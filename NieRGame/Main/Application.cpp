@@ -2,6 +2,15 @@
 #include <DxLib.h>
 #include "../General/game.h"
 #include  <cassert>
+namespace
+{
+	//ターゲットFPS
+	const int kTargetFPS = 120;
+	//ミリ秒
+	float kMillisecond = 1000.0f;
+	//タイムスケール
+	float kTimeScale = 1.0f;
+}
 
 Application& Application::GetInstance()
 {
@@ -47,25 +56,35 @@ bool Application::Init()
 	//バックカリングを行う(ポリゴンの裏面を描画しないようにする)
 	SetUseBackCulling(true);
 
+	//変数の初期化
+	m_deltaTime = 0.0f;
+	m_timeScale = kTimeScale;
+
     return true;
 }
 
 void Application::Run()
 {
-	
-
+	// 初期化
+	long long previousTime = GetNowHiPerformanceCount();
+	int targetFPS = kTargetFPS;
+#if _DEBUG
+	float totalTime = 0.0f;
+#endif
 	//ゲームループ
 	while (ProcessMessage() != -1) // Windowsが行う処理を待つ
 	{
-		//今回のループが始まった時間を覚えておく
-		LONGLONG time = GetNowHiPerformanceCount();
+		// 今フレームの開始時刻
+		long long currentTime = GetNowHiPerformanceCount();
+		m_deltaTime = static_cast<float>(currentTime - previousTime) / 1000000.0f;
+		previousTime = currentTime;
 
 		//画面全体をクリア
 		ClearDrawScreen();
-
-		//ここにゲームの処理を書く
 		//Widowモードが切り替わったかをチェック
 		bool isWindow = m_isWindow;
+
+		//ここにゲームの処理を書く
 		
 		
 		//切り替わったなら
@@ -74,14 +93,23 @@ void Application::Run()
 			//切り替わり処理
 			ChangeScreenMode();
 		}
+#if _DEBUG
+		// 時間計測
+		totalTime += m_deltaTime;
+		DebugDrawFPS(totalTime, targetFPS);
+#endif
+
 
 		//画面の切り替わりを待つ必要がある
 		ScreenFlip();//1/60秒経過するまで待つ
 
-		//FPSを60に固定
-		while (GetNowHiPerformanceCount() - time < 16667);
-		{
-
+		// FPSに合わせて待機
+		int frameMS = static_cast<int>(kMillisecond / targetFPS);
+		long long frameEnd = GetNowHiPerformanceCount();
+		float elapsedMS = static_cast<float>(frameEnd - previousTime) / kMillisecond;
+		int waitMS = frameMS - static_cast<int>(elapsedMS);
+		if (waitMS > 0) {
+			WaitTimer(waitMS);
 		}
 
 		//ESCキーで終了
@@ -118,4 +146,12 @@ void Application::ChangeScreenMode()
 	SetWindowSizeExtendRate(1.0);
 	//画面全体をクリア
 	ClearDrawScreen();
+}
+
+void Application::DebugDrawFPS(float totalTime, int targetFPS) const
+{
+	// デバッグ表示
+	DrawFormatString(10, 10, 0xffffff, L"fps=%.2f", GetFPS());
+	DrawFormatString(10, 30, 0xffffff, L"経過時間=%.2f", totalTime);
+	DrawFormatString(10, 50, 0xffffff, L"targetFPS=%d", targetFPS);
 }
