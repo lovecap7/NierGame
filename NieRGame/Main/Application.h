@@ -1,5 +1,6 @@
 #pragma once
-
+#include<memory>
+class ShaderPostProcess;
 /// <summary>
 /// シングルトン
 /// </summary>
@@ -61,6 +62,8 @@ private:
 	float m_deltaTime;
 	//タイムスケール
 	float m_timeScale;
+	//ポストエフェクト
+	std::unique_ptr<ShaderPostProcess> m_postProcess;
 private:
 	//スクリーンモードを切り替える際の処理
 	void ChangeScreenMode();

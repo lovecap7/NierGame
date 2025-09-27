@@ -1,6 +1,7 @@
 #include "Application.h"
 #include <DxLib.h>
 #include "../General/game.h"
+#include "../General/ShaderPostProcess.h"
 #include  <cassert>
 namespace
 {
@@ -8,6 +9,8 @@ namespace
 	const int kTargetFPS = 120;
 	//ミリ秒
 	float kMillisecond = 1000.0f;
+	//マイクロ秒
+	float kMicrosecond = 1000000.0f;
 	//タイムスケール
 	float kTimeScale = 1.0f;
 }
@@ -47,6 +50,7 @@ bool Application::Init()
 
 	//描画先を裏画面にする
 	SetDrawScreen(DX_SCREEN_BACK);
+	SetDrawMode(DX_DRAWMODE_NEAREST);
 
 	//3D描画のための準備
 	//Zバッファを使用する
@@ -65,43 +69,54 @@ bool Application::Init()
 
 void Application::Run()
 {
+	//ポストエフェクトの準備
+	m_postProcess = std::make_unique<ShaderPostProcess>();
+	m_postProcess->Init();
+	//レンダーターゲット(Drawの書き込み先)
+	auto RT = MakeScreen(Game::kScreenWidth, Game::kScreenHeight);
 	// 初期化
 	long long previousTime = GetNowHiPerformanceCount();
 	int targetFPS = kTargetFPS;
 #if _DEBUG
 	float totalTime = 0.0f;
 #endif
+	int handle = LoadGraph(L"Data/Img/ジャスト回避.png");
+
 	//ゲームループ
 	while (ProcessMessage() != -1) // Windowsが行う処理を待つ
 	{
 		// 今フレームの開始時刻
 		long long currentTime = GetNowHiPerformanceCount();
-		m_deltaTime = static_cast<float>(currentTime - previousTime) / 1000000.0f;
+		m_deltaTime = static_cast<float>(currentTime - previousTime) / kMicrosecond;//秒に変換
 		previousTime = currentTime;
 
+		//ターゲット
+		SetDrawScreen(RT);
 		//画面全体をクリア
 		ClearDrawScreen();
-		//Widowモードが切り替わったかをチェック
-		bool isWindow = m_isWindow;
 
 		//ここにゲームの処理を書く
-		
-		
-		//切り替わったなら
-		if (m_isWindow != isWindow)
-		{
-			//切り替わり処理
-			ChangeScreenMode();
-		}
+		m_postProcess->Update();
+
+		DrawGraph(0, 0, handle, true);
+		DrawBox(200, 400, 300, 500, GetColor(0, 0, 0), true);
+
+		//裏描画
+		SetDrawScreen(DX_SCREEN_BACK);
+		ClearDrawScreen();
+		//裏画面にレンダーターゲットを描画
+		m_postProcess->Draw(RT);
 #if _DEBUG
 		// 時間計測
 		totalTime += m_deltaTime;
-		DebugDrawFPS(totalTime, targetFPS);
+		// デバッグ表示
+		DrawFormatString(10, 10, 0xffffff, L"fps=%.2f", GetFPS());
+		DrawFormatString(10, 30, 0xffffff, L"経過時間=%.2f", totalTime);
+		DrawFormatString(10, 50, 0xffffff, L"targetFPS=%d", targetFPS);
 #endif
 
-
 		//画面の切り替わりを待つ必要がある
-		ScreenFlip();//1/60秒経過するまで待つ
+		ScreenFlip();
 
 		// FPSに合わせて待機
 		int frameMS = static_cast<int>(kMillisecond / targetFPS);
@@ -123,7 +138,10 @@ void Application::Run()
 
 void Application::Terminate()
 {
-	DxLib_End();				// ＤＸライブラリ使用の終了処理
+	//ポストエフェクトの終了
+	m_postProcess->End();
+	//ＤＸライブラリ使用の終了処理
+	DxLib_End();				
 }
 
 void Application::SetWindowMode(bool isWindow)
