@@ -53,6 +53,9 @@ public:
 	float GetTimeScale() const { return m_timeScale; };
 	//タイムスケールを考慮したデルタタイムを取得
 	float GetDeltaTimeWithTimeScale() const { return m_deltaTime * m_timeScale; };
+
+	//ポストエフェクト
+	std::unique_ptr<ShaderPostProcess>& GetPostProcess() { return m_postProcess; };
 private:
 	//アプリケーションの終了
 	bool m_isFinishApplication;
@@ -64,9 +67,18 @@ private:
 	float m_timeScale;
 	//ポストエフェクト
 	std::unique_ptr<ShaderPostProcess> m_postProcess;
+	//デバッグ用
+	enum class DebugState : int
+	{
+		SceneInfo	= 0,
+		FPS			= 1,
+		DebugMax	= 2
+	};
+	DebugState m_debugState = DebugState::SceneInfo;
 private:
 	//スクリーンモードを切り替える際の処理
 	void ChangeScreenMode();
 	//ターゲットFPS
 	void DebugDrawFPS(float totalTime, int targetFPS)const;
+	
 };

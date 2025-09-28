@@ -2,6 +2,9 @@
 #include <DxLib.h>
 #include "../General/game.h"
 #include "../General/ShaderPostProcess.h"
+#include "../General/Input.h"
+#include "../General/Collision/Physics.h"
+#include "../Scene/SceneController.h"
 #include  <cassert>
 namespace
 {
@@ -69,6 +72,14 @@ bool Application::Init()
 
 void Application::Run()
 {
+	//コントローラー
+	auto& input = Input::GetInstance();
+	input.Init();
+	//シーン
+	std::unique_ptr<SceneController> sceneController = std::make_unique<SceneController>();
+	//Physics(衝突処理)
+	auto& physics = Physics::GetInstance();
+	physics.Init();
 	//ポストエフェクトの準備
 	m_postProcess = std::make_unique<ShaderPostProcess>();
 	m_postProcess->Init();
@@ -80,7 +91,6 @@ void Application::Run()
 #if _DEBUG
 	float totalTime = 0.0f;
 #endif
-	int handle = LoadGraph(L"Data/Img/ジャスト回避.png");
 
 	//ゲームループ
 	while (ProcessMessage() != -1) // Windowsが行う処理を待つ
@@ -95,9 +105,14 @@ void Application::Run()
 		//画面全体をクリア
 		ClearDrawScreen();
 
-		//ここにゲームの処理を書く
+		//更新
+		input.Update();
+		sceneController->Update();
+		physics.Update();
 		m_postProcess->Update();
-		DrawGraph(0, 0, handle, true);
+
+		//描画
+		sceneController->Draw();
 
 		//裏描画
 		SetDrawScreen(DX_SCREEN_BACK);
@@ -107,10 +122,27 @@ void Application::Run()
 #if _DEBUG
 		// 時間計測
 		totalTime += m_deltaTime;
-		// デバッグ表示
-		DrawFormatString(10, 10, 0xffffff, L"fps=%.2f", GetFPS());
-		DrawFormatString(10, 30, 0xffffff, L"経過時間=%.2f", totalTime);
-		DrawFormatString(10, 50, 0xffffff, L"targetFPS=%d", targetFPS);
+		//状態切り替え
+		if(input.IsTrigger("Select"))
+		{
+			m_debugState = static_cast<DebugState>((static_cast<int>(m_debugState) + 1) % static_cast<int>(DebugState::DebugMax));
+		}
+		switch (m_debugState)
+		{
+		case Application::DebugState::FPS:
+			// デバッグ表示
+			DrawFormatString(10, 10, 0xffffff, L"fps=%.2f", GetFPS());
+			DrawFormatString(10, 30, 0xffffff, L"経過時間=%.2f", totalTime);
+			DrawFormatString(10, 50, 0xffffff, L"targetFPS=%d", targetFPS);
+			break;
+		case Application::DebugState::SceneInfo:
+			sceneController->DebugDraw();
+			break;
+		case Application::DebugState::DebugMax:
+			break;
+		default:
+			break;
+		}
 #endif
 
 		//画面の切り替わりを待つ必要がある
@@ -128,7 +160,6 @@ void Application::Run()
 		//ESCキーで終了
 		if (CheckHitKey(KEY_INPUT_ESCAPE) || m_isFinishApplication)
 		{
-			
 			break;
 		}
 	}
