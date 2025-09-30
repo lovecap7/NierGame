@@ -1,0 +1,94 @@
+# Blender 4.1.1 MTL File: 'None'
+# www.blender.org
+
+newmtl Clothes_Fabric
+Ka 1.000000 1.000000 1.000000
+Kd 0.035695 0.035695 0.035695
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 2
+map_Ns C:/Users/井上　恋/Documents/GitHub/NierGame/素材候補/Player/source/Lucille_Clothes_Roughness.png
+map_refl C:/Users/井上　恋/Documents/GitHub/NierGame/素材候補/Player/source/Lucille_Clothes_Metalness.png
+map_d D:/andyk/Blender 2/Maps/Lucille/Lucille_Clothes_Alpha.png
+
+newmtl Clothes_Nonfabric
+Ka 1.000000 1.000000 1.000000
+Kd 0.035695 0.035695 0.035695
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 2
+map_Ns C:/Users/井上　恋/Documents/GitHub/NierGame/素材候補/Player/source/Lucille_Clothes_Roughness.png
+map_refl C:/Users/井上　恋/Documents/GitHub/NierGame/素材候補/Player/source/Lucille_Clothes_Metalness.png
+map_d D:/andyk/Blender 2/Maps/Lucille/Lucille_Clothes_Alpha.png
+
+newmtl Eye
+Ka 1.000000 1.000000 1.000000
+Ks 0.318182 0.318182 0.318182
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 2
+map_Kd C:/Users/井上　恋/Documents/GitHub/NierGame/素材候補/Player/source/Lucille_Head_Albedo.png
+map_Ns C:/Users/井上　恋/Documents/GitHub/NierGame/素材候補/Player/source/Lucille_Head_Roughness.png
+map_d C:/Users/井上　恋/Documents/GitHub/NierGame/素材候補/Player/source/Lucille_Head_Albedo.png
+
+newmtl Eyelashes
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.004165 0.004470 0.005202
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 0.654545
+illum 9
+
+newmtl Hair
+Ns 22.499992
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 2
+map_Kd C:/Users/井上　恋/Documents/GitHub/NierGame/素材候補/Player/source/Lucille_Hair_Albedo.png
+map_d C:/Users/井上　恋/Documents/GitHub/NierGame/素材候補/Player/source/Lucille_Hair_Alpha.png
+
+newmtl Hair_Flyaway
+Ns 22.499992
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 2
+map_Kd C:/Users/井上　恋/Documents/GitHub/NierGame/素材候補/Player/source/Lucille_Hair_Albedo.png
+map_d C:/Users/井上　恋/Documents/GitHub/NierGame/素材候補/Player/source/Lucille_Hair_Flyaway_Alpha.png
+
+newmtl Lucille_Body
+Ns 84.628113
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd C:/Users/井上　恋/Documents/GitHub/NierGame/素材候補/Player/source/Lucille_Body.png
+
+newmtl Lucille_Skin_Head
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 2
+map_Kd C:/Users/井上　恋/Documents/GitHub/NierGame/素材候補/Player/source/Lucille_Head_Albedo.png
+map_Ns C:/Users/井上　恋/Documents/GitHub/NierGame/素材候補/Player/source/Lucille_Head_Roughness.png
+map_d C:/Users/井上　恋/Documents/GitHub/NierGame/素材候補/Player/source/Lucille_Head_Albedo.png
+
+newmtl Stocking
+Ns 103.238075
+Ka 1.000000 1.000000 1.000000
+Kd 0.056082 0.071354 0.083522
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
