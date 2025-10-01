@@ -141,8 +141,12 @@
   <ItemGroup>
     <ClCompile Include="Game\Actor\Actor.cpp" />
     <ClCompile Include="Game\Actor\ActorManager.cpp" />
-    <ClCompile Include="Game\Actor\DebugPlayer.cpp" />
+    <ClCompile Include="Game\Actor\Debug\DebugEnemy.cpp" />
+    <ClCompile Include="Game\Actor\Debug\DebugPlayer.cpp" />
     <ClCompile Include="Game\Camera\Camera.cpp" />
+    <ClCompile Include="Game\Camera\CameraBase.cpp" />
+    <ClCompile Include="Game\Camera\CameraController.cpp" />
+    <ClCompile Include="Game\Camera\PlayerCamera.cpp" />
     <ClCompile Include="General\Animator.cpp" />
     <ClCompile Include="General\Collision\CapsuleCollider.cpp" />
     <ClCompile Include="General\Collision\Collidable.cpp" />
@@ -167,6 +171,8 @@
     <ClCompile Include="General\StringUtil.cpp" />
     <ClCompile Include="Main\Application.cpp" />
     <ClCompile Include="Main\main.cpp" />
+    <ClCompile Include="Scene\Debug\DebugSelectScene.cpp" />
+    <ClCompile Include="Scene\Debug\PlayerTestScene.cpp" />
     <ClCompile Include="Scene\GameScene.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
     <ClCompile Include="Scene\SceneController.cpp" />
@@ -175,8 +181,12 @@
   <ItemGroup>
     <ClInclude Include="Game\Actor\Actor.h" />
     <ClInclude Include="Game\Actor\ActorManager.h" />
-    <ClInclude Include="Game\Actor\DebugPlayer.h" />
+    <ClInclude Include="Game\Actor\Debug\DebugEnemy.h" />
+    <ClInclude Include="Game\Actor\Debug\DebugPlayer.h" />
     <ClInclude Include="Game\Camera\Camera.h" />
+    <ClInclude Include="Game\Camera\CameraBase.h" />
+    <ClInclude Include="Game\Camera\CameraController.h" />
+    <ClInclude Include="Game\Camera\PlayerCamera.h" />
     <ClInclude Include="General\Animator.h" />
     <ClInclude Include="General\Collision\CapsuleCollider.h" />
     <ClInclude Include="General\Collision\Collidable.h" />
@@ -202,6 +212,8 @@
     <ClInclude Include="General\ShaderPostProcess.h" />
     <ClInclude Include="General\StringUtil.h" />
     <ClInclude Include="Main\Application.h" />
+    <ClInclude Include="Scene\Debug\DebugSelectScene.h" />
+    <ClInclude Include="Scene\Debug\PlayerTestScene.h" />
     <ClInclude Include="Scene\GameScene.h" />
     <ClInclude Include="Scene\SceneBase.h" />
     <ClInclude Include="Scene\SceneController.h" />

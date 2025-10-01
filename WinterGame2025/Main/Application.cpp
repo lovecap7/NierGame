@@ -46,6 +46,9 @@ bool Application::Init()
 
 	//画面サイズ変更
 	SetGraphMode(Game::kScreenWidth, Game::kScreenHeight, Game::kColorBitNum);
+	//バックグラウンド実行
+	SetAlwaysRunFlag(true);
+
 	if (DxLib_Init() == -1)		// ＤＸライブラリ初期化処理
 	{
 		return false;			// エラーが起きたら直ちに終了
@@ -100,6 +103,11 @@ void Application::Run()
 		m_deltaTime = static_cast<float>(currentTime - previousTime) / kMicrosecond;//秒に変換
 		previousTime = currentTime;
 
+#if _DEBUG
+		//FPSとタイムスケールの変更
+		DebugChangeTimeScaleAndFPS(input, targetFPS);
+#endif
+
 		//ターゲット
 		SetDrawScreen(RT);
 		//画面全体をクリア
@@ -131,9 +139,7 @@ void Application::Run()
 		{
 		case Application::DebugState::FPS:
 			// デバッグ表示
-			DrawFormatString(10, 10, 0xffffff, L"fps=%.2f", GetFPS());
-			DrawFormatString(10, 30, 0xffffff, L"経過時間=%.2f", totalTime);
-			DrawFormatString(10, 50, 0xffffff, L"targetFPS=%d", targetFPS);
+			DebugDrawFPS(totalTime, targetFPS);
 			break;
 		case Application::DebugState::SceneInfo:
 			sceneController->DebugDraw();
@@ -201,4 +207,21 @@ void Application::DebugDrawFPS(float totalTime, int targetFPS) const
 	DrawFormatString(10, 10, 0xffffff, L"fps=%.2f", GetFPS());
 	DrawFormatString(10, 30, 0xffffff, L"経過時間=%.2f", totalTime);
 	DrawFormatString(10, 50, 0xffffff, L"targetFPS=%d", targetFPS);
+	DrawFormatString(10, 70, 0xffffff, L"TimeScale=%.2f", m_timeScale);
+}
+
+void Application::DebugChangeTimeScaleAndFPS(Input& input, int& targetFPS)
+{
+	//FPS変更
+	auto fps = static_cast<float>(targetFPS);
+	if (input.IsPress("AddFPS"))fps += 100 * m_deltaTime;
+	if (input.IsPress("SubFPS"))fps -=m_deltaTime;
+	fps = MathSub::ClampInt(fps, 15, kTargetFPS);
+	targetFPS = static_cast<int>(fps);
+	//タイムスケール変更
+	auto timeScale = m_timeScale;
+	if (input.IsPress("AddTimeScale"))timeScale += m_deltaTime;
+	if (input.IsPress("SubTimeScale"))timeScale -= m_deltaTime;
+	timeScale = MathSub::ClampFloat(timeScale, 0.0f, 10.0f);
+	m_timeScale = timeScale;
 }

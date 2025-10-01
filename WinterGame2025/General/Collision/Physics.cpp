@@ -5,6 +5,7 @@
 #include "CapsuleCollider.h"
 #include "PolygonCollider.h"
 #include "Rigidbody.h"
+#include "../../Main/Application.h"
 #include <cassert>
 
 namespace
@@ -12,13 +13,11 @@ namespace
 	//確認回数
 	constexpr int kTryNum = 30;
 	//重力
-	const Vector3 kGroundGravity = { 0.0f, -5.0f, 0.0f };
+	const Vector3 kGroundGravity = { 0.0f, -600.0f, 0.0f };
 	//空中にいるオブジェクトに対する重力
-	const Vector3 kAirGravity = { 0.0f, -0.5f, 0.0f };
+	const Vector3 kAirGravity = { 0.0f, -1.0f, 0.0f };
 	//落下状態に切り替わる落下ベクトルの大きさ
 	constexpr float kChangeStateFall = -4.0f;
-	//落下スピードの上限(Y成分の大きさ)
-	constexpr float kMaxGravityY = -20.0f;
 }
 
 void Physics::Init()
@@ -49,6 +48,8 @@ void Physics::Update()
 {
 	//更新をしないなら
 	if (!m_isUpdate)return;
+	//タイムスケールの初期化
+	InitTimeScale();
 	//重力
 	Gravity();
 	//床と壁のとの当たったフラグを初期化
@@ -191,26 +192,34 @@ std::list<std::weak_ptr<Collidable>> Physics::RayCast(const Vector3& startPos, c
 	return collList;
 }
 
-void Physics::Gravity()
+void Physics::InitTimeScale()
 {
+	float timeScale = Application::GetInstance().GetTimeScale();
 	for (auto& collidable : m_collidables)
 	{
-		//重力を受けるか
-		if (!collidable->m_rb->m_isGravity)continue;
+		//自分のタイムスケールを優先しないなら
+		if (!collidable->m_rb->IsMyTimeScale())
+		{
+			//グローバルのタイムスケールをセット
+			collidable->m_rb->SetMyTimeScale(timeScale);
+		}
+	}
+}
+
+void Physics::Gravity()
+{
+	auto& app = Application::GetInstance();
+	float deltaTime = app.GetDeltaTime();
+	
+	for (auto& collidable : m_collidables)
+	{
+		if (!collidable->m_rb->m_isGravity) continue;
 		auto rb = collidable->m_rb;
-		//地上にいるときと空中にいるときで重力の大きさを変える
+
+		// 状態によって重力を選択
 		auto gravity = kGroundGravity;
-		if (!collidable->IsFloor())//地上にいない場合
-		{
-			gravity = kAirGravity;
-		}
-		//重力をかける
-		rb->m_vec += gravity;
-		//重力に上限をつける
-		if (rb->m_vec.y < kMaxGravityY)
-		{
-			//上限を超えないようにする
-			rb->m_vec.y = kMaxGravityY;
-		}
+
+		// 時間補正付きで重力を加える
+		rb->m_vec += gravity * deltaTime * rb->GetMyTimeScale();
 	}
 }

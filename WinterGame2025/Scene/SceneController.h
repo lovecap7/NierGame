@@ -6,7 +6,6 @@ class SceneBase;
 /// <summary>
 /// 各シーンを管理するクラス
 /// 管理はするが、繊維を管理はしない(繊維はクラスどもがやる)
-/// インターフェイスを提供するクラス
 /// </summary>
 class SceneController
 {

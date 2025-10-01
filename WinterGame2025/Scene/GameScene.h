@@ -2,7 +2,7 @@
 #include "SceneBase.h"
 #include <memory>
 class Input;
-class Camera;
+class CameraController;
 class SceneController;
 class ActorManager;
 
@@ -28,6 +28,6 @@ private:
 	//アクターマネージャー
 	std::shared_ptr<ActorManager> m_actorManager;
 	//カメラ
-	std::shared_ptr<Camera> m_camera;
+	std::shared_ptr<CameraController> m_cameraController;
 };
 

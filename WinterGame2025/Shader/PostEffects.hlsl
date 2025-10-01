@@ -10,6 +10,13 @@ cbuffer ConstantBuffer : register(b4)
     float noiseSpeed;    //ノイズの時間変化の速さ
     int state;           //シェーダーの動作状態（通常/グリッチ/モノクロ）
 }
+cbuffer ConstantBuffer2 : register(b5)
+{
+    float justRate; //経過時間
+    float dummy1;
+    float dummy2;
+    float dummy3;
+}
 
 //モノクロ化のための輝度係数
 #define R_LUMINANCE 0.298912
@@ -17,9 +24,10 @@ cbuffer ConstantBuffer : register(b4)
 #define B_LUMINANCE 0.114478
 
 //シェーダーの状態定数
-#define STATE_NORMAL 0             //通常
-#define STATE_GLITCH 1 << 0        //グリッチ効果のみ
-#define STATE_MONOCHROME 1 << 1    //モノクロのみ
+#define STATE_NORMAL 0              //通常
+#define STATE_GLITCH 1 << 0         //グリッチ効果
+#define STATE_MONOCHROME 1 << 1     //モノクロ
+#define STATE_JUSTAVOID 1 << 2      //ジャスト回避
 
 // 疑似乱数を生成する関数
 float random(float2 seeds)
@@ -59,6 +67,7 @@ PS_OUTPUT main(PS_INPUT input)
 
     bool isUseGlitch = (state & STATE_GLITCH);
     bool isUseGray = (state & STATE_MONOCHROME);
+    bool isUseJust = (state & STATE_JUSTAVOID);
     
     // 元のテクスチャ色を取得
     float4 color = tex.Sample(smp, input.uv);
@@ -104,6 +113,22 @@ PS_OUTPUT main(PS_INPUT input)
         //色味を微妙に調整（青み・緑みを少し強調）
         color.g *= 1.07;
         color.b *= 1.04;
+    }
+    
+    //ジャスト回避
+    if (isUseJust)
+    {
+         //UV
+        float2 uv = input.uv;
+ 
+        float d = length(uv - 0.5);
+
+        float lerpRate = saturate(justRate);
+        float4 vignetteColor = lerp(color, float4(0.0, 0.0, 0.0, 1.0), lerpRate);
+
+        float vignetteDistance = pow(saturate(d * 1.5), 2);
+
+        color = lerp(color, vignetteColor, vignetteDistance);
     }
 
     //最終的なカラーを出力

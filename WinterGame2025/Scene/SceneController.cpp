@@ -2,6 +2,8 @@
 #include <memory>
 #include<cassert>
 #include "TitleScene.h"
+#include "Debug/DebugSelectScene.h"
+#include "../General/Input.h"
 
 SceneController::SceneController():
 	m_isUpdate(true)
@@ -9,7 +11,7 @@ SceneController::SceneController():
 #if _DEBUG
 	//一番最初のシーンだけは割り当てる
 	//自分自身のインスタンスを渡してあげる
-	ChangeScene(std::make_shared<TitleScene>(*this));
+	ChangeScene(std::make_shared<DebugSelectScene>(*this));
 #else
 	//一番最初のシーンだけは割り当てる
 	//自分自身のインスタンスを渡してあげる
@@ -22,6 +24,16 @@ void SceneController::Update()
 {
 	//更新をしないならreturn
 	if (!m_isUpdate)return;
+#if _DEBUG
+	//デバッグ用
+	auto& input = Input::GetInstance();
+	if (input.IsTrigger("DebugScene"))
+	{
+		ChangeScene(std::make_shared<DebugSelectScene>(*this));
+		return;
+	}
+#endif
+
 	//最後にプッシュ(入れた)シーンのみ更新処理を行う(他のシーンは更新はストップ)
 	m_scenes.back()->Update();
 }
@@ -73,7 +85,7 @@ void SceneController::PushScene(std::shared_ptr<SceneBase> scene)
 void SceneController::PopScene()
 {
 	//実行するシーンがなくなるので許可しない
-	if (m_scenes.size() == 1)return;
+	if (m_scenes.size() <= 1)return;
 	m_scenes.back()->End();	//終了処理
 	m_scenes.pop_back();	//末尾を取り除く
 }

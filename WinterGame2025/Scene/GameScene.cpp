@@ -4,8 +4,9 @@
 #include  "../General/Input.h"
 #include "SceneController.h"
 #include "../Game/Actor/ActorManager.h"
-#include "../Game/Actor/DebugPlayer.h"
-#include "../Game/Camera/Camera.h"
+#include "../Game/Actor/Debug/DebugPlayer.h"
+#include "../Game/Camera/CameraController.h"
+#include "../Game/Camera/PlayerCamera.h"
 
 GameScene::GameScene(SceneController& controller) :
 	SceneBase(controller)
@@ -25,10 +26,13 @@ void GameScene::Init()
 	auto debugPlayer = std::make_shared<DebugPlayer>();
 	m_actorManager->Entry(debugPlayer);
 	//カメラ
-	m_camera = std::make_shared<Camera>();
-	m_camera->Init();
+	m_cameraController = std::make_shared<CameraController>();
+	m_cameraController->Init();
+	//プレイヤーカメラ
+	auto playerCamera = std::make_shared<PlayerCamera>();
+	m_cameraController->ChangeCamera(playerCamera);
 	//デバッグ用プレイヤーにカメラをセット
-	debugPlayer->SetCamera(m_camera);
+	debugPlayer->SetCamera(playerCamera);
 }
 
 void GameScene::Update()
@@ -48,7 +52,7 @@ void GameScene::Update()
 		targetPos = m_actorManager->GetPlayer().lock()->GetPos();
 	}
 	//カメラ更新
-	m_camera->Update(targetPos);
+	m_cameraController->Update();
 }
 
 void GameScene::Draw()
@@ -75,7 +79,5 @@ void GameScene::DebugDraw() const
 #if _DEBUG
 	DrawString(0, 0, L"Game Scene", 0xffffff);
 	DrawString(0, 16, L"[D]キーで Debug Scene", 0xffffff);
-	auto cPos = m_camera->GetPos();
-	printf("cPos {%.2f,%.2f,%.2f}\n", cPos.x, cPos.y, cPos.z);
 #endif
 }

@@ -66,6 +66,8 @@ private:
 		void OnCollide() { owner->OnCollide(colider); }
 	};
 
+	//時間のスケールを初期化
+	void InitTimeScale();
 	//重力
 	void Gravity();
 

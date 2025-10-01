@@ -122,4 +122,18 @@ namespace MyDraw {
 		// シェーダーをオフに
 		DxLib::SetUsePixelShader(-1);
 	}
+	inline void DrawPS(int x, int y, float scale, float angle, const int cBuffH1, const int cBuffH2, int handle, int psH)
+	{
+		//更新
+		UpdateShaderConstantBuffer(cBuffH1);
+		UpdateShaderConstantBuffer(cBuffH2);
+		//4番にセット
+		SetShaderConstantBuffer(cBuffH1, DX_SHADERTYPE_PIXEL, 4);
+		//5番にセット
+		SetShaderConstantBuffer(cBuffH2, DX_SHADERTYPE_PIXEL, 5);
+		//画像をノイズ入りで描画
+		MyDraw::DrawRotaGraph(x, y, scale, angle, handle, psH, true);
+		// シェーダーをオフに
+		DxLib::SetUsePixelShader(-1);
+	}
 }

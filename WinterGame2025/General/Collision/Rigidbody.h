@@ -22,14 +22,24 @@ public:
 	void SetMoveVec(Vector3 vec);
 	void ResetVec() { m_vec = m_vec.Zero(); };
 	//次の座標
-	Vector3 GetNextPos() { return m_pos + m_vec; };
+	Vector3 GetNextPos() const;
 	//スピードダウン
 	void SpeedDown(float decRate);
+	//自分のタイムスケールを使うか
+	void SetIsMyTimeScale(bool isUse) { m_isMyTimeScale = isUse; };
+	bool IsMyTimeScale() const { return m_isMyTimeScale; };
+	//自分のタイムスケールを設定
+	void SetMyTimeScale(float timeScale) { m_myTimeScale = timeScale; };
+	float GetMyTimeScale() const { return m_myTimeScale; };
 public:
 	//座標とベクトル
 	Vector3 m_pos;
 	Vector3 m_vec;
 	//重力を受ける
 	bool m_isGravity ; //重力を受けるかどうか
+	//自分のタイムスケールを優先する
+	bool m_isMyTimeScale;
+	//自分のタイムスケール
+	float m_myTimeScale;
 };
 

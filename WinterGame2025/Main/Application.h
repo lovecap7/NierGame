@@ -1,6 +1,7 @@
 #pragma once
 #include<memory>
 class ShaderPostProcess;
+class Input;
 /// <summary>
 /// シングルトン
 /// </summary>
@@ -80,5 +81,6 @@ private:
 	void ChangeScreenMode();
 	//ターゲットFPS
 	void DebugDrawFPS(float totalTime, int targetFPS)const;
-	
+	//タイムスケールとFPSを変更
+	void DebugChangeTimeScaleAndFPS(Input& input, int& targetFPS);
 };

@@ -38,6 +38,14 @@ void Input::Init()
 	m_inputActionMap["B"]		= { {InputType::kKeyboard,KEY_INPUT_H}		, {InputType::kPad,PAD_INPUT_2} };
 	m_inputActionMap["X"]		=	{ {InputType::kKeyboard,KEY_INPUT_G}	, {InputType::kPad,PAD_INPUT_3} };
 	m_inputActionMap["Y"]		= { {InputType::kKeyboard,KEY_INPUT_Y}		, {InputType::kPad,PAD_INPUT_4} };
+#if _DEBUG
+	m_inputActionMap["DebugScene"] = { {InputType::kKeyboard,KEY_INPUT_D}};
+	m_inputActionMap["AddFPS"] = { {InputType::kKeyboard,KEY_INPUT_6}};
+	m_inputActionMap["SubFPS"] = { {InputType::kKeyboard,KEY_INPUT_5}};
+	m_inputActionMap["AddTimeScale"] = { {InputType::kKeyboard,KEY_INPUT_8}};
+	m_inputActionMap["SubTimeScale"] = { {InputType::kKeyboard,KEY_INPUT_7}};
+#endif
+
 	//çXêVÇÇ∑ÇÈ
 	m_isUpdate = true;
 }

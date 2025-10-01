@@ -7,6 +7,7 @@
 #include "PolygonCollider.h"
 #include "TorusCollider.h"
 #include "Rigidbody.h"
+#include "../../Main/Application.h"
 
 CollisionChecker::CollisionChecker()
 {
@@ -88,6 +89,7 @@ bool CollisionChecker::IsCollide(const std::shared_ptr<Collidable> collA, const 
 
 bool CollisionChecker::CheckCollSS(const std::shared_ptr<Collidable> collA, const std::shared_ptr<Collidable> collB)
 {
+
 	//コリジョンデータの取得
 	auto collDataA = std::dynamic_pointer_cast<SphereCollider>(collA->m_collisionData);
 	auto collDataB = std::dynamic_pointer_cast<SphereCollider>(collB->m_collisionData);

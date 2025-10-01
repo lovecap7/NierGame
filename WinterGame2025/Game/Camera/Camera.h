@@ -14,12 +14,11 @@ public:
 private:
     //ƒJƒƒ‰‹——£
     float m_distance;
-
     //ã‰º§ŒÀ
-    float m_vertexAngle = 0.0f;
+    float m_vertexAngle;
     //Œü‚«
-    Vector3 m_front = Vector3(0, 0, -1);
-    Vector3 m_right = Vector3(1, 0, 0);
+    Vector3 m_front;
+    Vector3 m_right;
     Vector3 m_look;
     //‰ñ“]
     Quaternion m_rotH;

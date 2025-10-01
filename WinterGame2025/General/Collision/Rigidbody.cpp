@@ -1,5 +1,6 @@
 #include "Rigidbody.h"
 #include "../Math/Vector2.h"
+#include "../../Main/Application.h"
 
 namespace
 {
@@ -10,7 +11,9 @@ namespace
 Rigidbody::Rigidbody():
 	m_pos(),
 	m_vec(),
-	m_isGravity(true) //èdóÕÇéÛÇØÇÈ
+	m_isGravity(true) ,//èdóÕÇéÛÇØÇÈ
+	m_isMyTimeScale(false),
+	m_myTimeScale(1.0f)
 {
 }
 
@@ -33,6 +36,14 @@ void Rigidbody::SetMoveVec(Vector3 vec)
 {
 	m_vec.x = vec.x;
 	m_vec.z = vec.z;
+}
+
+Vector3 Rigidbody::GetNextPos() const
+{
+	//éûä‘
+	auto& app = Application::GetInstance();
+	float deltaTime = app.GetDeltaTime();
+	return m_pos + (m_vec * m_myTimeScale * deltaTime);
 }
 
 void Rigidbody::SpeedDown(float decRate)
