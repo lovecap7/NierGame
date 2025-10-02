@@ -170,6 +170,45 @@ void Model::SetDir(Vector2 vec)
 	m_nextForward = dir.XZ();
 }
 
+void Model::SetDir(Vector3 vec)
+{
+	if (vec.SqMagnitude() <= 0.0f) return;
+
+	Vector3 dir = vec.Normalize();
+
+	// ほぼ同じなら無視
+	if ((m_forward - dir).SqMagnitude() < 1e-6f) return;
+
+	// 角度
+	float dotVal = MathSub::ClampFloat(m_forward.Dot(dir), -1.0f, 1.0f);
+	float angle = std::acos(dotVal);
+
+	// 軸
+	Vector3 axis = m_forward.Cross(dir);
+	if (axis.SqMagnitude() < 1e-6f)//最小値
+	{
+		// 真逆の場合は安定した補助軸を使う
+		if (std::fabs(m_forward.y) < 0.99f)
+			axis = m_forward.Cross(Vector3::Up());
+		else
+			axis = m_forward.Cross(Vector3::Right());
+	}
+	axis = axis.Normalize();
+
+	// クォータニオン
+	m_rotaQ = Quaternion::AngleAxis(angle / m_rotaSpeed, axis);
+
+	m_rotaFrame = m_rotaSpeed;
+	m_nextForward = dir;
+}
+
+void Model::LookAt(Vector3 target, Vector3 up)
+{
+	auto mat = Matrix4x4::LookAt(target);
+	SetDir(mat * Vector3::Forward());
+}
+
+
 void Model::SetColor(float r, float g, float b, float a)
 {
 	COLOR_F color = { r, g, b, a };
@@ -193,6 +232,11 @@ void Model::SetColor(COLOR_F color)
 	DxLib::MV1SetDifColorScale(m_modelHandle, m_color);
 	DxLib::MV1SetSpcColorScale(m_modelHandle, m_color);
 	DxLib::MV1SetAmbColorScale(m_modelHandle, m_color);
+}
+
+void Model::SetMatrix(Matrix4x4 mat)
+{
+	DxLib::MV1SetMatrix(m_modelHandle, mat.ToDxLibMATRIX());
 }
 
 void Model::ResetColor()

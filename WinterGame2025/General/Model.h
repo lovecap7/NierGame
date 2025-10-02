@@ -19,9 +19,12 @@ public:
 	void SetPos(VECTOR pos);
 	void SetScale(VECTOR pos);
 	void SetRot(VECTOR rot);
-	void SetDir(Vector2 vec);
+	void SetDir(Vector2 vec);//XZ•½–Ê‚Å‚ÌŒü‚«
+	void SetDir(Vector3 vec);
+	void LookAt(Vector3 target, Vector3 up = Vector3::Up());
 	void SetColor(float r, float g, float b, float a);
 	void SetColor(COLOR_F color);
+	void SetMatrix(Matrix4x4 mat);
 	void ResetColor();
 	//ƒ‚ƒfƒ‹•ÏX
 	void SetModel(int modelHandle);
