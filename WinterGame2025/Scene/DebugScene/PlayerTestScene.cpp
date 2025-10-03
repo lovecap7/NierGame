@@ -1,23 +1,24 @@
-#include "GameScene.h"
-#include "TitleScene.h"
+#include "PlayerTestScene.h"
 #include <Dxlib.h>
-#include  "../General/Input.h"
-#include "SceneController.h"
-#include "../Game/Actor/ActorManager.h"
-#include "../Game/Actor/DebugActor/DebugPlayer.h"
-#include "../Game/Camera/CameraController.h"
-#include "../Game/Camera/PlayerCamera.h"
+#include  "../../General/Input.h"
+#include "../SceneController.h"
+#include "../../Game/Actor/ActorManager.h"
+#include "../../Game/Actor/DebugActor/DebugPlayer.h"
+#include "../../Game/Actor/DebugActor/DebugEnemy.h"
+#include "../../Game/Actor/DebugActor/DebugWeapon.h"
+#include "../../Game/Camera/CameraController.h"
+#include "../../Game/Camera/PlayerCamera.h"
 
-GameScene::GameScene(SceneController& controller) :
+PlayerTestScene::PlayerTestScene(SceneController& controller) :
 	SceneBase(controller)
 {
 }
 
-GameScene::~GameScene()
+PlayerTestScene::~PlayerTestScene()
 {
 }
 
-void GameScene::Init()
+void PlayerTestScene::Init()
 {
 	//アクターマネージャー
 	m_actorManager = std::make_shared<ActorManager>();
@@ -25,6 +26,10 @@ void GameScene::Init()
 	//デバッグ用プレイヤー
 	auto debugPlayer = std::make_shared<DebugPlayer>();
 	m_actorManager->Entry(debugPlayer);
+	//デバッグ用敵
+	auto debugEnemy = std::make_shared<DebugEnemy>();
+	m_actorManager->Entry(debugEnemy);
+	debugPlayer->SetEnemy(debugEnemy);
 	//カメラ
 	m_cameraController = std::make_shared<CameraController>();
 	m_cameraController->Init();
@@ -33,16 +38,15 @@ void GameScene::Init()
 	m_cameraController->ChangeCamera(playerCamera);
 	//デバッグ用プレイヤーにカメラをセット
 	debugPlayer->SetCamera(playerCamera);
+	//武器の生成
+	auto weapon = std::make_shared<DebugWeapon>(MV1LoadModel(L"Data/Model/Weapon/SwordZ.mv1"));
+	m_actorManager->Entry(weapon);
+	debugPlayer->SetWeapon(weapon);
 }
 
-void GameScene::Update()
+void PlayerTestScene::Update()
 {
 	auto& input = Input::GetInstance();
-	if (input.IsTrigger("A"))
-	{
-		m_controller.ChangeScene(std::make_unique<TitleScene>(m_controller));
-		return;
-	}
 	//アクターマネージャー更新
 	m_actorManager->Update();
 	//ターゲット
@@ -55,7 +59,7 @@ void GameScene::Update()
 	m_cameraController->Update();
 }
 
-void GameScene::Draw()
+void PlayerTestScene::Draw()
 {
 #if _DEBUG
 	//グリッド線
@@ -69,15 +73,15 @@ void GameScene::Draw()
 	m_actorManager->Draw();
 }
 
-void GameScene::End()
+void PlayerTestScene::End()
 {
 
 }
 
-void GameScene::DebugDraw() const
+void PlayerTestScene::DebugDraw() const
 {
 #if _DEBUG
-	DrawString(0, 0, L"Game Scene", 0xffffff);
+	DrawString(0, 0, L"Player Test Scene", 0xffffff);
 	DrawString(0, 16, L"[D]キーで Debug Scene", 0xffffff);
 #endif
 }

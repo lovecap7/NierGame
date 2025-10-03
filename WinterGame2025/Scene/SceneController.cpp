@@ -2,7 +2,7 @@
 #include <memory>
 #include<cassert>
 #include "TitleScene.h"
-#include "Debug/DebugSelectScene.h"
+#include "DebugScene/DebugSelectScene.h"
 #include "../General/Input.h"
 
 SceneController::SceneController():

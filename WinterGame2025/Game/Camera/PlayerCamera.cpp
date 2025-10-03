@@ -1,7 +1,7 @@
 #include "PlayerCamera.h"
 #include "../../General/Input.h"
 #include "../../General/Collision/SphereCollider.h"
-#include "../Actor/Debug/DebugPlayer.h"
+#include "../Actor/DebugActor/DebugPlayer.h"
 #include "../../Main/Application.h"
 
 namespace
