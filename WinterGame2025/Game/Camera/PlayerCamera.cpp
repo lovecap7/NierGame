@@ -7,16 +7,16 @@
 namespace
 {
     //カメラ距離
-    constexpr float kDistance = 1000.0f;
+    constexpr float kDistance = 500.0f;
     //回転速度
-    constexpr float kHorizontalSpeed = 1.0f;
-    constexpr float kVerticalSpeed = -1.0f;
+    constexpr float kHorizontalSpeed = 0.02f;
+    constexpr float kVerticalSpeed = 0.02f;
     //上下限界角度
-    constexpr float kLimitAngle = 89.0f;
+    constexpr float kLimitAngle = 80.0f;
     //入力値角度変換
     constexpr float kInputToAngle = 0.1f;
     //カメラの高さ
-    constexpr float kCameraHeight = 200.0f;
+    constexpr float kCameraHeight = 300.0f;
 }
 
 PlayerCamera::PlayerCamera() :
@@ -37,7 +37,7 @@ void PlayerCamera::Init()
     m_right = Vector3::Right();
     m_look = m_front;
     m_rotH = Quaternion::IdentityQ();
-	m_targetPos = Vector3::Zero();
+	m_viewPos = Vector3::Zero();
 	m_cameraPos = Vector3::Zero();
 	m_isLockOn = false;
 	m_playerPos = Vector3::Zero();
@@ -45,24 +45,15 @@ void PlayerCamera::Init()
 
 void PlayerCamera::Update()
 {
-    //デルタタイム
-	float deltaTime = Application::GetInstance().GetDeltaTime();
-
     Vector3 playerPos = m_playerPos;
     Vector3 targetPos = playerPos;
-	//ロックオン中ならターゲットをロックオン対象にする
-    if (m_isLockOn && !m_lockOnTarget.expired())
-    {
-		//ターゲットとロックオン対象の中間地点を見る
-        targetPos = Vector3::Lerp(m_lockOnTarget.lock()->GetNextPos(), playerPos, 0.5f);
-    }
     //ターゲット
     targetPos.y += kCameraHeight; //少し上を見る
     auto& input = Input::GetInstance();
     Vector2 stick(input.GetStickInfo().rightStickX * kInputToAngle, input.GetStickInfo().rightStickY * kInputToAngle);
     //入力による回転
-    float rotH = stick.x * kHorizontalSpeed * deltaTime;
-    float rotV = stick.y * kVerticalSpeed * deltaTime;
+    float rotH = stick.x * kHorizontalSpeed;
+    float rotV = stick.y * kVerticalSpeed;
 
     //左右回転（Up軸）
     auto qH = Quaternion::AngleAxis(rotH * MyMath::DEG_2_RAD, Vector3::Up());
@@ -81,16 +72,24 @@ void PlayerCamera::Update()
     m_rotH = qH * m_rotH;
 
     //理想カメラ位置
-    Vector3 idealPos;
-    idealPos = targetPos - m_look * m_distance;
+    Vector3 nextPos;
+    nextPos = targetPos - m_look * m_distance;
+    //ロックオン中ならターゲットをロックオン対象にする
+    Vector3 viewPos = targetPos;
+    if (m_isLockOn && !m_lockOnTarget.expired())
+    {
+        //ターゲットとロックオン対象の中間地点を見る
+        viewPos = Vector3::Lerp(m_lockOnTarget.lock()->GetNextPos(), playerPos, 0.4f);
+    }
 
     //位置確定
-    m_cameraPos = Vector3::Lerp(m_cameraPos,idealPos,0.1f);
-	m_targetPos = targetPos;
+    m_cameraPos = Vector3::Lerp(m_cameraPos, nextPos, 0.05f);
+   
+	m_viewPos = Vector3::Lerp(m_viewPos, viewPos, 0.05f);
     // DxLibに反映
     SetCameraPositionAndTarget_UpVecY(
         m_cameraPos.ToDxLibVector(),
-        m_targetPos.ToDxLibVector()
+        m_viewPos.ToDxLibVector()
     );
 }
 

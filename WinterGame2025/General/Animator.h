@@ -19,6 +19,8 @@ private:
 	Anim m_animNext;	//次のアニメーション
 	//ブレンドに使う
 	float m_blendRate;
+	//タイムスケール
+	float m_timeScale;
 	//アニメーションを進める
 	void UpdateAnim(const int& modelHandle, Anim& anim);
 	//ブレンド率の更新
@@ -82,4 +84,6 @@ public:
 	bool IsFinishFixedLoop();
 	//アニメーションの速度を変更
 	void SetAnimSpeed(const float& animSpeed);
+	//タイムスケール
+	void SetTimeScale(float timeScale) { m_timeScale = timeScale; };
 };

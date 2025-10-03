@@ -82,6 +82,8 @@ public:
 	void SetIsWall(bool isWall) { m_isWall = isWall; };
 	//床と壁のフラグ
 	void ResetHitFlag() { m_isFloor = m_isWall = false; };
+	//タイムスケール
+	virtual void SetTimeScale(float scale);
 private:
 	void CreateCollider(Shape shape);
 	//PhysicsがCollidableを自由に管理できるように

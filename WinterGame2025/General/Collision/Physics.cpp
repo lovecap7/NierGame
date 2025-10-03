@@ -13,11 +13,7 @@ namespace
 	//確認回数
 	constexpr int kTryNum = 30;
 	//重力
-	const Vector3 kGroundGravity = { 0.0f, -600.0f, 0.0f };
-	//空中にいるオブジェクトに対する重力
-	const Vector3 kAirGravity = { 0.0f, -1.0f, 0.0f };
-	//落下状態に切り替わる落下ベクトルの大きさ
-	constexpr float kChangeStateFall = -4.0f;
+	const Vector3 kGroundGravity = { 0.0f, -0.5f, 0.0f };
 }
 
 void Physics::Init()
@@ -201,7 +197,7 @@ void Physics::InitTimeScale()
 		if (!collidable->m_rb->IsMyTimeScale())
 		{
 			//グローバルのタイムスケールをセット
-			collidable->m_rb->SetMyTimeScale(timeScale);
+			collidable->SetTimeScale(timeScale);
 		}
 	}
 }
@@ -209,7 +205,6 @@ void Physics::InitTimeScale()
 void Physics::Gravity()
 {
 	auto& app = Application::GetInstance();
-	float deltaTime = app.GetDeltaTime();
 	
 	for (auto& collidable : m_collidables)
 	{
@@ -220,6 +215,6 @@ void Physics::Gravity()
 		auto gravity = kGroundGravity;
 
 		// 時間補正付きで重力を加える
-		rb->m_vec += gravity * deltaTime * rb->GetMyTimeScale();
+		rb->m_vec += gravity * rb->GetMyTimeScale();
 	}
 }

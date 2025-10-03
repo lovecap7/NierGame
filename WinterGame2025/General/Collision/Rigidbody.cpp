@@ -1,6 +1,5 @@
 #include "Rigidbody.h"
 #include "../Math/Vector2.h"
-#include "../../Main/Application.h"
 
 namespace
 {
@@ -40,10 +39,7 @@ void Rigidbody::SetMoveVec(Vector3 vec)
 
 Vector3 Rigidbody::GetNextPos() const
 {
-	//ŽžŠÔ
-	auto& app = Application::GetInstance();
-	float deltaTime = app.GetDeltaTime();
-	return m_pos + (m_vec * m_myTimeScale * deltaTime);
+	return m_pos + (m_vec * m_myTimeScale);
 }
 
 void Rigidbody::SpeedDown(float decRate)

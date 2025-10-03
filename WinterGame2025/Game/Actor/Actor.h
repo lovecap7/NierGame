@@ -72,5 +72,7 @@ public:
 	Vector3 GetNextPos() const;
 	//モデルクラス
 	std::shared_ptr<Model> GetModel() const { return m_model; };
+	//タイムスケール
+	void SetTimeScale(float scale)override;
 };
 

@@ -23,7 +23,7 @@ protected:
     //回転
     Quaternion m_rotH;
     //位置
-	Vector3 m_targetPos; //注視点
+	Vector3 m_viewPos; //注視点
 	Vector3 m_cameraPos; //カメラ位置
 };
 

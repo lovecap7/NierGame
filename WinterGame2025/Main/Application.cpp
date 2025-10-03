@@ -9,7 +9,7 @@
 namespace
 {
 	//ターゲットFPS
-	const int kTargetFPS = 120;
+	const int kTargetFPS = 60;
 	//ミリ秒
 	float kMillisecond = 1000.0f;
 	//マイクロ秒
@@ -67,9 +67,7 @@ bool Application::Init()
 	SetUseBackCulling(true);
 
 	//変数の初期化
-	m_deltaTime = 0.0f;
 	m_timeScale = kTimeScale;
-
     return true;
 }
 
@@ -88,26 +86,12 @@ void Application::Run()
 	m_postProcess->Init();
 	//レンダーターゲット(Drawの書き込み先)
 	auto RT = MakeScreen(Game::kScreenWidth, Game::kScreenHeight);
-	// 初期化
-	long long previousTime = GetNowHiPerformanceCount();
-	int targetFPS = kTargetFPS;
-#if _DEBUG
-	float totalTime = 0.0f;
-#endif
 
 	//ゲームループ
 	while (ProcessMessage() != -1) // Windowsが行う処理を待つ
 	{
-		// 今フレームの開始時刻
-		long long currentTime = GetNowHiPerformanceCount();
-		m_deltaTime = static_cast<float>(currentTime - previousTime) / kMicrosecond;//秒に変換
-		previousTime = currentTime;
-
-#if _DEBUG
-		//FPSとタイムスケールの変更
-		DebugChangeTimeScaleAndFPS(input, targetFPS);
-#endif
-
+		//今回のループが始まった時間を覚えておく
+		LONGLONG time = GetNowHiPerformanceCount();
 		//ターゲット
 		SetDrawScreen(RT);
 		//画面全体をクリア
@@ -128,8 +112,16 @@ void Application::Run()
 		//裏画面にレンダーターゲットを描画
 		m_postProcess->Draw(RT);
 #if _DEBUG
-		// 時間計測
-		totalTime += m_deltaTime;
+		if (input.IsPress("AddTimeScale"))
+		{
+			m_timeScale += 0.01f;
+		}
+		else if (input.IsPress("SubTimeScale"))
+		{
+			m_timeScale -= 0.01f;
+		}
+		m_timeScale = MathSub::ClampFloat(m_timeScale, 0.0f, 5.0f);
+
 		//状態切り替え
 		if(input.IsTrigger("Select"))
 		{
@@ -139,7 +131,7 @@ void Application::Run()
 		{
 		case Application::DebugState::FPS:
 			// デバッグ表示
-			DebugDrawFPS(totalTime, targetFPS);
+			DebugDrawFPS();
 			break;
 		case Application::DebugState::SceneInfo:
 			sceneController->DebugDraw();
@@ -154,15 +146,12 @@ void Application::Run()
 		//画面の切り替わりを待つ必要がある
 		ScreenFlip();
 
-		// FPSに合わせて待機
-		int frameMS = static_cast<int>(kMillisecond / targetFPS);
-		long long frameEnd = GetNowHiPerformanceCount();
-		float elapsedMS = static_cast<float>(frameEnd - previousTime) / kMillisecond;
-		int waitMS = frameMS - static_cast<int>(elapsedMS);
-		if (waitMS > 0) {
-			WaitTimer(waitMS);
-		}
 
+		//FPSを60に固定
+		while (GetNowHiPerformanceCount() - time < 16667);
+		{
+
+		}
 		//ESCキーで終了
 		if (CheckHitKey(KEY_INPUT_ESCAPE) || m_isFinishApplication)
 		{
@@ -201,27 +190,9 @@ void Application::ChangeScreenMode()
 	ClearDrawScreen();
 }
 
-void Application::DebugDrawFPS(float totalTime, int targetFPS) const
+void Application::DebugDrawFPS() const
 {
 	// デバッグ表示
-	DrawFormatString(10, 10, 0xffffff, L"fps=%.2f", GetFPS());
-	DrawFormatString(10, 30, 0xffffff, L"経過時間=%.2f", totalTime);
-	DrawFormatString(10, 50, 0xffffff, L"targetFPS=%d", targetFPS);
-	DrawFormatString(10, 70, 0xffffff, L"TimeScale=%.2f", m_timeScale);
-}
-
-void Application::DebugChangeTimeScaleAndFPS(Input& input, int& targetFPS)
-{
-	//FPS変更
-	auto fps = static_cast<float>(targetFPS);
-	if (input.IsPress("AddFPS"))fps += 100 * m_deltaTime;
-	if (input.IsPress("SubFPS"))fps -=m_deltaTime;
-	fps = MathSub::ClampInt(fps, 15, kTargetFPS);
-	targetFPS = static_cast<int>(fps);
-	//タイムスケール変更
-	auto timeScale = m_timeScale;
-	if (input.IsPress("AddTimeScale"))timeScale += m_deltaTime;
-	if (input.IsPress("SubTimeScale"))timeScale -= m_deltaTime;
-	timeScale = MathSub::ClampFloat(timeScale, 0.0f, 10.0f);
-	m_timeScale = timeScale;
+	DrawFormatString(10, 10, 0xffffff, L"fps=%.2f", DxLib::GetFPS());
+	DrawFormatString(10, 26, 0xffffff, L"TimeScale=%.2f", m_timeScale);
 }

@@ -31,7 +31,8 @@ Model::Model(int modelHandle, VECTOR pos) :
 	m_color{ 1.0f,1.0f ,1.0f ,1.0f },
 	m_beforeScale(m_scale),
 	m_beforeScaleDif{},
-	m_modelHeightAdjust(0.0f)
+	m_modelHeightAdjust(0.0f),
+	m_timeScale(1.0f)
 {
 	//座標
 	DxLib::MV1SetPosition(m_modelHandle, pos);
@@ -53,7 +54,9 @@ Model::Model(int modelHandle, VECTOR pos, Vector3 forward) :
 	m_beforeScale(m_scale),
 	m_beforeScaleDif{},
 	m_beforeSetDir{ forward.XZ() },
-	m_modelHeightAdjust(0.0f)
+	m_modelHeightAdjust(0.0f),
+	m_timeScale(1.0f),
+	m_rotaSpeed(1.0f)
 {
 	//座標
 	m_pos = pos;
@@ -72,7 +75,7 @@ void Model::Update()
 	m_animator->PlayAnim(m_modelHandle);
 
 	//向きの更新
-	if (m_rotaFrame > 0)
+	if (m_rotaFrame > 0 && m_timeScale > 0.0f)
 	{
 		--m_rotaFrame;
 		//回転
@@ -89,18 +92,17 @@ void Model::Update()
 		if (m_forward.Magnitude() > 0.0f)m_forward = m_forward.Normalize();
 	}
 	//ヒット効果から元の状態に戻していく
-	if (m_hitCountFrame > 0)
+	if (m_hitCountFrame > 0 && m_timeScale > 0.0f)
 	{
 		--m_hitCountFrame;
 		//もとに戻してく(色)
-		m_color.g += 1.0f / kHitFrame;
-		m_color.b += 1.0f / kHitFrame;
+		float hitFrame = (1.0f / kHitFrame) * m_timeScale;
+		m_color.g += hitFrame;
+		m_color.b += hitFrame;
 		SetColor(m_color);
 		//大きさ
-		m_scale -= m_beforeScaleDif / kHitFrame;
+		m_scale -= (m_beforeScaleDif / kHitFrame) * m_timeScale;
 	}
-	//行列適用
-	ApplyMat();
 }
 
 void Model::Draw() const
@@ -185,7 +187,7 @@ void Model::SetDir(Vector3 vec)
 
 	// 軸
 	Vector3 axis = m_forward.Cross(dir);
-	if (axis.SqMagnitude() < 1e-6f)//最小値
+	if (axis.SqMagnitude() < 0.0f)//最小値
 	{
 		// 真逆の場合は安定した補助軸を使う
 		if (std::fabs(m_forward.y) < 0.99f)
@@ -343,6 +345,11 @@ bool Model::IsFinishFixedLoop()
 {
 	//指定ループ終了
 	return m_animator->IsFinishFixedLoop();
+}
+void Model::SetTimeScale(float scale)
+{
+	m_animator->SetTimeScale(scale);
+	m_timeScale = scale;
 }
 void Model::ApplyMat()
 {

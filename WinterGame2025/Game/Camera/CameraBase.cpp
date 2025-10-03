@@ -7,7 +7,7 @@ CameraBase::CameraBase():
     m_right(Vector3::Right()),
     m_look(m_front),
     m_rotH(Quaternion::IdentityQ()),
-	m_targetPos(Vector3::Zero()),
+	m_viewPos(Vector3::Zero()),
 	m_cameraPos(Vector3::Zero())
 {
 }

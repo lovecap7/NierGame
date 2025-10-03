@@ -46,14 +46,10 @@ public:
 	//Window切り替え
 	void SetWindowMode(bool isWindow);
 	bool IsWindowMode()const { return m_isWindow; };
-	//デルタタイムを取得
-	float GetDeltaTime() const { return m_deltaTime; };
 	//タイムスケールを設定
 	void SetTimeScale(float timeScale) { m_timeScale = timeScale; };
 	//タイムスケールを取得
 	float GetTimeScale() const { return m_timeScale; };
-	//タイムスケールを考慮したデルタタイムを取得
-	float GetDeltaTimeWithTimeScale() const { return m_deltaTime * m_timeScale; };
 
 	//ポストエフェクト
 	std::unique_ptr<ShaderPostProcess>& GetPostProcess() { return m_postProcess; };
@@ -62,8 +58,6 @@ private:
 	bool m_isFinishApplication;
 	//ウィンドウモードにする
 	bool m_isWindow = true;
-	//デルタタイム
-	float m_deltaTime;
 	//タイムスケール
 	float m_timeScale;
 	//ポストエフェクト
@@ -80,7 +74,5 @@ private:
 	//スクリーンモードを切り替える際の処理
 	void ChangeScreenMode();
 	//ターゲットFPS
-	void DebugDrawFPS(float totalTime, int targetFPS)const;
-	//タイムスケールとFPSを変更
-	void DebugChangeTimeScaleAndFPS(Input& input, int& targetFPS);
+	void DebugDrawFPS()const;
 };

@@ -53,6 +53,10 @@ public:
 	void DeleteAnim();//再生中のアニメーションを削除
 	void SetFixedLoopFrame(float loopFrame);//指定ループ再生
 	bool IsFinishFixedLoop();//指定ループ再生終了
+	//タイムスケール
+	void SetTimeScale(float scale);
+	//モデルに行列を適用させる
+	void ApplyMat();
 private:
 	int m_modelHandle;
 	//アニメーション
@@ -87,7 +91,7 @@ private:
 	//攻撃を食らった時に少し大きくするので差を覚えておく
 	Vector3 m_beforeScaleDif;
 	Vector3 m_beforeScale;
-	//モデルに行列を適用させる
-	void ApplyMat();
+	//タイムスケール
+	float m_timeScale;
 };
 

@@ -30,6 +30,14 @@ void Collidable::End()
 	Physics::GetInstance().Exit(shared_from_this());
 }
 
+void Collidable::SetTimeScale(float scale)
+{
+	if (m_rb)
+	{
+		m_rb->SetMyTimeScale(scale);
+	}
+}
+
 void Collidable::CreateCollider(Shape shape)
 {
 	switch (shape)

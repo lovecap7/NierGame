@@ -1,4 +1,5 @@
 #include "Animator.h"
+#include "../Main/Application.h"
 #include <DxLib.h>
 namespace
 {
@@ -7,8 +8,9 @@ namespace
 	constexpr float kDefAnimSpeed = 0.5f;//デフォルトの再生速度
 }
 
-Animator::Animator():
-	m_blendRate(kMaxBlend)
+Animator::Animator() :
+	m_blendRate(kMaxBlend),
+	m_timeScale(1.0f)
 {
 }
 
@@ -20,6 +22,8 @@ void Animator::SetAnim(const int& modelHandle, const int& anim, const bool& isLo
 {
 	//メインかサブのアニメーションと同じなら設定しない
 	if (anim == m_animNext.m_attachAnim)return;
+	//タイムスケールが0の時も設定しない
+	if (m_timeScale <= 0.0f)return;
 
 	if (m_animNow.m_attachAnim != -1)
 	{
@@ -53,6 +57,8 @@ void Animator::SetAnim(const int& modelHandle, const int& anim, const bool& isLo
 {
 	//メインかサブのアニメーションと同じなら設定しない
 	if (anim == m_animNext.m_attachAnim)return;
+	//タイムスケールが0の時も設定しない
+	if (m_timeScale <= 0.0f)return;
 
 	if (m_animNow.m_attachAnim != -1)
 	{
@@ -93,7 +99,7 @@ void Animator::RemoveAnim(const int& modelHandle, Anim& anim)
 {
 	//そもそも何もアタッチされていないなら早期リターン
 	if (anim.m_attachAnimIndex == -1)return;
-	
+
 	//今のモーションを消す
 	MV1DetachAnim(modelHandle, anim.m_attachAnimIndex);
 	anim.m_attachAnim = -1;
@@ -143,7 +149,7 @@ void Animator::SetAnimSpeed(const float& animSpeed)
 	m_animNext.m_animSpeed = animSpeed;
 }
 
-void Animator::UpdateAnim(const int& modelHandle,Anim& anim)
+void Animator::UpdateAnim(const int& modelHandle, Anim& anim)
 {
 	//何もアタッチされてないなら再生しない
 	if (anim.m_attachAnimIndex == -1)return;
@@ -169,7 +175,7 @@ void Animator::UpdateAnim(const int& modelHandle,Anim& anim)
 	}
 	//アニメーションを進める
 	MV1SetAttachAnimTime(modelHandle, anim.m_attachAnimIndex, anim.m_animTimer);
-	anim.m_animTimer += anim.m_animSpeed;
+	anim.m_animTimer += anim.m_animSpeed * m_timeScale;
 	//指定ループ再生なら
 	if (anim.m_isFixedLoop && anim.m_fixedLoopFrame > 0.0f)
 	{
@@ -183,7 +189,7 @@ void Animator::UpdateBlend(const int& modelHandle)
 	MV1SetAttachAnimBlendRate(modelHandle, m_animNow.m_attachAnimIndex, kMaxBlend - m_blendRate);
 	MV1SetAttachAnimBlendRate(modelHandle, m_animNext.m_attachAnimIndex, m_blendRate);
 	//だんだん変化していく
-	m_blendRate += kBlendRate;
+	m_blendRate += kBlendRate * m_timeScale;
 	//ブレンド率が最大なら
 	if (m_blendRate >= kMaxBlend)
 	{
