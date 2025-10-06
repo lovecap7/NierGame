@@ -2,6 +2,9 @@
 #include <Dxlib.h>
 #include  "../../General/Input.h"
 #include "../SceneController.h"
+#include "../../Game/Actor/ActorManager.h"
+#include "../../Game/Camera/CameraController.h"
+#include "../../Game/Camera/PlayerCamera.h"
 
 PlayerTestScene::PlayerTestScene(SceneController& controller) :
 	SceneBase(controller)
@@ -14,12 +17,23 @@ PlayerTestScene::~PlayerTestScene()
 
 void PlayerTestScene::Init()
 {
-	
+	//カメラ
+	auto camera = std::make_shared<PlayerCamera>();
+	m_cameraController = std::make_shared<CameraController>();
+	m_cameraController->Init();
+	m_cameraController->ChangeCamera(camera);
+	//アクター
+	m_actorManager = std::make_shared<ActorManager>();
+	m_actorManager->Init();
+	m_actorManager->CreateActorCSV("DebugScene/CharacterData");
+	m_actorManager->CreateActorCSV("DebugScene/StageData");
+	m_actorManager->SetCamera(camera);
 }
 
 void PlayerTestScene::Update()
 {
-	
+	m_actorManager->Update();
+	m_cameraController->Update();
 }
 
 void PlayerTestScene::Draw()
@@ -32,11 +46,12 @@ void PlayerTestScene::Draw()
 		DrawLine3D(VGet(i * 100, 0, -1000), VGet(i * 100, 0, 1000), 0x00ffff);
 	}
 #endif
+	m_actorManager->Draw();
 }
 
 void PlayerTestScene::End()
 {
-
+	m_actorManager->End();
 }
 
 void PlayerTestScene::DebugDraw() const

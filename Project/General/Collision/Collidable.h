@@ -17,6 +17,7 @@ enum class CollisionState
 // 位置補正の優先度の判別に使う
 enum class Priority : int
 {
+	None,		
 	Low,		// 低
 	Middle,		// 中
 	High,		// 高
@@ -95,16 +96,18 @@ protected:
 	std::shared_ptr<ColliderBase> m_collisionData;
 	//座標とベクトル
 	std::shared_ptr<Rigidbody> m_rb;
-	//衝突判定を行わない(trueなら)
-	bool m_isThrough;
-	//トリガー
-	bool m_isTrigger;
+
 	//状態
 	CollisionState m_collState;
 	//優先度
 	Priority m_priority;
 	//タグ
 	GameTag m_tag;
+	//衝突判定を行わない(trueなら)
+	bool m_isThrough;
+	//トリガー
+	bool m_isTrigger;
+
 	//床に当たったならtrue
 	bool m_isFloor;
 	//壁に当たったならtrue
@@ -113,13 +116,12 @@ protected:
 	/// <summary>
 	/// 全てのコライダブルの設定を行う
 	/// </summary>
-	/// <param name="collState">コライダブルの状態</param>
 	/// <param name="priority">優先度</param>
 	/// <param name="tag">ゲームタグ</param>
 	/// <param name="isTrough">当たり判定を無視するか</param>
 	/// <param name="isTrigger">トリガー判定をするか</param>
 	/// <param name="isTrigger">重力を受けるか</param>
-	void AllSetting(CollisionState collState, Priority priority, GameTag tag, bool isTrough, bool isTrigger,bool isGravity);
+	void AllSetting(Priority priority, GameTag tag, bool isTrough, bool isTrigger,bool isGravity);
 };
 
 

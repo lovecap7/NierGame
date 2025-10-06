@@ -3,6 +3,7 @@
 #include <string>
 #include "../../General/Math/MyMath.h"
 #include "../../General/Collision/Collidable.h"
+#include "../../General/CSV/ActorData.h"
 
 class ActorManager;
 class Collidable;
@@ -15,6 +16,8 @@ class Actor abstract :
 	public Collidable
 {
 protected:
+	//データ
+	std::shared_ptr<ActorData> m_actorData;
 	//消滅
 	bool m_isDelete;
 	//アクターの識別番号
@@ -23,8 +26,10 @@ protected:
 	bool m_isSetId;
 	//モデル
 	std::shared_ptr<Model> m_model;
+	//アクターマネージャーの参照
+	std::weak_ptr<ActorManager> m_pActorManager;
 public:
-	Actor(Shape shape);
+	Actor(std::shared_ptr<ActorData> actorData,Shape shape, std::weak_ptr<ActorManager> pActorManager);
 	virtual ~Actor() {};
 	/// <summary>
 	/// 初期化処理

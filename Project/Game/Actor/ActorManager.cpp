@@ -2,6 +2,10 @@
 #include "Actor.h"
 #include <DxLib.h>
 #include <cassert>
+#include "../../General/CSV/CSVDataLoader.h"
+#include "../../General/CSV/ActorData.h"
+#include "DebugActor/DebugPlayer.h"
+#include "Stage/StageObject.h"
 
 
 ActorManager::ActorManager():
@@ -63,4 +67,35 @@ void ActorManager::Draw() const
 
 void ActorManager::End()
 {
+}
+
+void ActorManager::CreateActorCSV(const char* path)
+{
+	//CSVを読み込む
+	std::shared_ptr<CSVDataLoader> csvLoader = std::make_shared<CSVDataLoader>();
+	auto csvDatas = csvLoader->LoadCSV(path);
+	//アクターの作成
+	for (auto& data : csvDatas)
+	{
+		//データを変換
+		auto actorData = std::make_shared<ActorData>(data);
+		//アクターを作成
+		std::shared_ptr<Actor> actor;
+		if (actorData->m_actorType == ActorData::ActorType::Character)
+		{
+			//キャラクター
+			actor = std::make_shared<DebugPlayer>(actorData, shared_from_this());
+		}
+		else if (actorData->m_actorType == ActorData::ActorType::Stage)
+		{
+			//ステージ
+			actor = std::make_shared<StageObject>(actorData, shared_from_this());
+		}
+		else if (actorData->m_actorType == ActorData::ActorType::Attack)
+		{
+			//攻撃
+			actor = std::make_shared<DebugPlayer>(actorData, shared_from_this());
+		}
+		Entry(actor);
+	}
 }

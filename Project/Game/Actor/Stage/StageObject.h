@@ -1,0 +1,25 @@
+#pragma once
+#include "../Actor.h"
+#include "../../../General/Math/MyMath.h"
+#include <DxLib.h>
+#include <memory>
+class Collidable;
+class ActorManager;
+class StageObject :
+    public Actor
+{
+public:
+    StageObject(std::shared_ptr<ActorData> actorData, std::weak_ptr<ActorManager> pActorManager);
+    ~StageObject();
+    void Init()override;
+    void Update() override;
+    void OnCollide(const std::shared_ptr<Collidable> other)override;
+    void Draw()const override;
+    void Complete() override;
+    void End()override;
+    //‚·‚è”²‚¯‚é‚©
+    void SetIsThrough(bool isThrough);
+private:
+};
+
+

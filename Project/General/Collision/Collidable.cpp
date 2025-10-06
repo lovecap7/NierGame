@@ -9,7 +9,7 @@ Collidable::Collidable(Shape shape):
 	m_isThrough(false),
 	m_isTrigger(false),
 	m_collState(CollisionState::Normal),
-	m_priority(Priority::Middle),
+	m_priority(Priority::None),
 	m_tag(GameTag::None),
 	m_isFloor(false),
 	m_isWall(false)
@@ -60,9 +60,8 @@ void Collidable::CreateCollider(Shape shape)
 	}
 }
 
-void Collidable::AllSetting(CollisionState collState, Priority priority, GameTag tag, bool isTrough, bool isTrigger, bool isGravity)
+void Collidable::AllSetting(Priority priority, GameTag tag, bool isTrough, bool isTrigger, bool isGravity)
 {
-	m_collState = collState;		//ó‘Ô
 	m_priority = priority;			//—Dæ“x
 	m_tag = tag;					//ƒ^ƒO
 	m_isThrough = isTrough;			//“–‚½‚è”»’è‚ğ–³‹‚·‚é‚©
