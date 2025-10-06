@@ -1,6 +1,6 @@
 #include "StageObjectDraw.h"
 #include "../../../General/Collision/PolygonCollider.h"
-#include "../../../General/Rigidbody.h"
+#include "../../../General/Collision/Rigidbody.h"
 #include "../../../General/Collision/Collidable.h"
 #include "../../../General/Model.h"
 
@@ -15,11 +15,6 @@ StageObjectDraw::StageObjectDraw(int modelHandle, VECTOR pos, VECTOR scale, VECT
 
 StageObjectDraw::~StageObjectDraw()
 {
-}
-
-void StageObjectDraw::Update(const std::weak_ptr<GameCamera> camera, const std::weak_ptr<ActorManager> actorManager)
-{
-	m_model->Update();
 }
 
 void StageObjectDraw::Update()

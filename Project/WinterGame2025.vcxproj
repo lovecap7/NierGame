@@ -141,9 +141,8 @@
   <ItemGroup>
     <ClCompile Include="Game\Actor\Actor.cpp" />
     <ClCompile Include="Game\Actor\ActorManager.cpp" />
-    <ClCompile Include="Game\Actor\DebugActor\DebugEnemy.cpp" />
-    <ClCompile Include="Game\Actor\DebugActor\DebugPlayer.cpp" />
-    <ClCompile Include="Game\Actor\DebugActor\DebugWeapon.cpp" />
+    <ClCompile Include="Game\Actor\Stage\StageObjectCollision.cpp" />
+    <ClCompile Include="Game\Actor\Stage\StageObjectDraw.cpp" />
     <ClCompile Include="Game\Camera\Camera.cpp" />
     <ClCompile Include="Game\Camera\CameraBase.cpp" />
     <ClCompile Include="Game\Camera\CameraController.cpp" />
@@ -159,6 +158,8 @@
     <ClCompile Include="General\Collision\Rigidbody.cpp" />
     <ClCompile Include="General\Collision\SphereCollider.cpp" />
     <ClCompile Include="General\Collision\TorusCollider.cpp" />
+    <ClCompile Include="General\CSVDataLoader.cpp" />
+    <ClCompile Include="General\CSVDataSaver.cpp" />
     <ClCompile Include="General\Input.cpp" />
     <ClCompile Include="General\Math\MathSub.cpp" />
     <ClCompile Include="General\Math\Matrix3x3.cpp" />
@@ -182,9 +183,8 @@
   <ItemGroup>
     <ClInclude Include="Game\Actor\Actor.h" />
     <ClInclude Include="Game\Actor\ActorManager.h" />
-    <ClInclude Include="Game\Actor\DebugActor\DebugEnemy.h" />
-    <ClInclude Include="Game\Actor\DebugActor\DebugPlayer.h" />
-    <ClInclude Include="Game\Actor\DebugActor\DebugWeapon.h" />
+    <ClInclude Include="Game\Actor\Stage\StageObjectCollision.h" />
+    <ClInclude Include="Game\Actor\Stage\StageObjectDraw.h" />
     <ClInclude Include="Game\Camera\Camera.h" />
     <ClInclude Include="Game\Camera\CameraBase.h" />
     <ClInclude Include="Game\Camera\CameraController.h" />
@@ -200,6 +200,9 @@
     <ClInclude Include="General\Collision\Rigidbody.h" />
     <ClInclude Include="General\Collision\SphereCollider.h" />
     <ClInclude Include="General\Collision\TorusCollider.h" />
+    <ClInclude Include="General\CSVDataLoader.h" />
+    <ClInclude Include="General\CSVDatas.h" />
+    <ClInclude Include="General\CSVDataSaver.h" />
     <ClInclude Include="General\Game.h" />
     <ClInclude Include="General\Input.h" />
     <ClInclude Include="General\Math\MathSub.h" />
@@ -214,6 +217,8 @@
     <ClInclude Include="General\ShaderPostProcess.h" />
     <ClInclude Include="General\StringUtil.h" />
     <ClInclude Include="Main\Application.h" />
+    <ClInclude Include="Scene\DebugScene\DebugSelectScene.h" />
+    <ClInclude Include="Scene\DebugScene\PlayerTestScene.h" />
     <ClInclude Include="Scene\Debug\DebugSelectScene.h" />
     <ClInclude Include="Scene\Debug\PlayerTestScene.h" />
     <ClInclude Include="Scene\GameScene.h" />

@@ -117,28 +117,22 @@
     <ClCompile Include="Game\Camera\PlayerCamera.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\Debug\PlayerTestScene.cpp">
+    <ClCompile Include="Scene\DebugScene\DebugSelectScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\Debug\DebugSelectScene.cpp">
+    <ClCompile Include="Scene\DebugScene\PlayerTestScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Actor\Debug\DebugEnemy.cpp">
+    <ClCompile Include="Game\Actor\Stage\StageObjectCollision.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Actor\Debug\DebugPlayer.cpp">
+    <ClCompile Include="Game\Actor\Stage\StageObjectDraw.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Actor\Debug\DebugWeapon.cpp">
+    <ClCompile Include="General\CSVDataLoader.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Actor\DebugActor\DebugEnemy.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Actor\DebugActor\DebugPlayer.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Actor\DebugActor\DebugWeapon.cpp">
+    <ClCompile Include="General\CSVDataSaver.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -275,22 +269,25 @@
     <ClInclude Include="Scene\Debug\DebugSelectScene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Actor\Debug\DebugPlayer.h">
+    <ClInclude Include="Game\Actor\Stage\StageObjectDraw.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Actor\Debug\DebugEnemy.h">
+    <ClInclude Include="Game\Actor\Stage\StageObjectCollision.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Actor\Debug\DebugWeapon.h">
+    <ClInclude Include="Scene\DebugScene\PlayerTestScene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Actor\DebugActor\DebugEnemy.h">
+    <ClInclude Include="Scene\DebugScene\DebugSelectScene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Actor\DebugActor\DebugPlayer.h">
+    <ClInclude Include="General\CSVDataLoader.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Actor\DebugActor\DebugWeapon.h">
+    <ClInclude Include="General\CSVDatas.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="General\CSVDataSaver.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,7 +2,7 @@
 #include "../../../General/Collision/PolygonCollider.h"
 #include "../../../General/Collision/SphereCollider.h"
 #include "../../../General/Collision/CapsuleCollider.h"
-#include "../../../General/Rigidbody.h"
+#include "../../../General/Collision/Rigidbody.h"
 #include "../../../General/Collision/Collidable.h"
 #include "../../../General/Model.h"
 
@@ -54,7 +54,7 @@ void StageObjectCollision::Init()
 	Collidable::Init();
 	MV1SetupCollInfo(m_collisionHandle, -1);
 }
-void StageObjectCollision::Update(const std::weak_ptr<GameCamera> camera, const std::weak_ptr<ActorManager> actorManager)
+void StageObjectCollision::Update()
 {
 	MV1RefreshCollInfo(m_collisionHandle, -1);
 	m_model->Update();
