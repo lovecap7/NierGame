@@ -1,0 +1,29 @@
+#pragma once
+#include "CameraBase.h"
+#include <memory>
+class Actor;
+class PlayerCamera :
+    public CameraBase
+{
+public:
+	PlayerCamera();
+	~PlayerCamera();
+	virtual void Init() override;
+	virtual void Update() override;
+	//ロックオン開始
+	void StartLockOn(std::weak_ptr<Actor> lockOnTarget);
+	//ロックオン終了
+	void EndLockOn();
+	//ロックオン中か
+	bool IsLockOn() const { return m_isLockOn; }
+	//プレイヤーの座標
+	void SetPlayerPos(const Vector3& pos) { m_playerPos = pos; }
+private:
+	//ロックオン対象
+	std::weak_ptr<Actor> m_lockOnTarget;
+	//ロックオン中か
+	bool m_isLockOn;
+	//プレイヤーの座標
+	Vector3 m_playerPos;
+};
+
