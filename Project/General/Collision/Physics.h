@@ -49,6 +49,8 @@ public:
 	std::list<std::weak_ptr<Collidable>> GetAreaXCollidable(float startX,float endX);
 	//レイを飛ばして当たったCollidableを返す
 	std::list<std::weak_ptr<Collidable>> RayCast(const Vector3& startPos, const Vector3& endPos);
+	//カメラからレイを飛ばして終点に一番近い座標を返す
+	Vector3 GetCameraRatCastNearEndPos(const Vector3& targetPos, const Vector3& cameraPos);
 private:
 	//当たり判定のチェックをするクラス
 	std::shared_ptr<CollisionChecker> m_collChecker;

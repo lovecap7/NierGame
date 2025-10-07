@@ -2,15 +2,11 @@
 #include "../../../General/Collision/ColliderBase.h"
 #include "../../../General/Collision/Rigidbody.h"
 #include "../../../General/Collision/Collidable.h"
+#include "../../../General/Collision/PolygonCollider.h"
 #include "../../../General/Model.h"
 StageObject::StageObject(std::shared_ptr<ActorData> actorData, std::weak_ptr<ActorManager> pActorManager):
 	Actor(actorData,Shape::Polygon,pActorManager)
 {
-	/*if (m_actorData->m_modelPath == L"Collision/Cube")
-	{
-		Vector3 scale = m_model->GetScale() * 0.01f;
-		m_model->SetScale(scale.ToDxLibVector());
-	}*/
 }
 
 StageObject::~StageObject()
@@ -19,8 +15,8 @@ StageObject::~StageObject()
 
 void StageObject::Init()
 {
-	Collidable::Init();
 	if (m_isThrough)return;
+	Collidable::Init();
 	MV1SetupCollInfo(m_model->GetModelHandle(), -1);
 }
 
@@ -52,6 +48,7 @@ void StageObject::Complete()
 
 void StageObject::End()
 {
-	Collidable::End();
 	m_model->End();
+	if (m_isThrough)return;
+	Collidable::End();
 }

@@ -1,6 +1,7 @@
 #include "PlayerCamera.h"
 #include "../../General/Input.h"
 #include "../../General/Collision/SphereCollider.h"
+#include "../../General/Collision/Physics.h"
 #include "../../Main/Application.h"
 #include "../Actor/DebugActor/DebugPlayer.h"
 
@@ -15,7 +16,7 @@ namespace
     constexpr float kCameraHeight = 150.0f;     //プレイヤーからのカメラ高さ
 
     //追従・補間設定定数
-    constexpr float kNormalFollowLerp = 0.05f;  //通常時の追従速度
+    constexpr float kNormalFollowLerp = 0.02f;  //通常時の追従速度
     constexpr float kForwardFollowLerp = 0.2f;  //プレイヤーが前進中の追従速度
     constexpr float kLerpBlendSpeed = 0.001f;     //lerp率の補間速度
     constexpr float kDotThreshold = 0.7f;       //前進中」と判定するためのDot閾値
@@ -113,6 +114,8 @@ void PlayerCamera::Update()
     //理想カメラ位置
     Vector3 nextPos;
     nextPos = targetPos - m_look * m_distance;
+    //位置補正
+    nextPos = Physics::GetInstance().GetCameraRatCastNearEndPos(targetPos, nextPos);
     //位置確定
     m_cameraPos = nextPos;
     //視点確定

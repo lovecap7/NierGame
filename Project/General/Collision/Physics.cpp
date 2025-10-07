@@ -193,6 +193,33 @@ std::list<std::weak_ptr<Collidable>> Physics::RayCast(const Vector3& startPos, c
 	return collList;
 }
 
+Vector3 Physics::GetCameraRatCastNearEndPos(const Vector3& targetPos, const Vector3& cameraPos)
+{
+	auto hitColls = RayCast(targetPos, cameraPos);
+	float shortDis = 1000000.0f;
+	Vector3 hitPos = cameraPos;
+	for (auto& hitColl : hitColls)
+	{
+		if (hitColl.expired())continue;
+		auto pHitColl = hitColl.lock();
+		//ポリゴンかチェック
+		if (pHitColl->GetShape() != Shape::Polygon)continue;
+		if (pHitColl->m_isThrough)continue;
+		if (pHitColl->m_isTrigger)continue;
+		MV1_COLL_RESULT_POLY result = MV1CollCheck_Line(std::dynamic_pointer_cast<PolygonCollider>(pHitColl->m_collisionData)->GetModelHandle(), -1,
+			targetPos.ToDxLibVector(), cameraPos.ToDxLibVector());
+		if (!result.HitFlag)continue;
+		//最短かどうか
+		float dis = (Vector3(result.HitPosition) - targetPos).Magnitude();
+		if (shortDis > dis)
+		{
+			shortDis = dis;
+			hitPos = result.HitPosition;
+		}
+	}
+	return hitPos;
+}
+
 void Physics::InitTimeScale()
 {
 	float timeScale = Application::GetInstance().GetTimeScale();
