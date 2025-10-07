@@ -150,6 +150,7 @@
     <ClCompile Include="Game\Actor\Character\Player\Player.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\PlayerStateBase.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\PlayerStateIdle.cpp" />
+    <ClCompile Include="Game\Actor\Character\Player\PlayerStateWalk.cpp" />
     <ClCompile Include="Game\Actor\DebugActor\DebugEnemy.cpp" />
     <ClCompile Include="Game\Actor\DebugActor\DebugPlayer.cpp" />
     <ClCompile Include="Game\Actor\DebugActor\DebugWeapon.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="Game\Actor\Character\Player\Player.h" />
     <ClInclude Include="Game\Actor\Character\Player\PlayerStateBase.h" />
     <ClInclude Include="Game\Actor\Character\Player\PlayerStateIdle.h" />
+    <ClInclude Include="Game\Actor\Character\Player\PlayerStateWalk.h" />
     <ClInclude Include="Game\Actor\DebugActor\DebugEnemy.h" />
     <ClInclude Include="Game\Actor\DebugActor\DebugPlayer.h" />
     <ClInclude Include="Game\Actor\DebugActor\DebugWeapon.h" />

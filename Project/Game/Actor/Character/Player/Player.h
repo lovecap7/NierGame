@@ -9,6 +9,7 @@ class ActorManager;
 class CharacterStateBase;
 class Input;
 class ActorData;
+class PlayerCamera;
 class Player :
 	public CharacterBase
 {
@@ -35,7 +36,10 @@ public:
 	//コリジョンの状態を設定
 	void SetCollState(CollisionState collState) { m_collState = collState; }
 	CollisionState GetCollState()const { return m_collState; };
+	//カメラの回転量
+	Quaternion GetCameraRot()const;
 private:
-	
+	//カメラ
+	std::weak_ptr<PlayerCamera> GetPlayerCamera()const;
 };
 

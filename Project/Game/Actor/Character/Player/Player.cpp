@@ -9,6 +9,7 @@
 #include "../../../../General/Model.h"
 #include "../../../../General/Animator.h"
 #include "../../ActorManager.h"
+#include "../../../Camera/PlayerCamera.h"
 #include <DxLib.h>
 #include <cmath>
 #include <cassert>
@@ -57,6 +58,13 @@ void Player::Update()
 	}
 	//アニメーションの更新
 	m_model->Update();
+	//カメラに位置を渡す
+	if (!GetPlayerCamera().expired())
+	{
+		auto camera = GetPlayerCamera().lock();
+		camera->SetPlayerPos(m_rb->GetNextPos());
+		camera->SetPlayerVec(m_rb->GetMoveVec());
+	}
 }
 
 void Player::OnCollide(const std::shared_ptr<Collidable> other)
@@ -96,4 +104,32 @@ void Player::End()
 {
 	m_model->End();
 	Collidable::End();
+}
+
+Quaternion Player::GetCameraRot() const
+{
+	Quaternion q = Quaternion::IdentityQ();
+	if (!m_pActorManager.expired())
+	{
+		auto actorM = m_pActorManager.lock();
+		if (!actorM->GetCamera().expired())
+		{
+			q = actorM->GetCamera().lock()->GetRot();
+		}
+	}
+	return q;
+}
+
+std::weak_ptr<PlayerCamera> Player::GetPlayerCamera() const
+{
+	std::weak_ptr<PlayerCamera> camera;
+	if (!m_pActorManager.expired())
+	{
+		auto actorM = m_pActorManager.lock();
+		if (!actorM->GetCamera().expired())
+		{
+			camera = actorM->GetCamera();
+		}
+	}
+	return camera;
 }
