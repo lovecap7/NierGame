@@ -2,9 +2,12 @@
 #include <list>
 #include <memory>
 #include <map>
+#include "../../General/Collision/Collidable.h"
 
 class Actor;
+class ActorData;
 class PlayerCamera;
+class CharacterBase;
 class ActorManager : public std::enable_shared_from_this<ActorManager>
 {
 public:
@@ -35,5 +38,8 @@ private:
 	int m_actorId;//割り振る番号
 	//カメラの参照
 	std::weak_ptr<PlayerCamera> m_pCamera;
+private:
+	//キャラクターの作成
+	std::shared_ptr<CharacterBase> CreateChara(GameTag tag, std::shared_ptr<ActorData> data);
 };
 

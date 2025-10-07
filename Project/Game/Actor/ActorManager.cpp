@@ -6,6 +6,8 @@
 #include "../../General/CSV/ActorData.h"
 #include "DebugActor/DebugPlayer.h"
 #include "Stage/StageObject.h"
+#include "Character/CharacterBase.h"
+#include "Character/Player/Player.h"
 
 
 ActorManager::ActorManager():
@@ -84,7 +86,7 @@ void ActorManager::CreateActorCSV(const char* path)
 		if (actorData->m_actorType == ActorData::ActorType::Character)
 		{
 			//キャラクター
-			actor = std::make_shared<DebugPlayer>(actorData, shared_from_this());
+			actor = CreateChara(actorData->m_gameTag, actorData);
 		}
 		else if (actorData->m_actorType == ActorData::ActorType::Stage)
 		{
@@ -98,4 +100,17 @@ void ActorManager::CreateActorCSV(const char* path)
 		}
 		Entry(actor);
 	}
+}
+
+std::shared_ptr<CharacterBase> ActorManager::CreateChara(GameTag tag, std::shared_ptr<ActorData> data)
+{
+	std::shared_ptr<CharacterBase> chara;
+	//プレイヤー
+	if (tag == GameTag::Player)
+	{
+		chara = std::make_shared<Player>(data, shared_from_this());
+	}
+	//nullチェック
+	assert(chara);
+	return chara;
 }

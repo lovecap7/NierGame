@@ -145,6 +145,11 @@
   <ItemGroup>
     <ClCompile Include="Game\Actor\Actor.cpp" />
     <ClCompile Include="Game\Actor\ActorManager.cpp" />
+    <ClCompile Include="Game\Actor\Character\CharacterBase.cpp" />
+    <ClCompile Include="Game\Actor\Character\CharacterStateBase.cpp" />
+    <ClCompile Include="Game\Actor\Character\Player\Player.cpp" />
+    <ClCompile Include="Game\Actor\Character\Player\PlayerStateBase.cpp" />
+    <ClCompile Include="Game\Actor\Character\Player\PlayerStateIdle.cpp" />
     <ClCompile Include="Game\Actor\DebugActor\DebugEnemy.cpp" />
     <ClCompile Include="Game\Actor\DebugActor\DebugPlayer.cpp" />
     <ClCompile Include="Game\Actor\DebugActor\DebugWeapon.cpp" />
@@ -191,6 +196,11 @@
   <ItemGroup>
     <ClInclude Include="Game\Actor\Actor.h" />
     <ClInclude Include="Game\Actor\ActorManager.h" />
+    <ClInclude Include="Game\Actor\Character\CharacterBase.h" />
+    <ClInclude Include="Game\Actor\Character\CharacterStateBase.h" />
+    <ClInclude Include="Game\Actor\Character\Player\Player.h" />
+    <ClInclude Include="Game\Actor\Character\Player\PlayerStateBase.h" />
+    <ClInclude Include="Game\Actor\Character\Player\PlayerStateIdle.h" />
     <ClInclude Include="Game\Actor\DebugActor\DebugEnemy.h" />
     <ClInclude Include="Game\Actor\DebugActor\DebugPlayer.h" />
     <ClInclude Include="Game\Actor\DebugActor\DebugWeapon.h" />

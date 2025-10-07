@@ -1,0 +1,99 @@
+#include "Player.h"
+#include "PlayerStateBase.h"
+#include "PlayerStateIdle.h"
+#include "../../../../General/game.h"
+#include "../../../../General/Collision/CapsuleCollider.h"
+#include "../../../../General/Collision/Rigidbody.h"
+#include "../../../../General/Collision/Collidable.h"
+#include "../../../../General/Input.h"
+#include "../../../../General/Model.h"
+#include "../../../../General/Animator.h"
+#include "../../ActorManager.h"
+#include <DxLib.h>
+#include <cmath>
+#include <cassert>
+
+namespace
+{
+
+}
+
+Player::Player(std::shared_ptr<ActorData> actorData, std::weak_ptr<ActorManager> pActorManager) :
+	CharacterBase(actorData,Shape::Capsule,pActorManager)
+{
+	
+}
+
+Player::~Player()
+{
+}
+
+void Player::Init()
+{
+	//Physicsに登録
+	Collidable::Init();
+	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
+	auto thisPointer = std::dynamic_pointer_cast<Player>(shared_from_this());
+	m_state = std::make_shared<PlayerStateIdle>(thisPointer);
+	//状態を変化する
+	m_state->ChangeState(m_state);
+	//モデルの高さ調整
+	m_model->SetModelHeightAdjust(-m_actorData->m_collRadius);
+}
+
+
+void Player::Update()
+{
+	//入力の取得
+	auto& input = Input::GetInstance();
+	//状態に合わせた更新
+	m_state->Update();
+	//状態が変わったかをチェック
+	if (m_state != m_state->GetNextState())
+	{
+		//状態を変化する
+		m_state = m_state->GetNextState();
+		m_state->Init();
+	}
+	//アニメーションの更新
+	m_model->Update();
+}
+
+void Player::OnCollide(const std::shared_ptr<Collidable> other)
+{
+}
+
+void Player::Draw() const
+{
+#if _DEBUG
+	//衝突判定
+	DrawCapsule3D(
+		m_rb->m_pos.ToDxLibVector(),
+		std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetEndPos().ToDxLibVector(),
+		std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetRadius(),
+		16,
+		0xff0000,
+		0xff0000,
+		false//地面にいると塗りつぶされる
+	);
+#endif
+	m_model->Draw();
+}
+
+void Player::Complete()
+{
+	m_rb->SetPos(m_rb->GetNextPos());
+	Vector3 endPos = m_rb->m_pos;
+	endPos.y += m_actorData->m_collHeight;
+	std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->SetEndPos(endPos);//カプセルの移動
+	//モデルの座標更新
+	m_model->SetPos(m_rb->m_pos.ToDxLibVector());
+	m_model->ApplyMat();
+}
+
+
+void Player::End()
+{
+	m_model->End();
+	Collidable::End();
+}
