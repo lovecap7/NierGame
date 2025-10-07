@@ -6,24 +6,28 @@
 
 namespace
 {
-    //カメラ距離
-    constexpr float kDistance = 500.0f;
-    //回転速度
-    constexpr float kHorizontalSpeed = 0.02f;
-    constexpr float kVerticalSpeed = 0.02f;
-    //上下限界角度
-    constexpr float kLimitAngle = 80.0f;
-    //入力値角度変換
-    constexpr float kInputToAngle = 0.1f;
-    //カメラの高さ
-    constexpr float kCameraHeight = 300.0f;
+    //カメラ設定定数
+    constexpr float kDistance = 300.0f;         //カメラ距離
+    constexpr float kHorizontalSpeed = 0.05f;   //水平回転速度
+    constexpr float kVerticalSpeed = 0.02f;     //垂直回転速度
+    constexpr float kLimitAngle = 80.0f;        //上下限界角度
+    constexpr float kInputToAngle = 0.1f;       //スティック入力→角度変換係数
+    constexpr float kCameraHeight = 150.0f;     //プレイヤーからのカメラ高さ
+
+    //追従・補間設定定数
+    constexpr float kNormalFollowLerp = 0.05f;  //通常時の追従速度
+    constexpr float kForwardFollowLerp = 0.2f;  //プレイヤーが前進中の追従速度
+    constexpr float kLerpBlendSpeed = 0.001f;     //lerp率の補間速度
+    constexpr float kDotThreshold = 0.7f;       //前進中」と判定するためのDot閾値
+    constexpr float kLockOnFollowSpeed = 0.1f;  //ロックオン時の回転追従速度
 }
 
 PlayerCamera::PlayerCamera() :
 	CameraBase(),
 	m_isLockOn(false),
 	m_lockOnTarget(),
-	m_playerPos(Vector3::Zero())
+	m_playerPos(Vector3::Zero()),
+    m_lerpRate(0.0f)
 {
 }
 
@@ -41,6 +45,7 @@ void PlayerCamera::Init()
 	m_cameraPos = Vector3::Zero();
 	m_isLockOn = false;
 	m_playerPos = Vector3::Zero();
+    m_lerpRate = kNormalFollowLerp;
 }
 
 void PlayerCamera::Update()
@@ -75,48 +80,45 @@ void PlayerCamera::Update()
         {
             m_look = m_look.Normalize();
         }
+
         //回転量の保存
         m_rotH = qH * m_rotH;
-
     }
     else
     {
         if (islockOn)
         {
             auto lockOn = m_lockOnTarget.lock();
-            //ロックオンの座標
-            Vector3 lockOnPos = lockOn->GetPos();
-            lockOnPos = Vector3::Lerp(lockOnPos, playerPos, 0.5f);
-            //プレイヤーからターゲットへのベクトル
-            Vector3 dir = (lockOnPos - m_cameraPos).Normalize();
-
-            //水平成分だけを抜き出す
+            //ターゲットとプレイヤーの間
+            Vector3 lockOnPos = Vector3::Lerp(lockOn->GetPos(), playerPos, 0.5f);
+            Vector3 dir = lockOnPos - m_cameraPos;
+            if (dir.SqMagnitude() > 0.0f)
+            {
+                dir = dir.Normalize();
+            }
             Vector3 flatDir = dir;
             flatDir.y = 0.0f;
-            if (flatDir.SqMagnitude() > 0.0f)
+            UpdateCameraDirection(flatDir, kLockOnFollowSpeed); //ロックオンは即座に反映
+        }
+        else
+        {
+            Vector3 moveDir = m_playerVec;
+            if (moveDir.SqMagnitude() > 0.0f)
             {
-                flatDir = flatDir.Normalize();
+                moveDir = moveDir.Normalize();
+                UpdateCameraDirection(moveDir, kNormalFollowLerp);// ゆっくり追従
             }
-            //Y軸回転を quaternion で作る
-            float angleY = atan2f(flatDir.x, flatDir.z); // Z前方基準
-            m_rotH = Quaternion::AngleAxis(angleY, Vector3::Up());
-
-            //front / right / look をリセット
-            m_front = flatDir;
-            m_right = Vector3::Up().Cross(m_front).Normalize();
-            m_look = dir;
         }
     }
     //理想カメラ位置
     Vector3 nextPos;
     nextPos = targetPos - m_look * m_distance;
+    //位置確定
+    m_cameraPos = nextPos;
+    //視点確定
     //ロックオン中ならターゲットをロックオン対象にする
     Vector3 viewPos = targetPos;
-
-    //位置確定
-    m_cameraPos = Vector3::Lerp(m_cameraPos, nextPos, 0.05f);
-   
-	m_viewPos = Vector3::Lerp(m_viewPos, viewPos, 0.05f);
+    m_viewPos = viewPos;
     // DxLibに反映
     SetCameraPositionAndTarget_UpVecY(
         m_cameraPos.ToDxLibVector(),
@@ -135,4 +137,34 @@ void PlayerCamera::EndLockOn()
 {
 	m_isLockOn = false;
 	m_lockOnTarget.reset();
+}
+
+void PlayerCamera::UpdateCameraDirection(const Vector3& targetDir, float followSpeed)
+{
+    Vector3 normTargetDir = targetDir;
+    if (normTargetDir.SqMagnitude() > 0.0f)
+    {
+        normTargetDir = normTargetDir.Normalize();
+    }
+
+    // targetDirに向かってfrontを補間
+    m_front = Vector3::Lerp(m_front, normTargetDir, followSpeed);
+    if (m_front.SqMagnitude() > 0.0f)
+    {
+        m_front = m_front.Normalize();
+    }
+    // 向きベクトル更新
+    m_right = Vector3::Up().Cross(m_front);
+    if (m_right.SqMagnitude() > 0.0f)
+    {
+        m_right = m_right.Normalize();
+    }
+    m_look = Quaternion::AngleAxis(m_vertexAngle * MyMath::DEG_2_RAD, m_right) * m_front;
+    if (m_look.SqMagnitude() > 0.0f)
+    {
+        m_look = m_look.Normalize();
+    }
+
+    // 水平方向のクォータニオンを保存
+    m_rotH = Quaternion::CalcHorizontalQuat(m_front);
 }

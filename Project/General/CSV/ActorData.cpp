@@ -78,13 +78,13 @@ void ActorData::Conversion()
 	m_gameTag = gameTag;
 
 	//“–‚½‚è”»’è‚ğ–³‹‚·‚é‚©
-	m_isTrough = (m_data[14] == L"true");
+	m_isTrough = (m_data[14] == L"1");
 
 	//ƒgƒŠƒK[
-	m_isTrigger = (m_data[15] == L"true");
+	m_isTrigger = (m_data[15] == L"1");
 
 	//d—Í
-	m_isGravity = (m_data[16] == L"true");
+	m_isGravity = (m_data[16] == L"1");
 
 	//”¼Œa
 	m_collRadius = std::stof(m_data[17]);

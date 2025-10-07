@@ -30,5 +30,6 @@ public:
 private:
 	//モデルリソース
 	std::map<std::wstring,int>m_modelHandles;
+
 };
 

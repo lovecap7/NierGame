@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClCompile Include="Game\Actor\Actor.cpp" />
     <ClCompile Include="Game\Actor\ActorManager.cpp" />
+    <ClCompile Include="Game\Actor\DebugActor\DebugEnemy.cpp" />
     <ClCompile Include="Game\Actor\DebugActor\DebugPlayer.cpp" />
     <ClCompile Include="Game\Actor\DebugActor\DebugWeapon.cpp" />
     <ClCompile Include="Game\Actor\Stage\StageObject.cpp" />
@@ -190,6 +191,7 @@
   <ItemGroup>
     <ClInclude Include="Game\Actor\Actor.h" />
     <ClInclude Include="Game\Actor\ActorManager.h" />
+    <ClInclude Include="Game\Actor\DebugActor\DebugEnemy.h" />
     <ClInclude Include="Game\Actor\DebugActor\DebugPlayer.h" />
     <ClInclude Include="Game\Actor\DebugActor\DebugWeapon.h" />
     <ClInclude Include="Game\Actor\Stage\StageObject.h" />

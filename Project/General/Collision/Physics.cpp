@@ -13,7 +13,12 @@ namespace
 	//確認回数
 	constexpr int kTryNum = 30;
 	//重力
-	const Vector3 kGroundGravity = { 0.0f, -0.5f, 0.0f };
+	const Vector3 kGroundGravity = { 0.0f, -5.0f, 0.0f };
+	const Vector3 kAirGravity = { 0.0f, -0.5f, 0.0f };
+	//落下状態に切り替わる落下ベクトルの大きさ
+	constexpr float kChangeStateFall = -4.0f;
+	//落下スピードの上限(Y成分の大きさ)
+	constexpr float kMaxGravityY = -20.0f;
 }
 
 void Physics::Init()
@@ -208,13 +213,16 @@ void Physics::Gravity()
 	
 	for (auto& collidable : m_collidables)
 	{
-		if (!collidable->m_rb->m_isGravity) continue;
+		//重力を受けるか
+		if (!collidable->m_rb->m_isGravity)continue;
 		auto rb = collidable->m_rb;
-
-		// 状態によって重力を選択
+		//地上にいるときと空中にいるときで重力の大きさを変える
 		auto gravity = kGroundGravity;
-
-		// 時間補正付きで重力を加える
+		if (!collidable->IsFloor())//地上にいない場合
+		{
+			gravity = kAirGravity;
+		}
+		//時間補正付きで重力を加える
 		rb->m_vec += gravity * rb->GetMyTimeScale();
 	}
 }

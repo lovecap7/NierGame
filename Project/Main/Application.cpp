@@ -68,6 +68,7 @@ bool Application::Init()
 
 	//変数の初期化
 	m_timeScale = kTimeScale;
+	m_isUpdateStop = false;
     return true;
 }
 
@@ -92,17 +93,24 @@ void Application::Run()
 	{
 		//今回のループが始まった時間を覚えておく
 		LONGLONG time = GetNowHiPerformanceCount();
-		//ターゲット
-		SetDrawScreen(RT);
-		//画面全体をクリア
-		ClearDrawScreen();
-
+#if _DEBUG
 		//更新
 		input.Update();
-		sceneController->Update();
-		physics.Update();
-		m_postProcess->Update();
-
+		if (input.IsTrigger("StopUpdate"))
+		{
+			m_isUpdateStop = !m_isUpdateStop;
+		}
+		if (!m_isUpdateStop || input.IsTrigger("OneFrame"))
+#endif
+		{
+			//ターゲット
+			SetDrawScreen(RT);
+			//画面全体をクリア
+			ClearDrawScreen();
+			sceneController->Update();
+			physics.Update();
+			m_postProcess->Update();
+		}
 		//描画
 		sceneController->Draw();
 

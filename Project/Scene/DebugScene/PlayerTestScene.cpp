@@ -5,6 +5,8 @@
 #include "../../Game/Actor/ActorManager.h"
 #include "../../Game/Camera/CameraController.h"
 #include "../../Game/Camera/PlayerCamera.h"
+#include "../../General/Collision/Physics.h"
+#include "../../General/Input.h"
 
 PlayerTestScene::PlayerTestScene(SceneController& controller) :
 	SceneBase(controller)

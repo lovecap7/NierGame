@@ -18,6 +18,8 @@ public:
 	bool IsLockOn() const { return m_isLockOn; }
 	//プレイヤーの座標
 	void SetPlayerPos(const Vector3& pos) { m_playerPos = pos; }
+	//プレイヤーのベクトル
+	void SetPlayerVec(const Vector3& vec) { m_playerVec = vec; }
 private:
 	//ロックオン対象
 	std::weak_ptr<Actor> m_lockOnTarget;
@@ -25,5 +27,12 @@ private:
 	bool m_isLockOn;
 	//プレイヤーの座標
 	Vector3 m_playerPos;
+	//プレイヤーのベクトル
+	Vector3 m_playerVec;
+	//Lerp率
+	float m_lerpRate;
+private:
+	//カメラの向きを更新
+	void UpdateCameraDirection(const Vector3& targetDir, float followSpeed);
 };
 

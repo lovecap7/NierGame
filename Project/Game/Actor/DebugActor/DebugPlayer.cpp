@@ -1,7 +1,7 @@
 #include "DebugPlayer.h"
 #include "DebugWeapon.h"
 #include "../../../General/Collision/Rigidbody.h"
-#include "../../../General/Collision/SphereCollider.h"
+#include "../../../General/Collision/CapsuleCollider.h"
 #include "../../../General/Input.h"
 #include "../../Camera/PlayerCamera.h"
 #include "../../../Main/Application.h"
@@ -76,12 +76,9 @@ void DebugPlayer::Update()
 
 
 	//ジャンプ
-	if (input.IsTrigger("B"))
+	if (input.IsTrigger("A") && m_isFloor)
 	{
-		if (m_rb->m_pos.y <= 0.0f)
-		{
-			m_rb->m_vec.y = kJumpPower;
-		}
+		m_rb->m_vec.y = kJumpPower;
 	}
 	//タイムスケール
 	if (input.IsTrigger("Y"))
@@ -93,7 +90,7 @@ void DebugPlayer::Update()
 		}
 	}
 	//ジャスト回避
-	if (input.IsTrigger("A"))
+	if (input.IsTrigger("B"))
 	{
 		m_invincibleTime = 120.0f;
 	}
@@ -128,12 +125,25 @@ void DebugPlayer::Update()
 	}
 	//カメラに位置を渡す
 	camera->SetPlayerPos(m_rb->GetNextPos());
+	camera->SetPlayerVec(m_rb->GetMoveVec());
 	//モデルの更新
 	m_model->Update();
 }
 
 void DebugPlayer::Draw() const
 {
+#if _DEBUG
+	//衝突判定
+	DrawCapsule3D(
+		m_rb->m_pos.ToDxLibVector(),
+		std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetEndPos().ToDxLibVector(),
+		std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetRadius(),
+		16,
+		0xff0000,
+		0xff0000,
+		false//地面にいると塗りつぶされる
+	);
+#endif
 	DrawSphere3D(m_rb->m_pos.ToDxLibVector(), 50.0f, 16, 0x00ff00, 0, true);
 	//タイムスケール表示
 	if (m_rb->IsMyTimeScale())
@@ -163,14 +173,11 @@ void DebugPlayer::OnCollide(const std::shared_ptr<Collidable> other)
 
 void DebugPlayer::Complete()
 {
-	if (m_rb->GetNextPos().y < 0.0f)
-	{
-		m_rb->m_pos.y = 0.0f;
-		m_rb->m_vec.y = 0.0f;
-	}
-	//Rigidbodyの位置を更新
 	m_rb->SetPos(m_rb->GetNextPos());
-	//モデルの位置を更新
+	Vector3 endPos = m_rb->m_pos;
+	endPos.y += m_actorData->m_collHeight;
+	std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->SetEndPos(endPos);//カプセルの移動
+	//モデルの座標更新
 	m_model->SetPos(m_rb->m_pos.ToDxLibVector());
 	m_model->ApplyMat();
 }

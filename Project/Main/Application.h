@@ -70,6 +70,8 @@ private:
 		DebugMax	= 2
 	};
 	DebugState m_debugState = DebugState::SceneInfo;
+	//デバッグ用
+	bool m_isUpdateStop;
 private:
 	//スクリーンモードを切り替える際の処理
 	void ChangeScreenMode();

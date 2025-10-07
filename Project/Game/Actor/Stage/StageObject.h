@@ -18,7 +18,7 @@ public:
     void Complete() override;
     void End()override;
     //‚·‚è”²‚¯‚é‚©
-    void SetIsThrough(bool isThrough);
+    void SetIsThrough(bool isThrough) { m_isThrough = isThrough; };
 private:
 };
 

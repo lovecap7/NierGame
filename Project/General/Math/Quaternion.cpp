@@ -290,6 +290,11 @@ Quaternion Quaternion::Slerp(const Quaternion& sRota, const Quaternion& eRota, f
 	return rQ;
 }
 
+Quaternion Quaternion::CalcHorizontalQuat(const Vector3& dir)
+{
+	float angleY = atan2f(dir.x, dir.z);
+	return Quaternion::AngleAxis(angleY, Vector3::Up());
+}
 
 
 //Quaternion Quaternion::LookAt(const Vector3& targetDir, const Vector3& up)

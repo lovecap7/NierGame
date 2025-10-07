@@ -69,6 +69,9 @@ public:
 	/// <param name="t">補間係数(0~1)</param>
 	/// <returns>補間後クオータニオン</returns>
 	static Quaternion Slerp(const Quaternion& sRota, const Quaternion& eRota, float t);
+
+	//水平方向の回転
+	static Quaternion CalcHorizontalQuat(const Vector3& dir);
 	
 };
 

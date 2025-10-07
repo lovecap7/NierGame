@@ -44,6 +44,8 @@ void Input::Init()
 	m_inputActionMap["SubFPS"] = { {InputType::kKeyboard,KEY_INPUT_5}};
 	m_inputActionMap["AddTimeScale"] = { {InputType::kKeyboard,KEY_INPUT_8}};
 	m_inputActionMap["SubTimeScale"] = { {InputType::kKeyboard,KEY_INPUT_7}};
+	m_inputActionMap["StopUpdate"] = { {InputType::kKeyboard,KEY_INPUT_1}};
+	m_inputActionMap["OneFrame"] = { {InputType::kKeyboard,KEY_INPUT_2}};
 #endif
 
 	//çXêVÇÇ∑ÇÈ
