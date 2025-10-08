@@ -8,7 +8,7 @@
 namespace
 {
     //カメラ設定定数
-    constexpr float kDistance = 300.0f;         //カメラ距離
+    constexpr float kDistance = 400.0f;         //カメラ距離
     constexpr float kHorizontalSpeed = 0.05f;   //水平回転速度
     constexpr float kVerticalSpeed = 0.02f;     //垂直回転速度
     constexpr float kLimitAngle = 80.0f;        //上下限界角度
@@ -16,7 +16,7 @@ namespace
     constexpr float kCameraHeight = 150.0f;     //プレイヤーからのカメラ高さ
 
     //追従・補間設定定数
-    constexpr float kNormalFollowLerp = 0.02f;  //通常時の追従速度
+    constexpr float kNormalFollowLerp = 0.005f;  //通常時の追従速度
     constexpr float kForwardFollowLerp = 0.2f;  //プレイヤーが前進中の追従速度
     constexpr float kLerpBlendSpeed = 0.001f;     //lerp率の補間速度
     constexpr float kDotThreshold = 0.7f;       //前進中」と判定するためのDot閾値

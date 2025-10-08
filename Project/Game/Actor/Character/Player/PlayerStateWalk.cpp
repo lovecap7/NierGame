@@ -8,7 +8,7 @@
 namespace
 {
 	constexpr float kSpeed = 5.0f;
-	const char* kAnimNameWalk = "rig_deform|Walk";
+	const char* kAnimNameWalk = "Player|Jog_N";
 }
 
 PlayerStateWalk::PlayerStateWalk(std::weak_ptr<Actor> player):

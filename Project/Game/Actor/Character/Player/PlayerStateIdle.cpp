@@ -10,7 +10,7 @@ namespace
 	//減速率
 	constexpr float kMoveDeceRate = 0.8f;
 	//アニメーション
-	const char* kAnim = "rig_deform|Idle_N";
+	const char* kAnim = "Player|Idle_N";
 	//モデルの旋回速度
 	constexpr int kModelRotateSpeed = 5;
 }

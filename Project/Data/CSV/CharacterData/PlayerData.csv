@@ -1,0 +1,6 @@
+﻿状態,アニメーション
+待機,rig_deform|Idle_N
+武器持ち待機,rig_deform|Walk
+通常歩行,rig_deform|Walk
+ゆっくり歩行,rig_deform|Walk
+武器持ち歩行,rig_deform|Walk
