@@ -1,6 +1,7 @@
 #include "PlayerStateIdle.h"
 #include "Player.h"
-#include "PlayerStateWalk.h"
+#include "PlayerStateMoving.h"
+#include "PlayerStateAvoid.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Input.h"
 #include "../../../../General/Collision/Rigidbody.h"
@@ -39,8 +40,15 @@ void PlayerStateIdle::Update()
 	//“ü—Í‚ª‚ ‚é‚È‚çˆÚ“®
 	if (input.GetStickInfo().IsLeftStickInput())
 	{
-		//ˆÚ“®
-		ChangeState(std::make_shared<PlayerStateWalk>(m_owner));
+		//•à‚«
+		ChangeState(std::make_shared<PlayerStateMoving>(m_owner,false));
+		return;
+	}
+	//‰ñ”ð
+	if (input.IsTrigger("B"))
+	{
+		//ƒ_ƒbƒVƒ…
+		ChangeState(std::make_shared<PlayerStateAvoid>(m_owner));
 		return;
 	}
 	//‚¾‚ñ‚¾‚ñŒ¸‘¬

@@ -149,8 +149,9 @@
     <ClCompile Include="Game\Actor\Character\CharacterStateBase.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\Player.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\PlayerStateBase.cpp" />
+    <ClCompile Include="Game\Actor\Character\Player\PlayerStateAvoid.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\PlayerStateIdle.cpp" />
-    <ClCompile Include="Game\Actor\Character\Player\PlayerStateWalk.cpp" />
+    <ClCompile Include="Game\Actor\Character\Player\PlayerStateMoving.cpp" />
     <ClCompile Include="Game\Actor\DebugActor\DebugEnemy.cpp" />
     <ClCompile Include="Game\Actor\DebugActor\DebugPlayer.cpp" />
     <ClCompile Include="Game\Actor\DebugActor\DebugWeapon.cpp" />
@@ -201,8 +202,9 @@
     <ClInclude Include="Game\Actor\Character\CharacterStateBase.h" />
     <ClInclude Include="Game\Actor\Character\Player\Player.h" />
     <ClInclude Include="Game\Actor\Character\Player\PlayerStateBase.h" />
+    <ClInclude Include="Game\Actor\Character\Player\PlayerStateAvoid.h" />
     <ClInclude Include="Game\Actor\Character\Player\PlayerStateIdle.h" />
-    <ClInclude Include="Game\Actor\Character\Player\PlayerStateWalk.h" />
+    <ClInclude Include="Game\Actor\Character\Player\PlayerStateMoving.h" />
     <ClInclude Include="Game\Actor\DebugActor\DebugEnemy.h" />
     <ClInclude Include="Game\Actor\DebugActor\DebugPlayer.h" />
     <ClInclude Include="Game\Actor\DebugActor\DebugWeapon.h" />

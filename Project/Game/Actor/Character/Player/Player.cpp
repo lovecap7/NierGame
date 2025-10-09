@@ -47,6 +47,21 @@ void Player::Update()
 {
 	//入力の取得
 	auto& input = Input::GetInstance();
+
+	//タイムスケール
+	if (input.IsTrigger("Y"))
+	{
+		m_rb->SetIsMyTimeScale(!m_rb->IsMyTimeScale());
+		if (m_rb->IsMyTimeScale())
+		{
+			SetTimeScale(0.5f);
+		}
+		else
+		{
+			SetTimeScale(1.0f);
+		}
+	}
+
 	//状態に合わせた更新
 	m_state->Update();
 	//状態が変わったかをチェック
