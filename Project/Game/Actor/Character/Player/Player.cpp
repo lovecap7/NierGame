@@ -16,11 +16,13 @@
 
 namespace
 {
-
+	//ジャンプの最大数
+	constexpr int kMaxJumpNum = 2;
 }
 
 Player::Player(std::shared_ptr<ActorData> actorData, std::weak_ptr<ActorManager> pActorManager) :
-	CharacterBase(actorData,Shape::Capsule,pActorManager)
+	CharacterBase(actorData,Shape::Capsule,pActorManager),
+	m_jumpNum(0)
 {
 	
 }
@@ -73,13 +75,6 @@ void Player::Update()
 	}
 	//アニメーションの更新
 	m_model->Update();
-	//カメラに位置を渡す
-	if (!GetPlayerCamera().expired())
-	{
-		auto camera = GetPlayerCamera().lock();
-		camera->SetPlayerPos(m_rb->GetNextPos());
-		camera->SetPlayerVec(m_rb->GetMoveVec());
-	}
 }
 
 void Player::OnCollide(const std::shared_ptr<Collidable> other)
@@ -112,6 +107,18 @@ void Player::Complete()
 	//モデルの座標更新
 	m_model->SetPos(m_rb->m_pos.ToDxLibVector());
 	m_model->ApplyMat();
+	//ジャンプ回数リセット
+	if (m_isFloor)
+	{
+		m_jumpNum = 0;
+	}
+	//カメラに位置を渡す
+	if (!GetPlayerCamera().expired())
+	{
+		auto camera = GetPlayerCamera().lock();
+		camera->SetPlayerPos(m_rb->m_pos);
+		camera->SetPlayerVec(m_rb->GetMoveVec());
+	}
 }
 
 
@@ -133,6 +140,22 @@ Quaternion Player::GetCameraRot() const
 		}
 	}
 	return q;
+}
+
+void Player::AddJumpNum()
+{
+	++m_jumpNum;
+	m_jumpNum = MathSub::ClampInt(m_jumpNum, 0, kMaxJumpNum);
+}
+
+bool Player::IsJumpable() const
+{
+	return m_jumpNum < kMaxJumpNum;
+}
+
+bool Player::IsFall() const
+{
+	return m_rb->m_vec.y < 0.0f;
 }
 
 std::weak_ptr<PlayerCamera> Player::GetPlayerCamera() const

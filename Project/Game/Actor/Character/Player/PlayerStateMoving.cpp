@@ -1,7 +1,9 @@
 #include "PlayerStateMoving.h"
 #include "Player.h"
 #include "PlayerStateIdle.h"
+#include "PlayerStateJump.h"
 #include "PlayerStateAvoid.h"
+#include "PlayerStateFall.h"
 #include "../../../../General/Input.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Collision/Rigidbody.h"
@@ -18,6 +20,7 @@ PlayerStateMoving::PlayerStateMoving(std::weak_ptr<Actor> player, bool isDash) :
 	PlayerStateBase(player),
 	m_speed(0.0f)
 {
+	if (m_owner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
 	//歩き
 	if (!isDash)
@@ -48,30 +51,34 @@ void PlayerStateMoving::Update()
 {
 	if (m_owner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
-	auto& input = Input::GetInstance();
-
-	if (!input.GetStickInfo().IsLeftStickInput())
+	//落下
+	if (owner->IsFall())
 	{
-		//待機
-		ChangeState(std::make_shared<PlayerStateIdle>(m_owner));
+		ChangeState(std::make_shared<PlayerStateFall>(m_owner));
 		return;
 	}
+	auto& input = Input::GetInstance();
+	//回避
 	if (input.IsTrigger("B"))
 	{
 		//回避
 		ChangeState(std::make_shared<PlayerStateAvoid>(m_owner));
 		return;
 	}
-	//移動
-	Vector3 vec = Vector3::Zero();
-	vec.x = input.GetStickInfo().leftStickX;
-	vec.z = -input.GetStickInfo().leftStickY;
-	if (vec.SqMagnitude() > 0.0f)
+	if (!input.GetStickInfo().IsLeftStickInput())
 	{
-		vec = vec.Normalize();
+		//待機
+		ChangeState(std::make_shared<PlayerStateIdle>(m_owner));
+		return;
 	}
-	//カメラの向きに合わせて移動方向を変える
-	vec = owner->GetCameraRot() * vec;
+	//ジャンプ
+	if (owner->IsJumpable() && input.IsTrigger("A"))
+	{
+		ChangeState(std::make_shared<PlayerStateJump>(m_owner));
+		return;
+	}
+	//移動
+	Vector3 vec = InputMoveVec(owner,input);
 	vec *= m_speed;
 	owner->GetRb()->SetMoveVec(vec);
 

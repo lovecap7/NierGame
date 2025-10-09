@@ -11,3 +11,19 @@ PlayerStateBase::PlayerStateBase(std::weak_ptr<Actor>  player):
 PlayerStateBase::~PlayerStateBase()
 {
 }
+
+Vector3 PlayerStateBase::InputMoveVec(std::shared_ptr<Player> owner, Input& input)
+{
+	auto rb = owner->GetRb();
+	//ˆÚ“®
+	Vector3 vec = Vector3::Zero();
+	vec.x = input.GetStickInfo().leftStickX;
+	vec.z = -input.GetStickInfo().leftStickY;
+	if (vec.SqMagnitude() > 0.0f)
+	{
+		vec = vec.Normalize();
+	}
+	//ƒJƒƒ‰‚ÌŒü‚«‚É‡‚í‚¹‚ÄˆÚ“®•ûŒü‚ð•Ï‚¦‚é
+	vec = owner->GetCameraRot() * vec;
+	return vec;
+}

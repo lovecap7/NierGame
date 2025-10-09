@@ -32,5 +32,6 @@ private:
 protected:
 	//Ž©•ª‚Ìƒ|ƒCƒ“ƒ^
 	std::weak_ptr<Actor> m_owner;
+
 };
 

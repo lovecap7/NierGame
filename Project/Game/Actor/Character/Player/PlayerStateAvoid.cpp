@@ -21,11 +21,11 @@ PlayerStateAvoid::PlayerStateAvoid(std::weak_ptr<Actor> player) :
 	m_avoidDir(),
 	m_speed(kStartSpeed)
 {
-	auto& input = Input::GetInstance();
-	//ダッシュ状態
+	if (m_owner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
 	owner->SetCollState(CollisionState::Move);
 
+	auto& input = Input::GetInstance();
 	//移動
 	Vector3 vec = Vector3::Zero();
 	vec.x = input.GetStickInfo().leftStickX;
@@ -61,6 +61,8 @@ PlayerStateAvoid::PlayerStateAvoid(std::weak_ptr<Actor> player) :
 		//モデルの向き
 		owner->GetModel()->SetDir(Vector2(-vec.x, -vec.z));
 	}
+
+	
 }
 
 PlayerStateAvoid::~PlayerStateAvoid()

@@ -38,8 +38,20 @@ public:
 	CollisionState GetCollState()const { return m_collState; };
 	//カメラの回転量
 	Quaternion GetCameraRot()const;
+
+	//ジャンプ回数
+	int GetJumpNum() const { return m_jumpNum; };
+	void AddJumpNum();
+	//ジャンプ可能
+	bool IsJumpable()const;
+
+	//落下しているか
+	bool IsFall()const;
 private:
 	//カメラ
 	std::weak_ptr<PlayerCamera> GetPlayerCamera()const;
+private:
+	//ジャンプ回数
+	int m_jumpNum;
 };
 

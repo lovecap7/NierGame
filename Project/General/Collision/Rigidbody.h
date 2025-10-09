@@ -12,7 +12,8 @@ public:
 	void SetPosY(float y) { m_pos.y = y; };
 	void SetPosZ(float z) { m_pos.z = z; };
 	//ベクトル
-	Vector3 GetVec() { return m_vec; };
+	Vector3 GetVec()const { return m_vec; };
+	Vector3 GetVecWithTS()const;
 	Vector3 GetMoveVec();//水平方向のベクトル
 	void SetVec(Vector3 vec) { m_vec = vec; };
 	void SetVecX(float x) { m_vec.x = x; };

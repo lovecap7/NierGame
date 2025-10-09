@@ -17,6 +17,11 @@ Rigidbody::Rigidbody():
 }
 
 
+Vector3 Rigidbody::GetVecWithTS()const
+{
+	return (m_vec * m_myTimeScale);
+}
+
 Vector3 Rigidbody::GetMoveVec()
 {
 	Vector3 moveVec = m_vec;
@@ -39,7 +44,7 @@ void Rigidbody::SetMoveVec(Vector3 vec)
 
 Vector3 Rigidbody::GetNextPos() const
 {
-	return m_pos + (m_vec * m_myTimeScale);
+	return m_pos + GetVecWithTS();
 }
 
 void Rigidbody::SpeedDown(float decRate)

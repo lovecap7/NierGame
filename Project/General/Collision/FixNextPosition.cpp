@@ -12,6 +12,7 @@ namespace
 	constexpr float kOverlapGap = 1.0f;
 	constexpr float kCheckUnder = -800.0f;
 	constexpr float kCheckTop = 800.0f;
+	constexpr float kWallThreshold = 0.5f;
 }
 
 FixNextPosition::FixNextPosition() :
@@ -156,8 +157,14 @@ void FixNextPosition::FixNextPosSP(const std::shared_ptr<Collidable> collA, cons
 
 	//床ポリゴンと壁ポリゴンに分ける
 	AnalyzeWallAndFloor(hitDim, nextPos);
+
+	//床か天井に当たったか
+	bool isFloorAndRoof = m_floorAndRoofNum > 0;
+	//壁に当たったか
+	bool isWall = m_wallNum > 0;
+
 	//床と当たったなら
-	if (m_floorAndRoofNum > 0)
+	if (isFloorAndRoof)
 	{
 		//補正するベクトルを返す
 		Vector3 overlapVec = OverlapVecSphereAndPoly(m_floorAndRoofNum, nextPos, *m_floorAndRoof, collDataA->GetRadius());
@@ -171,9 +178,8 @@ void FixNextPosition::FixNextPosSP(const std::shared_ptr<Collidable> collA, cons
 			collA->SetIsFloor(true);
 		}
 	}
-
 	//壁と当たっているなら
-	if(m_wallNum > 0)
+	if(isWall)
 	{
 		//壁に当たっているので
 		collA->SetIsWall(true);
@@ -181,8 +187,12 @@ void FixNextPosition::FixNextPosSP(const std::shared_ptr<Collidable> collA, cons
 		//補正するベクトルを返す
 		Vector3 overlapVec = OverlapVecSphereAndPoly(m_wallNum, nextPos, *m_wall, collDataA->GetRadius());
 		
-		//ポリゴンは固定(static)なので球のみ動かす
-		rbA->AddVec(overlapVec);
+		//位置を補正
+		Vector3 newPos = rbA->GetNextPos() + overlapVec;
+		rbA->SetPos(newPos);
+
+		//横方向の速度をリセット（めり込み反動防止）
+		rbA->SetMoveVec(Vector3::Zero());
 	}
 
 	// 検出したプレイヤーの周囲のポリゴン情報を開放する
@@ -296,7 +306,7 @@ void FixNextPosition::FixNextPosCP(const std::shared_ptr<Collidable> collA, cons
 	}
 
 	//カプセルの頭座標と足座標
-	Position3 headPos = collDataA->GetNextEndPos(rbA->GetVec());//移動後
+	Position3 headPos = collDataA->GetNextEndPos(rbA->GetVecWithTS());//移動後
 	Position3 legPos = rbA->GetNextPos();//移動後
 	//頭より足のほうが低い位置にあるなら入れ替える
 	if (headPos.y < legPos.y)
@@ -305,41 +315,48 @@ void FixNextPosition::FixNextPosCP(const std::shared_ptr<Collidable> collA, cons
 		legPos = headPos;
 		headPos = temp;
 	}
+	float radius = collDataA->GetRadius();
 
 	//床ポリゴンと壁ポリゴンに分ける
 	AnalyzeWallAndFloor(hitDim, legPos);
+
+	//床か天井に当たったか
+	bool isFloorAndRoof = m_floorAndRoofNum > 0;
+	//壁に当たったか
+	bool isWall = m_wallNum > 0;
+
 	//床と当たったなら
-	if (m_floorAndRoofNum > 0)
+	if (isFloorAndRoof)
 	{
 		//ジャンプしているなら
 		if (collA->m_collState == CollisionState::Jump)
 		{
 			//天井に当たった処理
-			HitRoofCP(collA, headPos, m_floorAndRoofNum, *m_floorAndRoof, collDataA->GetRadius());
+			HitRoofCP(collA, headPos, m_floorAndRoofNum, *m_floorAndRoof, radius);
 		}
 		else
 		{
 			//床の高さに合わせる
-			if (HitFloorCP(collA, legPos, m_floorAndRoofNum, *m_floorAndRoof, collDataA->GetRadius()))
-			{
-				//床に当たっているので
-				collA->SetIsFloor(true);
-			}
+			HitFloorCP(collA, legPos, m_floorAndRoofNum, *m_floorAndRoof, radius);
 		}
 	}
-
 	//壁と当たっているなら
-	if (m_wallNum > 0)
+	if (isWall)
 	{
 		//壁に当たっているので
 		collA->SetIsWall(true);
 
 		//補正するベクトルを返す
-		Vector3 overlapVec = HitWallCP(headPos, legPos, m_wallNum, *m_wall, collDataA->GetRadius());
-		
-		//ポリゴンは固定(static)なので球のみ動かす
-		rbA->AddVec(overlapVec);
+		Vector3 overlapVec = HitWallCP(headPos, legPos, m_wallNum, *m_wall, radius);
+
+		//位置を補正
+		Vector3 newPos = rbA->GetNextPos() + overlapVec;
+		rbA->SetPos(newPos);
+
+		//横方向の速度をリセット（めり込み反動防止）
+		rbA->SetMoveVec(Vector3::Zero());
 	}
+
 
 	// 検出したプレイヤーの周囲のポリゴン情報を開放する
 	DxLib::MV1CollResultPolyDimTerminate(hitDim);
@@ -355,8 +372,8 @@ void FixNextPosition::AnalyzeWallAndFloor(MV1_COLL_RESULT_POLY_DIM hitDim, const
 	//検出されたポリゴンの数だけ繰り返す
 	for (int i = 0; i < hitDim.HitNum;++i)
 	{
-		//XZ平面に垂直かどうかはポリゴンの法線のY成分が0に近いかどうかで判断する
-		if (hitDim.Dim[i].Normal.y < 0.1f && hitDim.Dim[i].Normal.y > -0.1f)
+		// 法線のY成分が大きければ床、小さければ壁
+		if (abs(hitDim.Dim[i].Normal.y) < kWallThreshold)
 		{
 			//壁ポリゴンと判断された場合でも、プレイヤーのY座標＋1.0fより高いポリゴンのみ当たり判定を行う
 			//段さで突っかかるのを防ぐため
@@ -430,12 +447,23 @@ Vector3 FixNextPosition::HitWallCP(const Vector3& headPos, const Vector3& legPos
 {
 	//垂線を下して近い点を探して最短距離を求める
 	float hitShortDis = shortDis;//最短距離
+
+	Vector3 top = headPos;
+	top.y += shortDis;
+	Vector3 bot = legPos;
+	bot.y -= shortDis;
+
 	//法線
 	Vector3 nom = {};
 	for (int i = 0; i < hitNum; ++i)
 	{
+		//壁かチェック
+		if (abs(dim[i].Normal.y) >= kWallThreshold)continue;
+		VECTOR pos1 = dim[i].Position[0];
+		VECTOR pos2 = dim[i].Position[1];
+		VECTOR pos3 = dim[i].Position[2];
 		//最短距離の2乗を返す
-		float dis = Segment_Triangle_MinLength_Square(headPos.ToDxLibVector(), legPos.ToDxLibVector(), dim[i].Position[0], dim[i].Position[1], dim[i].Position[2]);
+		float dis = Segment_Triangle_MinLength_Square(top.ToDxLibVector(), bot.ToDxLibVector(), pos1, pos2, pos3);
 		//平方根を返す
 		dis = sqrtf(dis);
 		//初回または前回より距離が短いなら
@@ -461,7 +489,7 @@ Vector3 FixNextPosition::HitWallCP(const Vector3& headPos, const Vector3& legPos
 }
 
 
-bool FixNextPosition::HitFloorCP(const std::shared_ptr<Collidable> coll, const Vector3& legPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis)
+bool FixNextPosition::HitFloorCP(const std::shared_ptr<Collidable> coll, const Vector3& headPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis)
 {
 	//リジッドボディ
 	auto rb = coll->m_rb;
@@ -471,22 +499,25 @@ bool FixNextPosition::HitFloorCP(const std::shared_ptr<Collidable> coll, const V
 	//当たった中で足元に一番近いY座標に合わせる
 	float lowHitPosY = rb->GetPos().y;
 	//床と当たったか
-	bool hitFloor = false;
+	bool isHitFloor = false;
 	for (int i = 0; i < hitNum; ++i)
 	{
 		//下向きの法線ベクトルなら飛ばす
 		if (dim[i].Normal.y < 0.0f)continue;
+		VECTOR pos1 = dim[i].Position[0];
+		VECTOR pos2 = dim[i].Position[1];
+		VECTOR pos3 = dim[i].Position[2];
 		// 足の下にポリゴンがあるかをチェック
-		 HITRESULT_LINE lineResult = HitCheck_Line_Triangle(legPos.ToDxLibVector(), VAdd(legPos.ToDxLibVector(), VGet(0.0f, kCheckUnder, 0.0f)), dim[i].Position[0], dim[i].Position[1], dim[i].Position[2]);
+		 HITRESULT_LINE lineResult = HitCheck_Line_Triangle(headPos.ToDxLibVector(), VAdd(headPos.ToDxLibVector(), VGet(0.0f, kCheckUnder, 0.0f)), pos1, pos2, pos3);
 
 		if (lineResult.HitFlag)
 		{
-			hitFloor = true;
 			 //距離
-			 float dis = VSize(VSub(lineResult.Position, legPos.ToDxLibVector()));
+			 float dis = VSize(VSub(lineResult.Position, headPos.ToDxLibVector()));
 			 //初回または前回より距離が短いなら
 			 if (hitShortDis > dis)
 			 {
+				 isHitFloor = true;
 				 //現状の最短
 				 hitShortDis = dis;
 				 lowHitPosY = lineResult.Position.y;
@@ -494,14 +525,16 @@ bool FixNextPosition::HitFloorCP(const std::shared_ptr<Collidable> coll, const V
 		}
 	}
 	//当たったいるなら
-	if (hitFloor)
+	if (isHitFloor)
 	{
 		//床の高さに合わせる
 		lowHitPosY += shortDis + kOverlapGap;
 		rb->SetPosY(lowHitPosY);
 		rb->SetVecY(0.0f);
+		//床に当たっているので
+		coll->SetIsFloor(true);
 	}
-	return hitFloor;
+	return isHitFloor;
 }
 
 void FixNextPosition::HitRoofCP(const std::shared_ptr<Collidable> coll, const Vector3& headPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis)
@@ -513,7 +546,7 @@ void FixNextPosition::HitRoofCP(const std::shared_ptr<Collidable> coll, const Ve
 	//当たった中で足元に一番近いY座標に合わせる
 	float lowHitPosY = rb->GetPos().y;
 	//天井と当たったか
-	bool hitRoof = false;
+	bool isHitRoof = false;
 	for (int i = 0; i < hitNum; ++i)
 	{
 		//上向きの法線ベクトルなら飛ばす
@@ -523,23 +556,23 @@ void FixNextPosition::HitRoofCP(const std::shared_ptr<Collidable> coll, const Ve
 
 		if (lineResult.HitFlag)
 		{
-			hitRoof = true;
 			//距離
 			float dis = VSize(VSub(lineResult.Position, headPos.ToDxLibVector()));
 			//初回または前回より距離が短いなら
 			if (hitShortDis > dis)
 			{
+				isHitRoof = true;
 				//現状の最短
 				hitShortDis = dis;
 			}
 		}
 	}
 	//当たったいるなら
-	if (hitRoof)
+	if (isHitRoof)
 	{
 		//押し戻し
 		//どれくらい押し戻すか
-		float overlap = shortDis - hitShortDis;
+		float overlap = std::abs(shortDis - hitShortDis);
 		overlap = MathSub::ClampFloat(overlap, 0, shortDis);
 		overlap += kOverlapGap;
 		//法線

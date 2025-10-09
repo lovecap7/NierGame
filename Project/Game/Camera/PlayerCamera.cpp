@@ -101,15 +101,6 @@ void PlayerCamera::Update()
             flatDir.y = 0.0f;
             UpdateCameraDirection(flatDir, kLockOnFollowSpeed); //ロックオンは即座に反映
         }
-        else
-        {
-            Vector3 moveDir = m_playerVec;
-            if (moveDir.SqMagnitude() > 0.0f)
-            {
-                moveDir = moveDir.Normalize();
-                UpdateCameraDirection(moveDir, kNormalFollowLerp);// ゆっくり追従
-            }
-        }
     }
     //理想カメラ位置
     Vector3 nextPos;

@@ -50,6 +50,21 @@ float MathSub::Min(float a, float b)
     return min;
 }
 
+float MathSub::Min(float a, float b,float c)
+{
+    float min = a;
+    if (min > b)
+    {
+        min = b;
+    }
+    if (min > c)
+    {
+        min = c;
+    }
+    return min;
+}
+
+
 float MathSub::Max(float a, float b)
 {
     float max = a;
@@ -59,6 +74,21 @@ float MathSub::Max(float a, float b)
     }
     return max;
 }
+
+float MathSub::Max(float a, float b, float c)
+{
+    float max = a;
+    if (max < b)
+    {
+        max = b;
+    }
+    if (max < c)
+    {
+        max = c;
+    }
+    return max;
+}
+
 
 float MathSub::Sign(float num)
 {

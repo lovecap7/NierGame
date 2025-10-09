@@ -2,6 +2,8 @@
 #include "Player.h"
 #include "PlayerStateMoving.h"
 #include "PlayerStateAvoid.h"
+#include "PlayerStateFall.h"
+#include "PlayerStateJump.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Input.h"
 #include "../../../../General/Collision/Rigidbody.h"
@@ -19,10 +21,10 @@ namespace
 PlayerStateIdle::PlayerStateIdle(std::weak_ptr<Actor> player):
 	PlayerStateBase(player)
 {
-	//待機状態
-	auto coll = std::dynamic_pointer_cast<Player>(m_owner.lock());
-	coll->GetModel()->SetAnim(kAnim, true);
-	coll->SetCollState(CollisionState::Normal);
+	if (m_owner.expired())return;
+	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
+	owner->GetModel()->SetAnim(kAnim, true);
+	owner->SetCollState(CollisionState::Normal);
 }
 
 PlayerStateIdle::~PlayerStateIdle()
@@ -37,18 +39,29 @@ void PlayerStateIdle::Update()
 {
 	auto& input = Input::GetInstance();
 	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
-	//入力があるなら移動
-	if (input.GetStickInfo().IsLeftStickInput())
+	//落下
+	if (owner->IsFall())
 	{
-		//歩き
-		ChangeState(std::make_shared<PlayerStateMoving>(m_owner,false));
+		ChangeState(std::make_shared<PlayerStateFall>(m_owner));
 		return;
 	}
 	//回避
 	if (input.IsTrigger("B"))
 	{
-		//ダッシュ
 		ChangeState(std::make_shared<PlayerStateAvoid>(m_owner));
+		return;
+	}
+	//ジャンプ
+	if (owner->IsJumpable() && input.IsTrigger("A"))
+	{
+		ChangeState(std::make_shared<PlayerStateJump>(m_owner));
+		return;
+	}
+	//入力があるなら移動
+	if (input.GetStickInfo().IsLeftStickInput())
+	{
+		//歩き
+		ChangeState(std::make_shared<PlayerStateMoving>(m_owner,false));
 		return;
 	}
 	//だんだん減速

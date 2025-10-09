@@ -35,6 +35,8 @@ public:
     /// <returns></returns>
     static float Min(float a, float b);
 
+    static float Min(float a, float b, float c);
+
     /// <summary>
     /// Å‘å’l‚ğ•Ô‚·
     /// </summary>
@@ -42,6 +44,8 @@ public:
     /// <param name="b"></param>
     /// <returns></returns>
     static float Max(float a, float b);
+
+    static float Max(float a, float b, float c);
 
     /// <summary>
     /// ’l‚Ì•„†‚ğæ“¾
