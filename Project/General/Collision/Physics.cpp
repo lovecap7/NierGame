@@ -243,9 +243,9 @@ void Physics::Gravity()
 		auto gravity = kGroundGravity;
 		if (!collidable->IsFloor())//’nã‚É‚¢‚È‚¢ê‡
 		{
-			gravity = kAirGravity;
+			gravity = kAirGravity * rb->GetMyTimeScale();
 		}
 		//ŽžŠÔ•â³•t‚«‚Åd—Í‚ð‰Á‚¦‚é
-		rb->m_vec += gravity * rb->GetMyTimeScale();
+		rb->m_vec += gravity;
 	}
 }

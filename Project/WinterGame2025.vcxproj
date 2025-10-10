@@ -164,6 +164,7 @@
     <ClCompile Include="Game\Camera\PlayerCamera.cpp" />
     <ClCompile Include="General\Animator.cpp" />
     <ClCompile Include="General\AssetManager.cpp" />
+    <ClCompile Include="General\CharaStatus.cpp" />
     <ClCompile Include="General\Collision\CapsuleCollider.cpp" />
     <ClCompile Include="General\Collision\Collidable.cpp" />
     <ClCompile Include="General\Collision\ColliderBase.cpp" />
@@ -219,6 +220,7 @@
     <ClInclude Include="Game\Camera\PlayerCamera.h" />
     <ClInclude Include="General\Animator.h" />
     <ClInclude Include="General\AssetManager.h" />
+    <ClInclude Include="General\CharaStatus.h" />
     <ClInclude Include="General\Collision\CapsuleCollider.h" />
     <ClInclude Include="General\Collision\Collidable.h" />
     <ClInclude Include="General\Collision\ColliderBase.h" />
