@@ -79,5 +79,6 @@ public:
 	std::shared_ptr<Model> GetModel() const { return m_model; };
 	//タイムスケール
 	void SetTimeScale(float scale)override;
+	float GetTimeScale()const;
 };
 

@@ -26,12 +26,16 @@ public:
 	std::shared_ptr<CharacterStateBase> GetNextState() { return m_nextState; };
 	//状態変化
 	virtual void ChangeState(std::shared_ptr<CharacterStateBase> nextState);
+
+	//フレームのカウント
+	void CountFrame();
 private:
 	//次の状態
 	std::shared_ptr<CharacterStateBase> m_nextState;
 protected:
 	//自分のポインタ
 	std::weak_ptr<Actor> m_owner;
-
+	//フレームカウント
+	float m_frame;
 };
 

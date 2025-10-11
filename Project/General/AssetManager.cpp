@@ -24,7 +24,8 @@ int AssetManager::GetModelHandle(std::wstring path)
         m_modelHandles[path] = handle;
     }
     //ハンドルチェック
-    assert(handle >= 0);
+    //assert(handle >= 0);
+
     //コピーを渡す
     return MV1DuplicateModel(handle);
 }

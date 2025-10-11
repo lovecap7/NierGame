@@ -1,21 +1,19 @@
 #include "PlayerStateFall.h"
 #include "PlayerStateJump.h"
 #include "PlayerStateIdle.h"
+#include "PlayerStateHit.h"
 #include "Player.h"
 #include "PlayerStateMoving.h"
 #include "PlayerStateAvoid.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Input.h"
 #include "../../../../General/Collision/Rigidbody.h"
+#include "../../../../General/CharaStatus.h"
 
 namespace
 {
 	//アニメーション
 	const char* kAnimFall = "Player|Fall";
-	//移動速度
-	constexpr float kMoveSpeed = 2.0f;
-	//上限
-	constexpr float kMaxMoveSpeed = 10.0f;
 }
 
 PlayerStateFall::PlayerStateFall(std::weak_ptr<Actor> player) :
@@ -40,6 +38,14 @@ void PlayerStateFall::Update()
 {
 	auto& input = Input::GetInstance();
 	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
+	//ステータス
+	auto status = owner->GetCharaStatus();
+	//やられ
+	if (status->IsHitReaction())
+	{
+		ChangeState(std::make_shared<PlayerStateHit>(m_owner));
+		return;
+	}
 	//地面に付いたら
 	if (owner->IsFloor())
 	{
@@ -53,7 +59,7 @@ void PlayerStateFall::Update()
 		return;
 	}
 	//回避
-	if (input.IsTrigger("B"))
+	if (input.IsTrigger("B") && owner->IsAvoidable())
 	{
 		ChangeState(std::make_shared<PlayerStateAvoid>(m_owner));
 		return;
@@ -64,21 +70,9 @@ void PlayerStateFall::Update()
 		auto rb = owner->GetRb();
 		//移動
 		Vector3 vec = InputMoveVec(owner, input);
-		vec *= kMoveSpeed;
+		vec *= status->GetMS();
 		//空中移動
-		rb->AddVec(vec);
-		//横移動速度に上限をつける
-		float speed = rb->GetMoveVec().Magnitude();
-		if (speed > 0.0f)
-		{
-			speed = MathSub::ClampFloat(speed, 0.0f, kMaxMoveSpeed);
-			Vector3 moveVec = rb->GetMoveVec();
-			if (moveVec.Magnitude() > 0.0f)
-			{
-				moveVec = moveVec.Normalize();
-			}
-			rb->SetMoveVec(moveVec * speed);
-		}
+		rb->SetMoveVec(vec);
 		//モデルの向き
 		owner->GetModel()->SetDir(Vector2(vec.x, vec.z));
 	}

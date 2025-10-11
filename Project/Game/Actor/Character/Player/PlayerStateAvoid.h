@@ -14,4 +14,6 @@ private:
     Vector3 m_avoidDir;
     //‘¬“x
     float m_speed;
+    //ƒGƒ“ƒh
+    float m_endSpeed;
 };

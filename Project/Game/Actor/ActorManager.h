@@ -7,7 +7,9 @@
 class Actor;
 class ActorData;
 class PlayerCamera;
+class CharaStatusData;
 class CharacterBase;
+class AttackBase;
 class ActorManager : public std::enable_shared_from_this<ActorManager>
 {
 public:
@@ -26,20 +28,19 @@ public:
 	//終了処理
 	void End();
 	//CSVからアクターを作成
-	void CreateActorCSV(const char* path);
+	void CreateActorCSV(const char* folderName,const char* fileName);
 	//カメラのセット
 	void SetCamera(std::weak_ptr<PlayerCamera> pCamera) { m_pCamera = pCamera; };
 	//カメラの参照
 	std::weak_ptr<PlayerCamera> GetCamera()const { return m_pCamera; };
+
 private:
 	//アクター
 	std::list<std::shared_ptr<Actor>> m_actors;
-	//ID
-	int m_actorId;//割り振る番号
 	//カメラの参照
 	std::weak_ptr<PlayerCamera> m_pCamera;
 private:
 	//キャラクターの作成
-	std::shared_ptr<CharacterBase> CreateChara(GameTag tag, std::shared_ptr<ActorData> data);
+	std::shared_ptr<CharacterBase> CreateChara(GameTag tag, std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> data);
 };
 

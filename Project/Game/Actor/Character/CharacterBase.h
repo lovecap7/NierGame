@@ -6,14 +6,20 @@
 class CharacterStateBase;
 class ActorManager;
 class ActorData;
+class CharaStatus;
+class CharaStatusData;
 class CharacterBase abstract:
     public Actor
 {
 public:
-	CharacterBase(std::shared_ptr<ActorData> actorData,Shape shape, std::weak_ptr<ActorManager> pActorManager);
+	CharacterBase(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData,Shape shape, std::weak_ptr<ActorManager> pActorManager);
 	virtual ~CharacterBase() {};
+    //ステータス
+    std::shared_ptr<CharaStatus> GetCharaStatus()const;
 protected:
     //キャラクターの状態
     std::shared_ptr<CharacterStateBase> m_state;
+    //ステータス
+    std::shared_ptr<CharaStatus> m_charaStatus;
 };
 

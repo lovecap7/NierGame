@@ -151,9 +151,11 @@
     <ClCompile Include="Game\Actor\Character\Player\PlayerStateBase.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\PlayerStateAvoid.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\PlayerStateFall.cpp" />
+    <ClCompile Include="Game\Actor\Character\Player\PlayerStateHit.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\PlayerStateIdle.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\PlayerStateJump.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\PlayerStateMoving.cpp" />
+    <ClCompile Include="Game\Actor\DebugActor\DebugAttack.cpp" />
     <ClCompile Include="Game\Actor\DebugActor\DebugEnemy.cpp" />
     <ClCompile Include="Game\Actor\DebugActor\DebugPlayer.cpp" />
     <ClCompile Include="Game\Actor\DebugActor\DebugWeapon.cpp" />
@@ -176,6 +178,7 @@
     <ClCompile Include="General\Collision\SphereCollider.cpp" />
     <ClCompile Include="General\Collision\TorusCollider.cpp" />
     <ClCompile Include="General\CSV\ActorData.cpp" />
+    <ClCompile Include="General\CSV\CharaStatusData.cpp" />
     <ClCompile Include="General\CSV\CSVData.cpp" />
     <ClCompile Include="General\CSV\CSVDataLoader.cpp" />
     <ClCompile Include="General\Input.cpp" />
@@ -207,9 +210,11 @@
     <ClInclude Include="Game\Actor\Character\Player\PlayerStateBase.h" />
     <ClInclude Include="Game\Actor\Character\Player\PlayerStateAvoid.h" />
     <ClInclude Include="Game\Actor\Character\Player\PlayerStateFall.h" />
+    <ClInclude Include="Game\Actor\Character\Player\PlayerStateHit.h" />
     <ClInclude Include="Game\Actor\Character\Player\PlayerStateIdle.h" />
     <ClInclude Include="Game\Actor\Character\Player\PlayerStateJump.h" />
     <ClInclude Include="Game\Actor\Character\Player\PlayerStateMoving.h" />
+    <ClInclude Include="Game\Actor\DebugActor\DebugAttack.h" />
     <ClInclude Include="Game\Actor\DebugActor\DebugEnemy.h" />
     <ClInclude Include="Game\Actor\DebugActor\DebugPlayer.h" />
     <ClInclude Include="Game\Actor\DebugActor\DebugWeapon.h" />
@@ -232,6 +237,7 @@
     <ClInclude Include="General\Collision\SphereCollider.h" />
     <ClInclude Include="General\Collision\TorusCollider.h" />
     <ClInclude Include="General\CSV\ActorData.h" />
+    <ClInclude Include="General\CSV\CharaStatusData.h" />
     <ClInclude Include="General\CSV\CSVData.h" />
     <ClInclude Include="General\CSV\CSVDataLoader.h" />
     <ClInclude Include="General\Game.h" />

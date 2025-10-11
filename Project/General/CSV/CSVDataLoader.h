@@ -15,7 +15,7 @@ public:
     /// </summary>
     /// <param name="fileName">csv</param>
     /// <returns></returns>
-    std::vector<std::shared_ptr<CSVData>> LoadCSV(const char* fileName);
+    std::vector<std::shared_ptr<CSVData>> LoadCSV(const char* path);
 private:
     std::vector<std::vector<std::wstring>> GetWStringList(const char* path);
 };

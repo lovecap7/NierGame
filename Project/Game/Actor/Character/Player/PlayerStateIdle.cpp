@@ -4,14 +4,14 @@
 #include "PlayerStateAvoid.h"
 #include "PlayerStateFall.h"
 #include "PlayerStateJump.h"
+#include "PlayerStateHit.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Input.h"
 #include "../../../../General/Collision/Rigidbody.h"
+#include "../../../../General/CharaStatus.h"
 
 namespace
 {
-	//減速率
-	constexpr float kMoveDeceRate = 0.8f;
 	//アニメーション
 	const char* kAnim = "Player|Idle_N";
 	//モデルの旋回速度
@@ -25,6 +25,13 @@ PlayerStateIdle::PlayerStateIdle(std::weak_ptr<Actor> player):
 	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
 	owner->GetModel()->SetAnim(kAnim, true);
 	owner->SetCollState(CollisionState::Normal);
+
+	//地面に付いてるなら
+	if (owner->IsFloor())
+	{
+		//回避可能
+		owner->SetIsAvoidable(true);
+	}
 }
 
 PlayerStateIdle::~PlayerStateIdle()
@@ -39,6 +46,12 @@ void PlayerStateIdle::Update()
 {
 	auto& input = Input::GetInstance();
 	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
+	//やられ
+	if (owner->GetCharaStatus()->IsHitReaction())
+	{
+		ChangeState(std::make_shared<PlayerStateHit>(m_owner));
+		return;
+	}
 	//落下
 	if (owner->IsFall())
 	{
@@ -46,7 +59,7 @@ void PlayerStateIdle::Update()
 		return;
 	}
 	//回避
-	if (input.IsTrigger("B"))
+	if (input.IsTrigger("B") && owner->IsAvoidable())
 	{
 		ChangeState(std::make_shared<PlayerStateAvoid>(m_owner));
 		return;
@@ -64,6 +77,6 @@ void PlayerStateIdle::Update()
 		ChangeState(std::make_shared<PlayerStateMoving>(m_owner,false));
 		return;
 	}
-	//だんだん減速
-	owner->GetRb()->SpeedDown(kMoveDeceRate);
+	//移動量リセット
+	owner->GetRb()->SetMoveVec(Vector3::Zero());
 }

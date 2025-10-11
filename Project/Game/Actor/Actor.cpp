@@ -62,6 +62,9 @@ Actor::Actor(std::shared_ptr<ActorData> actorData,Shape shape, std::weak_ptr<Act
 		break;
 	};
 	AllSetting(m_actorData->m_priority, m_actorData->m_gameTag, m_actorData->m_isTrough, m_actorData->m_isTrigger, m_actorData->m_isGravity);
+
+	//ID‚ÌÝ’è
+	SetID(m_actorData->m_actorID);
 }
 
 void Actor::SetID(int id)
@@ -90,4 +93,9 @@ void Actor::SetTimeScale(float scale)
 	{
 		m_model->SetTimeScale(scale);
 	}
+}
+
+float Actor::GetTimeScale()const
+{
+	return m_rb->GetMyTimeScale();
 }

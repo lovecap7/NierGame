@@ -5,7 +5,24 @@ namespace
 	constexpr float kUnityToDXPosition = 100.0f;
 }
 
+ActorData::ActorData():
+	m_actorID(),
+	m_actorType(ActorType::None),
+	m_pos(),
+	m_rot(),
+	m_scale(),
+	m_modelPath(),
+	m_priority(Priority::None),
+	m_isTrough(false),
+	m_isTrigger(false),
+	m_isGravity(false),
+	m_collRadius(0.0f),
+	m_collHeight(0.0f)
+{
+}
+
 ActorData::ActorData(std::shared_ptr<CSVData> data):
+	m_actorID(0),
 	m_actorType(ActorType::None),
 	m_pos(),	
 	m_rot(),
@@ -14,7 +31,9 @@ ActorData::ActorData(std::shared_ptr<CSVData> data):
 	m_priority(Priority::None),
 	m_isTrough(false),
 	m_isTrigger(false),
-	m_isGravity(false)
+	m_isGravity(false),
+	m_collRadius(0.0f),
+	m_collHeight(0.0f)
 {
 	//データを取得
 	this->m_data = data->GetData();
@@ -30,8 +49,12 @@ void ActorData::Conversion()
 {
 	if (m_data.size() <= 0)return;
 	//１項目目は名前で必要ないので飛ばす
+	
+	//ID
+	m_actorID = std::stoi(m_data[1]);
+
 	//アクタータイプ
-	std::wstring tempStr = m_data[1];
+	std::wstring tempStr = m_data[2];
 	ActorType actorType = ActorType::None;
 	if (tempStr == L"Character")actorType = ActorType::Character;
 	else if (tempStr == L"Stage")actorType = ActorType::Stage;
@@ -39,25 +62,25 @@ void ActorData::Conversion()
 	m_actorType = actorType;
 
 	//座標
-	m_pos.x = std::stof(m_data[2]) * kUnityToDXPosition;
-	m_pos.y = std::stof(m_data[3]) * kUnityToDXPosition;
-	m_pos.z = std::stof(m_data[4]) * kUnityToDXPosition;
+	m_pos.x = std::stof(m_data[3]) * kUnityToDXPosition;
+	m_pos.y = std::stof(m_data[4]) * kUnityToDXPosition;
+	m_pos.z = std::stof(m_data[5]) * kUnityToDXPosition;
 
 	//回転
-	m_rot.x = std::stof(m_data[5]);
-	m_rot.y = std::stof(m_data[6]);
-	m_rot.z = -1 * std::stof(m_data[7]);
+	m_rot.x = std::stof(m_data[6]);
+	m_rot.y = std::stof(m_data[7]);
+	m_rot.z = -1 * std::stof(m_data[8]);
 
 	//大きさ
-	m_scale.x = std::stof(m_data[8]);
-	m_scale.y = std::stof(m_data[9]);
-	m_scale.z = std::stof(m_data[10]);
+	m_scale.x = std::stof(m_data[9]);
+	m_scale.y = std::stof(m_data[10]);
+	m_scale.z = std::stof(m_data[11]);
 
 	//モデルのパス
-	m_modelPath = m_data[11];
+	m_modelPath = m_data[12];
 
 	//優先度
-	tempStr = m_data[12];
+	tempStr = m_data[13];
 	Priority priority = Priority::None;
 	if (tempStr == L"Low")priority = Priority::Low;
 	else if (tempStr == L"Middle")priority = Priority::Middle;
@@ -66,7 +89,7 @@ void ActorData::Conversion()
 	m_priority = priority;
 
 	//ゲームタグ
-	tempStr = m_data[13];
+	tempStr = m_data[14];
 	GameTag gameTag = GameTag::None;
 	if (tempStr == L"Player")gameTag = GameTag::Player;
 	else if (tempStr == L"Enemy")gameTag = GameTag::Enemy;
@@ -78,17 +101,17 @@ void ActorData::Conversion()
 	m_gameTag = gameTag;
 
 	//当たり判定を無視するか
-	m_isTrough = (m_data[14] == L"1");
+	m_isTrough = (m_data[15] == L"1");
 
 	//トリガー
-	m_isTrigger = (m_data[15] == L"1");
+	m_isTrigger = (m_data[16] == L"1");
 
 	//重力
-	m_isGravity = (m_data[16] == L"1");
+	m_isGravity = (m_data[17] == L"1");
 
 	//半径
-	m_collRadius = std::stof(m_data[17]);
+	m_collRadius = std::stof(m_data[18]);
 
 	//高さ
-	m_collHeight = std::stof(m_data[18]);
+	m_collHeight = std::stof(m_data[19]);
 }

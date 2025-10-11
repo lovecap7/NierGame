@@ -32,6 +32,8 @@ public:
 	//自分のタイムスケールを設定
 	void SetMyTimeScale(float timeScale) { m_myTimeScale = timeScale; };
 	float GetMyTimeScale() const { return m_myTimeScale; };
+	//重力
+	void SetIsGravity(bool isGravity) { m_isGravity = isGravity; };
 public:
 	//座標とベクトル
 	Vector3 m_pos;

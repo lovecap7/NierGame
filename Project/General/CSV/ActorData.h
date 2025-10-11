@@ -6,6 +6,7 @@ class ActorData :
 	public CSVData
 {
 public:
+	ActorData();
 	ActorData(std::shared_ptr<CSVData> data);
 	~ActorData();
 	//アクターを識別するタイプ
@@ -16,6 +17,8 @@ public:
 		Stage,
 		Attack,
 	};
+	//ID
+	unsigned int m_actorID;
 	//アクタータイプ
 	ActorType m_actorType;
 	//座標

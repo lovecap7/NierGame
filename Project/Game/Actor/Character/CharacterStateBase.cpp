@@ -1,8 +1,10 @@
 #include "CharacterStateBase.h"
 #include "../../../General/Collision/Physics.h"
+#include "../../../General/Collision/Collidable.h"
 
 CharacterStateBase::CharacterStateBase(std::weak_ptr<Actor> owner):
-	m_owner(owner)
+	m_owner(owner),
+	m_frame(0.0f)
 {
 }
 
@@ -14,4 +16,11 @@ void CharacterStateBase::ChangeState(std::shared_ptr<CharacterStateBase> nextSta
 {
 	//状態変化
 	m_nextState = move(nextState);
+}
+
+void CharacterStateBase::CountFrame()
+{
+	if (m_owner.expired())return;
+	//タイムスケールに合わせてカウント
+	m_frame += m_owner.lock()->GetTimeScale();
 }

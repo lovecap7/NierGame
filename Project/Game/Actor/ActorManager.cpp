@@ -4,14 +4,18 @@
 #include <cassert>
 #include "../../General/CSV/CSVDataLoader.h"
 #include "../../General/CSV/ActorData.h"
+#include "../../General/CSV/CharaStatusData.h"
 #include "DebugActor/DebugPlayer.h"
 #include "Stage/StageObject.h"
 #include "Character/CharacterBase.h"
 #include "Character/Player/Player.h"
 
+namespace
+{
+	const std::string kCharaStatusDataName = "CharaStatusData";
+}
 
-ActorManager::ActorManager():
-	m_actorId(0)
+ActorManager::ActorManager()
 {
 	
 }
@@ -28,9 +32,6 @@ void ActorManager::Entry(std::shared_ptr<Actor> actor)
 	if (it != m_actors.end())return;
 	//アクターの初期化
 	actor->Init();
-	//アクターのIDを設定
-	actor->SetID(m_actorId);
-	m_actorId++;
 	//アクターを追加
 	m_actors.emplace_back(actor);
 }
@@ -71,44 +72,54 @@ void ActorManager::End()
 {
 }
 
-void ActorManager::CreateActorCSV(const char* path)
+void ActorManager::CreateActorCSV(const char* folderName, const char* fileName)
 {
 	//CSVを読み込む
 	std::shared_ptr<CSVDataLoader> csvLoader = std::make_shared<CSVDataLoader>();
-	auto csvDatas = csvLoader->LoadCSV(path);
+	std::string path = folderName + std::string("/") + fileName;
+	auto csvDatas = csvLoader->LoadCSV(path.c_str());
+
+	//キャラクターのステータスを読み込む
+	std::string charaStatusPath = folderName + std::string("/") + kCharaStatusDataName;
+	auto csvStatusDatas = csvLoader->LoadCSV(charaStatusPath.c_str());
+
 	//アクターの作成
 	for (auto& data : csvDatas)
 	{
+		if (!data)continue;
 		//データを変換
 		auto actorData = std::make_shared<ActorData>(data);
 		//アクターを作成
 		std::shared_ptr<Actor> actor;
 		if (actorData->m_actorType == ActorData::ActorType::Character)
 		{
-			//キャラクター
-			actor = CreateChara(actorData->m_gameTag, actorData);
+			for (auto& statusData : csvStatusDatas)
+			{
+				auto tStatusData = std::make_shared<CharaStatusData>(statusData);
+				//IDが一致するなら
+				if (tStatusData->m_id == actorData->m_actorID)
+				{
+					//キャラクター作成
+					actor = CreateChara(actorData->m_gameTag, actorData, tStatusData);
+				}
+			}
 		}
 		else if (actorData->m_actorType == ActorData::ActorType::Stage)
 		{
 			//ステージ
 			actor = std::make_shared<StageObject>(actorData, shared_from_this());
 		}
-		else if (actorData->m_actorType == ActorData::ActorType::Attack)
-		{
-			//攻撃
-			actor = std::make_shared<DebugPlayer>(actorData, shared_from_this());
-		}
 		Entry(actor);
 	}
 }
 
-std::shared_ptr<CharacterBase> ActorManager::CreateChara(GameTag tag, std::shared_ptr<ActorData> data)
+std::shared_ptr<CharacterBase> ActorManager::CreateChara(GameTag tag, std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData)
 {
 	std::shared_ptr<CharacterBase> chara;
 	//プレイヤー
 	if (tag == GameTag::Player)
 	{
-		chara = std::make_shared<Player>(data, shared_from_this());
+		chara = std::make_shared<Player>(actorData, charaStatusData, shared_from_this());
 	}
 	//nullチェック
 	assert(chara);

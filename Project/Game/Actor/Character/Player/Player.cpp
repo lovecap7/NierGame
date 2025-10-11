@@ -5,6 +5,7 @@
 #include "../../../../General/Collision/CapsuleCollider.h"
 #include "../../../../General/Collision/Rigidbody.h"
 #include "../../../../General/Collision/Collidable.h"
+#include "../../../../General/CharaStatus.h"
 #include "../../../../General/Input.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Animator.h"
@@ -20,8 +21,8 @@ namespace
 	constexpr int kMaxJumpNum = 2;
 }
 
-Player::Player(std::shared_ptr<ActorData> actorData, std::weak_ptr<ActorManager> pActorManager) :
-	CharacterBase(actorData,Shape::Capsule,pActorManager),
+Player::Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager) :
+	CharacterBase(actorData,charaStatusData,Shape::Capsule,pActorManager),
 	m_jumpNum(0)
 {
 	
@@ -75,10 +76,27 @@ void Player::Update()
 	}
 	//アニメーションの更新
 	m_model->Update();
+
+	//状態のリセット
+	m_charaStatus->InitHitState();
 }
 
 void Player::OnCollide(const std::shared_ptr<Collidable> other)
 {
+	//デバッグ
+	if (other->GetGameTag() == GameTag::Attack)
+	{
+		//ダメージを受ける
+		m_charaStatus->OnDamage(10, 100, CharaStatus::AttackWeight::Heavy);
+		if (m_charaStatus->IsHitReaction())
+		{
+			Vector3 knockBack = m_rb->m_pos - std::dynamic_pointer_cast<Actor>(other)->GetNextPos();
+			knockBack = knockBack.Normalize() * 2.0f;
+			knockBack.y = 0.0f;
+			m_rb->m_vec = knockBack;
+			printf("ダメージを受けた！！ %d\n", 10);
+		}
+	}
 }
 
 void Player::Draw() const

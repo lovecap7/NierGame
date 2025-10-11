@@ -7,6 +7,7 @@
 
 class ActorManager;
 class CharacterStateBase;
+class CharaStatusData;
 class Input;
 class ActorData;
 class PlayerCamera;
@@ -14,7 +15,7 @@ class Player :
 	public CharacterBase
 {
 public:
-	Player(std::shared_ptr<ActorData> actorData, std::weak_ptr<ActorManager> pActorManager);
+	Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager);
 	virtual ~Player();
 	//初期化処理
 	void Init()override;
@@ -45,6 +46,10 @@ public:
 	//ジャンプ可能
 	bool IsJumpable()const;
 
+	//回避可能
+	bool IsAvoidable()const { return m_isAvoidable; };
+	void SetIsAvoidable(bool isAvoidable){ m_isAvoidable = isAvoidable; };
+
 	//落下しているか
 	bool IsFall()const;
 private:
@@ -53,5 +58,7 @@ private:
 private:
 	//ジャンプ回数
 	int m_jumpNum;
+	//回避可能
+	bool m_isAvoidable;
 };
 

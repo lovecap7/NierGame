@@ -20,15 +20,15 @@ CSVDataLoader::~CSVDataLoader()
 {
 }
 
-std::vector<std::shared_ptr<CSVData>> CSVDataLoader::LoadCSV(const char* fileName)
+std::vector<std::shared_ptr<CSVData>> CSVDataLoader::LoadCSV(const char* path)
 {
 	//データを格納する配列
 	std::vector<std::shared_ptr<CSVData>> datas;
 
 	//パス
-	std::string path = kPath + fileName + kCSV;
+	std::string pPath = kPath + path + kCSV;
 	//データをすべて読み込む
-	auto valuesDatas = GetWStringList(path.c_str());
+	auto valuesDatas = GetWStringList(pPath.c_str());
 
 	for (auto values : valuesDatas)
 	{

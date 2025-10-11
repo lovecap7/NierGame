@@ -5,11 +5,11 @@
 #include "../../../../General/Input.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Collision/Rigidbody.h"
+#include "../../../../General/CharaStatus.h"
 
 namespace
 {
-	constexpr float kStartSpeed = 10.0f;
-	constexpr float kEndSpeed = 30.0f;
+	constexpr float kSpeedDif = 10.0f;
 	constexpr float kLerpSpeedRate = 0.1f;
 	const char* kAnimNameForwardAvoid = "Player|AvoidForward";
 	//const char* kAnimNameForwardAvoid = "Player|JustAvoid";
@@ -19,7 +19,8 @@ namespace
 PlayerStateAvoid::PlayerStateAvoid(std::weak_ptr<Actor> player) :
 	PlayerStateBase(player),
 	m_avoidDir(),
-	m_speed(kStartSpeed)
+	m_speed(0.0f),
+	m_endSpeed(0.0f)
 {
 	if (m_owner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
@@ -62,11 +63,35 @@ PlayerStateAvoid::PlayerStateAvoid(std::weak_ptr<Actor> player) :
 		owner->GetModel()->SetDir(Vector2(-vec.x, -vec.z));
 	}
 
-	
+	auto status = owner->GetCharaStatus();
+	//速度
+	float baseSpeed = status->GetMS();
+	m_endSpeed = baseSpeed + kSpeedDif;
+	float startSpeed = MathSub::ClampFloat(baseSpeed - kSpeedDif,0, m_endSpeed);
+	m_speed = startSpeed;
+
+	//空中にいるなら重力の影響を受けない
+	if (!owner->IsFloor())
+	{
+		auto rb = owner->GetRb();
+		rb->SetIsGravity(false);
+		rb->SetVecY(0.0f);
+		//回避不可能(ジャンプをするか地面に付くと可能に)
+		owner->SetIsAvoidable(false);
+	}
+
+	//無敵
+	status->SetIsNoDamage(true);
 }
 
 PlayerStateAvoid::~PlayerStateAvoid()
 {
+	if (m_owner.expired())return;
+	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
+	owner->GetRb()->SetIsGravity(true);
+
+	//無敵
+	owner->GetCharaStatus()->SetIsNoDamage(false);
 }
 
 void PlayerStateAvoid::Init()
@@ -96,7 +121,7 @@ void PlayerStateAvoid::Update()
 			return;
 		}
 	}
-	m_speed = MathSub::Lerp(m_speed, kEndSpeed, kLerpSpeedRate);
+	m_speed = MathSub::Lerp(m_speed, m_endSpeed, kLerpSpeedRate);
 	Vector3 vec = m_avoidDir * m_speed;
 	//移動
 	owner->GetRb()->SetMoveVec(vec);

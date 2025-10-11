@@ -3,9 +3,11 @@
 #include  "../../General/Input.h"
 #include "../SceneController.h"
 #include "../../Game/Actor/ActorManager.h"
+#include "../../Game/Actor/DebugActor/DebugAttack.h"
 #include "../../Game/Camera/CameraController.h"
 #include "../../Game/Camera/PlayerCamera.h"
 #include "../../General/Collision/Physics.h"
+#include "../../General/CSV/ActorData.h"
 
 PlayerTestScene::PlayerTestScene(SceneController& controller) :
 	SceneBase(controller)
@@ -26,9 +28,19 @@ void PlayerTestScene::Init()
 	//アクター
 	m_actorManager = std::make_shared<ActorManager>();
 	m_actorManager->Init();
-	m_actorManager->CreateActorCSV("DebugScene/CharacterData");
-	m_actorManager->CreateActorCSV("DebugScene/StageData");
+	m_actorManager->CreateActorCSV("DebugScene","CharacterData");
+	m_actorManager->CreateActorCSV("DebugScene","StageData");
 	m_actorManager->SetCamera(camera);
+
+	//攻撃デバッグ
+	auto atData = std::make_shared<ActorData>();
+	atData->m_pos = Vector3(100,100,100);
+	atData->m_collRadius = 100.0f;
+	atData->m_gameTag = GameTag::Attack;
+	atData->m_isGravity = false;
+	atData->m_isTrigger = true;
+	auto attack = std::make_shared<DebugAttack>(atData, m_actorManager);
+	m_actorManager->Entry(attack);
 }
 
 void PlayerTestScene::Update()
