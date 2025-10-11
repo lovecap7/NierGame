@@ -80,5 +80,9 @@ public:
 	//タイムスケール
 	void SetTimeScale(float scale)override;
 	float GetTimeScale()const;
+	//自分のタイムスケールを使う
+	void EnableIsMyScale();
+	//使わない
+	void DisableIsMyScale();
 };
 

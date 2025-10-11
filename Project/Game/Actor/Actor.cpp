@@ -99,3 +99,13 @@ float Actor::GetTimeScale()const
 {
 	return m_rb->GetMyTimeScale();
 }
+
+void Actor::EnableIsMyScale()
+{
+	m_rb->SetIsMyTimeScale(true);
+}
+
+void Actor::DisableIsMyScale()
+{
+	m_rb->SetIsMyTimeScale(false);
+}

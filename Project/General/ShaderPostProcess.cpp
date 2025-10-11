@@ -7,7 +7,9 @@
 ShaderPostProcess::ShaderPostProcess() :
 	m_psHandle(-1),
 	m_cbuff1Handle(-1),
-	m_cbuff1(nullptr)
+	m_cbuff1(nullptr),
+	m_countJustFrame(0.0f),
+	m_justFrame(1.0f)
 {
 }
 
@@ -43,9 +45,22 @@ void ShaderPostProcess::Update()
 		m_cbuff1->blockScale = MyMath::GetRandF(0.0f, 10.0f);
 		m_cbuff1->noiseSpeed = MyMath::GetRandF(0.0f, 10.0f);
 	}
-	if (!(m_cbuff1->state & static_cast<int>(PostEffectState::JustAvoid)))
+	//ジャスト回避をしているなら
+	if (m_cbuff1->state & static_cast<int>(PostEffectState::JustAvoid))
 	{
 		//更新
+		m_cbuff2->justRate = (m_countJustFrame / m_justFrame);
+		if (m_countJustFrame > m_justFrame)
+		{
+			m_countJustFrame = m_justFrame;
+		}
+		else
+		{
+			++m_countJustFrame;
+		}
+	}
+	else
+	{
 		m_cbuff2->justRate = 0.0f;
 	}
 }
@@ -61,4 +76,14 @@ void ShaderPostProcess::End()
 	DeleteShader(m_psHandle);
 	DeleteShaderConstantBuffer(m_cbuff1Handle);
 	DeleteShaderConstantBuffer(m_cbuff2Handle);
+}
+
+void ShaderPostProcess::SetJustAvoidEffectTime(const float time)
+{
+	m_justFrame = time;
+	if (m_justFrame <= 0.0f)
+	{
+		m_justFrame = 1.0f;
+	}
+	m_countJustFrame = 0;
 }

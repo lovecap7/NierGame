@@ -23,7 +23,10 @@ namespace
 
 Player::Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager) :
 	CharacterBase(actorData,charaStatusData,Shape::Capsule,pActorManager),
-	m_jumpNum(0)
+	m_jumpNum(0),
+	m_isAvoidable(true),
+	m_isJustAvoid(false),
+	m_noDamageFrame(0.0f)
 {
 	
 }
@@ -76,6 +79,18 @@ void Player::Update()
 	}
 	//アニメーションの更新
 	m_model->Update();
+
+	//ジャスト回避無敵時間
+	if (m_isJustAvoid)
+	{
+		m_noDamageFrame -= GetTimeScale();
+		m_charaStatus->SetIsNoDamage(true);
+		if (m_noDamageFrame <= 0.0f)
+		{
+			m_isJustAvoid = false;
+			m_charaStatus->SetIsNoDamage(false);
+		}
+	}
 
 	//状態のリセット
 	m_charaStatus->InitHitState();
@@ -174,6 +189,12 @@ bool Player::IsJumpable() const
 bool Player::IsFall() const
 {
 	return m_rb->m_vec.y < 0.0f;
+}
+
+void Player::SetNoDamageFrame(float m_frame)
+{
+	m_noDamageFrame = m_frame;
+	m_isJustAvoid = true;
 }
 
 std::weak_ptr<PlayerCamera> Player::GetPlayerCamera() const

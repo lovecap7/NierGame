@@ -52,6 +52,9 @@ public:
 
 	//落下しているか
 	bool IsFall()const;
+
+	//無敵時間
+	void SetNoDamageFrame(float m_frame);
 private:
 	//カメラ
 	std::weak_ptr<PlayerCamera> GetPlayerCamera()const;
@@ -60,5 +63,9 @@ private:
 	int m_jumpNum;
 	//回避可能
 	bool m_isAvoidable;
+
+	//無敵時間(ジャスト回避成功時数フレーム無敵)
+	bool m_isJustAvoid;
+	float m_noDamageFrame;
 };
 

@@ -2,6 +2,7 @@
 #include "PlayerStateIdle.h"
 #include "Player.h"
 #include "PlayerStateMoving.h"
+#include "PlayerStateJustAvoid.h"
 #include "../../../../General/Input.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Collision/Rigidbody.h"
@@ -12,8 +13,9 @@ namespace
 	constexpr float kSpeedDif = 10.0f;
 	constexpr float kLerpSpeedRate = 0.1f;
 	const char* kAnimNameForwardAvoid = "Player|AvoidForward";
-	//const char* kAnimNameForwardAvoid = "Player|JustAvoid";
 	const char* kAnimNameBackAvoid = "Player|AvoidBack";
+	//ジャスト回避フレーム
+	constexpr float kJustFrame = 15.0f;
 }
 
 PlayerStateAvoid::PlayerStateAvoid(std::weak_ptr<Actor> player) :
@@ -89,9 +91,6 @@ PlayerStateAvoid::~PlayerStateAvoid()
 	if (m_owner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
 	owner->GetRb()->SetIsGravity(true);
-
-	//無敵
-	owner->GetCharaStatus()->SetIsNoDamage(false);
 }
 
 void PlayerStateAvoid::Init()
@@ -105,8 +104,20 @@ void PlayerStateAvoid::Update()
 	if (m_owner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
 	auto model = owner->GetModel();
+
+	//ジャスト回避フレーム内で攻撃を受けたら
+	CountFrame();
+	if (m_frame <= kJustFrame && owner->GetCharaStatus()->IsHit())
+	{
+		//ジャスト回避
+		ChangeState(std::make_shared<PlayerStateJustAvoid>(m_owner));
+		return;
+	}
+
 	if (model->IsFinishAnim())
 	{
+		//無敵解除
+		owner->GetCharaStatus()->SetIsNoDamage(false);
 		auto& input = Input::GetInstance();
 		if (input.GetStickInfo().IsLeftStickInput())
 		{

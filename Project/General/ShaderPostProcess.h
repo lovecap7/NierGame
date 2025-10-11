@@ -25,7 +25,7 @@ public:
 	//状態リセット
 	void ResetPostEffectState() { m_cbuff1->state = static_cast<int>(PostEffectState::Normal); }
 	//ジャスト回避エフェクトの時間を設定
-	void SetJustAvoidEffectTime(const float time) { m_cbuff2->justRate = time; }
+	void SetJustAvoidEffectTime(const float time);
 private:
 	//グリッジ用の定数バッファ
 	struct CBuff1
@@ -52,5 +52,9 @@ private:
 	CBuff2* m_cbuff2;
 	//シェーダハンドル
 	int m_psHandle;
+
+	//ジャスト回避フレーム
+	float m_justFrame;
+	float m_countJustFrame;
 };
 
