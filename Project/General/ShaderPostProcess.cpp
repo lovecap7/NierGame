@@ -49,10 +49,11 @@ void ShaderPostProcess::Update()
 	if (m_cbuff1->state & static_cast<int>(PostEffectState::JustAvoid))
 	{
 		//更新
-		m_cbuff2->justRate = (m_countJustFrame / m_justFrame);
+		m_cbuff2->justRate = m_countJustFrame / m_justFrame;
 		if (m_countJustFrame > m_justFrame)
 		{
-			m_countJustFrame = m_justFrame;
+			//ジャスト回避演出終了
+			SubPostEffectState(PostEffectState::JustAvoid);
 		}
 		else
 		{
@@ -62,6 +63,7 @@ void ShaderPostProcess::Update()
 	else
 	{
 		m_cbuff2->justRate = 0.0f;
+		m_countJustFrame = 0.0f;
 	}
 }
 

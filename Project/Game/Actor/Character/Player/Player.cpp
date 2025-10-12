@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "PlayerStateBase.h"
 #include "PlayerStateIdle.h"
+#include "PlayerStateAvoid.h"
 #include "../../../../General/game.h"
 #include "../../../../General/Collision/CapsuleCollider.h"
 #include "../../../../General/Collision/Rigidbody.h"
@@ -25,7 +26,7 @@ Player::Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatus
 	CharacterBase(actorData,charaStatusData,Shape::Capsule,pActorManager),
 	m_jumpNum(0),
 	m_isAvoidable(true),
-	m_isJustAvoid(false),
+	m_isJustAvoided(false),
 	m_noDamageFrame(0.0f)
 {
 	
@@ -54,6 +55,16 @@ void Player::Update()
 	//入力の取得
 	auto& input = Input::GetInstance();
 
+#if _DEBUG
+	if (input.IsTrigger("FullRecovery"))
+	{
+		//復活
+		m_charaStatus->FullRecovery();
+		//数フレーム無敵
+		SetNoDamageFrame(60.0f);
+	}
+#endif
+
 	//タイムスケール
 	if (input.IsTrigger("Y"))
 	{
@@ -81,20 +92,12 @@ void Player::Update()
 	m_model->Update();
 
 	//ジャスト回避無敵時間
-	if (m_isJustAvoid)
-	{
-		m_noDamageFrame -= GetTimeScale();
-		m_charaStatus->SetIsNoDamage(true);
-		if (m_noDamageFrame <= 0.0f)
-		{
-			m_isJustAvoid = false;
-			m_charaStatus->SetIsNoDamage(false);
-		}
-	}
+	UpdateJustAvoid();
 
 	//状態のリセット
 	m_charaStatus->InitHitState();
 }
+
 
 void Player::OnCollide(const std::shared_ptr<Collidable> other)
 {
@@ -102,14 +105,16 @@ void Player::OnCollide(const std::shared_ptr<Collidable> other)
 	if (other->GetGameTag() == GameTag::Attack)
 	{
 		//ダメージを受ける
-		m_charaStatus->OnDamage(10, 100, CharaStatus::AttackWeight::Heavy);
+		m_charaStatus->OnDamage(100, 100, CharaStatus::AttackWeight::Heavy);
 		if (m_charaStatus->IsHitReaction())
 		{
 			Vector3 knockBack = m_rb->m_pos - std::dynamic_pointer_cast<Actor>(other)->GetNextPos();
 			knockBack = knockBack.Normalize() * 2.0f;
 			knockBack.y = 0.0f;
 			m_rb->m_vec = knockBack;
-			printf("ダメージを受けた！！ %d\n", 10);
+#if _DEBUG
+			printf("残りの体力 : %d\n", m_charaStatus->GetNowHP());
+#endif
 		}
 	}
 }
@@ -194,8 +199,35 @@ bool Player::IsFall() const
 void Player::SetNoDamageFrame(float m_frame)
 {
 	m_noDamageFrame = m_frame;
-	m_isJustAvoid = true;
+	m_isJustAvoided = true;
 }
+
+void Player::UpdateJustAvoid()
+{
+	//ジャスト回避後
+	if (m_isJustAvoided)
+	{
+		m_noDamageFrame -= GetTimeScale();
+		m_charaStatus->SetIsNoDamage(true);
+		//無敵時間が切れて今回避状態ではないなら無敵解除
+		if (m_noDamageFrame <= 0.0f && std::dynamic_pointer_cast<PlayerStateAvoid>(m_state) == nullptr)
+		{
+			m_isJustAvoided = false;
+			m_charaStatus->SetIsNoDamage(false);
+		}
+	}
+#if _DEBUG
+	/*if (m_charaStatus->IsNoDamage())
+	{
+		printf("今無敵です\n");
+	}
+	else
+	{
+		printf("今無敵ではない\n");
+	}*/
+#endif
+}
+
 
 std::weak_ptr<PlayerCamera> Player::GetPlayerCamera() const
 {

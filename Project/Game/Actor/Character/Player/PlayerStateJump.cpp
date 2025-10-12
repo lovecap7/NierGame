@@ -3,6 +3,7 @@
 #include "PlayerStateFall.h"
 #include "PlayerStateAvoid.h"
 #include "PlayerStateHit.h"
+#include "PlayerStateDeath.h"
 #include "Player.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Input.h"
@@ -57,6 +58,18 @@ void PlayerStateJump::Update()
 	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
 	//ステータス
 	auto status = owner->GetCharaStatus();
+	//死亡
+	if (status->IsDead())
+	{
+		ChangeState(std::make_shared<PlayerStateDeath>(m_owner));
+		return;
+	}
+	//回避
+	if (input.IsBuffered("B") && owner->IsAvoidable())
+	{
+		ChangeState(std::make_shared<PlayerStateAvoid>(m_owner));
+		return;
+	}
 	//やられ
 	if (status->IsHitReaction())
 	{
@@ -69,12 +82,13 @@ void PlayerStateJump::Update()
 		ChangeState(std::make_shared<PlayerStateFall>(m_owner));
 		return;
 	}
-	//回避
-	if (input.IsTrigger("B") && owner->IsAvoidable())
-	{
-		ChangeState(std::make_shared<PlayerStateAvoid>(m_owner));
-		return;
-	}
+
+	//ジャンプ中の移動
+	MoveJump(input, owner, status);
+}
+
+void PlayerStateJump::MoveJump(Input& input, std::shared_ptr<Player> owner, std::shared_ptr<CharaStatus> status)
+{
 	//移動の入力があるなら
 	if (input.GetStickInfo().IsLeftStickInput())
 	{

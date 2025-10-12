@@ -1,6 +1,8 @@
 #pragma once
 #include "PlayerStateBase.h"
 class Actor;
+class Player;
+class Input;
 class PlayerStateMoving :
     public PlayerStateBase, public std::enable_shared_from_this<PlayerStateMoving>
 {
@@ -12,5 +14,7 @@ public:
 private:
     //‘¬“x
     float m_speed;
+    //ˆÚ“®
+    void Move(std::shared_ptr<Player> owner, Input& input);
 };
 

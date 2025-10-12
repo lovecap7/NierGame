@@ -5,6 +5,7 @@
 #include "PlayerStateAvoid.h"
 #include "PlayerStateFall.h"
 #include "PlayerStateHit.h"
+#include "PlayerStateDeath.h"
 #include "../../../../General/Input.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Collision/Rigidbody.h"
@@ -62,8 +63,23 @@ void PlayerStateMoving::Update()
 {
 	if (m_owner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
+	auto status = owner->GetCharaStatus();
+	//死亡
+	if (status->IsDead())
+	{
+		ChangeState(std::make_shared<PlayerStateDeath>(m_owner));
+		return;
+	}
+	auto& input = Input::GetInstance();
+	//回避
+	if (input.IsBuffered("B") && owner->IsAvoidable())
+	{
+		//回避
+		ChangeState(std::make_shared<PlayerStateAvoid>(m_owner));
+		return;
+	}
 	//やられ
-	if (owner->GetCharaStatus()->IsHitReaction())
+	if (status->IsHitReaction())
 	{
 		ChangeState(std::make_shared<PlayerStateHit>(m_owner));
 		return;
@@ -74,14 +90,7 @@ void PlayerStateMoving::Update()
 		ChangeState(std::make_shared<PlayerStateFall>(m_owner));
 		return;
 	}
-	auto& input = Input::GetInstance();
-	//回避
-	if (input.IsTrigger("B") && owner->IsAvoidable())
-	{
-		//回避
-		ChangeState(std::make_shared<PlayerStateAvoid>(m_owner));
-		return;
-	}
+	//待機
 	if (!input.GetStickInfo().IsLeftStickInput())
 	{
 		//待機
@@ -89,13 +98,18 @@ void PlayerStateMoving::Update()
 		return;
 	}
 	//ジャンプ
-	if (owner->IsJumpable() && input.IsTrigger("A"))
+	if (owner->IsJumpable() && input.IsBuffered("A"))
 	{
 		ChangeState(std::make_shared<PlayerStateJump>(m_owner));
 		return;
 	}
+	Move(owner, input);
+}
+
+void PlayerStateMoving::Move(std::shared_ptr<Player> owner, Input& input)
+{
 	//移動
-	Vector3 vec = InputMoveVec(owner,input);
+	Vector3 vec = InputMoveVec(owner, input);
 	vec *= m_speed;
 	owner->GetRb()->SetMoveVec(vec);
 

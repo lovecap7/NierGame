@@ -34,7 +34,7 @@ void PlayerTestScene::Init()
 
 	//攻撃デバッグ
 	auto atData = std::make_shared<ActorData>();
-	atData->m_pos = Vector3(100,100,100);
+	atData->m_pos = Vector3(100,100,300);
 	atData->m_collRadius = 100.0f;
 	atData->m_gameTag = GameTag::Attack;
 	atData->m_isGravity = false;

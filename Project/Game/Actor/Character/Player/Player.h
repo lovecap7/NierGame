@@ -55,6 +55,8 @@ public:
 
 	//無敵時間
 	void SetNoDamageFrame(float m_frame);
+	//ジャスト回避後の無敵フレーム
+	void UpdateJustAvoid();
 private:
 	//カメラ
 	std::weak_ptr<PlayerCamera> GetPlayerCamera()const;
@@ -65,7 +67,7 @@ private:
 	bool m_isAvoidable;
 
 	//無敵時間(ジャスト回避成功時数フレーム無敵)
-	bool m_isJustAvoid;
+	bool m_isJustAvoided;
 	float m_noDamageFrame;
 };
 

@@ -17,6 +17,11 @@ namespace
 	constexpr float kMediumPowerStickMax = 700.0f;
 	//最大まで倒していると判定する範囲
 	constexpr float kHighPowerStickMin = kMediumPowerStickMax;
+
+
+	//先行入力
+	//有効フレーム数
+	constexpr int kBufferFrame = 10;
 }
 
 void Input::Init()
@@ -46,6 +51,7 @@ void Input::Init()
 	m_inputActionMap["SubTimeScale"] = { {InputType::kKeyboard,KEY_INPUT_7}};
 	m_inputActionMap["StopUpdate"] = { {InputType::kKeyboard,KEY_INPUT_1}};
 	m_inputActionMap["OneFrame"] = { {InputType::kKeyboard,KEY_INPUT_2}};
+	m_inputActionMap["FullRecovery"] = { {InputType::kKeyboard,KEY_INPUT_3}};
 #endif
 
 	//更新をする
@@ -118,6 +124,20 @@ void Input::Update()
 	DxLib::GetJoypadXInputState(DX_INPUT_PAD1, xInputState);
 	m_triggerInfo.left = xInputState->LeftTrigger;
 	m_triggerInfo.right = xInputState->RightTrigger;
+	delete xInputState;
+
+
+	//先行入力を更新
+	UpdateBuffer();
+
+	//新しく押された入力をバッファに登録
+	for (const auto& keyInfo : m_currentInput)
+	{
+		if (IsTrigger(keyInfo.first))
+		{
+			m_inputBufferFrame[keyInfo.first] = kBufferFrame;
+		}
+	}
 }
 
 void Input::StopUpdate()
@@ -329,4 +349,25 @@ bool Input::IsRepeate(const std::string& action, int deltaTime)const
 		}
 	}
 	return false;
+}
+
+bool Input::IsBuffered(const std::string& action) const
+{
+	auto it = m_inputBufferFrame.find(action);
+	if (it == m_inputBufferFrame.end()) return false;
+
+	//まだ有効時間内ならtrue
+	return it->second > 0;
+}
+
+void Input::UpdateBuffer()
+{
+	for (auto& [key, frame] : m_inputBufferFrame)
+	{
+		//フレームを減らしていく
+		if (frame > 0)
+		{
+			--frame;
+		}
+	}
 }

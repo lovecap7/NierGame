@@ -7,6 +7,8 @@ namespace
 {
 	constexpr int kMaxStatus = 9999;
 	constexpr int kMinStatus = 1;
+	constexpr float randomMin = 0.9f;
+	constexpr float randomMax = 1.1f;
 }
 
 CharaStatus::CharaStatus(std::shared_ptr<CharaStatusData> charaStatusData):
@@ -60,14 +62,14 @@ void CharaStatus::OnDamage(int power, int at, CharaStatus::AttackWeight aw)
 
 	//無敵中はダメージを食らわない
 	if (m_isNoDamage)return;
-
+	
 	//ダメージ計算
-	int atk = MathSub::ClampInt(at, kMinStatus, kMaxStatus);
-	int df	= MathSub::ClampInt(m_df, kMinStatus, kMaxStatus);
-	int damage = static_cast<float>(power) * static_cast<float>((atk * atk) / (atk + df));
+	int damage = GetDamage(power, at);
 	m_nowHp -= damage;
 	m_nowHp = MathSub::ClampInt(m_nowHp, 0, m_maxHp);
-
+#if _DEBUG
+	printf("ダメージを受けた！！ %d\n", damage);
+#endif
 	//ひるむか
 	if (CheckHitReaction(aw, m_ar))
 	{
@@ -84,6 +86,30 @@ void CharaStatus::Heal(int value)
 void CharaStatus::FullRecovery()
 {
 	m_nowHp = m_maxHp;
+}
+
+int CharaStatus::GetDamage(int power, int at)
+{
+	//攻撃力
+	float atk = static_cast<float>(MathSub::ClampInt(at, kMinStatus, kMaxStatus));
+	//防御力
+	float df = static_cast<float>(MathSub::ClampInt(m_df, kMinStatus, kMaxStatus));
+	//乱数
+	float random = MyMath::GetRandF(randomMin, randomMax);
+
+	//攻撃と防御の比率で減衰（防御が高いほど小さくなる）
+	float rate = atk / (atk + df);
+
+	//ダメージ = 威力 × 攻防比 × 乱数
+	int damage = power * rate * random;
+
+	//1は最低値
+	if (damage <= 0)
+	{
+		damage = 1;
+	}
+
+	return damage;
 }
 
 bool CharaStatus::CheckHitReaction(AttackWeight aw, Armor am)

@@ -176,6 +176,14 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	bool IsRepeate(const std::string& action,int deltaTime = 30)const;
+
+	/// <summary>
+   /// 先行入力をチェックする
+   /// </summary>
+   /// <param name="action">アクション名</param>
+   /// <returns>先行入力が有効ならtrue</returns>
+	bool IsBuffered(const std::string& action) const;
+
 private:
 	/// <summary>
 	/// 入力の種類
@@ -205,6 +213,15 @@ private:
 	TriggerInfo m_triggerInfo = TriggerInfo();
 	//更新するか
 	bool m_isUpdate;
+
+	//先行入力
+	std::map<std::string, int> m_inputBufferFrame;
+
+private:
+	/// <summary>
+	/// すべての先行入力を更新する（フレームごとに呼ばれる）
+	/// </summary>
+	void UpdateBuffer();
 };
 
 

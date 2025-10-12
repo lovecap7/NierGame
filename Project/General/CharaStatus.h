@@ -69,6 +69,7 @@ public:
 
 	//無敵
 	void SetIsNoDamage(bool isNoDamage) { m_isNoDamage = isNoDamage; };
+	bool IsNoDamage()const { return m_isNoDamage; };
 	//攻撃を受けたか
 	bool IsHit()const { return m_isHit; }
 	//リアクションをするか
@@ -93,6 +94,10 @@ private:
 
 	//初期値
 	std::shared_ptr<CharaStatusData> m_charaStatusData;
+
+private:
+	//ダメージ計算
+	int GetDamage(int power, int at);
 };
 //演算子オーバーロード
 CharaStatus::AttackWeight operator+(const CharaStatus::AttackWeight& left, const CharaStatus::AttackWeight& right);
