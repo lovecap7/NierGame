@@ -48,8 +48,9 @@ ActorData::~ActorData()
 void ActorData::Conversion()
 {
 	if (m_data.size() <= 0)return;
-	//１項目目は名前で必要ないので飛ばす
-	
+	//名前
+	m_name = m_data[0];
+
 	//ID
 	m_actorID = std::stoi(m_data[1]);
 

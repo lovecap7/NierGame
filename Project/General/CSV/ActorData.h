@@ -2,6 +2,7 @@
 #include "CSVData.h"
 #include "../Math/MyMath.h"
 #include "../Collision/Collidable.h"
+#include <string>
 class ActorData :
 	public CSVData
 {
@@ -16,7 +17,10 @@ public:
 		Character,
 		Stage,
 		Attack,
+		Weapon,
 	};
+	//名前
+	std::wstring m_name;
 	//ID
 	unsigned int m_actorID;
 	//アクタータイプ

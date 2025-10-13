@@ -9,6 +9,7 @@
 #include "Stage/StageObject.h"
 #include "Character/CharacterBase.h"
 #include "Character/Player/Player.h"
+#include "Character/Player/Weapon/Weapon.h"
 
 namespace
 {
@@ -110,6 +111,15 @@ void ActorManager::CreateActorCSV(const char* folderName, const char* fileName)
 			actor = std::make_shared<StageObject>(actorData, shared_from_this());
 		}
 		Entry(actor);
+
+		//プレイヤーなら
+		if (actorData->m_gameTag == GameTag::Player)
+		{
+			//武器を持たせる
+			SetUpPlayer(std::dynamic_pointer_cast<Player>(actor));
+		}
+		
+
 	}
 }
 
@@ -124,4 +134,36 @@ std::shared_ptr<CharacterBase> ActorManager::CreateChara(GameTag tag, std::share
 	//nullチェック
 	assert(chara);
 	return chara;
+}
+
+void ActorManager::SetUpPlayer(std::shared_ptr<Player> player)
+{
+	//CSVを読み込む
+	std::shared_ptr<CSVDataLoader> csvLoader = std::make_shared<CSVDataLoader>();
+	std::string path = "Weapon" + std::string("/") + "WeaponData";
+	auto csvDatas = csvLoader->LoadCSV(path.c_str());
+	//武器作成
+	for (auto& data : csvDatas)
+	{
+		if (!data)continue;
+		//データを変換
+		auto weaponData = std::make_shared<ActorData>(data);
+		//武器を作成
+		std::shared_ptr<Weapon> weapon = std::make_shared<Weapon>(weaponData,shared_from_this());
+
+		//マネージャーにエントリー
+		Entry(weapon);
+
+		//武器をセット
+		if (weaponData->m_name == L"LightSword")
+		{
+			//片手剣
+			player->SetSword(weapon,true);
+		}
+		else
+		{
+			//大剣
+			player->SetSword(weapon,false);
+		}
+	}
 }

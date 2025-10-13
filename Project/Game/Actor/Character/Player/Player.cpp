@@ -2,6 +2,7 @@
 #include "PlayerStateBase.h"
 #include "PlayerStateIdle.h"
 #include "PlayerStateAvoid.h"
+#include "Weapon/Weapon.h"
 #include "../../../../General/game.h"
 #include "../../../../General/Collision/CapsuleCollider.h"
 #include "../../../../General/Collision/Rigidbody.h"
@@ -29,7 +30,6 @@ Player::Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatus
 	m_isJustAvoided(false),
 	m_noDamageFrame(0.0f)
 {
-	
 }
 
 Player::~Player()
@@ -228,6 +228,23 @@ void Player::UpdateJustAvoid()
 #endif
 }
 
+void Player::SetSword(std::weak_ptr<Weapon> weapon, bool isLightSword)
+{
+	if (weapon.expired())return;
+	auto sword = weapon.lock();
+	sword->SetOwnerHandle(m_model->GetModelHandle());
+	if (isLightSword)
+	{
+		m_lightSword = weapon;
+		sword->SetFrameIndex(295, 303);
+	}
+	else
+	{
+		m_bigSword = weapon;
+		sword->SetFrameIndex(295, 304);
+	}
+	
+}
 
 std::weak_ptr<PlayerCamera> Player::GetPlayerCamera() const
 {

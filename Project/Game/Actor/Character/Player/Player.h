@@ -11,6 +11,7 @@ class CharaStatusData;
 class Input;
 class ActorData;
 class PlayerCamera;
+class Weapon;
 class Player :
 	public CharacterBase
 {
@@ -57,6 +58,9 @@ public:
 	void SetNoDamageFrame(float m_frame);
 	//ジャスト回避後の無敵フレーム
 	void UpdateJustAvoid();
+
+	//武器の参照
+	void SetSword(std::weak_ptr<Weapon> weapon,bool isLightSword);
 private:
 	//カメラ
 	std::weak_ptr<PlayerCamera> GetPlayerCamera()const;
@@ -69,5 +73,9 @@ private:
 	//無敵時間(ジャスト回避成功時数フレーム無敵)
 	bool m_isJustAvoided;
 	float m_noDamageFrame;
+
+	//武器
+	std::weak_ptr<Weapon> m_lightSword;
+	std::weak_ptr<Weapon> m_bigSword;
 };
 

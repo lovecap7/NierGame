@@ -6,6 +6,7 @@
 
 class Actor;
 class ActorData;
+class Player;
 class PlayerCamera;
 class CharaStatusData;
 class CharacterBase;
@@ -42,5 +43,8 @@ private:
 private:
 	//キャラクターの作成
 	std::shared_ptr<CharacterBase> CreateChara(GameTag tag, std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> data);
+
+	//プレイヤーの準備
+	void SetUpPlayer(std::shared_ptr<Player> player);
 };
 
