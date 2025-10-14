@@ -1,6 +1,7 @@
 #pragma once
 #include "../CharacterBase.h"
 #include "../../../../General/Math/MyMath.h"
+#include "../../../../General/CSV/PlayerAnimData.h"
 #include <memory>
 #include <map>
 #include <string>
@@ -61,7 +62,19 @@ public:
 
 	//武器の参照
 	void SetSword(std::weak_ptr<Weapon> weapon,bool isLightSword);
+
+	//片手剣を持つ
+	void HaveLightSword();
+	//大剣を持つ
+	void HaveBigSword();
+	//武器を収める
+	void PutAwaySword();
+
+	//アニメーションデータ
+	std::string GetAnim(std::wstring state);
 private:
+	//アニメーションデータをCSVから読み込む
+	void InitAnimData();
 	//カメラ
 	std::weak_ptr<PlayerCamera> GetPlayerCamera()const;
 private:
@@ -75,7 +88,16 @@ private:
 	float m_noDamageFrame;
 
 	//武器
-	std::weak_ptr<Weapon> m_lightSword;
-	std::weak_ptr<Weapon> m_bigSword;
+	std::weak_ptr<Weapon> m_pLightSword;
+	std::weak_ptr<Weapon> m_pBigSword;
+
+	//武器の状態
+	PlayerAnimData::WeaponType m_haveWeaponType;
+
+	//武器を収めるまでのフレームをカウント
+	float m_putAwayCountFrame;
+
+	//アニメーション
+	std::vector<std::shared_ptr<PlayerAnimData>> m_animDatas;
 };
 

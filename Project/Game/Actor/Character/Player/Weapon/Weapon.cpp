@@ -3,6 +3,11 @@
 #include "../../../../../General/Collision/Rigidbody.h"
 #include "../../../../../General/Collision/SphereCollider.h"
 
+namespace
+{
+	constexpr float kIdleOffsetY = 30.0f;
+}
+
 Weapon::Weapon(std::shared_ptr<ActorData> actorData, std::weak_ptr<ActorManager> pActorManager) :
 	Actor(actorData, Shape::Sphere, pActorManager),
 	m_ownerHandle(-1),
@@ -74,7 +79,7 @@ void Weapon::Complete()
 		//座標
 		Vector3 weaponPos = MV1GetFramePosition(m_ownerHandle, m_idleSlotIndex);
 		mat.mat[3][0] = weaponPos.x;
-		mat.mat[3][1] = weaponPos.y;
+		mat.mat[3][1] = weaponPos.y + kIdleOffsetY;
 		mat.mat[3][2] = weaponPos.z;
 		//セット
 		SetWeaponMat(mat);

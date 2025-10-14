@@ -12,12 +12,14 @@ namespace
 {
 	constexpr float kSpeedDif = 10.0f;
 	constexpr float kLerpSpeedRate = 0.1f;
-	const char* kAnimNameForwardAvoid = "Player|AvoidForward";
-	const char* kAnimNameBackAvoid = "Player|AvoidBack";
+	
+	//アニメーション
+	const std::wstring kForwardAvoid = L"AvoidForward";
+	const std::wstring kBackAvoid = L"AvoidBack";
+	const std::wstring kJustAvoid = L"JustAvoid";
+
 	//ジャスト回避フレーム
 	constexpr float kJustFrame = 15.0f;
-	//ジャスト回避
-	const char* kAnimNameJustAvoid = "Player|JustAvoid";
 	//スロー速度
 	constexpr float kSlowSpeed = 0.5f;
 	//無敵フレーム
@@ -37,6 +39,9 @@ PlayerStateAvoid::PlayerStateAvoid(std::weak_ptr<Actor> player) :
 	if (m_owner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
 	owner->SetCollState(CollisionState::Move);
+
+	//武器は持たない
+	owner->PutAwaySword();
 
 	auto& input = Input::GetInstance();
 	//移動
@@ -64,13 +69,13 @@ PlayerStateAvoid::PlayerStateAvoid(std::weak_ptr<Actor> player) :
 	//前進か下がるかでアニメーション切り替え
 	if (!isBack)
 	{
-		owner->GetModel()->SetAnim(kAnimNameForwardAvoid, false);
+		owner->GetModel()->SetAnim(owner->GetAnim(kForwardAvoid).c_str(), false);
 		//モデルの向き
 		owner->GetModel()->SetDir(Vector2(vec.x, vec.z));
 	}
 	else
 	{
-		owner->GetModel()->SetAnim(kAnimNameBackAvoid, false);
+		owner->GetModel()->SetAnim(owner->GetAnim(kBackAvoid).c_str(), false);
 		//モデルの向き
 		owner->GetModel()->SetDir(Vector2(-vec.x, -vec.z));
 	}
@@ -158,7 +163,7 @@ void PlayerStateAvoid::InitJustAvoid(std::shared_ptr<Model> model, std::shared_p
 	m_isJustAvoid = true;
 
 	//ジャスト回避
-	model->SetAnim(kAnimNameJustAvoid, false, 1.2f);
+	model->SetAnim(owner->GetAnim(kJustAvoid).c_str(), false, 1.2f);
 
 	//終了フレーム
 	m_finishJustAvoid = model->GetTotalAnimFrame() - kFisishJustAvoidFrame;

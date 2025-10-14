@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <list>
+#include "Math/MyMath.h"
 
 class Input final
 {
@@ -62,6 +63,26 @@ public:
 		//“ü—Í‚ª“ü‚Á‚½‚©‚Ç‚¤‚©‚ğæ“¾(ˆÚ“®ó‘Ô‚ÉØ‚è‘Ö‚¦‚é‚Æ‚«‚Ég‚¤)
 		bool IsLeftStickInput() { return leftStickX != 0 || leftStickY != 0; };
 		bool IsRightStickInput() { return rightStickX != 0 || rightStickY != 0; };
+
+		//“ü—Í‚Ì‘å‚«‚³
+		float LeftStickMagnitude() const
+		{
+			return Vector2(leftStickX, leftStickY).Magnitude();
+		}
+		float RightStickMagnitude() const
+		{
+			return Vector2(rightStickX, rightStickY).Magnitude();
+		}
+
+		//Š„‡
+		float LeftStickRate() const
+		{
+			return LeftStickMagnitude() * 0.001f;
+		}
+		float RightStickRate() const
+		{
+			return RightStickMagnitude() * 0.001f;
+		}
 	};
 
 	struct TriggerInfo

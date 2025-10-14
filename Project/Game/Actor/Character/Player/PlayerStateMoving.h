@@ -14,6 +14,11 @@ public:
 private:
     //速度
     float m_speed;
+    //ダッシュ
+    bool m_isDash;
+private:
+    //アニメーション切り替え
+    void ChangeWalkAnim(std::shared_ptr<Player> owner, Input& input);
     //移動
     void Move(std::shared_ptr<Player> owner, Input& input);
 };

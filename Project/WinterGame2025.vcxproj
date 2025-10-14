@@ -183,6 +183,7 @@
     <ClCompile Include="General\CSV\CharaStatusData.cpp" />
     <ClCompile Include="General\CSV\CSVData.cpp" />
     <ClCompile Include="General\CSV\CSVDataLoader.cpp" />
+    <ClCompile Include="General\CSV\PlayerAnimData.cpp" />
     <ClCompile Include="General\Input.cpp" />
     <ClCompile Include="General\Math\MathSub.cpp" />
     <ClCompile Include="General\Math\Matrix3x3.cpp" />
@@ -244,6 +245,7 @@
     <ClInclude Include="General\CSV\CharaStatusData.h" />
     <ClInclude Include="General\CSV\CSVData.h" />
     <ClInclude Include="General\CSV\CSVDataLoader.h" />
+    <ClInclude Include="General\CSV\PlayerAnimData.h" />
     <ClInclude Include="General\Game.h" />
     <ClInclude Include="General\Input.h" />
     <ClInclude Include="General\Math\MathSub.h" />

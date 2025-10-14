@@ -1,6 +1,5 @@
 #include <Dxlib.h>
 #include "Input.h"
-#include "Math/Vector2.h"
 
 namespace
 {

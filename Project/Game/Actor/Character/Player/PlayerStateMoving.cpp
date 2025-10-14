@@ -14,30 +14,34 @@
 namespace
 {
 	constexpr float kRunSpeedRata = 1.5f;
-	const char* kAnimNameJog = "Player|Jog_N";
-	const char* kAnimNameRun = "Player|Run";
+
+	//小走り
+	const std::wstring kJog = L"Jog";
+	//歩き
+	const std::wstring kWalk = L"Walk";
+	//走る
+	const std::wstring kRun = L"Run";
 }
 
 PlayerStateMoving::PlayerStateMoving(std::weak_ptr<Actor> player, bool isDash) :
 	PlayerStateBase(player),
-	m_speed(0.0f)
+	m_speed(0.0f),
+	m_isDash(isDash)
 {
 	if (m_owner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
 	//ステータス
 	auto status = owner->GetCharaStatus();
-	float speed = status->GetMS();
-	//歩き
-	if (!isDash)
-	{
-		owner->GetModel()->SetAnim(kAnimNameJog, true);
-		m_speed = speed;
-	}
+	m_speed = status->GetMS();
 	//走り
-	else
+	if(m_isDash)
 	{
-		owner->GetModel()->SetAnim(kAnimNameRun, true);
-		m_speed = speed * kRunSpeedRata;
+		//武器は持たない
+		owner->PutAwaySword();
+		//アニメーション
+		owner->GetModel()->SetAnim(owner->GetAnim(kRun).c_str(), true);
+		//速度を少し早く
+		m_speed *= kRunSpeedRata;
 	}
 	owner->SetCollState(CollisionState::Move);
 
@@ -103,14 +107,43 @@ void PlayerStateMoving::Update()
 		ChangeState(std::make_shared<PlayerStateJump>(m_owner));
 		return;
 	}
+
+	//アニメーション
+	ChangeWalkAnim(owner, input);
+
+	//移動
 	Move(owner, input);
+}
+
+void PlayerStateMoving::ChangeWalkAnim(std::shared_ptr<Player> owner,Input& input)
+{
+	if (!m_isDash)
+	{
+		//スティックの割合からアニメーションを変更
+		//小走り
+		bool isJog = input.GetStickInfo().LeftStickRate() >= 0.5f;
+		if (isJog)
+		{
+			owner->GetModel()->SetAnim(owner->GetAnim(L"Jog").c_str(), true);
+		}
+		else
+		{
+			owner->GetModel()->SetAnim(owner->GetAnim(L"Walk").c_str(), true);
+		}
+	}
 }
 
 void PlayerStateMoving::Move(std::shared_ptr<Player> owner, Input& input)
 {
 	//移動
 	Vector3 vec = InputMoveVec(owner, input);
-	vec *= m_speed;
+	float speed = m_speed;
+	//ダッシュ中じゃないならスティックの割合
+	if (!m_isDash)
+	{
+		speed *= input.GetStickInfo().LeftStickRate();
+	}
+	vec *= speed;
 	owner->GetRb()->SetMoveVec(vec);
 
 	//モデルの向き

@@ -14,7 +14,7 @@
 namespace
 {
 	//アニメーション
-	const char* kAnim = "Player|Idle_N";
+	const std::wstring kIdle = L"Idle";
 	//モデルの旋回速度
 	constexpr int kModelRotateSpeed = 5;
 }
@@ -24,7 +24,6 @@ PlayerStateIdle::PlayerStateIdle(std::weak_ptr<Actor> player):
 {
 	if (m_owner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
-	owner->GetModel()->SetAnim(kAnim, true);
 	owner->SetCollState(CollisionState::Normal);
 
 	//地面に付いてるなら
@@ -85,6 +84,14 @@ void PlayerStateIdle::Update()
 		return;
 	}
 
+	//アニメーション切り替え
+	ChangeAnim(owner);
+
 	//移動量リセット
 	owner->GetRb()->SetMoveVec(Vector3::Zero());
+}
+
+void PlayerStateIdle::ChangeAnim(std::shared_ptr<Player> owner)
+{
+	owner->GetModel()->SetAnim(owner->GetAnim(kIdle).c_str(), true);
 }

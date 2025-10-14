@@ -13,8 +13,10 @@
 namespace
 {
 	//アニメーション
-	const char* kAnimJump1 = "Player|Jump1";
-	const char* kAnimJump2 = "Player|Jump2";
+	const std::wstring kJump1 = L"Jump1";
+	const std::wstring kJump2 = L"Jump2";
+	//ジャンプ一回目
+	constexpr int kFirstJump = 1;
 }
 
 PlayerStateJump::PlayerStateJump(std::weak_ptr<Actor> player) :
@@ -24,13 +26,13 @@ PlayerStateJump::PlayerStateJump(std::weak_ptr<Actor> player) :
 	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
 	//ジャンプ回数カウント
 	owner->AddJumpNum();
-	if (owner->GetJumpNum() <= 1)
+	if (owner->GetJumpNum() <= kFirstJump)
 	{
-		owner->GetModel()->SetAnim(kAnimJump1, false);
+		owner->GetModel()->SetAnim(owner->GetAnim(kJump1).c_str(), false);
 	}
 	else
 	{
-		owner->GetModel()->SetAnim(kAnimJump2, false);
+		owner->GetModel()->SetAnim(owner->GetAnim(kJump2).c_str(), false);
 	}
 	owner->SetCollState(CollisionState::Jump);
 

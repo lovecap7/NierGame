@@ -13,6 +13,8 @@
 #include "../../../../General/Animator.h"
 #include "../../ActorManager.h"
 #include "../../../Camera/PlayerCamera.h"
+#include "../../../../General/CSV/CSVDataLoader.h"
+#include "../../../../General/CSV/CSVData.h"
 #include <DxLib.h>
 #include <cmath>
 #include <cassert>
@@ -21,6 +23,15 @@ namespace
 {
 	//ジャンプの最大数
 	constexpr int kMaxJumpNum = 2;
+
+	//武器の持ち手
+	constexpr int kHandIndex = 295;
+	//背中
+	constexpr int kBackLightIndex = 302;
+	constexpr int kBackBigIndex = 304;
+
+	//武器を収めるまでのフレーム
+	constexpr float kPutAwayFrame = 60.0f * 5.0f;
 }
 
 Player::Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager) :
@@ -28,7 +39,9 @@ Player::Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatus
 	m_jumpNum(0),
 	m_isAvoidable(true),
 	m_isJustAvoided(false),
-	m_noDamageFrame(0.0f)
+	m_noDamageFrame(0.0f),
+	m_putAwayCountFrame(0.0f),
+	m_haveWeaponType(PlayerAnimData::WeaponType::None)
 {
 }
 
@@ -40,6 +53,8 @@ void Player::Init()
 {
 	//Physicsに登録
 	Collidable::Init();
+	//アニメーションデータ
+	InitAnimData();
 	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
 	auto thisPointer = std::dynamic_pointer_cast<Player>(shared_from_this());
 	m_state = std::make_shared<PlayerStateIdle>(thisPointer);
@@ -63,20 +78,45 @@ void Player::Update()
 		//数フレーム無敵
 		SetNoDamageFrame(60.0f);
 	}
-#endif
 
-	//タイムスケール
+	////タイムスケール
+	//if (input.IsTrigger("Y"))
+	//{
+	//	m_rb->SetIsMyTimeScale(!m_rb->IsMyTimeScale());
+	//	if (m_rb->IsMyTimeScale())
+	//	{
+	//		SetTimeScale(0.5f);
+	//	}
+	//	else
+	//	{
+	//		SetTimeScale(1.0f);
+	//	}
+	//}
+
+	//メイン攻撃
+	if (input.IsTrigger("X"))
+	{
+		HaveLightSword();
+	}
+	//サブ攻撃
 	if (input.IsTrigger("Y"))
 	{
-		m_rb->SetIsMyTimeScale(!m_rb->IsMyTimeScale());
-		if (m_rb->IsMyTimeScale())
-		{
-			SetTimeScale(0.5f);
-		}
-		else
-		{
-			SetTimeScale(1.0f);
-		}
+		HaveBigSword();
+	}
+
+
+#endif
+
+	//武器を収める
+	if (m_putAwayCountFrame <= 0.0f)
+	{
+		m_putAwayCountFrame = 0.0f;
+		PutAwaySword();
+	}
+	else
+	{
+		//カウント
+		m_putAwayCountFrame -= GetTimeScale();
 	}
 
 	//状態に合わせた更新
@@ -235,15 +275,97 @@ void Player::SetSword(std::weak_ptr<Weapon> weapon, bool isLightSword)
 	sword->SetOwnerHandle(m_model->GetModelHandle());
 	if (isLightSword)
 	{
-		m_lightSword = weapon;
-		sword->SetFrameIndex(295, 303);
+		m_pLightSword = weapon;
+		sword->SetFrameIndex(kHandIndex, kBackLightIndex);
 	}
 	else
 	{
-		m_bigSword = weapon;
-		sword->SetFrameIndex(295, 304);
+		m_pBigSword = weapon;
+		sword->SetFrameIndex(kHandIndex, kBackBigIndex);
 	}
 	
+}
+
+void Player::HaveLightSword()
+{
+	//片手剣を持つ
+	if (m_pLightSword.expired() || m_pBigSword.expired())return;
+
+	auto lightSword = m_pLightSword.lock();
+	auto bigSword = m_pBigSword.lock();
+
+	lightSword->SetIsBattle(true);
+	bigSword->SetIsBattle(false);
+
+	//武器を収めるまでのフレーム
+	m_putAwayCountFrame = kPutAwayFrame;
+
+	//片手剣を持っている
+	m_haveWeaponType = PlayerAnimData::WeaponType::LightSword;
+}
+
+void Player::HaveBigSword()
+{
+	//大剣を持つ
+	if (m_pLightSword.expired() || m_pBigSword.expired())return;
+
+	auto lightSword = m_pLightSword.lock();
+	auto bigSword = m_pBigSword.lock();
+
+	lightSword->SetIsBattle(false);
+	bigSword->SetIsBattle(true);
+
+	//武器を収めるまでのフレーム
+	m_putAwayCountFrame = kPutAwayFrame;
+
+	//大剣を持っている
+	m_haveWeaponType = PlayerAnimData::WeaponType::BigSword;
+}
+
+void Player::PutAwaySword()
+{
+	//武器を収める
+	if (m_pLightSword.expired() || m_pBigSword.expired())return;
+
+	auto lightSword = m_pLightSword.lock();
+	auto bigSword = m_pBigSword.lock();
+
+	lightSword->SetIsBattle(false);
+	bigSword->SetIsBattle(false);
+
+	//武器を持っていない
+	m_haveWeaponType = PlayerAnimData::WeaponType::None;
+}
+
+std::string Player::GetAnim(std::wstring state)
+{
+	std::string path = "Player|";
+
+	//探す
+	for (auto& data : m_animDatas)
+	{
+		//条件に合うものがあったら
+		if (data->m_stateName == state && data->m_weaponType == m_haveWeaponType)
+		{
+			path += data->m_animName;
+			break;
+		}
+	}
+
+	return path;
+}
+
+void Player::InitAnimData()
+{
+	//CSVを読み込む
+	auto csvLoader = std::make_shared<CSVDataLoader>();
+	auto datas = csvLoader->LoadCSV("Player/PlayerAnimData");
+	//登録
+	for (auto& data : datas)
+	{
+		std::shared_ptr<PlayerAnimData> animData = std::make_shared<PlayerAnimData>(data);
+		m_animDatas.emplace_back(animData);
+	}
 }
 
 std::weak_ptr<PlayerCamera> Player::GetPlayerCamera() const

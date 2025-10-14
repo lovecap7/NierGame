@@ -9,7 +9,7 @@
 namespace
 {
 	//アニメーション
-	const char* kAnim = "Player|Death";
+	const std::wstring kDeath = L"Death";
 	//モデルの旋回速度
 	constexpr int kModelRotateSpeed = 5;
 }
@@ -19,7 +19,7 @@ PlayerStateDeath::PlayerStateDeath(std::weak_ptr<Actor> player) :
 {
 	if (m_owner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
-	owner->GetModel()->SetAnim(kAnim, false);
+	owner->GetModel()->SetAnim(owner->GetAnim(kDeath).c_str(), false);
 	owner->SetCollState(CollisionState::Dead);
 	auto status = owner->GetCharaStatus();
 	//無敵

@@ -14,14 +14,14 @@
 namespace
 {
 	//アニメーション
-	const char* kAnimFall = "Player|Fall";
+	const std::wstring kFall = L"Fall";
 }
 
 PlayerStateFall::PlayerStateFall(std::weak_ptr<Actor> player) :
 	PlayerStateBase(player)
 {
 	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
-	owner->GetModel()->SetAnim(kAnimFall, true);
+	owner->GetModel()->SetAnim(owner->GetAnim(kFall).c_str(), true);
 	owner->SetCollState(CollisionState::Fall);
 	//Y成分のリセット
 	owner->GetRb()->SetVecY(0.0f);

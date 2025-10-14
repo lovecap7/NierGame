@@ -10,7 +10,7 @@
 namespace
 {
 	//アニメーション
-	const char* kAnim = "Player|Hit1";
+	const std::wstring kHit = L"Hit";
 	//モデルの旋回速度
 	constexpr int kModelRotateSpeed = 5;
 }
@@ -20,7 +20,7 @@ PlayerStateHit::PlayerStateHit(std::weak_ptr<Actor> player) :
 {
 	if (m_owner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
-	owner->GetModel()->SetAnim(kAnim, false);
+	owner->GetModel()->SetAnim(owner->GetAnim(kHit).c_str(), false);
 	owner->SetCollState(CollisionState::Normal);
 
 	auto status = owner->GetCharaStatus();
