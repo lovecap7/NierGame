@@ -18,8 +18,8 @@ namespace
 PlayerStateHit::PlayerStateHit(std::weak_ptr<Actor> player) :
 	PlayerStateBase(player)
 {
-	if (m_owner.expired())return;
-	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
+	if (m_pOwner.expired())return;
+	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	owner->GetModel()->SetAnim(owner->GetAnim(kHit).c_str(), false);
 	owner->SetCollState(CollisionState::Normal);
 
@@ -30,8 +30,8 @@ PlayerStateHit::PlayerStateHit(std::weak_ptr<Actor> player) :
 
 PlayerStateHit::~PlayerStateHit()
 {
-	if (m_owner.expired())return;
-	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
+	if (m_pOwner.expired())return;
+	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	auto status = owner->GetCharaStatus();
 	//無敵
 	status->SetIsNoDamage(false);
@@ -43,12 +43,12 @@ void PlayerStateHit::Init()
 }
 void PlayerStateHit::Update()
 {
-	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
+	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	//モデルのアニメーションが終わったら
 	if (owner->GetModel()->IsFinishAnim())
 	{
 		//待機
-		ChangeState(std::make_shared<PlayerStateIdle>(m_owner));
+		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
 		return;
 	}
 }

@@ -36,8 +36,8 @@ PlayerStateAvoid::PlayerStateAvoid(std::weak_ptr<Actor> player) :
 	m_isJustAvoid(false),
 	m_finishJustAvoid(0.0f)
 {
-	if (m_owner.expired())return;
-	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
+	if (m_pOwner.expired())return;
+	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	owner->SetCollState(CollisionState::Move);
 
 	//武器は持たない
@@ -103,8 +103,8 @@ PlayerStateAvoid::PlayerStateAvoid(std::weak_ptr<Actor> player) :
 
 PlayerStateAvoid::~PlayerStateAvoid()
 {
-	if (m_owner.expired())return;
-	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
+	if (m_pOwner.expired())return;
+	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	owner->GetRb()->SetIsGravity(true);
 
 	//ジャスト回避に成功しているなら数フレーム間無敵
@@ -123,8 +123,8 @@ void PlayerStateAvoid::Init()
 
 void PlayerStateAvoid::Update()
 {
-	if (m_owner.expired())return;
-	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
+	if (m_pOwner.expired())return;
+	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	auto model = owner->GetModel();
 	auto& app = Application::GetInstance();
 
@@ -142,13 +142,13 @@ void PlayerStateAvoid::Update()
 		if (input.GetStickInfo().IsLeftStickInput())
 		{
 			//走る
-			ChangeState(std::make_shared<PlayerStateMoving>(m_owner, true));
+			ChangeState(std::make_shared<PlayerStateMoving>(m_pOwner, true));
 			return;
 		}
 		else
 		{
 			//待機
-			ChangeState(std::make_shared<PlayerStateIdle>(m_owner));
+			ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
 			return;
 		}
 	}

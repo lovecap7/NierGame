@@ -28,8 +28,8 @@ PlayerStateMoving::PlayerStateMoving(std::weak_ptr<Actor> player, bool isDash) :
 	m_speed(0.0f),
 	m_isDash(isDash)
 {
-	if (m_owner.expired())return;
-	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
+	if (m_pOwner.expired())return;
+	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	//ステータス
 	auto status = owner->GetCharaStatus();
 	m_speed = status->GetMS();
@@ -65,13 +65,13 @@ void PlayerStateMoving::Init()
 
 void PlayerStateMoving::Update()
 {
-	if (m_owner.expired())return;
-	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
+	if (m_pOwner.expired())return;
+	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	auto status = owner->GetCharaStatus();
 	//死亡
 	if (status->IsDead())
 	{
-		ChangeState(std::make_shared<PlayerStateDeath>(m_owner));
+		ChangeState(std::make_shared<PlayerStateDeath>(m_pOwner));
 		return;
 	}
 	auto& input = Input::GetInstance();
@@ -79,32 +79,32 @@ void PlayerStateMoving::Update()
 	if (input.IsBuffered("B") && owner->IsAvoidable())
 	{
 		//回避
-		ChangeState(std::make_shared<PlayerStateAvoid>(m_owner));
+		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
 		return;
 	}
 	//やられ
 	if (status->IsHitReaction())
 	{
-		ChangeState(std::make_shared<PlayerStateHit>(m_owner));
+		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner));
 		return;
 	}
 	//落下
 	if (owner->IsFall())
 	{
-		ChangeState(std::make_shared<PlayerStateFall>(m_owner));
+		ChangeState(std::make_shared<PlayerStateFall>(m_pOwner));
 		return;
 	}
 	//待機
 	if (!input.GetStickInfo().IsLeftStickInput())
 	{
 		//待機
-		ChangeState(std::make_shared<PlayerStateIdle>(m_owner));
+		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
 		return;
 	}
 	//ジャンプ
 	if (owner->IsJumpable() && input.IsBuffered("A"))
 	{
-		ChangeState(std::make_shared<PlayerStateJump>(m_owner));
+		ChangeState(std::make_shared<PlayerStateJump>(m_pOwner));
 		return;
 	}
 

@@ -12,9 +12,11 @@
 #include "../../../../General/Model.h"
 #include "../../../../General/Animator.h"
 #include "../../ActorManager.h"
+#include "../../../Attack/AttackManager.h"
 #include "../../../Camera/PlayerCamera.h"
 #include "../../../../General/CSV/CSVDataLoader.h"
 #include "../../../../General/CSV/CSVData.h"
+#include "../../../../General/CSV/AttackData.h"
 #include <DxLib.h>
 #include <cmath>
 #include <cassert>
@@ -53,8 +55,14 @@ void Player::Init()
 {
 	//Physicsに登録
 	Collidable::Init();
+
+	//CSVを読み込む
+	auto csvLoader = std::make_shared<CSVDataLoader>();
 	//アニメーションデータ
-	InitAnimData();
+	InitAnimData(csvLoader);
+	//攻撃データ
+	InitAttackData(csvLoader);
+
 	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
 	auto thisPointer = std::dynamic_pointer_cast<Player>(shared_from_this());
 	m_state = std::make_shared<PlayerStateIdle>(thisPointer);
@@ -94,15 +102,15 @@ void Player::Update()
 	//}
 
 	//メイン攻撃
-	if (input.IsTrigger("X"))
-	{
-		HaveLightSword();
-	}
-	//サブ攻撃
-	if (input.IsTrigger("Y"))
-	{
-		HaveBigSword();
-	}
+	//if (input.IsTrigger("X"))
+	//{
+	//	HaveLightSword();
+	//}
+	////サブ攻撃
+	//if (input.IsTrigger("Y"))
+	//{
+	//	HaveBigSword();
+	//}
 
 
 #endif
@@ -144,14 +152,8 @@ void Player::OnCollide(const std::shared_ptr<Collidable> other)
 	//デバッグ
 	if (other->GetGameTag() == GameTag::Attack)
 	{
-		//ダメージを受ける
-		m_charaStatus->OnDamage(100, 100, CharaStatus::AttackWeight::Heavy);
 		if (m_charaStatus->IsHitReaction())
 		{
-			Vector3 knockBack = m_rb->m_pos - std::dynamic_pointer_cast<Actor>(other)->GetNextPos();
-			knockBack = knockBack.Normalize() * 2.0f;
-			knockBack.y = 0.0f;
-			m_rb->m_vec = knockBack;
 #if _DEBUG
 			printf("残りの体力 : %d\n", m_charaStatus->GetNowHP());
 #endif
@@ -286,6 +288,18 @@ void Player::SetSword(std::weak_ptr<Weapon> weapon, bool isLightSword)
 	
 }
 
+std::weak_ptr<Weapon> Player::GetWeapon(PlayerAnimData::WeaponType type) const
+{
+	if (type == PlayerAnimData::WeaponType::LightSword)
+	{
+		return m_pLightSword;
+	}
+	else
+	{
+		return m_pBigSword;
+	}
+}
+
 void Player::HaveLightSword()
 {
 	//片手剣を持つ
@@ -337,7 +351,7 @@ void Player::PutAwaySword()
 	m_haveWeaponType = PlayerAnimData::WeaponType::None;
 }
 
-std::string Player::GetAnim(std::wstring state)
+std::string Player::GetAnim(std::wstring state)const
 {
 	std::string path = "Player|";
 
@@ -355,16 +369,56 @@ std::string Player::GetAnim(std::wstring state)
 	return path;
 }
 
-void Player::InitAnimData()
+std::shared_ptr<AttackData> Player::GetAttackData(std::wstring attackName) const
 {
-	//CSVを読み込む
-	auto csvLoader = std::make_shared<CSVDataLoader>();
+	std::shared_ptr<AttackData> attackData;
+
+	//探す
+	for (auto& data : m_attackDatas)
+	{
+		//条件に合うものがあったら
+		if (data->m_name == attackName)
+		{
+			attackData = data;
+			break;
+		}
+	}
+
+	assert(attackData);
+
+	return attackData;
+}
+
+void Player::SetAttack(std::shared_ptr<AttackBase> attack)
+{
+	if (m_pActorManager.expired())return;
+	auto actorManager = m_pActorManager.lock();
+	//攻撃マネージャー
+	if (actorManager->GetAttackManager().expired())return;
+	auto attackManager = actorManager->GetAttackManager().lock();
+
+	attackManager->Entry(attack);
+}
+
+void Player::InitAnimData(std::shared_ptr<CSVDataLoader> csvLoader)
+{
 	auto datas = csvLoader->LoadCSV("Player/PlayerAnimData");
 	//登録
 	for (auto& data : datas)
 	{
 		std::shared_ptr<PlayerAnimData> animData = std::make_shared<PlayerAnimData>(data);
 		m_animDatas.emplace_back(animData);
+	}
+}
+
+void Player::InitAttackData(std::shared_ptr<CSVDataLoader> csvLoader)
+{
+	auto datas = csvLoader->LoadCSV("Player/PlayerAttackData");
+	//登録
+	for (auto& data : datas)
+	{
+		std::shared_ptr<AttackData> attackData = std::make_shared<AttackData>(data);
+		m_attackDatas.emplace_back(attackData);
 	}
 }
 

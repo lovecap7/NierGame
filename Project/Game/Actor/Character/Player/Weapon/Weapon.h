@@ -47,6 +47,9 @@ public:
     //í“¬’†‚©
     bool IsBattle()const { return m_isBattle; };
     void SetIsBattle(bool isBattle) { m_isBattle = isBattle; };
+
+    //Œ•æ
+    Vector3 GetUP()const { return m_up; };
 private:
     //‚¿å‚Ìƒnƒ“ƒhƒ‹
     int m_ownerHandle;
@@ -59,5 +62,8 @@ private:
 
     //í“¬’†‚©‚Ç‚¤‚©
     bool m_isBattle;
+
+    //Œ•æ
+    Vector3 m_up;
 };
 

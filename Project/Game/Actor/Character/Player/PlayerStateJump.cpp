@@ -22,8 +22,8 @@ namespace
 PlayerStateJump::PlayerStateJump(std::weak_ptr<Actor> player) :
 	PlayerStateBase(player)
 {
-	if (m_owner.expired())return;
-	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
+	if (m_pOwner.expired())return;
+	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	//ジャンプ回数カウント
 	owner->AddJumpNum();
 	if (owner->GetJumpNum() <= kFirstJump)
@@ -57,31 +57,31 @@ void PlayerStateJump::Init()
 void PlayerStateJump::Update()
 {
 	auto& input = Input::GetInstance();
-	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
+	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	//ステータス
 	auto status = owner->GetCharaStatus();
 	//死亡
 	if (status->IsDead())
 	{
-		ChangeState(std::make_shared<PlayerStateDeath>(m_owner));
+		ChangeState(std::make_shared<PlayerStateDeath>(m_pOwner));
 		return;
 	}
 	//回避
 	if (input.IsBuffered("B") && owner->IsAvoidable())
 	{
-		ChangeState(std::make_shared<PlayerStateAvoid>(m_owner));
+		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
 		return;
 	}
 	//やられ
 	if (status->IsHitReaction())
 	{
-		ChangeState(std::make_shared<PlayerStateHit>(m_owner));
+		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner));
 		return;
 	}
 	//落下
 	if (owner->IsFall())
 	{
-		ChangeState(std::make_shared<PlayerStateFall>(m_owner));
+		ChangeState(std::make_shared<PlayerStateFall>(m_pOwner));
 		return;
 	}
 

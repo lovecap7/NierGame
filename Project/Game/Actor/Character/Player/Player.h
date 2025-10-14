@@ -2,6 +2,7 @@
 #include "../CharacterBase.h"
 #include "../../../../General/Math/MyMath.h"
 #include "../../../../General/CSV/PlayerAnimData.h"
+#include "../../../../General/CSV/AttackData.h"
 #include <memory>
 #include <map>
 #include <string>
@@ -13,6 +14,8 @@ class Input;
 class ActorData;
 class PlayerCamera;
 class Weapon;
+class CSVDataLoader;
+class AttackBase;
 class Player :
 	public CharacterBase
 {
@@ -60,8 +63,12 @@ public:
 	//ジャスト回避後の無敵フレーム
 	void UpdateJustAvoid();
 
+	//持ってる武器情報
+	PlayerAnimData::WeaponType GetHaveWeaponType()const { return m_haveWeaponType; };
+
 	//武器の参照
 	void SetSword(std::weak_ptr<Weapon> weapon,bool isLightSword);
+	std::weak_ptr<Weapon> GetWeapon(PlayerAnimData::WeaponType type)const;
 
 	//片手剣を持つ
 	void HaveLightSword();
@@ -71,10 +78,18 @@ public:
 	void PutAwaySword();
 
 	//アニメーションデータ
-	std::string GetAnim(std::wstring state);
+	std::string GetAnim(std::wstring state)const;
+	//攻撃データ
+	std::shared_ptr<AttackData> GetAttackData(std::wstring attackName)const;
+
+	//攻撃の登録
+	void SetAttack(std::shared_ptr<AttackBase> attack);
+
 private:
 	//アニメーションデータをCSVから読み込む
-	void InitAnimData();
+	void InitAnimData(std::shared_ptr<CSVDataLoader> csvLoader);
+	//攻撃データを読み込む
+	void InitAttackData(std::shared_ptr<CSVDataLoader> csvLoader);
 	//カメラ
 	std::weak_ptr<PlayerCamera> GetPlayerCamera()const;
 private:
@@ -97,7 +112,9 @@ private:
 	//武器を収めるまでのフレームをカウント
 	float m_putAwayCountFrame;
 
-	//アニメーション
+	//アニメーションデータ
 	std::vector<std::shared_ptr<PlayerAnimData>> m_animDatas;
+	//攻撃データ
+	std::vector<std::shared_ptr<AttackData>> m_attackDatas;
 };
 

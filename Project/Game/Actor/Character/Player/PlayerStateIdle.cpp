@@ -6,6 +6,7 @@
 #include "PlayerStateJump.h"
 #include "PlayerStateHit.h"
 #include "PlayerStateDeath.h"
+#include "PlayerStateLightAttack.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Input.h"
 #include "../../../../General/Collision/Rigidbody.h"
@@ -22,8 +23,8 @@ namespace
 PlayerStateIdle::PlayerStateIdle(std::weak_ptr<Actor> player):
 	PlayerStateBase(player)
 {
-	if (m_owner.expired())return;
-	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
+	if (m_pOwner.expired())return;
+	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	owner->SetCollState(CollisionState::Normal);
 
 	//地面に付いてるなら
@@ -45,42 +46,48 @@ void PlayerStateIdle::Init()
 void PlayerStateIdle::Update()
 {
 	auto& input = Input::GetInstance();
-	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
+	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	//死亡
 	if (owner->GetCharaStatus()->IsDead())
 	{
-		ChangeState(std::make_shared<PlayerStateDeath>(m_owner));
+		ChangeState(std::make_shared<PlayerStateDeath>(m_pOwner));
 		return;
 	}
 	//落下
 	if (owner->IsFall())
 	{
-		ChangeState(std::make_shared<PlayerStateFall>(m_owner));
+		ChangeState(std::make_shared<PlayerStateFall>(m_pOwner));
 		return;
 	}
 	//回避
 	if (input.IsBuffered("B") && owner->IsAvoidable())
 	{
-		ChangeState(std::make_shared<PlayerStateAvoid>(m_owner));
+		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
 		return;
 	}
 	//やられ
 	if (owner->GetCharaStatus()->IsHitReaction())
 	{
-		ChangeState(std::make_shared<PlayerStateHit>(m_owner));
+		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner));
+		return;
+	}
+	//攻撃
+	if (input.IsBuffered("X"))
+	{
+		ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner,L"MainAttack1"));
 		return;
 	}
 	//ジャンプ
 	if (owner->IsJumpable() && input.IsBuffered("A"))
 	{
-		ChangeState(std::make_shared<PlayerStateJump>(m_owner));
+		ChangeState(std::make_shared<PlayerStateJump>(m_pOwner));
 		return;
 	}
 	//入力があるなら移動
 	if (input.GetStickInfo().IsLeftStickInput())
 	{
 		//歩き
-		ChangeState(std::make_shared<PlayerStateMoving>(m_owner,false));
+		ChangeState(std::make_shared<PlayerStateMoving>(m_pOwner,false));
 		return;
 	}
 

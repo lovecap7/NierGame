@@ -13,7 +13,8 @@ Weapon::Weapon(std::shared_ptr<ActorData> actorData, std::weak_ptr<ActorManager>
 	m_ownerHandle(-1),
 	m_battleSlotIndex(0),
 	m_idleSlotIndex(0),
-	m_isBattle(false)
+	m_isBattle(false),
+	m_up(Vector3::Up())
 {
 	m_model->SetRotSpeed(1);
 }
@@ -68,6 +69,9 @@ void Weapon::Complete()
 		m_model->SetPos(weaponPos.ToDxLibVector());
 		//Rigidbodyの位置を更新
 		m_rb->m_pos = m_rb->GetNextPos();
+
+		//向き更新
+		m_up = mat * Vector3::Up();
 	}
 	//戦闘中ではないなら
 	else
@@ -87,6 +91,14 @@ void Weapon::Complete()
 		m_model->SetPos(weaponPos.ToDxLibVector());
 		//Rigidbodyの位置を更新
 		m_rb->m_pos = m_rb->GetNextPos();
+
+		//向き更新
+		m_up = mat * Vector3::Up();
+	}
+
+	if (m_up.SqMagnitude() > 0.0f)
+	{
+		m_up = m_up.Normalize();
 	}
 }
 

@@ -17,8 +17,8 @@ namespace
 PlayerStateDeath::PlayerStateDeath(std::weak_ptr<Actor> player) :
 	PlayerStateBase(player)
 {
-	if (m_owner.expired())return;
-	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
+	if (m_pOwner.expired())return;
+	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	owner->GetModel()->SetAnim(owner->GetAnim(kDeath).c_str(), false);
 	owner->SetCollState(CollisionState::Dead);
 	auto status = owner->GetCharaStatus();
@@ -36,14 +36,14 @@ void PlayerStateDeath::Init()
 }
 void PlayerStateDeath::Update()
 {
-	if (m_owner.expired())return;
-	auto owner = std::dynamic_pointer_cast<Player>(m_owner.lock());
+	if (m_pOwner.expired())return;
+	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	auto status = owner->GetCharaStatus();
 	//•œŠˆ‚µ‚½‚ç
 	if (!status->IsDead())
 	{
 		//‘Ò‹@
-		ChangeState(std::make_shared<PlayerStateIdle>(m_owner));
+		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
 		return;
 	}
 

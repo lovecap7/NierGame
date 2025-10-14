@@ -3,6 +3,7 @@
 #include  "../../General/Input.h"
 #include "../SceneController.h"
 #include "../../Game/Actor/ActorManager.h"
+#include "../../Game/Attack/AttackManager.h"
 #include "../../Game/Actor/DebugActor/DebugAttack.h"
 #include "../../Game/Camera/CameraController.h"
 #include "../../Game/Camera/PlayerCamera.h"
@@ -25,12 +26,19 @@ void PlayerTestScene::Init()
 	m_cameraController = std::make_shared<CameraController>();
 	m_cameraController->Init();
 	m_cameraController->ChangeCamera(camera);
+
+	m_attackManager = std::make_shared<AttackManager>();
+	m_attackManager->Init();
+
 	//アクター
 	m_actorManager = std::make_shared<ActorManager>();
 	m_actorManager->Init();
 	m_actorManager->CreateActorCSV("DebugScene","CharacterData");
 	m_actorManager->CreateActorCSV("DebugScene","StageData");
+	//カメラセット
 	m_actorManager->SetCamera(camera);
+	//攻撃マネージャーセット
+	m_actorManager->SetAttackManager(m_attackManager);
 
 	//攻撃デバッグ
 	auto atData = std::make_shared<ActorData>();
@@ -45,7 +53,9 @@ void PlayerTestScene::Init()
 
 void PlayerTestScene::Update()
 {
+	//更新
 	m_actorManager->Update();
+	m_attackManager->Update();
 	m_cameraController->Update();
 }
 
@@ -60,6 +70,7 @@ void PlayerTestScene::Draw()
 	}
 #endif
 	m_actorManager->Draw();
+	m_attackManager->Draw();
 }
 
 void PlayerTestScene::End()

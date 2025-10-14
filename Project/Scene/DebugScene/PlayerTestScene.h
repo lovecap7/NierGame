@@ -5,6 +5,7 @@ class Input;
 class CameraController;
 class SceneController;
 class ActorManager;
+class AttackManager;
 
 class PlayerTestScene :
     public SceneBase
@@ -27,6 +28,10 @@ public:
 private:
     //アクターマネージャー
     std::shared_ptr<ActorManager> m_actorManager;
+
+    //攻撃
+    std::shared_ptr<AttackManager> m_attackManager;
+
     //カメラ
     std::shared_ptr<CameraController> m_cameraController;
 };

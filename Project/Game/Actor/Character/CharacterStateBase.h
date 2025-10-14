@@ -34,7 +34,7 @@ private:
 	std::shared_ptr<CharacterStateBase> m_nextState;
 protected:
 	//自分のポインタ
-	std::weak_ptr<Actor> m_owner;
+	std::weak_ptr<Actor> m_pOwner;
 	//フレームカウント
 	float m_frame;
 };
