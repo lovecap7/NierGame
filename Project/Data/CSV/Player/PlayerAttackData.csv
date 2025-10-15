@@ -5,11 +5,5 @@ MainAttack3,3,9,2,5,0,10,60,10,100,10,10,MainAttack3,MainAttack4,60,300,-50,0
 MainAttack4,1,10,2,5,0,10,60,10,100,10,10,MainAttack4,None,0,0,0,0
 SubAttack1,1,10,2,5,0,10,60,10,100,10,10,SubAttack1,SubAttack2,70,0,0,0
 SubAttack2,1,10,2,5,0,10,60,10,100,10,10,SubAttack2,None,60,0,0,0
-SubAttack3,1,10,2,5,0,10,60,10,100,10,10,SubAttack3,None,10,0,0,0
-SubAttackCharge,0,0,0,0,0,0,0,0,0,0,0,SubAttackCharge,SubAttack3,10,0,0,0
-,,,,,,,,,,,,,,,,,
-,攻撃タイプ詳細,,攻撃の重さ詳細,,,,,,,,,,,,,,
-,0 = なし,,0 = 軽い,,,,,,,,,,,,,,
-,1 = 近接攻撃,,1 = 普通,,,,,,,,,,,,,,
-,2 = 弾,,2 = 重い,,,,,,,,,,,,,,
-,3 = 刀投げ,,3 = とても重い,,,,,,,,,,,,,,
+SubAttack3,1,10,2,5,0,10,60,10,100,10,10,SubAttack3,None,50,0,0,0
+SubAttackCharge,0,0,0,0,0,0,0,0,0,0,0,SubAttackCharge,SubAttack3,1000,50,0,0

@@ -13,11 +13,14 @@
 namespace
 {
 	const std::wstring kFirstAttackName = L"SubAttack1";
+	const std::wstring kSecondAttackName = L"SubAttack2";
+	const std::wstring kChargeName = L"SubAttackCharge";
 }
 
 PlayerStateHeavyAttack::PlayerStateHeavyAttack(std::weak_ptr<Actor> player) :
 	PlayerStateBase(player),
-	m_isAppearedAttack(false)
+	m_isAppearedAttack(false),
+	m_chargeCountFrame(0.0f)
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
@@ -79,7 +82,7 @@ void PlayerStateHeavyAttack::Update()
 	auto model = owner->GetModel();
 
 	//発生フレームになったら
-	if (m_frame >= m_attackData->m_startFrame && !m_isAppearedAttack)
+	if (m_frame >= m_attackData->m_startFrame && !m_isAppearedAttack && m_attackData->m_attackType != AttackData::AttackType::None)
 	{
 		//攻撃発生
 		std::shared_ptr<SwordAttack> attack = std::make_shared<SwordAttack>(m_attackData, owner);
@@ -108,32 +111,52 @@ void PlayerStateHeavyAttack::Update()
 	}
 
 	//キャンセルフレーム
-	if ((model->GetTotalAnimFrame() - m_attackData->m_cancelFrame) < m_frame)
+	if ((model->GetTotalAnimFrame() - m_attackData->m_cancelFrame) < m_frame && m_attackData->m_nextAttackName != L"None")
 	{
-		//攻撃
-		if (input.IsBuffered("Y"))
+		owner->HaveBigSword();
+		if (input.IsPress("Y"))
 		{
-			owner->HaveBigSword();
-			//次の攻撃
-			if (m_attackData->m_nextAttackName != L"None")
+			m_chargeCountFrame += owner->GetTimeScale();
+			//チャージ
+			m_attackData = owner->GetAttackData(kChargeName);
+			//アニメーション
+			model->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), true);
+			//攻撃を削除
+			DeleteAttack();
+			return;
+		}
+		//攻撃
+		if (input.IsRelease("Y"))
+		{
+			//チャージがたまったら
+			if (m_chargeCountFrame >= m_attackData->m_param1)
 			{
-
 				//攻撃データ
 				m_attackData = owner->GetAttackData(m_attackData->m_nextAttackName);
-				m_isAppearedAttack = false;
-
-				//アニメーション
-				model->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), false);
-
-				//フレームリセット
-				m_frame = 0.0f;
-
-				DeleteAttack();
-
-				return;
 			}
+			//たまってない
+			else
+			{
+				//攻撃データ
+				m_attackData = owner->GetAttackData(kSecondAttackName);
+			}
+			m_isAppearedAttack = false;
+
+			//アニメーション
+			model->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), false);
+
+			//フレームリセット
+			m_frame = 0.0f;
+
+			//攻撃を削除
+			DeleteAttack();
+
+			return;
 		}
+		m_chargeCountFrame = 0.0f;
 	}
+
+
 	//アニメーションが終了したら
 	if (model->IsFinishAnim())
 	{

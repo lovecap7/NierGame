@@ -19,6 +19,8 @@ private:
     bool m_isAppearedAttack;
     //攻撃の参照
     std::weak_ptr<SwordAttack> m_pSwordAttack;
+    //チャージフレーム
+    float m_chargeCountFrame;
 private:
     //攻撃削除
     void DeleteAttack();

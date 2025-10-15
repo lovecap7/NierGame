@@ -6,6 +6,7 @@
 #include "PlayerStateFall.h"
 #include "PlayerStateHit.h"
 #include "PlayerStateDeath.h"
+#include "PlayerStateHeavyAttack.h"
 #include "PlayerStateLightAttack.h"
 #include "../../../../General/Input.h"
 #include "../../../../General/Model.h"
@@ -99,6 +100,11 @@ void PlayerStateMoving::Update()
 	if (input.IsBuffered("X"))
 	{
 		ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner));
+		return;
+	}
+	if (input.IsBuffered("Y"))
+	{
+		ChangeState(std::make_shared<PlayerStateHeavyAttack>(m_pOwner));
 		return;
 	}
 	//‘Ò‹@
