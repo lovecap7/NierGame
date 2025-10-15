@@ -4,6 +4,7 @@
 #include "PlayerStateAvoid.h"
 #include "PlayerStateHit.h"
 #include "PlayerStateDeath.h"
+#include "PlayerStateLightAttack.h"
 #include "Player.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Input.h"
@@ -82,6 +83,12 @@ void PlayerStateJump::Update()
 	if (owner->IsFall())
 	{
 		ChangeState(std::make_shared<PlayerStateFall>(m_pOwner));
+		return;
+	}
+	//UŒ‚
+	if (input.IsBuffered("X"))
+	{
+		ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner));
 		return;
 	}
 

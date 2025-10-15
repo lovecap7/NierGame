@@ -74,7 +74,7 @@ void PlayerStateIdle::Update()
 	//UŒ‚
 	if (input.IsBuffered("X"))
 	{
-		ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner,L"MainAttack1"));
+		ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner));
 		return;
 	}
 	//ƒWƒƒƒ“ƒv

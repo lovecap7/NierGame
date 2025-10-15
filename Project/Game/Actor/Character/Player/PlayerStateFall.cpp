@@ -6,6 +6,7 @@
 #include "PlayerStateMoving.h"
 #include "PlayerStateAvoid.h"
 #include "PlayerStateDeath.h"
+#include "PlayerStateLightAttack.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Input.h"
 #include "../../../../General/Collision/Rigidbody.h"
@@ -70,6 +71,12 @@ void PlayerStateFall::Update()
 	if (owner->IsJumpable() && input.IsBuffered("A"))
 	{
 		ChangeState(std::make_shared<PlayerStateJump>(m_pOwner));
+		return;
+	}
+	//UŒ‚
+	if (input.IsBuffered("X"))
+	{
+		ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner));
 		return;
 	}
 

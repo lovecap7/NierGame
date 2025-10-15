@@ -16,7 +16,9 @@ AttackData::AttackData():
 	m_length(0.0f),
 	m_param1(0.0f),
 	m_param2(0.0f),
-	m_param3(0.0f)
+	m_param3(0.0f),
+	m_moveSpeed(0.0f),
+	m_moveFrame(0)
 {
 
 }
@@ -80,17 +82,23 @@ void AttackData::Conversion()
 	//長さ
 	m_length = stof(m_data[9]);
 
+	//前進速度
+	m_moveSpeed = stof(m_data[10]);
+
+	//前進フレーム
+	m_moveFrame = stoi(m_data[11]);
+
 	//アニメーションの名前
-	m_animName = m_data[10];
+	m_animName = m_data[12];
 
 	//次の攻撃の名前
-	m_nextAttackName = m_data[11];
+	m_nextAttackName = m_data[13];
 
 	//キャンセルフレーム
-	m_cancelFrame = stoi(m_data[12]);
+	m_cancelFrame = stoi(m_data[14]);
 
 	//パラメータ
-	m_param1 = stof(m_data[13]);
-	m_param2 = stof(m_data[14]);
-	m_param3 = stof(m_data[15]);
+	m_param1 = stof(m_data[15]);
+	m_param2 = stof(m_data[16]);
+	m_param3 = stof(m_data[17]);
 }

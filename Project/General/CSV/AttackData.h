@@ -48,6 +48,12 @@ public:
 
 	//長さ
 	float m_length;
+
+	//前進速度
+	float m_moveSpeed;
+
+	//前進フレーム
+	int m_moveFrame;
 	
 	//アニメーションの名前
 	std::wstring m_animName;

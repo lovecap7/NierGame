@@ -2,13 +2,19 @@
 #include "Player.h"
 #include "PlayerStateMoving.h"
 #include "PlayerStateIdle.h"
+#include "PlayerStateAvoid.h"
 #include "Weapon/Weapon.h"
 #include "../../../Attack/SwordAttack.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Input.h"
 #include "../../../../General/Collision/Rigidbody.h"
 
-PlayerStateLightAttack::PlayerStateLightAttack(std::weak_ptr<Actor> player, std::wstring attackName):
+namespace
+{
+	const std::wstring kFirstAttackName = L"MainAttack1";
+}
+
+PlayerStateLightAttack::PlayerStateLightAttack(std::weak_ptr<Actor> player):
 	PlayerStateBase(player),
 	m_isAppearedAttack(false)
 {
@@ -19,13 +25,21 @@ PlayerStateLightAttack::PlayerStateLightAttack(std::weak_ptr<Actor> player, std:
 	//武器を持つ
 	owner->HaveLightSword();
 	//攻撃データ取得
-	m_attackData = owner->GetAttackData(attackName);
+	m_attackData = owner->GetAttackData(kFirstAttackName);
 	//アニメーション
 	owner->GetModel()->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), false);
+
+	//重力を受けない
+	owner->GetRb()->SetIsGravity(false);
 }
 
 PlayerStateLightAttack::~PlayerStateLightAttack()
 {
+	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
+	//重力を受ける
+	owner->GetRb()->SetIsGravity(true);
+	//攻撃削除
+	DeleteAttack();
 }
 
 void PlayerStateLightAttack::Init()
@@ -39,8 +53,25 @@ void PlayerStateLightAttack::Update()
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 
+	auto& input = Input::GetInstance();
+	//回避
+	if (input.IsBuffered("B") && owner->IsAvoidable())
+	{
+		//回避
+		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
+		return;
+	}
+
 	//フレームをカウント
 	CountFrame();
+	
+	//武器
+	auto weapon = owner->GetWeapon(PlayerAnimData::WeaponType::LightSword);
+	if (weapon.expired())return;
+	auto lightSword = weapon.lock();
+
+	//モデル
+	auto model = owner->GetModel();
 
 	//発生フレームになったら
 	if (m_frame >= m_attackData->m_startFrame && !m_isAppearedAttack)
@@ -56,10 +87,17 @@ void PlayerStateLightAttack::Update()
 
 		//攻撃が発生した
 		m_isAppearedAttack = true;
-	}
 
-	//モデル
-	auto model = owner->GetModel();
+		//刀を投げる攻撃の時
+		if (m_attackData->m_attackType == AttackData::AttackType::Throw)
+		{
+			lightSword->ThrowAndRoll(m_attackData->m_param1, model->GetDir(), owner->GetPos(), m_attackData->m_keepFrame, m_attackData->m_param2);
+		}
+		else
+		{
+			lightSword->FinisiThrowAndRoll();
+		}
+	}
 
 	//攻撃位置の更新
 	if (!m_pSwordAttack.expired())
@@ -76,16 +114,8 @@ void PlayerStateLightAttack::Update()
 			swordAttack->SetStartPos(lightSword->GetStartPos());
 			//終点
 			swordAttack->SetEndPos(lightSword->GetEndPos(m_attackData->m_length));
-
-			//テスト
-			if (m_frame == m_attackData->m_startFrame)
-			{
-				lightSword->ThrowAndRoll(300.0f, model->GetDir(), owner->GetPos(), 60, 10.0f);
-			}
 		}
 	}
-
-	auto& input = Input::GetInstance();
 
 	//キャンセルフレーム
 	if ((model->GetTotalAnimFrame() - m_attackData->m_cancelFrame) < m_frame)
@@ -108,11 +138,7 @@ void PlayerStateLightAttack::Update()
 				//フレームリセット
 				m_frame = 0.0f;
 
-				//攻撃の削除
-				if (!m_pSwordAttack.expired())
-				{
-					m_pSwordAttack.lock()->Delete();
-				}
+				DeleteAttack();
 
 				return;
 			}
@@ -134,6 +160,26 @@ void PlayerStateLightAttack::Update()
 			return;
 		}
 	}
+
+	//移動量
+	Vector3 moveVec = Vector3::Zero();
+	if (m_frame <= m_attackData->m_moveFrame)
+	{
+		//モデルの向き
+		owner->GetModel()->SetDir(InputMoveVec(owner, input).XZ());
+
+		//前進
+		moveVec = model->GetDir()* m_attackData->m_moveSpeed;
+	}
 	//移動量リセット
-	owner->GetRb()->SetMoveVec(Vector3::Zero());
+	owner->GetRb()->SetVec(moveVec);
+}
+
+void PlayerStateLightAttack::DeleteAttack()
+{
+	//攻撃の削除
+	if (!m_pSwordAttack.expired())
+	{
+		m_pSwordAttack.lock()->Delete();
+	}
 }

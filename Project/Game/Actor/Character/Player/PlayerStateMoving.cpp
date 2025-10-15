@@ -6,6 +6,7 @@
 #include "PlayerStateFall.h"
 #include "PlayerStateHit.h"
 #include "PlayerStateDeath.h"
+#include "PlayerStateLightAttack.h"
 #include "../../../../General/Input.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Collision/Rigidbody.h"
@@ -92,6 +93,12 @@ void PlayerStateMoving::Update()
 	if (owner->IsFall())
 	{
 		ChangeState(std::make_shared<PlayerStateFall>(m_pOwner));
+		return;
+	}
+	//UŒ‚
+	if (input.IsBuffered("X"))
+	{
+		ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner));
 		return;
 	}
 	//‘Ò‹@
