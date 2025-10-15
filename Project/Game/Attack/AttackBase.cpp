@@ -121,3 +121,9 @@ void AttackBase::Delete()
 {
 	m_keepFrame = 0.0f;
 }
+
+void AttackBase::ResetHitID()
+{
+	if (m_hitId.size() <= 0) return;
+	m_hitId.clear();
+}

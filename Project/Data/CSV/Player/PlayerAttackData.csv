@@ -3,8 +3,8 @@ MainAttack1,1,10,2,5,0,10,60,10,100,10,10,MainAttack1,MainAttack2,70,0,0,0
 MainAttack2,1,10,2,5,0,10,60,10,100,10,10,MainAttack2,MainAttack3,80,0,0,0
 MainAttack3,3,9,2,5,0,10,60,10,100,10,10,MainAttack3,MainAttack4,60,300,-50,0
 MainAttack4,1,10,2,5,0,10,60,10,100,10,10,MainAttack4,None,0,0,0,0
-SubAttack1,1,10,2,5,0,10,60,10,100,10,10,SubAttack1,SubAttack2,10,0,0,0
-SubAttack2,1,10,2,5,0,10,60,10,100,10,10,SubAttack2,None,10,0,0,0
+SubAttack1,1,10,2,5,0,10,60,10,100,10,10,SubAttack1,SubAttack2,70,0,0,0
+SubAttack2,1,10,2,5,0,10,60,10,100,10,10,SubAttack2,None,60,0,0,0
 SubAttack3,1,10,2,5,0,10,60,10,100,10,10,SubAttack3,None,10,0,0,0
 SubAttackCharge,0,0,0,0,0,0,0,0,0,0,0,SubAttackCharge,SubAttack3,10,0,0,0
 ,,,,,,,,,,,,,,,,,

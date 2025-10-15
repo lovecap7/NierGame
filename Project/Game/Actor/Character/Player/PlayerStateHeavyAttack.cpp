@@ -30,8 +30,12 @@ PlayerStateHeavyAttack::PlayerStateHeavyAttack(std::weak_ptr<Actor> player) :
 	//アニメーション
 	owner->GetModel()->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), false);
 
-	//重力を受けない
-	owner->GetRb()->SetIsGravity(false);
+	//空中にいるなら
+	if (!owner->IsFloor())
+	{
+		//重力を受けない
+		owner->GetRb()->SetIsGravity(false);
+	}
 }
 
 PlayerStateHeavyAttack::~PlayerStateHeavyAttack()
@@ -109,7 +113,7 @@ void PlayerStateHeavyAttack::Update()
 		//攻撃
 		if (input.IsBuffered("Y"))
 		{
-			owner->HaveLightSword();
+			owner->HaveBigSword();
 			//次の攻撃
 			if (m_attackData->m_nextAttackName != L"None")
 			{

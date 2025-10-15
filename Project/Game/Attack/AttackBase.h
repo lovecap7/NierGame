@@ -29,6 +29,9 @@ public:
     //íœ
     bool IsDelete();
     void Delete();
+
+    //IDƒŠƒZƒbƒg
+    void ResetHitID();
 protected:
     //ˆĞ—Í
     int m_attackPower;

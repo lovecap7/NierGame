@@ -29,8 +29,12 @@ PlayerStateLightAttack::PlayerStateLightAttack(std::weak_ptr<Actor> player):
 	//アニメーション
 	owner->GetModel()->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), false);
 
-	//重力を受けない
-	owner->GetRb()->SetIsGravity(false);
+	//空中にいるなら
+	if (!owner->IsFloor())
+	{
+		//重力を受けない
+		owner->GetRb()->SetIsGravity(false);
+	}
 }
 
 PlayerStateLightAttack::~PlayerStateLightAttack()
