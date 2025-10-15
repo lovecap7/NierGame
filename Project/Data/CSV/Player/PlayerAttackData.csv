@@ -1,9 +1,15 @@
-﻿攻撃の名前,威力,攻撃の重さ,ノックバックの大きさ,上方向の力,発生フレーム,持続フレーム,半径,長さ,アニメーションの名前,次の攻撃の名前,キャンセルフレーム
-MainAttack1,10,2,5,0,10,10,20,100,MainAttack1,MainAttack2,70
-MainAttack2,10,2,5,0,10,10,20,100,MainAttack2,MainAttack3,70
-MainAttack3,9,2,5,0,10,10,20,100,MainAttack3,MainAttack4,60
-MainAttack4,10,2,5,0,10,10,20,100,MainAttack4,None,0
-SubAttack1,10,2,5,0,10,10,20,100,SubAttack1,SubAttack2,10
-SubAttack2,10,2,5,0,10,10,20,100,SubAttack2,None,10
-SubAttack3,10,2,5,0,10,10,20,100,SubAttack3,None,10
-SubAttackCharge,0,0,0,0,0,0,0,0,SubAttackCharge,SubAttack3,10
+﻿攻撃の名前,攻撃タイプ,威力,攻撃の重さ,ノックバックの大きさ,上方向の力,発生フレーム,持続フレーム,半径,長さ,アニメーションの名前,次の攻撃の名前,キャンセルフレーム,パラメータ1,パラメータ2,パラメータ3
+MainAttack1,1,10,2,5,0,10,60,10,100,MainAttack1,MainAttack2,70,0,0,0
+MainAttack2,1,10,2,5,0,10,60,10,100,MainAttack2,MainAttack3,70,0,0,0
+MainAttack3,3,9,2,5,0,10,60,10,100,MainAttack3,MainAttack4,60,0,0,0
+MainAttack4,1,10,2,5,0,10,60,10,100,MainAttack4,None,0,0,0,0
+SubAttack1,1,10,2,5,0,10,60,10,100,SubAttack1,SubAttack2,10,0,0,0
+SubAttack2,1,10,2,5,0,10,60,10,100,SubAttack2,None,10,0,0,0
+SubAttack3,1,10,2,5,0,10,60,10,100,SubAttack3,None,10,0,0,0
+SubAttackCharge,0,0,0,0,0,0,0,0,0,SubAttackCharge,SubAttack3,10,0,0,0
+,,,,,,,,,,,,,,,
+,攻撃タイプ詳細,,攻撃の重さ詳細,,,,,,,,,,,,
+,0 = なし,,0 = 軽い,,,,,,,,,,,,
+,1 = 近接攻撃,,1 = 普通,,,,,,,,,,,,
+,2 = 弾,,2 = 重い,,,,,,,,,,,,
+,3 = 刀投げ,,3 = とても重い,,,,,,,,,,,,

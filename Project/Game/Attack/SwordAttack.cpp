@@ -19,7 +19,7 @@ void SwordAttack::Draw() const
 		m_rb->m_pos.ToDxLibVector(),
 		std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetEndPos().ToDxLibVector(),
 		std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetRadius(),
-		16,
+		8,
 		0xff00ff,
 		0xff00ff,
 		false//’n–Ê‚É‚¢‚é‚Æ“h‚è‚Â‚Ô‚³‚ê‚é

@@ -3,6 +3,7 @@
 #include "../../../General/Collision/SphereCollider.h"
 #include "../../../General/Input.h"
 #include "../../../Main/Application.h"
+#include "../Character/Player/Player.h"
 
 namespace
 {
@@ -46,6 +47,10 @@ void DebugAttack::End()
 
 void DebugAttack::OnCollide(const std::shared_ptr<Collidable> other)
 {
+	if (other->GetGameTag() == GameTag::Player)
+	{
+		std::dynamic_pointer_cast<Player>(other)->GetCharaStatus()->OnDamage(10, 10, CharaStatus::AttackWeight::Heaviest);
+	}
 }
 
 void DebugAttack::Complete()

@@ -15,6 +15,16 @@ public:
 	//攻撃の名前
 	std::wstring m_name;
 
+	enum class AttackType : int
+	{
+		None = 0,
+		Melee = 1,
+		Bullet = 2,
+		Throw = 3
+	};
+	//攻撃タイプ
+	AttackType m_attackType;
+
 	//威力
 	int m_attackPower;
 
@@ -47,6 +57,11 @@ public:
 
 	//キャンセル
 	int m_cancelFrame;
+
+	//パラメータ
+	float m_param1;
+	float m_param2;
+	float m_param3;
 
 private:
 	//変換

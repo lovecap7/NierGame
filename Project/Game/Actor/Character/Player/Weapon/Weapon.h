@@ -33,6 +33,7 @@ public:
     /// Updateの処理によって起こった衝突処理などの処理の確定
     /// </summary>
     virtual void Complete() override;
+
     //武器の行列
     void SetWeaponMat(Matrix4x4 mat);
     //フレーム番号
@@ -50,6 +51,15 @@ public:
 
     //剣先
     Vector3 GetUP()const { return m_up; };
+
+    //始点
+    Vector3 GetStartPos()const;
+    //終点
+    Vector3 GetEndPos(float length)const;
+
+    //くるくる回る
+    void ThrowAndRoll(float length,Vector3 dir, Vector3 startPos ,float frame,float rotaSpeed);
+    void FinisiThrowAndRoll();
 private:
     //持ち主のハンドル
     int m_ownerHandle;
@@ -65,5 +75,22 @@ private:
 
     //剣先
     Vector3 m_up;
+
+    //回転フレーム
+    float m_rotaFrame;
+    float m_rotaCountFrame;
+
+    //回転速度
+    float m_rotaSpeed;
+    float m_rotaAngle;
+
+    //移動先
+    Vector3 m_targetPos;
+private:
+    //向きの更新
+    void UpdateWeaponDir();
+    //回転
+    void UpdateThrowRota(Vector3& weaponPos, Matrix4x4& mat);
+
 };
 

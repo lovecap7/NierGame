@@ -58,6 +58,9 @@ void PlayerStateLightAttack::Update()
 		m_isAppearedAttack = true;
 	}
 
+	//モデル
+	auto model = owner->GetModel();
+
 	//攻撃位置の更新
 	if (!m_pSwordAttack.expired())
 	{
@@ -70,15 +73,17 @@ void PlayerStateLightAttack::Update()
 		{
 			auto lightSword = weapon.lock();
 			//始点
-			swordAttack->SetStartPos(lightSword->GetPos());
+			swordAttack->SetStartPos(lightSword->GetStartPos());
 			//終点
-			swordAttack->SetEndPos(lightSword->GetUP() * m_attackData->m_length);
+			swordAttack->SetEndPos(lightSword->GetEndPos(m_attackData->m_length));
+
+			//テスト
+			if (m_frame == m_attackData->m_startFrame)
+			{
+				lightSword->ThrowAndRoll(300.0f, model->GetDir(), owner->GetPos(), 60, 10.0f);
+			}
 		}
 	}
-
-
-	//モデル
-	auto model = owner->GetModel();
 
 	auto& input = Input::GetInstance();
 
