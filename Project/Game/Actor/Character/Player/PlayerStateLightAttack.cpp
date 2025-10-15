@@ -105,16 +105,11 @@ void PlayerStateLightAttack::Update()
 		//攻撃
 		auto swordAttack = m_pSwordAttack.lock();
 
-		//武器
-		auto weapon = owner->GetWeapon(PlayerAnimData::WeaponType::LightSword);
-		if (!weapon.expired())
-		{
-			auto lightSword = weapon.lock();
-			//始点
-			swordAttack->SetStartPos(lightSword->GetStartPos());
-			//終点
-			swordAttack->SetEndPos(lightSword->GetEndPos(m_attackData->m_length));
-		}
+		//攻撃の位置更新
+		//始点
+		swordAttack->SetStartPos(lightSword->GetStartPos());
+		//終点
+		swordAttack->SetEndPos(lightSword->GetEndPos(m_attackData->m_length));
 	}
 
 	//キャンセルフレーム
