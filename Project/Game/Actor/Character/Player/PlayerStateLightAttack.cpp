@@ -142,11 +142,23 @@ void PlayerStateLightAttack::Update()
 		if (input.IsBuffered("X"))
 		{
 			owner->HaveLightSword();
+			//次の攻撃名
+			auto nextName = m_attackData->m_nextAttackName;
+
 			//次の攻撃
-			if (m_attackData->m_nextAttackName != L"None")
+			if (nextName == L"None")
+			{
+				//空中にいないなら
+				if (owner->IsFloor())
+				{
+					//最初の攻撃
+					nextName = kFirstAttackName;
+				}
+			}
+			if (nextName != L"None")
 			{
 				//攻撃データ
-				m_attackData = owner->GetAttackData(m_attackData->m_nextAttackName);
+				m_attackData = owner->GetAttackData(nextName);
 				m_isAppearedAttack = false;
 
 				//アニメーション
