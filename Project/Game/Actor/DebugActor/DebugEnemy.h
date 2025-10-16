@@ -1,12 +1,15 @@
 #pragma once
-#include "../Actor.h"
+#include "../Character/CharacterBase.h"
 #include "../../../General/Math/MyMath.h"
 #include "../../../General/Collision/Rigidbody.h"
+class CharaStatusData;
+class ActorData;
+class ActorManager;
 class DebugEnemy :
-    public Actor
+	public CharacterBase
 {
 public:
-	DebugEnemy(std::shared_ptr<ActorData> actorData, std::weak_ptr<ActorManager> pActorManager);
+	DebugEnemy(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData,std::weak_ptr<ActorManager> pActorManager);
 	~DebugEnemy();
 	virtual void Init() override;
 	virtual void Update() override;

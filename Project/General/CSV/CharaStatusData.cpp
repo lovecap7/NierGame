@@ -1,5 +1,14 @@
 #include "CharaStatusData.h"
 
+CharaStatusData::CharaStatusData() :
+	m_hp(0),
+	m_at(0),
+	m_df(0),
+	m_ms(0.0f),
+	m_ar(CharaStatus::Armor::Light)
+{
+}
+
 CharaStatusData::CharaStatusData(std::shared_ptr<CSVData> data) :
 	m_hp(0),
 	m_at(0),

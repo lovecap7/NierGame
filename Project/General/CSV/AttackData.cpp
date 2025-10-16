@@ -3,6 +3,7 @@
 
 AttackData::AttackData():
 	m_name(),
+	m_isMultipleHit(false),
 	m_attackType(AttackData::AttackType::None),
 	m_attackWeight(CharaStatus::AttackWeight::Light),
 	m_cancelFrame(0),
@@ -25,6 +26,7 @@ AttackData::AttackData():
 
 AttackData::AttackData(std::shared_ptr<CSVData> data):
 	m_name(),
+	m_isMultipleHit(false),
 	m_attackType(AttackData::AttackType::None),
 	m_attackWeight(CharaStatus::AttackWeight::Light),
 	m_cancelFrame(0),
@@ -55,50 +57,53 @@ void AttackData::Conversion()
 	//攻撃の名前
 	m_name = m_data[0];
 
+	//ヒット番号
+	m_isMultipleHit = m_data[1] == L"TRUE";
+
 	//攻撃タイプ
-	m_attackType = static_cast<AttackType>(stoi(m_data[1]));
+	m_attackType = static_cast<AttackType>(stoi(m_data[2]));
 
 	//威力
-	m_attackPower = stoi(m_data[2]);
+	m_attackPower = stoi(m_data[3]);
 
 	//アーマー
-	m_attackWeight = static_cast<CharaStatus::AttackWeight>(stoi(m_data[3]));
+	m_attackWeight = static_cast<CharaStatus::AttackWeight>(stoi(m_data[4]));
 
 	//ノックバックの大きさ
-	m_knockBackPower = stof(m_data[4]);
+	m_knockBackPower = stof(m_data[5]);
 
 	//上方向の力
-	m_verticalPower = stof(m_data[5]);
+	m_verticalPower = stof(m_data[6]);
 
 	//発生フレーム
-	m_startFrame = stoi(m_data[6]);
+	m_startFrame = stoi(m_data[7]);
 
 	//持続フレーム
-	m_keepFrame = stoi(m_data[7]);
+	m_keepFrame = stoi(m_data[8]);
 
 	//半径
-	m_radius = stof(m_data[8]);
+	m_radius = stof(m_data[9]);
 
 	//長さ
-	m_length = stof(m_data[9]);
+	m_length = stof(m_data[10]);
 
 	//前進速度
-	m_moveSpeed = stof(m_data[10]);
+	m_moveSpeed = stof(m_data[11]);
 
 	//前進フレーム
-	m_moveFrame = stoi(m_data[11]);
+	m_moveFrame = stoi(m_data[12]);
 
 	//アニメーションの名前
-	m_animName = m_data[12];
+	m_animName = m_data[13];
 
 	//次の攻撃の名前
-	m_nextAttackName = m_data[13];
+	m_nextAttackName = m_data[14];
 
 	//キャンセルフレーム
-	m_cancelFrame = stoi(m_data[14]);
+	m_cancelFrame = stoi(m_data[15]);
 
 	//パラメータ
-	m_param1 = stof(m_data[15]);
-	m_param2 = stof(m_data[16]);
-	m_param3 = stof(m_data[17]);
+	m_param1 = stof(m_data[16]);
+	m_param2 = stof(m_data[17]);
+	m_param3 = stof(m_data[18]);
 }

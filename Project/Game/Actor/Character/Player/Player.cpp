@@ -170,9 +170,9 @@ void Player::Draw() const
 		std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetEndPos().ToDxLibVector(),
 		std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetRadius(),
 		16,
-		0xff0000,
-		0xff0000,
-		false//’n–Ê‚É‚¢‚é‚Æ“h‚è‚Â‚Ô‚³‚ê‚é
+		0x00ff00,
+		0x00ff00,
+		false
 	);
 #endif
 	m_model->Draw();

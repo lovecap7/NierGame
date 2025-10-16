@@ -5,11 +5,11 @@
 #include "../../General/CSV/CSVDataLoader.h"
 #include "../../General/CSV/ActorData.h"
 #include "../../General/CSV/CharaStatusData.h"
-#include "DebugActor/DebugPlayer.h"
 #include "Stage/StageObject.h"
 #include "Character/CharacterBase.h"
 #include "Character/Player/Player.h"
 #include "Character/Player/Weapon/Weapon.h"
+
 
 namespace
 {

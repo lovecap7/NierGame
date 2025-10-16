@@ -2,6 +2,7 @@
 #include "../../../General/Collision/Rigidbody.h"
 #include "../../../General/Collision/SphereCollider.h"
 #include "../../../General/Input.h"
+#include "../../../General/CharaStatus.h"
 #include "../../../Main/Application.h"
 
 namespace
@@ -10,8 +11,8 @@ namespace
 	constexpr float kJumpPower = 400.0f;
 }
 
-DebugEnemy::DebugEnemy(std::shared_ptr<ActorData> actorData, std::weak_ptr<ActorManager> pActorManager) :
-	Actor(actorData,Shape::Sphere, pActorManager)
+DebugEnemy::DebugEnemy(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager):
+	CharacterBase(actorData, charaStatusData,Shape::Sphere, pActorManager)
 {
 }
 
@@ -37,21 +38,22 @@ void DebugEnemy::Update()
 		m_rb->m_myTimeScale = 0.5f;
 		m_rb->SetIsMyTimeScale(!m_rb->IsMyTimeScale());
 	}
+
+	m_charaStatus->InitHitState();
 }
 
 void DebugEnemy::Draw() const
 {
-	DrawSphere3D(VGet(m_rb->m_pos.x, m_rb->m_pos.y, m_rb->m_pos.z), 50.0f, 16, 0xff0000, 0, true);
-	//タイムスケール表示
-	if (m_rb->IsMyTimeScale())
+	//ダメージを喰らったら色を変える
+	auto color = GetColor(255, 0, 0);
+	if (m_charaStatus->IsHit())
 	{
-		DrawString(0, 100, L"EnemyのTimeScaleを使用中", 0xffffff);
+		color = GetColor(0, 255, 255);
 	}
-	else
-	{
-		DrawString(0, 100, L"EnemyのTimeScaleを使用していない", 0xffffff);
-	}
-	DrawFormatString(0, 120, 0xffffff, L"EnemyのTimeScale = %.1f", m_rb->m_myTimeScale);
+
+	DrawSphere3D(VGet(m_rb->m_pos.x, m_rb->m_pos.y, m_rb->m_pos.z), 50.0f, 16, color, 0, true);
+	//体力
+	DrawFormatString(0, 120, 0xffffff, L"Enemyの体力は = %d", m_charaStatus->GetNowHP());
 }
 
 void DebugEnemy::End()

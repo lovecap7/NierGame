@@ -96,6 +96,23 @@ void Application::Run()
 #if _DEBUG
 		//XV
 		input.Update();
+		if (input.IsTrigger("Glitch"))
+		{
+			m_postProcess->AddPostEffectState(ShaderPostProcess::PostEffectState::Glitch);
+		}
+		if (input.IsTrigger("GlitchSub"))
+		{
+			m_postProcess->SubPostEffectState(ShaderPostProcess::PostEffectState::Glitch);
+		}
+		if (input.IsTrigger("Gray"))
+		{
+			m_postProcess->AddPostEffectState(ShaderPostProcess::PostEffectState::Gray);
+		}
+		if (input.IsTrigger("GraySub"))
+		{
+			m_postProcess->SubPostEffectState(ShaderPostProcess::PostEffectState::Gray);
+		}
+
 		if (input.IsTrigger("StopUpdate"))
 		{
 			m_isUpdateStop = !m_isUpdateStop;

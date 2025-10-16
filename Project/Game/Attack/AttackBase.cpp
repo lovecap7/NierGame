@@ -83,10 +83,14 @@ void AttackBase::OnCollide(const std::shared_ptr<Collidable> other)
 
 		std::shared_ptr<Actor> otherActor = std::dynamic_pointer_cast<Actor>(otherColl);
 		bool isFind = false;
+
+		//ID
+		int otherID = otherActor->GetID();
+
 		//IDがすでに記録されているか確認
 		for (auto id : m_hitId)
 		{
-			if (id == otherActor->GetID())
+			if (id == otherID)
 			{
 				isFind = true;
 				break;
@@ -95,6 +99,9 @@ void AttackBase::OnCollide(const std::shared_ptr<Collidable> other)
 		//攻撃成功
 		if (!isFind)
 		{
+			//IDを覚える
+			m_hitId.emplace_back(otherID);
+
 			//相手
 			auto otherStatus = std::dynamic_pointer_cast<CharacterBase>(otherColl)->GetCharaStatus();
 

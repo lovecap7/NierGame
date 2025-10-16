@@ -51,6 +51,10 @@ void Input::Init()
 	m_inputActionMap["StopUpdate"] = { {InputType::kKeyboard,KEY_INPUT_1}};
 	m_inputActionMap["OneFrame"] = { {InputType::kKeyboard,KEY_INPUT_2}};
 	m_inputActionMap["FullRecovery"] = { {InputType::kKeyboard,KEY_INPUT_3}};
+	m_inputActionMap["Glitch"] = { {InputType::kKeyboard,KEY_INPUT_G}};
+	m_inputActionMap["GlitchSub"] = { {InputType::kKeyboard,KEY_INPUT_H}};
+	m_inputActionMap["Gray"] = { {InputType::kKeyboard,KEY_INPUT_J}};
+	m_inputActionMap["GraySub"] = { {InputType::kKeyboard,KEY_INPUT_K}};
 #endif
 
 	//çXêVÇÇ∑ÇÈ

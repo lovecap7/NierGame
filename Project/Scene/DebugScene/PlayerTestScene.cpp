@@ -4,11 +4,15 @@
 #include "../SceneController.h"
 #include "../../Game/Actor/ActorManager.h"
 #include "../../Game/Attack/AttackManager.h"
-#include "../../Game/Actor/DebugActor/DebugAttack.h"
 #include "../../Game/Camera/CameraController.h"
 #include "../../Game/Camera/PlayerCamera.h"
 #include "../../General/Collision/Physics.h"
 #include "../../General/CSV/ActorData.h"
+#include "../../General/CSV/CharaStatusData.h"
+
+#include "../../Game/Actor/DebugActor/DebugAttack.h"
+#include "../../Game/Actor/DebugActor/DebugEnemy.h"
+#include "../../Game/Actor/DebugActor/DebugPlayer.h"
 
 PlayerTestScene::PlayerTestScene(SceneController& controller) :
 	SceneBase(controller)
@@ -49,6 +53,19 @@ void PlayerTestScene::Init()
 	atData->m_isTrigger = true;
 	auto attack = std::make_shared<DebugAttack>(atData, m_actorManager);
 	m_actorManager->Entry(attack);
+
+	//敵デバッグ
+	auto enemyData = std::make_shared<ActorData>();
+	enemyData->m_pos = Vector3(500, 100, 300);
+	enemyData->m_collRadius = 100.0f;
+	enemyData->m_gameTag = GameTag::Enemy;
+	enemyData->m_isGravity = false;
+	enemyData->m_isTrigger = true;
+	auto charaData = std::make_shared<CharaStatusData>();
+	charaData->m_hp = 1000000;
+
+	auto enemy = std::make_shared<DebugEnemy>(enemyData, charaData, m_actorManager);
+	m_actorManager->Entry(enemy);
 }
 
 void PlayerTestScene::Update()

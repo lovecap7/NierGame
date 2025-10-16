@@ -1,6 +1,7 @@
 #pragma once
 #include "PlayerStateBase.h"
 #include <memory>
+#include <string>
 class Actor;
 class AttackData;
 class SwordAttack;
@@ -21,6 +22,8 @@ private:
     std::weak_ptr<SwordAttack> m_pSwordAttack;
     //チャージフレーム
     float m_chargeCountFrame;
+    //次の攻撃
+    std::wstring m_nextAttackName;
 private:
     //攻撃削除
     void DeleteAttack();

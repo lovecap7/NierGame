@@ -15,6 +15,9 @@ public:
 	//攻撃の名前
 	std::wstring m_name;
 
+	//多段ヒットか
+	bool m_isMultipleHit;
+
 	enum class AttackType : int
 	{
 		None = 0,

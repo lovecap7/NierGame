@@ -78,28 +78,47 @@ void PlayerStateLightAttack::Update()
 	auto model = owner->GetModel();
 
 	//”­¶ƒtƒŒ[ƒ€‚É‚È‚Á‚½‚ç
-	if (m_frame >= m_attackData->m_startFrame && !m_isAppearedAttack)
+	if (m_frame >= m_attackData->m_startFrame)
 	{
-		//UŒ‚”­¶
-		std::shared_ptr<SwordAttack> attack = std::make_shared<SwordAttack>(m_attackData, owner);
-
-		//UŒ‚‚ğ“ü‚ê‚é
-		owner->SetAttack(attack);
-
-		//QÆ
-		m_pSwordAttack = attack;
-
-		//UŒ‚‚ª”­¶‚µ‚½
-		m_isAppearedAttack = true;
-
-		//“‚ğ“Š‚°‚éUŒ‚‚Ì
-		if (m_attackData->m_attackType == AttackData::AttackType::Throw)
+		if (m_isAppearedAttack)
 		{
-			lightSword->ThrowAndRoll(m_attackData->m_param1, model->GetDir(), owner->GetPos(), m_attackData->m_keepFrame, m_attackData->m_param2);
+			//”­¶‚µ‚½Œã‚ÉUŒ‚‚ªÁ¸‚µ‚½‚ç
+			if (m_pSwordAttack.expired())
+			{
+				//‘½’iƒqƒbƒgUŒ‚‚È‚çŸ‚ÌUŒ‚ƒf[ƒ^‚ğ“Ç‚İ‚Ş
+				if (m_attackData->m_isMultipleHit && m_attackData->m_nextAttackName != L"None")
+				{
+					//UŒ‚ƒf[ƒ^
+					m_attackData = owner->GetAttackData(m_attackData->m_nextAttackName);
+					//‚à‚¤ˆê“xUŒ‚”»’è‚ğo‚·
+					m_isAppearedAttack = false;
+				}
+			}
 		}
-		else
+		//‚Ü‚¾UŒ‚‚ª”­¶‚µ‚Ä‚¢‚È‚¢‚È‚ç”­¶
+		if (!m_isAppearedAttack)
 		{
-			lightSword->FinisiThrowAndRoll();
+			//UŒ‚”­¶
+			std::shared_ptr<SwordAttack> attack = std::make_shared<SwordAttack>(m_attackData, owner);
+
+			//UŒ‚‚ğ“ü‚ê‚é
+			owner->SetAttack(attack);
+
+			//QÆ
+			m_pSwordAttack = attack;
+
+			//UŒ‚‚ª”­¶‚µ‚½
+			m_isAppearedAttack = true;
+
+			//“‚ğ“Š‚°‚éUŒ‚‚Ì
+			if (m_attackData->m_attackType == AttackData::AttackType::Throw)
+			{
+				lightSword->ThrowAndRoll(m_attackData->m_param1, model->GetDir(), owner->GetPos(), m_attackData->m_keepFrame, m_attackData->m_param2);
+			}
+			else
+			{
+				lightSword->FinisiThrowAndRoll();
+			}
 		}
 	}
 
@@ -115,7 +134,7 @@ void PlayerStateLightAttack::Update()
 		//I“_
 		swordAttack->SetEndPos(lightSword->GetEndPos(m_attackData->m_length));
 	}
-
+	
 	//ƒLƒƒƒ“ƒZƒ‹ƒtƒŒ[ƒ€
 	if ((model->GetTotalAnimFrame() - m_attackData->m_cancelFrame) < m_frame)
 	{
@@ -126,7 +145,6 @@ void PlayerStateLightAttack::Update()
 			//Ÿ‚ÌUŒ‚
 			if (m_attackData->m_nextAttackName != L"None")
 			{
-
 				//UŒ‚ƒf[ƒ^
 				m_attackData = owner->GetAttackData(m_attackData->m_nextAttackName);
 				m_isAppearedAttack = false;

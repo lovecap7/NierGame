@@ -13,14 +13,15 @@
 namespace
 {
 	const std::wstring kFirstAttackName = L"SubAttack1";
-	const std::wstring kSecondAttackName = L"SubAttack2";
+	const std::wstring kChargeAttackName = L"SubAttack3";
 	const std::wstring kChargeName = L"SubAttackCharge";
 }
 
 PlayerStateHeavyAttack::PlayerStateHeavyAttack(std::weak_ptr<Actor> player) :
 	PlayerStateBase(player),
 	m_isAppearedAttack(false),
-	m_chargeCountFrame(0.0f)
+	m_chargeCountFrame(0.0f),
+	m_nextAttackName()
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
@@ -111,11 +112,17 @@ void PlayerStateHeavyAttack::Update()
 	}
 
 	//キャンセルフレーム
-	if ((model->GetTotalAnimFrame() - m_attackData->m_cancelFrame) < m_frame && m_attackData->m_nextAttackName != L"None")
+	if ((model->GetTotalAnimFrame() - m_attackData->m_cancelFrame) < m_frame)
 	{
 		owner->HaveBigSword();
 		if (input.IsPress("Y"))
 		{
+			//初めてのチャージ
+			if (m_chargeCountFrame <= 0.0f)
+			{
+				m_nextAttackName = m_attackData->m_nextAttackName;
+			}
+
 			m_chargeCountFrame += owner->GetTimeScale();
 			//チャージ
 			m_attackData = owner->GetAttackData(kChargeName);
@@ -132,13 +139,13 @@ void PlayerStateHeavyAttack::Update()
 			if (m_chargeCountFrame >= m_attackData->m_param1)
 			{
 				//攻撃データ
-				m_attackData = owner->GetAttackData(m_attackData->m_nextAttackName);
+				m_attackData = owner->GetAttackData(kChargeAttackName);
 			}
 			//たまってない
 			else
 			{
 				//攻撃データ
-				m_attackData = owner->GetAttackData(kSecondAttackName);
+				m_attackData = owner->GetAttackData(m_nextAttackName);
 			}
 			m_isAppearedAttack = false;
 
@@ -151,9 +158,11 @@ void PlayerStateHeavyAttack::Update()
 			//攻撃を削除
 			DeleteAttack();
 
+			//溜めフレームリセット
+			m_chargeCountFrame = 0.0f;
+
 			return;
 		}
-		m_chargeCountFrame = 0.0f;
 	}
 
 

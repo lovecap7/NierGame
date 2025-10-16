@@ -6,6 +6,7 @@ class CharaStatusData :
     public CSVData
 {
 public:
+	CharaStatusData();
 	CharaStatusData(std::shared_ptr<CSVData> data);
 	~CharaStatusData();
 	//ステータス
