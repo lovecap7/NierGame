@@ -158,6 +158,10 @@
     <ClCompile Include="Game\Actor\Character\Player\PlayerStateIdle.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\PlayerStateJump.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\PlayerStateMoving.cpp" />
+    <ClCompile Include="Game\Actor\Character\Player\Pod\Pod.cpp" />
+    <ClCompile Include="Game\Actor\Character\Player\Pod\PodStateAttack.cpp" />
+    <ClCompile Include="Game\Actor\Character\Player\Pod\PodStateBase.cpp" />
+    <ClCompile Include="Game\Actor\Character\Player\Pod\PodStateIdle.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\Weapon\Weapon.cpp" />
     <ClCompile Include="Game\Actor\DebugActor\DebugAttack.cpp" />
     <ClCompile Include="Game\Actor\DebugActor\DebugEnemy.cpp" />
@@ -191,6 +195,7 @@
     <ClCompile Include="General\CSV\CSVData.cpp" />
     <ClCompile Include="General\CSV\CSVDataLoader.cpp" />
     <ClCompile Include="General\CSV\PlayerAnimData.cpp" />
+    <ClCompile Include="General\CSV\PodData.cpp" />
     <ClCompile Include="General\Input.cpp" />
     <ClCompile Include="General\Math\MathSub.cpp" />
     <ClCompile Include="General\Math\Matrix3x3.cpp" />
@@ -227,6 +232,10 @@
     <ClInclude Include="Game\Actor\Character\Player\PlayerStateIdle.h" />
     <ClInclude Include="Game\Actor\Character\Player\PlayerStateJump.h" />
     <ClInclude Include="Game\Actor\Character\Player\PlayerStateMoving.h" />
+    <ClInclude Include="Game\Actor\Character\Player\Pod\Pod.h" />
+    <ClInclude Include="Game\Actor\Character\Player\Pod\PodStateAttack.h" />
+    <ClInclude Include="Game\Actor\Character\Player\Pod\PodStateBase.h" />
+    <ClInclude Include="Game\Actor\Character\Player\Pod\PodStateIdle.h" />
     <ClInclude Include="Game\Actor\Character\Player\Weapon\Weapon.h" />
     <ClInclude Include="Game\Actor\DebugActor\DebugAttack.h" />
     <ClInclude Include="Game\Actor\DebugActor\DebugEnemy.h" />
@@ -260,6 +269,7 @@
     <ClInclude Include="General\CSV\CSVData.h" />
     <ClInclude Include="General\CSV\CSVDataLoader.h" />
     <ClInclude Include="General\CSV\PlayerAnimData.h" />
+    <ClInclude Include="General\CSV\PodData.h" />
     <ClInclude Include="General\Game.h" />
     <ClInclude Include="General\Input.h" />
     <ClInclude Include="General\Math\MathSub.h" />

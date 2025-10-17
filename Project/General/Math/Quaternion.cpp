@@ -296,6 +296,15 @@ Quaternion Quaternion::CalcHorizontalQuat(const Vector3& dir)
 	return Quaternion::AngleAxis(angleY, Vector3::Up());
 }
 
+Quaternion Quaternion::CalcVerticalQuat(const Vector3& dir)
+{
+	//êÖïΩï˚å¸ÇÃí∑Ç≥
+	float horizontalLength = sqrtf(dir.x * dir.x + dir.z * dir.z);
+	//äpìx
+	float angleX = atan2f(dir.y, horizontalLength);
+	return Quaternion::AngleAxis(-angleX, Vector3::Right());
+}
+
 
 //Quaternion Quaternion::LookAt(const Vector3& targetDir, const Vector3& up)
 //{

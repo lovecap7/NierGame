@@ -204,7 +204,7 @@ void Model::SetDir(Vector3 vec)
 	m_nextForward = dir;
 }
 
-void Model::LookAt(Vector3 target, Vector3 up)
+void Model::LookAt(Vector3 target)
 {
 	auto mat = Matrix4x4::LookAt(target);
 	SetDir(mat * Vector3::Forward());

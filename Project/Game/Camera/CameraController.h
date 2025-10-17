@@ -51,7 +51,7 @@ public:
 	Quaternion GetCameraRot() const
 	{
 		if (m_cameras.empty())return Quaternion::IdentityQ();
-		return m_cameras.back()->GetRot();
+		return m_cameras.back()->GetRotH();
 	};
 private:
 	std::list<std::shared_ptr<CameraBase>> m_cameras;

@@ -44,8 +44,8 @@ void DebugPlayer::Update()
 	if (m_pActorManager.expired())return;
 	auto actorManager = m_pActorManager.lock();
 	//カメラの参照チェック
-	if (actorManager->GetCamera().expired())return;
-	auto camera = actorManager->GetCamera().lock();
+	if (actorManager->GetPlayerCamera().expired())return;
+	auto camera = actorManager->GetPlayerCamera().lock();
 	//入力取得
 	auto& input = Input::GetInstance();
 
@@ -67,7 +67,7 @@ void DebugPlayer::Update()
 	
 
 	//カメラの向きに合わせて移動方向を変える
-	vec = camera->GetRot() * vec;
+	vec = camera->GetRotH() * vec;
 	vec *= kSpeed;
 	m_rb->SetMoveVec(vec);
 

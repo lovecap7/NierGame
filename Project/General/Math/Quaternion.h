@@ -72,6 +72,8 @@ public:
 
 	//…•½•ûŒü‚Ì‰ñ“]
 	static Quaternion CalcHorizontalQuat(const Vector3& dir);
+	//‚’¼•ûŒü‚Ì‰ñ“]
+	static Quaternion CalcVerticalQuat(const Vector3& dir);
 	
 };
 

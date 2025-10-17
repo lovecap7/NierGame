@@ -49,6 +49,7 @@ void PlayerTestScene::Init()
 	atData->m_pos = Vector3(100,100,300);
 	atData->m_collRadius = 100.0f;
 	atData->m_gameTag = GameTag::Attack;
+	atData->m_isTrough = false;
 	atData->m_isGravity = false;
 	atData->m_isTrigger = true;
 	auto attack = std::make_shared<DebugAttack>(atData, m_actorManager);
@@ -59,8 +60,10 @@ void PlayerTestScene::Init()
 	enemyData->m_pos = Vector3(500, 100, 300);
 	enemyData->m_collRadius = 100.0f;
 	enemyData->m_gameTag = GameTag::Enemy;
+	enemyData->m_isTrough = false;
 	enemyData->m_isGravity = false;
-	enemyData->m_isTrigger = true;
+	enemyData->m_isTrigger = false;
+	enemyData->m_priority = Priority::Static;
 	auto charaData = std::make_shared<CharaStatusData>();
 	charaData->m_hp = 1000000;
 

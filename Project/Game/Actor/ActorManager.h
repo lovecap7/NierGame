@@ -35,7 +35,7 @@ public:
 	//カメラのセット
 	void SetCamera(std::weak_ptr<PlayerCamera> pCamera) { m_pCamera = pCamera; };
 	//カメラの参照
-	std::weak_ptr<PlayerCamera> GetCamera()const { return m_pCamera; };
+	std::weak_ptr<PlayerCamera> GetPlayerCamera()const { return m_pCamera; };
 
 	//攻撃マネージャーのセット
 	void SetAttackManager(std::weak_ptr<AttackManager> pAttackManager) { m_pAttackManager = pAttackManager; };

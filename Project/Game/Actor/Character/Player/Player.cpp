@@ -204,7 +204,9 @@ void Player::Complete()
 
 void Player::End()
 {
+	//ƒ‚ƒfƒ‹íœ
 	m_model->End();
+	//“o˜^‰ðœ
 	Collidable::End();
 }
 
@@ -214,9 +216,9 @@ Quaternion Player::GetCameraRot() const
 	if (!m_pActorManager.expired())
 	{
 		auto actorM = m_pActorManager.lock();
-		if (!actorM->GetCamera().expired())
+		if (!actorM->GetPlayerCamera().expired())
 		{
-			q = actorM->GetCamera().lock()->GetRot();
+			q = actorM->GetPlayerCamera().lock()->GetRotH();
 		}
 	}
 	return q;
@@ -428,9 +430,9 @@ std::weak_ptr<PlayerCamera> Player::GetPlayerCamera() const
 	if (!m_pActorManager.expired())
 	{
 		auto actorM = m_pActorManager.lock();
-		if (!actorM->GetCamera().expired())
+		if (!actorM->GetPlayerCamera().expired())
 		{
-			camera = actorM->GetCamera();
+			camera = actorM->GetPlayerCamera();
 		}
 	}
 	return camera;

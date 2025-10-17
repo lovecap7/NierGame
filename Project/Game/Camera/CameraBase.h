@@ -8,9 +8,12 @@ public:
 	virtual ~CameraBase();
 	virtual void Init() abstract;
 	virtual void Update() abstract;
-	const Vector3& GetPos() const { return m_cameraPos; }
-	const Vector3& GetLook() const { return m_look; }
-	const Quaternion& GetRot() const { return m_rotH; }
+	const Vector3& GetPos() const { return m_cameraPos; };
+	const Vector3& GetLook() const { return m_look; };
+	const Quaternion& GetRotH() const { return m_rotH; };
+	float GetVAngle()const { return m_vertexAngle; };
+	//‰E
+	const Vector3& GetRight() const { return m_right; };
 protected:
     //ƒJƒƒ‰‹——£
     float m_distance;

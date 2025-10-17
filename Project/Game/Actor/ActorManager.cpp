@@ -5,10 +5,12 @@
 #include "../../General/CSV/CSVDataLoader.h"
 #include "../../General/CSV/ActorData.h"
 #include "../../General/CSV/CharaStatusData.h"
+#include "../../General/CSV/PodData.h"
 #include "Stage/StageObject.h"
 #include "Character/CharacterBase.h"
 #include "Character/Player/Player.h"
 #include "Character/Player/Weapon/Weapon.h"
+#include "Character/Player/Pod/Pod.h"
 
 
 namespace
@@ -140,7 +142,7 @@ void ActorManager::SetUpPlayer(std::shared_ptr<Player> player)
 {
 	//CSVを読み込む
 	std::shared_ptr<CSVDataLoader> csvLoader = std::make_shared<CSVDataLoader>();
-	std::string path = "Weapon" + std::string("/") + "WeaponData";
+	std::string path = "Player" + std::string("/") + "WeaponData";
 	auto csvDatas = csvLoader->LoadCSV(path.c_str());
 	//武器作成
 	for (auto& data : csvDatas)
@@ -166,4 +168,22 @@ void ActorManager::SetUpPlayer(std::shared_ptr<Player> player)
 			player->SetSword(weapon,false);
 		}
 	}
+	//ポッドのデータ読み込み
+	path = "Player" + std::string("/") + "PodData";
+	csvDatas = csvLoader->LoadCSV(path.c_str());
+	//データを変換
+	auto podData = std::make_shared<PodData>(csvDatas.back());
+
+	//必要な情報のみをセットしていく
+	//アクターデータ
+	auto podActorData = std::make_shared<ActorData>();
+	podActorData->m_scale = podData->m_scale;
+	podActorData->m_modelPath = podData->m_modelPath;
+	auto podStatusData = std::make_shared<CharaStatusData>();
+	podStatusData->m_at = podData->m_at;
+	//ポッドを作成
+	std::shared_ptr<Pod> pod = std::make_shared<Pod>(podActorData, podStatusData, shared_from_this(), player);
+
+	//マネージャーにエントリー
+	Entry(pod);
 }

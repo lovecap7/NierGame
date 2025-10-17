@@ -21,7 +21,7 @@ public:
 	void SetRot(VECTOR rot);
 	void SetDir(Vector2 vec);//XZ•½–Ê‚Å‚ÌŒü‚«
 	void SetDir(Vector3 vec);
-	void LookAt(Vector3 target, Vector3 up = Vector3::Up());
+	void LookAt(Vector3 target);
 	void SetColor(float r, float g, float b, float a);
 	void SetColor(COLOR_F color);
 	void SetMatrix(Matrix4x4 mat);
