@@ -1,12 +1,16 @@
 #pragma once
 #include "../../CharacterBase.h"
 #include <memory>
+#include <vector>
+#include <string>
 class ActorManager;
 class Collidable;
 class Player;
 class Rigidbody;
 class ActorData;
 class CharaStatusData;
+class AttackData;
+class CSVDataLoader;
 
 class Pod :
     public CharacterBase
@@ -35,8 +39,19 @@ public:
 	Vector3 GetPlayerPos()const;
 	//カメラの向き
 	Vector3 GetCameraDir()const;
+
+	//攻撃データ
+	std::shared_ptr<AttackData> GetAttackData(std::wstring attackName)const;
+
 private:
 	//プレイヤーの参照
 	std::weak_ptr<Player> m_pPlayer;
+
+	//攻撃データ
+	std::vector<std::shared_ptr<AttackData>> m_attackDatas;
+
+private:
+	//攻撃データを読み込む
+	void InitAttackData(std::shared_ptr<CSVDataLoader> csvLoader);
 };
 

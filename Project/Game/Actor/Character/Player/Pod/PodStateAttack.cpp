@@ -1,9 +1,11 @@
 #include "PodStateAttack.h"
 #include "PodStateIdle.h"
 #include "Pod.h"
+#include "../../../../Attack/BulletAttack.h"
 #include "../../../../../General/Collision/Rigidbody.h"
 #include "../../../../../General/Model.h"
 #include "../../../../../General/Input.h"
+#include "../../../../../General/CSV/AttackData.h"
 
 namespace
 {
@@ -23,6 +25,8 @@ PodStateAttack::PodStateAttack(std::weak_ptr<Actor> pod):
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Pod>(m_pOwner.lock());
 	owner->GetModel()->SetAnim(kAnim, true);
+	//攻撃データ
+	m_attackData = owner->GetAttackData(L"NormalShot");
 }
 
 PodStateAttack::~PodStateAttack()
@@ -62,4 +66,18 @@ void PodStateAttack::Update()
 
 	//向きをカメラに合わせる
 	owner->GetModel()->SetDir(cameraDir.XZ());
+
+	//カウント
+	CountFrame();
+
+	//発生フレームになったら弾を打つ
+	if (m_attackData->m_startFrame >= m_frame)
+	{
+		//弾を打つ
+		auto bullet = std::make_shared<BulletAttack>(m_attackData, owner);
+		bullet->SetMoveVec(cameraDir * m_attackData->m_moveSpeed);
+		owner->SetAttack(bullet);
+		m_frame = 0.0f;
+	}
+	
 }

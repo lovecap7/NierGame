@@ -9,6 +9,8 @@
 #include "../../../../../General/CSV/CharaStatusData.h"
 #include "../../../../../General/CSV/ActorData.h"
 #include "../../../../../General/CSV/PodData.h"
+#include "../../../../../General/CSV/CSVDataLoader.h"
+#include <cassert>
 
 Pod::Pod(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager, std::weak_ptr<Player> pPlayer) :
 	CharacterBase(actorData, charaStatusData, Shape::Sphere, pActorManager),
@@ -88,4 +90,35 @@ Vector3 Pod::GetCameraDir() const
 	if(actorManager->GetPlayerCamera().expired())return Vector3::Zero();
 	//Œü‚«
 	return actorManager->GetPlayerCamera().lock()->GetLook();
+}
+
+std::shared_ptr<AttackData> Pod::GetAttackData(std::wstring attackName) const
+{
+	std::shared_ptr<AttackData> attackData;
+
+	//’T‚·
+	for (auto& data : m_attackDatas)
+	{
+		//ðŒ‚É‡‚¤‚à‚Ì‚ª‚ ‚Á‚½‚ç
+		if (data->m_name == attackName)
+		{
+			attackData = data;
+			break;
+		}
+	}
+
+	assert(attackData);
+
+	return attackData;
+}
+
+void Pod::InitAttackData(std::shared_ptr<CSVDataLoader> csvLoader)
+{
+	auto datas = csvLoader->LoadCSV("Player/PodAttackData");
+	//“o˜^
+	for (auto& data : datas)
+	{
+		std::shared_ptr<AttackData> attackData = std::make_shared<AttackData>(data);
+		m_attackDatas.emplace_back(attackData);
+	}
 }
