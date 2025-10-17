@@ -170,8 +170,9 @@
     <ClCompile Include="Game\Actor\Stage\StageObject.cpp" />
     <ClCompile Include="Game\Attack\AttackBase.cpp" />
     <ClCompile Include="Game\Attack\AttackManager.cpp" />
+    <ClCompile Include="Game\Attack\BulletAttack.cpp" />
     <ClCompile Include="Game\Attack\CapsuleAttackBase.cpp" />
-    <ClCompile Include="Game\Attack\ShereAttackBase.cpp" />
+    <ClCompile Include="Game\Attack\SphereAttackBase.cpp" />
     <ClCompile Include="Game\Attack\SwordAttack.cpp" />
     <ClCompile Include="Game\Camera\Camera.cpp" />
     <ClCompile Include="Game\Camera\CameraBase.cpp" />
@@ -245,8 +246,9 @@
     <ClInclude Include="Game\Actor\Stage\StageObject.h" />
     <ClInclude Include="Game\Attack\AttackBase.h" />
     <ClInclude Include="Game\Attack\AttackManager.h" />
+    <ClInclude Include="Game\Attack\BulletAttack.h" />
     <ClInclude Include="Game\Attack\CapsuleAttackBase.h" />
-    <ClInclude Include="Game\Attack\ShereAttackBase.h" />
+    <ClInclude Include="Game\Attack\SphereAttackBase.h" />
     <ClInclude Include="Game\Attack\SwordAttack.h" />
     <ClInclude Include="Game\Camera\Camera.h" />
     <ClInclude Include="Game\Camera\CameraBase.h" />

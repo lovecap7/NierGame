@@ -231,7 +231,10 @@
     <ClCompile Include="Game\Actor\Character\Player\Pod\PodStateBase.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Attack\ShereAttackBase.cpp">
+    <ClCompile Include="Game\Attack\SphereAttackBase.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Attack\BulletAttack.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -482,7 +485,10 @@
     <ClInclude Include="Game\Actor\Character\Player\Pod\PodStateBase.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Attack\ShereAttackBase.h">
+    <ClInclude Include="Game\Attack\SphereAttackBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Attack\BulletAttack.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
