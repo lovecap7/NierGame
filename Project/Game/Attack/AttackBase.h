@@ -47,5 +47,7 @@ protected:
     std::list<int> m_hitId;
     //‚¿å
     std::weak_ptr<CharacterBase> m_pOwner;
+    //“–‚½‚Á‚½‚±‚Æ‚ª‚ ‚é
+    bool m_isHit;
 };
 

@@ -64,6 +64,8 @@ void AttackBase::Update()
 	{
 		return; //何もしない
 	}
+	//ヒットリセット
+	m_isHit = false;
 }
 
 void AttackBase::OnCollide(const std::shared_ptr<Collidable> other)
@@ -110,6 +112,9 @@ void AttackBase::OnCollide(const std::shared_ptr<Collidable> other)
 
 			//ダメージを与える
 			otherStatus->OnDamage(m_attackPower, at, m_attackWeight);
+
+			//当たった
+			m_isHit = true;
 		}
 	}
 }

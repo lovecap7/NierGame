@@ -13,6 +13,7 @@ namespace
 class Input;
 class GameCamera;
 class ActorManager;
+
 class CharacterStateBase abstract
 {
 public:
@@ -29,6 +30,7 @@ public:
 
 	//フレームのカウント
 	void CountFrame();
+
 private:
 	//次の状態
 	std::shared_ptr<CharacterStateBase> m_nextState;

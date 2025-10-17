@@ -1,6 +1,7 @@
-#include "ShereAttackBase.h"
+#include "SphereAttackBase.h"
 #include "../../General/Collision/Rigidbody.h"
 #include "../../General/Collision/SphereCollider.h"
+
 SphereAttackBase::SphereAttackBase(std::shared_ptr<AttackData> attackData, std::weak_ptr<CharacterBase> pOwner) :
 	AttackBase(Shape::Sphere, attackData, pOwner)
 {
