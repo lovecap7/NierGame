@@ -17,6 +17,7 @@ AttackBase::AttackBase(Shape shape, std::shared_ptr<AttackData> attackData, std:
 	m_knockBackPower = attackData->m_knockBackPower; 
 	m_knockBackV = attackData->m_verticalPower;
 	m_keepFrame = attackData->m_keepFrame;
+	m_isHit = false;
 
 	//コライダーの設定
 	switch (shape)

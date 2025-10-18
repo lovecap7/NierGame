@@ -17,9 +17,20 @@ public:
     //当たった時
     void OnCollide(const std::shared_ptr<Collidable> other) override;
 
+    //リセット
+    void Reset(float keepFrame);
+
     //移動方向
     void SetMoveVec(Vector3 vec) { m_moveVec = vec; };
+
+    //アクティブ
+    void SetActive(bool isActive) { m_isActive = isActive; };
+    bool IsActive()const { return m_isActive; };
 private:
+    //移動
     Vector3 m_moveVec;
+
+    //アクティブ(弾の更新と描画を行うか)
+    bool m_isActive;
 };
 

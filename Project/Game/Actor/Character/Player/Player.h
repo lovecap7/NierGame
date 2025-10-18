@@ -81,10 +81,6 @@ public:
 	std::string GetAnim(std::wstring state)const;
 	//攻撃データ
 	std::shared_ptr<AttackData> GetAttackData(std::wstring attackName)const;
-
-	//攻撃の登録
-	void SetAttack(std::shared_ptr<AttackBase> attack);
-
 private:
 	//アニメーションデータをCSVから読み込む
 	void InitAnimData(std::shared_ptr<CSVDataLoader> csvLoader);
@@ -116,5 +112,6 @@ private:
 	std::vector<std::shared_ptr<PlayerAnimData>> m_animDatas;
 	//攻撃データ
 	std::vector<std::shared_ptr<AttackData>> m_attackDatas;
+
 };
 

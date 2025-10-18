@@ -3,6 +3,7 @@
 #include <memory>
 class AttackData;
 class Actor;
+class CharacterBase;
 class SwordAttack :
     public CapsuleAttackBase
 {

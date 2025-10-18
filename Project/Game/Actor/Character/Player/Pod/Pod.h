@@ -10,7 +10,9 @@ class Rigidbody;
 class ActorData;
 class CharaStatusData;
 class AttackData;
+class BulletAttack;
 class CSVDataLoader;
+class AttackBase;
 
 class Pod :
     public CharacterBase
@@ -42,7 +44,8 @@ public:
 
 	//攻撃データ
 	std::shared_ptr<AttackData> GetAttackData(std::wstring attackName)const;
-
+	//弾
+	std::vector<std::shared_ptr<BulletAttack>> GetBullets()const { return m_bullets; };
 private:
 	//プレイヤーの参照
 	std::weak_ptr<Player> m_pPlayer;
@@ -50,6 +53,8 @@ private:
 	//攻撃データ
 	std::vector<std::shared_ptr<AttackData>> m_attackDatas;
 
+	//弾を打つ際にその都度newすると負荷がかかり重くなるのであらかじめ作っておく
+	std::vector<std::shared_ptr<BulletAttack>> m_bullets;
 private:
 	//攻撃データを読み込む
 	void InitAttackData(std::shared_ptr<CSVDataLoader> csvLoader);

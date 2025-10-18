@@ -74,9 +74,20 @@ void PodStateAttack::Update()
 	if (m_attackData->m_startFrame >= m_frame)
 	{
 		//弾を打つ
-		auto bullet = std::make_shared<BulletAttack>(m_attackData, owner);
-		bullet->SetMoveVec(cameraDir * m_attackData->m_moveSpeed);
-		owner->SetAttack(bullet);
+		auto bullets = owner->GetBullets();
+		for (auto bullet : bullets)
+		{
+			//活動中でない弾があるなら
+			if (!bullet->IsActive())
+			{
+				//Activeにしつつフラグ等のリセット
+				bullet->Reset(m_attackData->m_keepFrame);
+				bullet->SetPos(owner->GetPos());
+				bullet->SetMoveVec(cameraDir * m_attackData->m_moveSpeed);
+				owner->SetAttack(bullet);
+				break;
+			}
+		}
 		m_frame = 0.0f;
 	}
 	

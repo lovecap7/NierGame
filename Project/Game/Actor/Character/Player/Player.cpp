@@ -391,17 +391,6 @@ std::shared_ptr<AttackData> Player::GetAttackData(std::wstring attackName) const
 	return attackData;
 }
 
-void Player::SetAttack(std::shared_ptr<AttackBase> attack)
-{
-	if (m_pActorManager.expired())return;
-	auto actorManager = m_pActorManager.lock();
-	//攻撃マネージャー
-	if (actorManager->GetAttackManager().expired())return;
-	auto attackManager = actorManager->GetAttackManager().lock();
-
-	attackManager->Entry(attack);
-}
-
 void Player::InitAnimData(std::shared_ptr<CSVDataLoader> csvLoader)
 {
 	auto datas = csvLoader->LoadCSV("Player/PlayerAnimData");

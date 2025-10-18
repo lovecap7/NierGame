@@ -10,12 +10,14 @@
 #include "../../../../../General/CSV/ActorData.h"
 #include "../../../../../General/CSV/PodData.h"
 #include "../../../../../General/CSV/CSVDataLoader.h"
+#include "../../../../Attack/BulletAttack.h"
 #include <cassert>
 
 Pod::Pod(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager, std::weak_ptr<Player> pPlayer) :
 	CharacterBase(actorData, charaStatusData, Shape::Sphere, pActorManager),
 	m_pPlayer(pPlayer)
 {
+	m_tag = GameTag::Player;
 }
 
 Pod::~Pod()
@@ -26,11 +28,25 @@ void Pod::Init()
 {
 	//Physicsに登録
 	Collidable::Init();
+
+	//攻撃データの初期化
+	InitAttackData(std::make_shared<CSVDataLoader>());
+
 	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
 	auto thisPointer = std::dynamic_pointer_cast<Pod>(shared_from_this());
 	m_state = std::make_shared<PodStateIdle>(thisPointer);
 	//状態を変化する
 	m_state->ChangeState(m_state);
+
+	//弾の作成
+	//攻撃データ
+	auto attackData =GetAttackData(L"NormalShot");
+	for (int i = 0; i < attackData->m_param1; i++)
+	{
+		auto bullet = std::make_shared<BulletAttack>(attackData, thisPointer);
+		bullet->SetActive(false);		//更新と描画を止める
+		m_bullets.emplace_back(bullet);
+	}
 }
 
 void Pod::Update()
