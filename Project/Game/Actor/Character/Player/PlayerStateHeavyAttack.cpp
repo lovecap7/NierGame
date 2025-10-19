@@ -78,8 +78,6 @@ void PlayerStateHeavyAttack::Update()
 
 void PlayerStateHeavyAttack::GroundUpdate(std::shared_ptr<Player> owner, Input& input)
 {
-	printf("AttackTypeBefore = %d\n", m_attackData->m_attackType);
-
 	// 回避
 	if (input.IsBuffered("B") && owner->IsAvoidable())
 	{
@@ -97,7 +95,10 @@ void PlayerStateHeavyAttack::GroundUpdate(std::shared_ptr<Player> owner, Input& 
 		//持続終了時に今の攻撃が多段ヒット攻撃なら次の攻撃を読み込む
 		if (m_isAppearedAttack && m_pSwordAttack.expired())
 		{
-			LoadNextMultipleHitAttack(owner);
+			if (m_attackData->m_isMultipleHit && m_attackData->m_nextAttackName != L"None")
+			{
+				LoadNextMultipleHitAttack(owner);
+			}
 		}
 		//攻撃作成
 		if (!m_isAppearedAttack)
@@ -177,8 +178,6 @@ void PlayerStateHeavyAttack::AirUpdate(std::shared_ptr<Player> owner, Input& inp
 
 bool PlayerStateHeavyAttack::LoadNextChargeOrCombo(std::shared_ptr<Player> owner, Input& input, std::shared_ptr<Model> model)
 {
-	printf("AttackTypeBefore = %d\n", m_attackData->m_attackType);
-
 	//キャンセルフレームの間
 	if ((model->GetTotalAnimFrame() - m_attackData->m_cancelFrame) <= m_frame)
 	{
@@ -190,19 +189,16 @@ bool PlayerStateHeavyAttack::LoadNextChargeOrCombo(std::shared_ptr<Player> owner
 			if (m_chargeCountFrame <= 0.0f)
 			{
 				m_nextAttackName = m_attackData->m_nextAttackName;
-				//チャージ
-				m_chargeCountFrame += owner->GetTimeScale();
 				m_attackData = owner->GetAttackData(kChargeName);
 				model->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), true);
 				DeleteAttack();
 			}
-
-			printf("AttackTypeAfter= %d\n", m_attackData->m_attackType);
-
+			//チャージ
+			m_chargeCountFrame += owner->GetTimeScale();
 			return true;	//チャージ中はtrueを返す
 		}
 		// チャージ完了または未完了による攻撃遷移
-		if (input.IsRelease("Y"))
+		if(input.IsRelease("Y"))
 		{
 			//チャージ完了かどうか
 			bool isCharged = ((m_chargeCountFrame >= m_attackData->m_param1) && 
@@ -213,13 +209,17 @@ bool PlayerStateHeavyAttack::LoadNextChargeOrCombo(std::shared_ptr<Player> owner
 			}
 			else
 			{
+				if (m_nextAttackName == L"")
+				{
+					m_nextAttackName = m_attackData->m_nextAttackName;
+				}
 				m_attackData = owner->GetAttackData(m_nextAttackName);
 			}
 			m_isAppearedAttack = false;
 			model->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), false);
 			m_frame = 0.0f;
-			DeleteAttack();
 			m_chargeCountFrame = 0.0f;
+			DeleteAttack();
 			return false;
 		}
 	}
