@@ -117,12 +117,22 @@ void Weapon::SetWeaponMat(Matrix4x4 mat)
 
 Vector3 Weapon::GetStartPos() const
 {
+    //現在のスロット
+    int slotIndex = m_idleSlotIndex;
+    if (m_isBattle)
+    {
+        slotIndex = m_battleSlotIndex;
+    }
+    //武器の位置を取得
+    Vector3 weaponPos = MV1GetFramePosition(m_ownerHandle, slotIndex);
+    //モデル位置を更新
+    m_model->SetPos(weaponPos.ToDxLibVector());
     return GetPos();
 }
 
 Vector3 Weapon::GetEndPos(float length) const
 {
-    return (m_up * length) + GetPos();
+    return (m_up * length) + GetStartPos();
 }
 
 void Weapon::ThrowAndRoll(float length, Vector3 dir, Vector3 startPos, float frame, float rotaSpeed)

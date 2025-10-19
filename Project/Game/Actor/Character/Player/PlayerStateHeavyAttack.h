@@ -1,32 +1,35 @@
 #pragma once
-#include "PlayerStateBase.h"
+#include "PlayerStateAttackBase.h"
 #include <memory>
 #include <string>
 class Actor;
+class Player;
 class AttackData;
 class SwordAttack;
 class PlayerStateHeavyAttack :
-    public PlayerStateBase, public std::enable_shared_from_this<PlayerStateHeavyAttack>
+    public PlayerStateAttackBase, public std::enable_shared_from_this<PlayerStateHeavyAttack>
 {
 public:
-    PlayerStateHeavyAttack(std::weak_ptr<Actor>  player);
+    PlayerStateHeavyAttack(std::weak_ptr<Actor>  player,bool isDash = false, bool isJust = false);
     ~PlayerStateHeavyAttack();
     void Init()override;
     void Update() override;
 private:
-    //攻撃データ
-    std::shared_ptr<AttackData> m_attackData;
-    //攻撃発生
-    bool m_isAppearedAttack;
-    //攻撃の参照
-    std::weak_ptr<SwordAttack> m_pSwordAttack;
-    //チャージフレーム
-    float m_chargeCountFrame;
     //次の攻撃
     std::wstring m_nextAttackName;
+    //状態遷移
+    using UpdateFunc_t = void(PlayerStateHeavyAttack::*)(std::shared_ptr<Player> owner,Input& input);
+    UpdateFunc_t m_update;
 private:
-    //攻撃削除
-    void DeleteAttack();
+    //チャージ攻撃をするか(チャージ中はtrueを返す)
+    bool LoadNextChargeOrCombo(std::shared_ptr<Player> owner, Input& input, std::shared_ptr<Model> model);
+    //移動か待機か
+    void ChangeToMoveOrIdle(std::shared_ptr<Player> owner, Input& input);
+private:
+    //地上
+    void GroundUpdate(std::shared_ptr<Player> owner, Input& input);
+    //空中
+    void AirUpdate(std::shared_ptr<Player> owner, Input& input);
 };
 
 

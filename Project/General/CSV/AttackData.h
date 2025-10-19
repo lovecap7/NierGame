@@ -20,10 +20,12 @@ public:
 
 	enum class AttackType : int
 	{
-		None = 0,
-		Melee = 1,
-		Bullet = 2,
-		Throw = 3
+		None	= 0,
+		Sword	= 1, //剣
+		Bullet	= 2, //弾
+		Throw	= 3, //投げもの
+		Punch	= 4, //パンチ
+		AOE		= 5	 //範囲ダメージ
 	};
 	//攻撃タイプ
 	AttackType m_attackType;

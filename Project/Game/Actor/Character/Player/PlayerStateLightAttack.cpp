@@ -11,12 +11,13 @@
 
 namespace
 {
-	const std::wstring kFirstAttackName = L"MainAttack1";
+	const std::wstring kFirstGroundAttackName = L"MainAttack1";
+	const std::wstring kChargeName = L"MainAttackCharge";
+	constexpr float kChargeFrame = 20.0f;
 }
 
 PlayerStateLightAttack::PlayerStateLightAttack(std::weak_ptr<Actor> player):
-	PlayerStateBase(player),
-	m_isAppearedAttack(false)
+	PlayerStateAttackBase(player)
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
@@ -25,7 +26,7 @@ PlayerStateLightAttack::PlayerStateLightAttack(std::weak_ptr<Actor> player):
 	//武器を持つ
 	owner->HaveLightSword();
 	//攻撃データ取得
-	m_attackData = owner->GetAttackData(kFirstAttackName);
+	m_attackData = owner->GetAttackData(kFirstGroundAttackName);
 	//アニメーション
 	owner->GetModel()->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), false);
 
@@ -66,13 +67,20 @@ void PlayerStateLightAttack::Update()
 		return;
 	}
 
+	//空中の時
+	bool isAir = !owner->IsFloor();
+	if (isAir)
+	{
+		//縦の移動量をリセット
+		owner->GetRb()->SetVecY(0.0f);
+	}
+
 	//フレームをカウント
 	CountFrame();
 	
 	//武器
-	auto weapon = owner->GetWeapon(PlayerAnimData::WeaponType::LightSword);
-	if (weapon.expired())return;
-	auto lightSword = weapon.lock();
+	if (owner->GetWeapon(PlayerAnimData::WeaponType::LightSword).expired())return;
+	auto weapon = owner->GetWeapon(PlayerAnimData::WeaponType::LightSword).lock();
 
 	//モデル
 	auto model = owner->GetModel();
@@ -80,135 +88,98 @@ void PlayerStateLightAttack::Update()
 	//発生フレームになったら
 	if (m_frame >= m_attackData->m_startFrame)
 	{
-		if (m_isAppearedAttack)
+		//多段ヒット攻撃の処理
+		if (m_isAppearedAttack && m_pSwordAttack.expired())
 		{
-			//発生した後に攻撃が消失したら
-			if (m_pSwordAttack.expired())
+			if (m_attackData->m_isMultipleHit && m_attackData->m_nextAttackName != L"None")
 			{
-				//多段ヒット攻撃なら次の攻撃データを読み込む
-				if (m_attackData->m_isMultipleHit && m_attackData->m_nextAttackName != L"None")
-				{
-					//攻撃データ
-					m_attackData = owner->GetAttackData(m_attackData->m_nextAttackName);
-					//もう一度攻撃判定を出す
-					m_isAppearedAttack = false;
-				}
+				//多段ヒット攻撃
+				LoadNextMultipleHitAttack(owner);
 			}
 		}
 		//まだ攻撃が発生していないなら発生
 		if (!m_isAppearedAttack)
 		{
-			//攻撃発生
-			std::shared_ptr<SwordAttack> attack = std::make_shared<SwordAttack>(m_attackData, owner);
-
-			//攻撃を入れる
-			owner->SetAttack(attack);
-
-			//参照
-			m_pSwordAttack = attack;
-
-			//攻撃が発生した
-			m_isAppearedAttack = true;
-
-			//刀を投げる攻撃の時
-			if (m_attackData->m_attackType == AttackData::AttackType::Throw)
-			{
-				lightSword->ThrowAndRoll(m_attackData->m_param1, model->GetDir(), owner->GetPos(), m_attackData->m_keepFrame, m_attackData->m_param2);
-			}
-			else
-			{
-				lightSword->FinisiThrowAndRoll();
-			}
+			CreateAttack(owner, weapon);
 		}
 	}
 
-	//攻撃位置の更新
-	if (!m_pSwordAttack.expired())
+	//長押ししているフレームをカウント
+	if (input.IsPress("X") && m_attackData->m_animName != kChargeName && !isAir)
 	{
-		//攻撃
-		auto swordAttack = m_pSwordAttack.lock();
-
-		//攻撃の位置更新
-		//始点
-		swordAttack->SetStartPos(lightSword->GetStartPos());
-		//終点
-		swordAttack->SetEndPos(lightSword->GetEndPos(m_attackData->m_length));
+		m_chargeCountFrame += owner->GetTimeScale();
+	}
+	else
+	{
+		m_chargeCountFrame = 0.0f;
 	}
 	
 	//キャンセルフレーム
 	if ((model->GetTotalAnimFrame() - m_attackData->m_cancelFrame) < m_frame)
 	{
-		//攻撃
-		if (input.IsBuffered("X"))
+		//攻撃の条件
+		bool isChargeAttack = m_chargeCountFrame >= kChargeFrame;
+		bool isCombAttack = input.IsBuffered("X");
+
+		//武器を持つ
+		owner->HaveLightSword();
+
+		//攻撃をするか
+		if (isChargeAttack || isCombAttack)
 		{
-			owner->HaveLightSword();
 			//次の攻撃名
 			auto nextName = m_attackData->m_nextAttackName;
-
-			//次の攻撃
-			if (nextName == L"None")
+			
+			//チャージ攻撃をするなら
+			if (isChargeAttack)
+			{
+				nextName = kChargeName;
+			}
+			//次の攻撃がない場合
+			else if (nextName == L"None")
 			{
 				//空中にいないなら
 				if (owner->IsFloor())
 				{
-					//最初の攻撃
-					nextName = kFirstAttackName;
+					//最初の攻撃に戻る
+					nextName = kFirstGroundAttackName;
 				}
 			}
-			if (nextName != L"None")
-			{
-				//攻撃データ
-				m_attackData = owner->GetAttackData(nextName);
-				m_isAppearedAttack = false;
 
-				//アニメーション
-				model->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), false);
+			//攻撃データ
+			m_attackData = owner->GetAttackData(nextName);
+			m_isAppearedAttack = false;
 
-				//フレームリセット
-				m_frame = 0.0f;
+			//アニメーション
+			model->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), false);
 
-				DeleteAttack();
+			//フレームリセット
+			m_frame = 0.0f;
 
-				return;
-			}
+			DeleteAttack();
+
+			return;
 		}
 	}
 	//アニメーションが終了したら
 	if (model->IsFinishAnim())
 	{
-		if (input.GetStickInfo().IsLeftStickInput())
-		{
-			//移動
-			ChangeState(std::make_shared<PlayerStateMoving>(m_pOwner, false));
-			return;
-		}
-		else
-		{
-			//待機
-			ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
-			return;
-		}
+		return ChangeToMoveOrIdle(owner,input);
 	}
-
-	//移動量
-	Vector3 moveVec = Vector3::Zero();
-	if (m_frame <= m_attackData->m_moveFrame)
-	{
-		//モデルの向き
-		owner->GetModel()->SetDir(InputMoveVec(owner, input).XZ());
-
-		//前進
-		moveVec = model->GetDir()* m_attackData->m_moveSpeed;
-	}
-	//移動量リセット
-	owner->GetRb()->SetVec(moveVec);
+	//移動
+	UpdateMove(owner, input, model);
+	//攻撃位置の更新
+	UpdateAttackPosition(owner, weapon);
 }
 
-void PlayerStateLightAttack::DeleteAttack()
+void PlayerStateLightAttack::ChangeToMoveOrIdle(std::shared_ptr<Player> owner, Input& input)
 {
-	//攻撃の削除
-	if (!m_pSwordAttack.expired())
+	if (input.GetStickInfo().IsLeftStickInput())
 	{
-		m_pSwordAttack.lock()->Delete();
+		ChangeState(std::make_shared<PlayerStateMoving>(m_pOwner, false));
+	}
+	else
+	{
+		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
 	}
 }

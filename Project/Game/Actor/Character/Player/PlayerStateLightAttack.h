@@ -1,11 +1,11 @@
 #pragma once
-#include "PlayerStateBase.h"
+#include "PlayerStateAttackBase.h"
 #include <memory>
 class Actor;
 class AttackData;
 class SwordAttack;
 class PlayerStateLightAttack :
-    public PlayerStateBase, public std::enable_shared_from_this<PlayerStateLightAttack>
+    public PlayerStateAttackBase, public std::enable_shared_from_this<PlayerStateLightAttack>
 {
 public:
     PlayerStateLightAttack(std::weak_ptr<Actor>  player);
@@ -13,15 +13,11 @@ public:
     void Init()override;
     void Update() override;
 private:
-    //攻撃データ
-    std::shared_ptr<AttackData> m_attackData;
-    //攻撃発生
-    bool m_isAppearedAttack;
-    //攻撃の参照
-    std::weak_ptr<SwordAttack> m_pSwordAttack;
+    //移動か待機か
+    void ChangeToMoveOrIdle(std::shared_ptr<Player> owner, Input& input);
 private:
-    //攻撃削除
-    void DeleteAttack();
+    //チャージフレーム
+
 };
 
 
