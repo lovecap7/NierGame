@@ -17,6 +17,7 @@ namespace
 	const std::wstring kFirstGroundAttackName = L"MainAttack1";
 	const std::wstring kChargeName = L"MainAttackCharge";
 	const std::wstring kJumpAttackName = L"RisingAttack";
+	const std::wstring kJustAttackName = L"JustAttackMain";
 	constexpr float kChargeFrame = 20.0f;
 }
 
@@ -40,8 +41,18 @@ PlayerStateLightAttack::PlayerStateLightAttack(std::weak_ptr<Actor> player, bool
 	//武器を持つ
 	owner->HaveLightSword();
 
+	//ジャスト回避
+	if (isJust)
+	{
+		//攻撃データ取得
+		m_attackData = owner->GetAttackData(kJustAttackName);
+		//上昇
+		owner->GetRb()->SetVecY(m_attackData->m_param1);
+		//この攻撃の場合重力を受ける
+		owner->GetRb()->SetIsGravity(true);
+	}
 	//ジャンプ中なら
-	if (isJump)
+	else if (isJump)
 	{
 		//攻撃データ取得
 		m_attackData = owner->GetAttackData(kJumpAttackName);
