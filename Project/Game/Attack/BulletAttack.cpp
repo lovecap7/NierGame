@@ -48,10 +48,12 @@ void BulletAttack::Update()
 
 void BulletAttack::Draw() const
 {
+#if _DEBUG
 	if (!m_isActive)return;
 	auto coll = std::dynamic_pointer_cast<SphereCollider>(m_collisionData);
 	DrawSphere3D(m_rb->m_pos.ToDxLibVector(),
 		coll->GetRadius(), 16, 0xff0000, 0xffffff, true);
+#endif
 }
 
 void BulletAttack::OnCollide(const std::shared_ptr<Collidable> other)

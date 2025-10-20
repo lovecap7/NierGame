@@ -17,10 +17,13 @@ namespace
 {
 	//ƒAƒjƒ[ƒVƒ‡ƒ“
 	const std::wstring kFall = L"Fall";
+	const std::wstring kGliding = L"PodFall";
 }
 
 PlayerStateFall::PlayerStateFall(std::weak_ptr<Actor> player) :
-	PlayerStateBase(player)
+	PlayerStateBase(player),
+	m_isGliding(false),
+	m_isGlided(false)
 {
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	owner->GetModel()->SetAnim(owner->GetAnim(kFall).c_str(), true);
@@ -74,16 +77,21 @@ void PlayerStateFall::Update()
 		ChangeState(std::make_shared<PlayerStateJump>(m_pOwner));
 		return;
 	}
-	//UŒ‚
-	if (input.IsBuffered("X"))
+
+	//‹ó’†UŒ‚‰Â”\‚È‚ç
+	if (!owner->IsAirAttacked())
 	{
-		ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner));
-		return;
-	}
-	if (input.IsBuffered("Y"))
-	{
-		ChangeState(std::make_shared<PlayerStateHeavyAttack>(m_pOwner));
-		return;
+		//UŒ‚
+		if (input.IsBuffered("X"))
+		{
+			ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner));
+			return;
+		}
+		if (input.IsBuffered("Y"))
+		{
+			ChangeState(std::make_shared<PlayerStateHeavyAttack>(m_pOwner));
+			return;
+		}
 	}
 
 	//—‰º’†‚ÌˆÚ“®
@@ -92,10 +100,10 @@ void PlayerStateFall::Update()
 
 void PlayerStateFall::MoveFall(Input& input, std::shared_ptr<Player> owner, std::shared_ptr<CharaStatus> status)
 {
+	auto rb = owner->GetRb();
 	//ˆÚ“®‚Ì“ü—Í‚ª‚ ‚é‚È‚ç
 	if (input.GetStickInfo().IsLeftStickInput())
 	{
-		auto rb = owner->GetRb();
 		//ˆÚ“®
 		Vector3 vec = InputMoveVec(owner, input);
 		vec *= status->GetMS();
@@ -103,5 +111,26 @@ void PlayerStateFall::MoveFall(Input& input, std::shared_ptr<Player> owner, std:
 		rb->SetMoveVec(vec);
 		//ƒ‚ƒfƒ‹‚ÌŒü‚«
 		owner->GetModel()->SetDir(Vector2(vec.x, vec.z));
+	}
+	if (input.IsPress("A") && !m_isGlided)
+	{
+		//ŠŠ‹ó
+		owner->GetModel()->SetAnim(owner->GetAnim(kGliding).c_str(), false);
+		//—‰º‘¬“x‚ğ’x‚­‚·‚é
+		rb->SetVecY(rb->GetVec().y / 2.0f);
+		//ŠŠ‹ó’†
+		m_isGliding = true;
+		
+	}
+	else
+	{
+		if (input.IsRelease("A"))
+		{
+			//ŠŠ‹ó‚ğ‚µ‚½
+			m_isGlided = true;
+		}
+		m_isGliding = false;
+		//—‰º
+		owner->GetModel()->SetAnim(owner->GetAnim(kFall).c_str(), true);
 	}
 }

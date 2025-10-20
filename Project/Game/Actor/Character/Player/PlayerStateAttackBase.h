@@ -5,7 +5,7 @@
 class Actor;
 class Player;
 class AttackData;
-class SwordAttack;
+class AttackBase;
 class Weapon;
 class PlayerStateAttackBase abstract:
     public PlayerStateBase
@@ -19,7 +19,7 @@ protected:
     //攻撃発生
     bool m_isAppearedAttack;
     //攻撃の参照
-    std::weak_ptr<SwordAttack> m_pSwordAttack;
+    std::weak_ptr<AttackBase> m_pAttack;
     //チャージフレーム
     float m_chargeCountFrame;
 protected:

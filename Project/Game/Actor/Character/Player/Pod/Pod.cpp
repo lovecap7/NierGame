@@ -15,7 +15,8 @@
 
 Pod::Pod(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager, std::weak_ptr<Player> pPlayer) :
 	CharacterBase(actorData, charaStatusData, Shape::Sphere, pActorManager),
-	m_pPlayer(pPlayer)
+	m_pPlayer(pPlayer),
+	m_isGliding(false)
 {
 	m_tag = GameTag::Player;
 }
@@ -53,6 +54,12 @@ void Pod::Update()
 {
 	//入力の取得
 	auto& input = Input::GetInstance();
+
+	//滑空状態かチェック
+	if (!m_pPlayer.expired())
+	{
+		m_isGliding = m_pPlayer.lock()->IsGliding();
+	}
 
 	//状態に合わせた更新
 	m_state->Update();
@@ -96,6 +103,13 @@ Vector3 Pod::GetPlayerPos() const
 	if (m_pPlayer.expired())return Vector3::Zero();
 	//座標
 	return m_pPlayer.lock()->GetNextPos();
+}
+
+Vector3 Pod::GetPlayerDir() const
+{
+	if (m_pPlayer.expired())return Vector3::Forward();
+	//座標
+	return m_pPlayer.lock()->GetModel()->GetDir();
 }
 
 Vector3 Pod::GetCameraDir() const

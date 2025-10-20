@@ -73,6 +73,17 @@ void ActorManager::Draw() const
 
 void ActorManager::End()
 {
+	//アクターの終了処理
+	std::list<std::shared_ptr<Actor>> deleteActer;
+	for (auto& actor : m_actors)
+	{
+		deleteActer.emplace_back(actor);
+	}
+	for (auto& actor : deleteActer)
+	{
+		Exit(actor);
+	}
+	deleteActer.clear();
 }
 
 void ActorManager::CreateActorCSV(const char* folderName, const char* fileName)

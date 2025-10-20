@@ -3,6 +3,9 @@
 #include "PlayerStateMoving.h"
 #include "PlayerStateIdle.h"
 #include "PlayerStateAvoid.h"
+#include "PlayerStateHeavyAttack.h"
+#include "PlayerStateJump.h"
+#include "PlayerStateFall.h"
 #include "Weapon/Weapon.h"
 #include "../../../Attack/SwordAttack.h"
 #include "../../../../General/Model.h"
@@ -13,29 +16,47 @@ namespace
 {
 	const std::wstring kFirstGroundAttackName = L"MainAttack1";
 	const std::wstring kChargeName = L"MainAttackCharge";
+	const std::wstring kJumpAttackName = L"RisingAttack";
 	constexpr float kChargeFrame = 20.0f;
 }
 
-PlayerStateLightAttack::PlayerStateLightAttack(std::weak_ptr<Actor> player):
+PlayerStateLightAttack::PlayerStateLightAttack(std::weak_ptr<Actor> player, bool isJump, bool isJust):
 	PlayerStateAttackBase(player)
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	owner->SetCollState(CollisionState::Move);
 
-	//武器を持つ
-	owner->HaveLightSword();
-	//攻撃データ取得
-	m_attackData = owner->GetAttackData(kFirstGroundAttackName);
-	//アニメーション
-	owner->GetModel()->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), false);
-
 	//空中にいるなら
 	if (!owner->IsFloor())
 	{
 		//重力を受けない
 		owner->GetRb()->SetIsGravity(false);
+		owner->SetIsAirAttacked(true);
+		//縦の移動量をリセット
+		owner->GetRb()->SetVecY(0.0f);
 	}
+
+	//武器を持つ
+	owner->HaveLightSword();
+
+	//ジャンプ中なら
+	if (isJump)
+	{
+		//攻撃データ取得
+		m_attackData = owner->GetAttackData(kJumpAttackName);
+		//上昇
+		owner->GetRb()->SetVecY(m_attackData->m_param1);
+		//この攻撃の場合重力を受ける
+		owner->GetRb()->SetIsGravity(true);
+	}
+	else
+	{
+		//攻撃データ取得
+		m_attackData = owner->GetAttackData(kFirstGroundAttackName);
+	}
+	//アニメーション
+	owner->GetModel()->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), false);
 }
 
 PlayerStateLightAttack::~PlayerStateLightAttack()
@@ -67,14 +88,6 @@ void PlayerStateLightAttack::Update()
 		return;
 	}
 
-	//空中の時
-	bool isAir = !owner->IsFloor();
-	if (isAir)
-	{
-		//縦の移動量をリセット
-		owner->GetRb()->SetVecY(0.0f);
-	}
-
 	//フレームをカウント
 	CountFrame();
 	
@@ -89,7 +102,7 @@ void PlayerStateLightAttack::Update()
 	if (m_frame >= m_attackData->m_startFrame)
 	{
 		//多段ヒット攻撃の処理
-		if (m_isAppearedAttack && m_pSwordAttack.expired())
+		if (m_isAppearedAttack && m_pAttack.expired())
 		{
 			if (m_attackData->m_isMultipleHit && m_attackData->m_nextAttackName != L"None")
 			{
@@ -105,7 +118,7 @@ void PlayerStateLightAttack::Update()
 	}
 
 	//長押ししているフレームをカウント
-	if (input.IsPress("X") && m_attackData->m_animName != kChargeName && !isAir)
+	if (input.IsPress("X") && m_attackData->m_animName != kChargeName && owner->IsFloor())
 	{
 		m_chargeCountFrame += owner->GetTimeScale();
 	}
@@ -145,19 +158,43 @@ void PlayerStateLightAttack::Update()
 					nextName = kFirstGroundAttackName;
 				}
 			}
+			if (nextName != L"None")
+			{
+				//攻撃データ
+				m_attackData = owner->GetAttackData(nextName);
+				m_isAppearedAttack = false;
 
-			//攻撃データ
-			m_attackData = owner->GetAttackData(nextName);
-			m_isAppearedAttack = false;
+				//アニメーション
+				model->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), false);
 
-			//アニメーション
-			model->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), false);
+				//フレームリセット
+				m_frame = 0.0f;
 
-			//フレームリセット
-			m_frame = 0.0f;
+				//攻撃削除
+				DeleteAttack();
 
-			DeleteAttack();
+				//切り上げ攻撃以外なら重力を受けない
+				if (nextName != kJumpAttackName)
+				{
+					//重力を受けない
+					owner->GetRb()->SetIsGravity(false);
+					//縦の移動量をリセット
+					owner->GetRb()->SetVecY(0.0f);
+				}
 
+				return;
+			}
+		}
+		//ジャンプ
+		if (owner->IsJumpable() && input.IsBuffered("A"))
+		{
+			ChangeState(std::make_shared<PlayerStateJump>(m_pOwner));
+			return;
+		}
+		//大剣攻撃
+		if (input.IsBuffered("Y"))
+		{
+			ChangeState(std::make_shared<PlayerStateHeavyAttack>(m_pOwner));
 			return;
 		}
 	}
@@ -174,6 +211,12 @@ void PlayerStateLightAttack::Update()
 
 void PlayerStateLightAttack::ChangeToMoveOrIdle(std::shared_ptr<Player> owner, Input& input)
 {
+	//空中にいるなら落下
+	if (!owner->IsFloor())
+	{
+		ChangeState(std::make_shared<PlayerStateFall>(m_pOwner));
+		return;
+	}
 	if (input.GetStickInfo().IsLeftStickInput())
 	{
 		ChangeState(std::make_shared<PlayerStateMoving>(m_pOwner, false));

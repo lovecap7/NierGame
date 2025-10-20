@@ -46,6 +46,9 @@ PlayerStateJump::PlayerStateJump(std::weak_ptr<Actor> player) :
 
 	//âÒîâ¬î\
 	owner->SetIsAvoidable(true);
+
+	//ãÛíÜçUåÇâ¬î\
+	owner->SetIsAirAttacked(false);
 }
 
 PlayerStateJump::~PlayerStateJump()
@@ -89,7 +92,7 @@ void PlayerStateJump::Update()
 	//çUåÇ
 	if (input.IsBuffered("X"))
 	{
-		ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner, true, false));
 		return;
 	}
 	if (input.IsBuffered("Y"))

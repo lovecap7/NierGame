@@ -2,6 +2,7 @@
 #include "PlayerStateBase.h"
 #include "PlayerStateIdle.h"
 #include "PlayerStateAvoid.h"
+#include "PlayerStateFall.h"
 #include "Weapon/Weapon.h"
 #include "../../../../General/game.h"
 #include "../../../../General/Collision/CapsuleCollider.h"
@@ -43,7 +44,8 @@ Player::Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatus
 	m_isJustAvoided(false),
 	m_noDamageFrame(0.0f),
 	m_putAwayCountFrame(0.0f),
-	m_haveWeaponType(PlayerAnimData::WeaponType::None)
+	m_haveWeaponType(PlayerAnimData::WeaponType::None),
+	m_isAirAttacked(false)
 {
 }
 
@@ -389,6 +391,16 @@ std::shared_ptr<AttackData> Player::GetAttackData(std::wstring attackName) const
 	assert(attackData);
 
 	return attackData;
+}
+
+bool Player::IsGliding() const
+{
+	auto state = std::dynamic_pointer_cast<PlayerStateFall>(m_state);
+	if (state != nullptr)
+	{
+		return state->IsGliding();
+	}
+	return false;
 }
 
 void Player::InitAnimData(std::shared_ptr<CSVDataLoader> csvLoader)

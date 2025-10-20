@@ -1,5 +1,6 @@
 #include "PodStateIdle.h"
 #include "PodStateAttack.h"
+#include "PodStateGliding.h"
 #include "Pod.h"
 #include "../../../../../General/Model.h"
 #include "../../../../../General/Collision/Rigidbody.h"
@@ -42,7 +43,16 @@ void PodStateIdle::Update()
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Pod>(m_pOwner.lock());
 
+	//ŠŠ‹óó‘Ô
+	if (owner->IsGliding())
+	{
+		//ŠŠ‹ó
+		ChangeState(std::make_shared<PodStateGliding>(m_pOwner));
+		return;
+	}
+
 	auto& input = Input::GetInstance();
+	
 	if (input.IsBuffered("RB"))
 	{
 		//ŽËŒ‚

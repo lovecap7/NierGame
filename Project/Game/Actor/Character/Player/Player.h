@@ -55,6 +55,10 @@ public:
 	bool IsAvoidable()const { return m_isAvoidable; };
 	void SetIsAvoidable(bool isAvoidable){ m_isAvoidable = isAvoidable; };
 
+	//空中攻撃可能か
+	bool IsAirAttacked()const { return m_isAirAttacked; };
+	void SetIsAirAttacked(bool isAttack){ m_isAirAttacked = isAttack; };
+
 	//落下しているか
 	bool IsFall()const;
 
@@ -81,6 +85,9 @@ public:
 	std::string GetAnim(std::wstring state)const;
 	//攻撃データ
 	std::shared_ptr<AttackData> GetAttackData(std::wstring attackName)const;
+
+	//滑空状態か
+	bool IsGliding()const;
 private:
 	//アニメーションデータをCSVから読み込む
 	void InitAnimData(std::shared_ptr<CSVDataLoader> csvLoader);
@@ -93,6 +100,8 @@ private:
 	int m_jumpNum;
 	//回避可能
 	bool m_isAvoidable;
+	//空中攻撃を行ったか
+	bool m_isAirAttacked;
 
 	//無敵時間(ジャスト回避成功時数フレーム無敵)
 	bool m_isJustAvoided;

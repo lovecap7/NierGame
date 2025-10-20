@@ -3,6 +3,8 @@
 #include "PlayerStateMoving.h"
 #include "PlayerStateIdle.h"
 #include "PlayerStateAvoid.h"
+#include "PlayerStateLightAttack.h"
+#include "PlayerStateJump.h"
 #include "Weapon/Weapon.h"
 #include "../../../Attack/SwordAttack.h"
 #include "../../../../General/Model.h"
@@ -31,11 +33,11 @@ PlayerStateHeavyAttack::PlayerStateHeavyAttack(std::weak_ptr<Actor> player,bool 
 	// 空中か地上かで初期攻撃設定
 	if (!owner->IsFloor())
 	{
-		owner->GetRb()->SetIsGravity(false);
 		m_attackData = owner->GetAttackData(kFirstAirAttackName);
 		m_update = &PlayerStateHeavyAttack::AirUpdate;
 		owner->SetCollState(CollisionState::Fall);
 		owner->GetRb()->SetVec(Vector3::Zero());
+		owner->SetIsAirAttacked(true);
 	}
 	else
 	{
@@ -65,6 +67,14 @@ PlayerStateHeavyAttack::~PlayerStateHeavyAttack()
 void PlayerStateHeavyAttack::Init()
 {
 	ChangeState(shared_from_this());
+	//重力を受けない
+	if (m_pOwner.expired()) return;
+	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
+	// 空中か地上かで初期攻撃設定
+	if (!owner->IsFloor())
+	{
+		owner->GetRb()->SetIsGravity(false);
+	}
 }
 
 void PlayerStateHeavyAttack::Update()
@@ -93,7 +103,7 @@ void PlayerStateHeavyAttack::GroundUpdate(std::shared_ptr<Player> owner, Input& 
 	if (m_frame >= m_attackData->m_startFrame)
 	{
 		//持続終了時に今の攻撃が多段ヒット攻撃なら次の攻撃を読み込む
-		if (m_isAppearedAttack && m_pSwordAttack.expired())
+		if (m_isAppearedAttack && m_pAttack.expired())
 		{
 			if (m_attackData->m_isMultipleHit && m_attackData->m_nextAttackName != L"None")
 			{
@@ -135,7 +145,7 @@ void PlayerStateHeavyAttack::AirUpdate(std::shared_ptr<Player> owner, Input& inp
 	if (m_frame >= m_attackData->m_startFrame)
 	{
 		//多段ヒット攻撃の処理
-		if (m_isAppearedAttack && m_pSwordAttack.expired())
+		if (m_isAppearedAttack && m_pAttack.expired())
 		{
 			if (m_attackData->m_isMultipleHit && m_attackData->m_nextAttackName != L"None")
 			{
@@ -164,6 +174,7 @@ void PlayerStateHeavyAttack::AirUpdate(std::shared_ptr<Player> owner, Input& inp
 			model->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), false);
 			m_frame = 0.0f;
 			DeleteAttack();
+			return;
 		}
 
 		if (model->IsFinishAnim())
@@ -196,6 +207,18 @@ bool PlayerStateHeavyAttack::LoadNextChargeOrCombo(std::shared_ptr<Player> owner
 			//チャージ
 			m_chargeCountFrame += owner->GetTimeScale();
 			return true;	//チャージ中はtrueを返す
+		}
+		//ジャンプ
+		if (owner->IsJumpable() && input.IsBuffered("A"))
+		{
+			ChangeState(std::make_shared<PlayerStateJump>(m_pOwner));
+			return true;
+		}
+		//片手剣攻撃
+		if (input.IsBuffered("X"))
+		{
+			ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner));
+			return true;
 		}
 		// チャージ完了または未完了による攻撃遷移
 		if(input.IsRelease("Y"))

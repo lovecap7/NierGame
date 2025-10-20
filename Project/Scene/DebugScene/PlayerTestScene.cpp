@@ -96,6 +96,7 @@ void PlayerTestScene::Draw()
 void PlayerTestScene::End()
 {
 	m_actorManager->End();
+	m_attackManager->End();
 }
 
 void PlayerTestScene::DebugDraw() const
