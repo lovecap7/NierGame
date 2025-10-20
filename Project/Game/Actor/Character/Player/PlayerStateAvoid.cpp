@@ -2,6 +2,7 @@
 #include "PlayerStateIdle.h"
 #include "Player.h"
 #include "PlayerStateMoving.h"
+#include "PlayerStateLightAttack.h"
 #include "../../../../General/Input.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Collision/Rigidbody.h"
@@ -128,6 +129,9 @@ void PlayerStateAvoid::Update()
 	auto model = owner->GetModel();
 	auto& app = Application::GetInstance();
 
+	//入力
+	auto& input = Input::GetInstance();
+
 	//フレームカウント
 	CountFrame();
 
@@ -136,6 +140,17 @@ void PlayerStateAvoid::Update()
 
 	if (model->IsFinishAnim())
 	{
+		//ジャスト回避成功したとき
+		if (m_isJustAvoid)
+		{
+			//攻撃
+			if (input.IsBuffered("X"))
+			{
+				ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner, false, true));
+				return;
+			}
+		}
+
 		//無敵解除
 		owner->GetCharaStatus()->SetIsNoDamage(false);
 		auto& input = Input::GetInstance();

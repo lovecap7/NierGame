@@ -22,7 +22,7 @@ private:
     float m_endSpeed;
     //ジャスト回避成功
     bool m_isJustAvoid;
-    //ジャスト回避が終了フレーム
+    //ジャスト回避が終了するフレーム
     float m_finishJustAvoid;
 private:
     //ジャスト回避初期化

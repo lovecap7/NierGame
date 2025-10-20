@@ -22,5 +22,5 @@ SubAttackAirStart_2,FALSE,1,10,2,5,0,80,600,30,200,60,10,SubAttackAir,SubAttackA
 SubAttackAirEnd,FALSE,5,10,2,5,0,0,10,200,200,0,0,SubAttackAirEnd,SubAttackAirEnd,0,0,0,0
 DashAttack,FALSE,1,10,2,5,0,0,20,30,200,50,10,DashAttack,SubAttack1,80,0,0,0
 RisingAttack,FALSE,1,10,2,5,10,0,20,50,100,10,10,RisingAttack,MainAttack1,10,20,0,0
-JustAttackMain,FALSE,1,10,2,5,10,0,20,50,100,10,10,JustAttackMain,MainAttack1,10,20,0,0
+JustAttackMain,FALSE,1,10,2,5,10,0,20,50,100,10,10,JustAttackMain,MainAttack1,40,30,0,0
 JustAttackSub,FALSE,1,10,2,5,10,0,20,50,100,10,10,JustAttackSub,MainAttack2,10,20,0,0
