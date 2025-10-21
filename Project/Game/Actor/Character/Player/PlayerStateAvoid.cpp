@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "PlayerStateMoving.h"
 #include "PlayerStateLightAttack.h"
+#include "PlayerStateHeavyAttack.h"
 #include "../../../../General/Input.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Collision/Rigidbody.h"
@@ -35,7 +36,9 @@ PlayerStateAvoid::PlayerStateAvoid(std::weak_ptr<Actor> player) :
 	m_speed(0.0f),
 	m_endSpeed(0.0f),
 	m_isJustAvoid(false),
-	m_finishJustAvoid(0.0f)
+	m_finishJustAvoid(0.0f),
+	m_isLightAttack(false),
+	m_isHeavyAttack(false)
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
@@ -138,18 +141,35 @@ void PlayerStateAvoid::Update()
 	//ジャスト回避
 	UpdateJustAvoid(owner, model, app);
 
+	//ジャスト回避成功後
+	if (m_isJustAvoid)
+	{
+		if (input.IsBuffered("X"))
+		{
+			m_isLightAttack = true;
+			m_isHeavyAttack = false;
+		}
+		else if (input.IsBuffered("Y"))
+		{
+			m_isLightAttack = false;
+			m_isHeavyAttack = true;
+		}
+	}
+
 	if (model->IsFinishAnim())
 	{
-		//ジャスト回避成功したとき
-		if (m_isJustAvoid)
+		//攻撃
+		if (m_isLightAttack)
 		{
-			//攻撃
-			if (input.IsBuffered("X"))
-			{
-				ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner, false, true));
-				return;
-			}
+			ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner, false, true));
+			return;
 		}
+		else if(m_isHeavyAttack)
+		{
+			ChangeState(std::make_shared<PlayerStateHeavyAttack>(m_pOwner, false, true));
+			return;
+		}
+		
 
 		//無敵解除
 		owner->GetCharaStatus()->SetIsNoDamage(false);

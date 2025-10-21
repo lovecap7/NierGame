@@ -27,7 +27,8 @@ Weapon::Weapon(std::shared_ptr<ActorData> actorData, std::weak_ptr<ActorManager>
     m_rotaCountFrame(0.0f),
     m_rotaFrame(0.0f),
     m_rotaSpeed(0.0f),
-    m_rotaAngle(0.0f)
+    m_rotaAngle(0.0f),
+    m_isDraw(true)
 {
     m_model->SetRotSpeed(1.0f);
 }
@@ -47,7 +48,10 @@ void Weapon::Update()
 
 void Weapon::Draw() const
 {
-    m_model->Draw();
+    if (m_isDraw)
+    {
+        m_model->Draw();
+    }
 }
 
 void Weapon::End()

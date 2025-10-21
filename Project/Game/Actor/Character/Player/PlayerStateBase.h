@@ -16,5 +16,6 @@ public:
 protected:
 	//ˆÚ“®•ûŒü
 	Vector3 InputMoveVec(std::shared_ptr<Player> owner,Input& input);
+
 };
 

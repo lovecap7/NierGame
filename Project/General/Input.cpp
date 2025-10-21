@@ -20,7 +20,7 @@ namespace
 
 	//先行入力
 	//有効フレーム数
-	constexpr int kBufferFrame = 10;
+	constexpr int kBufferFrame = 16;
 }
 
 void Input::Init()

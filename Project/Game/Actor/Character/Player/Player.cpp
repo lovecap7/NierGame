@@ -45,7 +45,8 @@ Player::Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatus
 	m_noDamageFrame(0.0f),
 	m_putAwayCountFrame(0.0f),
 	m_haveWeaponType(PlayerAnimData::WeaponType::None),
-	m_isAirAttacked(false)
+	m_isAirAttacked(false),
+	m_isDraw(true)
 {
 }
 
@@ -63,7 +64,7 @@ void Player::Init()
 	//ƒAƒjƒ[ƒVƒ‡ƒ“ƒf[ƒ^
 	InitAnimData(csvLoader);
 	//UŒ‚ƒf[ƒ^
-	InitAttackData(csvLoader);
+	InitAttackData(csvLoader, "Player/PlayerAttackData");
 
 	//‘Ò‹@ó‘Ô‚É‚·‚é(Å‰‚ÍƒvƒŒƒCƒ„[“à‚Åó‘Ô‚ð‰Šú‰»‚·‚é‚ª‚»‚Ì‚ ‚Æ‚ÍŠeó‘Ô‚Å‘JˆÚ‚·‚é
 	auto thisPointer = std::dynamic_pointer_cast<Player>(shared_from_this());
@@ -146,6 +147,13 @@ void Player::Update()
 
 	//ó‘Ô‚ÌƒŠƒZƒbƒg
 	m_charaStatus->InitHitState();
+
+	//•Ší‚ð•`‰æ‚·‚é‚©
+	if (!m_pBigSword.expired() && !m_pLightSword.expired())
+	{
+		m_pBigSword.lock()->SetIsDraw(m_isDraw);
+		m_pLightSword.lock()->SetIsDraw(m_isDraw);
+	}
 }
 
 
@@ -177,7 +185,10 @@ void Player::Draw() const
 		false
 	);
 #endif
-	m_model->Draw();
+	if (m_isDraw)
+	{
+		m_model->Draw();
+	}
 }
 
 void Player::Complete()
@@ -373,26 +384,6 @@ std::string Player::GetAnim(std::wstring state)const
 	return path;
 }
 
-std::shared_ptr<AttackData> Player::GetAttackData(std::wstring attackName) const
-{
-	std::shared_ptr<AttackData> attackData;
-
-	//’T‚·
-	for (auto& data : m_attackDatas)
-	{
-		//ðŒ‚É‡‚¤‚à‚Ì‚ª‚ ‚Á‚½‚ç
-		if (data->m_name == attackName)
-		{
-			attackData = data;
-			break;
-		}
-	}
-
-	assert(attackData);
-
-	return attackData;
-}
-
 bool Player::IsGliding() const
 {
 	auto state = std::dynamic_pointer_cast<PlayerStateFall>(m_state);
@@ -403,27 +394,6 @@ bool Player::IsGliding() const
 	return false;
 }
 
-void Player::InitAnimData(std::shared_ptr<CSVDataLoader> csvLoader)
-{
-	auto datas = csvLoader->LoadCSV("Player/PlayerAnimData");
-	//“o˜^
-	for (auto& data : datas)
-	{
-		std::shared_ptr<PlayerAnimData> animData = std::make_shared<PlayerAnimData>(data);
-		m_animDatas.emplace_back(animData);
-	}
-}
-
-void Player::InitAttackData(std::shared_ptr<CSVDataLoader> csvLoader)
-{
-	auto datas = csvLoader->LoadCSV("Player/PlayerAttackData");
-	//“o˜^
-	for (auto& data : datas)
-	{
-		std::shared_ptr<AttackData> attackData = std::make_shared<AttackData>(data);
-		m_attackDatas.emplace_back(attackData);
-	}
-}
 
 std::weak_ptr<PlayerCamera> Player::GetPlayerCamera() const
 {
@@ -437,4 +407,14 @@ std::weak_ptr<PlayerCamera> Player::GetPlayerCamera() const
 		}
 	}
 	return camera;
+}
+void Player::InitAnimData(std::shared_ptr<CSVDataLoader> csvLoader)
+{
+	auto datas = csvLoader->LoadCSV("Player/PlayerAnimData");
+	//“o˜^
+	for (auto& data : datas)
+	{
+		std::shared_ptr<PlayerAnimData> animData = std::make_shared<PlayerAnimData>(data);
+		m_animDatas.emplace_back(animData);
+	}
 }

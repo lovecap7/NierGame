@@ -22,7 +22,8 @@ namespace
 }
 
 PlayerStateLightAttack::PlayerStateLightAttack(std::weak_ptr<Actor> player, bool isJump, bool isJust):
-	PlayerStateAttackBase(player)
+	PlayerStateAttackBase(player),
+	m_isJust(isJust)
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
@@ -33,16 +34,17 @@ PlayerStateLightAttack::PlayerStateLightAttack(std::weak_ptr<Actor> player, bool
 	{
 		//重力を受けない
 		owner->GetRb()->SetIsGravity(false);
-		owner->SetIsAirAttacked(true);
 		//縦の移動量をリセット
 		owner->GetRb()->SetVecY(0.0f);
+		//空中攻撃をした
+		owner->SetIsAirAttacked(true);
 	}
 
 	//武器を持つ
 	owner->HaveLightSword();
 
 	//ジャスト回避
-	if (isJust)
+	if (m_isJust)
 	{
 		//攻撃データ取得
 		m_attackData = owner->GetAttackData(kJustAttackName);
@@ -50,6 +52,8 @@ PlayerStateLightAttack::PlayerStateLightAttack(std::weak_ptr<Actor> player, bool
 		owner->GetRb()->SetVecY(m_attackData->m_param1);
 		//この攻撃の場合重力を受ける
 		owner->GetRb()->SetIsGravity(true);
+		//透明
+		owner->SetIsDraw(false);
 	}
 	//ジャンプ中なら
 	else if (isJump)
@@ -60,6 +64,8 @@ PlayerStateLightAttack::PlayerStateLightAttack(std::weak_ptr<Actor> player, bool
 		owner->GetRb()->SetVecY(m_attackData->m_param1);
 		//この攻撃の場合重力を受ける
 		owner->GetRb()->SetIsGravity(true);
+		//空中攻撃をしたことはなし
+		owner->SetIsAirAttacked(false);
 	}
 	else
 	{
@@ -92,7 +98,7 @@ void PlayerStateLightAttack::Update()
 
 	auto& input = Input::GetInstance();
 	//回避
-	if (input.IsBuffered("B") && owner->IsAvoidable())
+	if (input.IsBuffered("B") && owner->IsAvoidable() && !m_isJust)
 	{
 		//回避
 		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
@@ -112,21 +118,42 @@ void PlayerStateLightAttack::Update()
 	//発生フレームになったら
 	if (m_frame >= m_attackData->m_startFrame)
 	{
-		//多段ヒット攻撃の処理
+		//持続が切れたら
 		if (m_isAppearedAttack && m_pAttack.expired())
 		{
+			//多段ヒット攻撃の処理
 			if (m_attackData->m_isMultipleHit && m_attackData->m_nextAttackName != L"None")
 			{
 				//多段ヒット攻撃
 				LoadNextMultipleHitAttack(owner);
 			}
+			//ジャスト回避攻撃の透明になるを解除
+			if (m_isJust)
+			{
+				owner->SetIsDraw(true);
+			}
+			
+			//重力を受ける
+			owner->GetRb()->SetIsGravity(true);
 		}
+		else
+		{
+			//持続中は空中なら落下しない
+			if (!owner->IsFloor() && m_attackData->m_animName != kJumpAttackName)
+			{
+				//重力を受けない
+				owner->GetRb()->SetIsGravity(false);
+				owner->GetRb()->SetVecY(0.0f);
+			}
+		}
+
 		//まだ攻撃が発生していないなら発生
 		if (!m_isAppearedAttack)
 		{
 			CreateAttack(owner, weapon);
 		}
 	}
+
 
 	//長押ししているフレームをカウント
 	if (input.IsPress("X") && m_attackData->m_animName != kChargeName && owner->IsFloor())
@@ -137,76 +164,70 @@ void PlayerStateLightAttack::Update()
 	{
 		m_chargeCountFrame = 0.0f;
 	}
-	
-	//キャンセルフレーム
-	if ((model->GetTotalAnimFrame() - m_attackData->m_cancelFrame) < m_frame)
+	//多段ヒット攻撃中はキャンセル攻撃をしない
+	if (!m_attackData->m_isMultipleHit)
 	{
-		//攻撃の条件
-		bool isChargeAttack = m_chargeCountFrame >= kChargeFrame;
-		bool isCombAttack = input.IsBuffered("X");
-
-		//武器を持つ
-		owner->HaveLightSword();
-
-		//攻撃をするか
-		if (isChargeAttack || isCombAttack)
+		//キャンセルフレーム
+		if ((model->GetTotalAnimFrame() - m_attackData->m_cancelFrame) < m_frame)
 		{
-			//次の攻撃名
-			auto nextName = m_attackData->m_nextAttackName;
-			
-			//チャージ攻撃をするなら
-			if (isChargeAttack)
+			//攻撃の条件
+			bool isChargeAttack = m_chargeCountFrame >= kChargeFrame;
+			bool isCombAttack = input.IsBuffered("X");
+
+			//武器を持つ
+			owner->HaveLightSword();
+
+			//攻撃をするか
+			if (isChargeAttack || isCombAttack)
 			{
-				nextName = kChargeName;
-			}
-			//次の攻撃がない場合
-			else if (nextName == L"None")
-			{
-				//空中にいないなら
-				if (owner->IsFloor())
+				//次の攻撃名
+				auto nextName = m_attackData->m_nextAttackName;
+
+				//チャージ攻撃をするなら
+				if (isChargeAttack)
 				{
-					//最初の攻撃に戻る
-					nextName = kFirstGroundAttackName;
+					nextName = kChargeName;
+				}
+				//次の攻撃がない場合
+				else if (nextName == L"None")
+				{
+					//空中にいないなら
+					if (owner->IsFloor())
+					{
+						//最初の攻撃に戻る
+						nextName = kFirstGroundAttackName;
+					}
+				}
+				if (nextName != L"None")
+				{
+					//攻撃データ
+					m_attackData = owner->GetAttackData(nextName);
+					m_isAppearedAttack = false;
+
+					//アニメーション
+					model->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), false);
+
+					//フレームリセット
+					m_frame = 0.0f;
+
+					//攻撃削除
+					DeleteAttack();
+
+					return;
 				}
 			}
-			if (nextName != L"None")
+			//ジャンプ
+			if (owner->IsJumpable() && input.IsBuffered("A"))
 			{
-				//攻撃データ
-				m_attackData = owner->GetAttackData(nextName);
-				m_isAppearedAttack = false;
-
-				//アニメーション
-				model->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), false);
-
-				//フレームリセット
-				m_frame = 0.0f;
-
-				//攻撃削除
-				DeleteAttack();
-
-				//切り上げ攻撃以外なら重力を受けない
-				if (nextName != kJumpAttackName)
-				{
-					//重力を受けない
-					owner->GetRb()->SetIsGravity(false);
-					//縦の移動量をリセット
-					owner->GetRb()->SetVecY(0.0f);
-				}
-
+				ChangeState(std::make_shared<PlayerStateJump>(m_pOwner));
 				return;
 			}
-		}
-		//ジャンプ
-		if (owner->IsJumpable() && input.IsBuffered("A"))
-		{
-			ChangeState(std::make_shared<PlayerStateJump>(m_pOwner));
-			return;
-		}
-		//大剣攻撃
-		if (input.IsBuffered("Y"))
-		{
-			ChangeState(std::make_shared<PlayerStateHeavyAttack>(m_pOwner));
-			return;
+			//大剣攻撃
+			if (input.IsBuffered("Y"))
+			{
+				ChangeState(std::make_shared<PlayerStateHeavyAttack>(m_pOwner));
+				return;
+			}
 		}
 	}
 	//アニメーションが終了したら
@@ -218,6 +239,12 @@ void PlayerStateLightAttack::Update()
 	UpdateMove(owner, input, model);
 	//攻撃位置の更新
 	UpdateAttackPosition(owner, weapon);
+	//ジャスト回避の上昇のリセット
+	if (m_isJust && m_frame >= m_attackData->m_moveFrame)
+	{
+		//縦の移動量をリセット
+		owner->GetRb()->SetVecY(0.0f);
+	}
 }
 
 void PlayerStateLightAttack::ChangeToMoveOrIdle(std::shared_ptr<Player> owner, Input& input)

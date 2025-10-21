@@ -18,6 +18,7 @@ namespace
 	const std::wstring kDashAttackName = L"DashAttack";
 	const std::wstring kChargeAttackName = L"SubAttack3";
 	const std::wstring kChargeName = L"SubAttackCharge";
+	const std::wstring kJustAttackName = L"JustAttackSub";
 }
 
 PlayerStateHeavyAttack::PlayerStateHeavyAttack(std::weak_ptr<Actor> player,bool isDash, bool isJust):
@@ -30,9 +31,16 @@ PlayerStateHeavyAttack::PlayerStateHeavyAttack(std::weak_ptr<Actor> player,bool 
 	owner->SetCollState(CollisionState::Move);
 	owner->HaveBigSword();
 
-	// 空中か地上かで初期攻撃設定
-	if (!owner->IsFloor())
+
+	//ジャスト回避
+	if (isJust)
 	{
+		//攻撃データ取得
+		m_attackData = owner->GetAttackData(kJustAttackName);
+	}
+	else if (!owner->IsFloor())
+	{
+		//空中か地上かで初期攻撃設定
 		m_attackData = owner->GetAttackData(kFirstAirAttackName);
 		m_update = &PlayerStateHeavyAttack::AirUpdate;
 		owner->SetCollState(CollisionState::Fall);
@@ -118,8 +126,13 @@ void PlayerStateHeavyAttack::GroundUpdate(std::shared_ptr<Player> owner, Input& 
 	}
 	//位置更新
 	UpdateAttackPosition(owner,weapon);
-	//チャージ攻撃関連の処理(チャージ中なら早期リターン)
-	if (LoadNextChargeOrCombo(owner, input, model))return;
+
+	//多段ヒット攻撃中はキャンセル攻撃をしない
+	if (!m_attackData->m_isMultipleHit)
+	{
+		//チャージ攻撃関連の処理(チャージ中なら早期リターン)
+		if (LoadNextChargeOrCombo(owner, input, model))return;
+	}
 
 	// アニメーション終了時
 	if (model->IsFinishAnim())

@@ -81,20 +81,20 @@ public:
 	//武器を収める
 	void PutAwaySword();
 
-	//アニメーションデータ
-	std::string GetAnim(std::wstring state)const;
-	//攻撃データ
-	std::shared_ptr<AttackData> GetAttackData(std::wstring attackName)const;
+	//アニメーションの検索
+	std::string GetAnim(std::wstring state) const;
 
 	//滑空状態か
 	bool IsGliding()const;
+
+	//描画
+	void SetIsDraw(bool isDraw) { m_isDraw = isDraw; };
 private:
-	//アニメーションデータをCSVから読み込む
-	void InitAnimData(std::shared_ptr<CSVDataLoader> csvLoader);
-	//攻撃データを読み込む
-	void InitAttackData(std::shared_ptr<CSVDataLoader> csvLoader);
 	//カメラ
 	std::weak_ptr<PlayerCamera> GetPlayerCamera()const;
+
+	//アニメーションの読み込み
+	void InitAnimData(std::shared_ptr<CSVDataLoader> csvLoader);
 private:
 	//ジャンプ回数
 	int m_jumpNum;
@@ -119,8 +119,8 @@ private:
 
 	//アニメーションデータ
 	std::vector<std::shared_ptr<PlayerAnimData>> m_animDatas;
-	//攻撃データ
-	std::vector<std::shared_ptr<AttackData>> m_attackDatas;
 
+	//描画しない
+	bool m_isDraw;
 };
 

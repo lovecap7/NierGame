@@ -60,6 +60,9 @@ public:
     //くるくる回る
     void ThrowAndRoll(float length,Vector3 dir, Vector3 startPos ,float frame,float rotaSpeed);
     void FinisiThrowAndRoll();
+
+    //描画
+    void SetIsDraw(bool isDraw) { m_isDraw = isDraw; };
 private:
     //持ち主のハンドル
     int m_ownerHandle;
@@ -86,6 +89,9 @@ private:
 
     //移動先
     Vector3 m_targetPos;
+
+    //描画
+    bool m_isDraw;
 private:
     //向きの更新
     void UpdateWeaponDir();

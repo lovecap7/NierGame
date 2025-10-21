@@ -24,6 +24,9 @@ private:
     bool m_isJustAvoid;
     //ジャスト回避が終了するフレーム
     float m_finishJustAvoid;
+    //ジャスト回避終了後に行う行動
+    bool m_isLightAttack;
+    bool m_isHeavyAttack;
 private:
     //ジャスト回避初期化
     void InitJustAvoid(std::shared_ptr<Model> model, std::shared_ptr<Player> owner);

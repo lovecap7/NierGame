@@ -16,7 +16,8 @@ private:
     //移動か待機か
     void ChangeToMoveOrIdle(std::shared_ptr<Player> owner, Input& input);
 private:
-  
+    //ジャスト回避
+    bool m_isJust;
 };
 
 

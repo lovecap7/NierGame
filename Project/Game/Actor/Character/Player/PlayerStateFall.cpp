@@ -28,8 +28,6 @@ PlayerStateFall::PlayerStateFall(std::weak_ptr<Actor> player) :
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	owner->GetModel()->SetAnim(owner->GetAnim(kFall).c_str(), true);
 	owner->SetCollState(CollisionState::Fall);
-	//Y¬•ª‚ÌƒŠƒZƒbƒg
-	owner->GetRb()->SetVecY(0.0f);
 }
 
 PlayerStateFall::~PlayerStateFall()
