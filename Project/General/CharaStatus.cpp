@@ -81,14 +81,15 @@ void CharaStatus::OnDamage(int power, int at, CharaStatus::AttackWeight aw)
 Vector3 CharaStatus::GetKnockBack(const Vector3& pos, float power, float up)
 {
 	//Œü‚«‚ðŒvŽZ
-	Vector3 dir = pos - m_ownerPos;
-	dir.y = 0.0f; //Y¬•ª‚Í–³Ž‹
-	if (dir.SqMagnitude() > 0.0f)
+	Vector3 vec = pos - m_ownerPos;
+	vec.y = 0.0f; //Y¬•ª‚Í–³Ž‹
+	if (vec.SqMagnitude() > 0.0f)
 	{
-		dir = dir.Normalize();
+		vec = vec.Normalize();
 	}
-	dir.y = up;
-
+	vec *= power;
+	vec.y = up;
+	return vec;
 }
 
 void CharaStatus::Heal(int value)

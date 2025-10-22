@@ -11,6 +11,7 @@ class PlayerCamera;
 class CharaStatusData;
 class CharacterBase;
 class AttackManager;
+class EnemyManager;
 class AttackBase;
 class ActorManager : public std::enable_shared_from_this<ActorManager>
 {
@@ -42,6 +43,9 @@ public:
 	//攻撃マネージャー参照
 	std::weak_ptr<AttackManager> GetAttackManager()const { return m_pAttackManager; };
 
+	//プレイヤーの参照
+	std::weak_ptr<Player> GetPlayer()const { return m_pPlayer; };
+
 private:
 	//アクター
 	std::list<std::shared_ptr<Actor>> m_actors;
@@ -49,6 +53,10 @@ private:
 	std::weak_ptr<PlayerCamera> m_pCamera;
 	//攻撃マネージャーの参照
 	std::weak_ptr<AttackManager> m_pAttackManager;
+	//プレイヤー
+	std::weak_ptr<Player> m_pPlayer;
+	//敵マネージャー
+	std::shared_ptr<EnemyManager> m_pEnemyManager;
 private:
 	//キャラクターの作成
 	std::shared_ptr<CharacterBase> CreateChara(GameTag tag, std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> data);

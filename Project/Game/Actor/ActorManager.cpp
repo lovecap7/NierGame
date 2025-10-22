@@ -12,6 +12,7 @@
 #include "Character/Enemy/NormalEnemy.h"
 #include "Character/Player/Weapon/Weapon.h"
 #include "Character/Player/Pod/Pod.h"
+#include "Character/Enemy/EnemyManager.h"
 
 
 namespace
@@ -40,6 +41,12 @@ void ActorManager::Entry(std::shared_ptr<Actor> actor)
 	actor->Init();
 	//アクターを追加
 	m_actors.emplace_back(actor);
+
+	//敵なら
+	if (actor->GetGameTag() == GameTag::Enemy)
+	{
+		m_pEnemyManager->Entry(std::dynamic_pointer_cast<EnemyBase>(actor));
+	}
 }
 
 void ActorManager::Exit(std::shared_ptr<Actor> actor)
@@ -49,11 +56,19 @@ void ActorManager::Exit(std::shared_ptr<Actor> actor)
 	if (it == m_actors.end())return;
 	actor->End();
 	m_actors.erase(it);
+
+	//敵なら
+	if (actor->GetGameTag() == GameTag::Enemy)
+	{
+		m_pEnemyManager->Exit(std::dynamic_pointer_cast<EnemyBase>(actor));
+	}
 }
 
 
 void ActorManager::Init()
 {
+	//敵マネージャーの作成
+	m_pEnemyManager = std::make_shared<EnemyManager>(shared_from_this());
 }
 
 void ActorManager::Update()
@@ -63,6 +78,8 @@ void ActorManager::Update()
 	{
 		actor->Update();
 	}
+	//敵マネージャーの更新
+	m_pEnemyManager->Update();
 }
 
 void ActorManager::Draw() const
@@ -160,6 +177,9 @@ std::shared_ptr<CharacterBase> ActorManager::CreateChara(GameTag tag, std::share
 
 void ActorManager::SetUpPlayer(std::shared_ptr<Player> player)
 {
+	//プレイヤーの参照
+	m_pPlayer = player;
+
 	//CSVを読み込む
 	std::shared_ptr<CSVDataLoader> csvLoader = std::make_shared<CSVDataLoader>();
 	std::wstring path = kWeaponDataName;

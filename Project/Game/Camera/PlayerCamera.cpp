@@ -4,6 +4,7 @@
 #include "../../General/Collision/Physics.h"
 #include "../../Main/Application.h"
 #include "../Actor/DebugActor/DebugPlayer.h"
+#include "../../General/Collision/Physics.h"
 
 namespace
 {

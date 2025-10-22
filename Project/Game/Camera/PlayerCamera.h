@@ -20,6 +20,8 @@ public:
 	void SetPlayerPos(const Vector3& pos) { m_playerPos = pos; }
 	//プレイヤーのベクトル
 	void SetPlayerVec(const Vector3& vec) { m_playerVec = vec; }
+	//ターゲット探索
+	void SearchTarget();
 private:
 	//ロックオン対象
 	std::weak_ptr<Actor> m_lockOnTarget;
