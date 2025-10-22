@@ -22,7 +22,8 @@ CharaStatus::CharaStatus(std::shared_ptr<CharaStatusData> charaStatusData):
 	m_isNoDamage(false),
 	m_isHit(false),
 	m_isHitReaction(false),
-	m_charaStatusData(charaStatusData)
+	m_charaStatusData(charaStatusData),
+	m_ownerPos()
 {
 	//‰Šú‰»
 	Init();
@@ -75,6 +76,19 @@ void CharaStatus::OnDamage(int power, int at, CharaStatus::AttackWeight aw)
 	{
 		m_isHitReaction = true;
 	}
+}
+
+Vector3 CharaStatus::GetKnockBack(const Vector3& pos, float power, float up)
+{
+	//Œü‚«‚ðŒvŽZ
+	Vector3 dir = pos - m_ownerPos;
+	dir.y = 0.0f; //Y¬•ª‚Í–³Ž‹
+	if (dir.SqMagnitude() > 0.0f)
+	{
+		dir = dir.Normalize();
+	}
+	dir.y = up;
+
 }
 
 void CharaStatus::Heal(int value)

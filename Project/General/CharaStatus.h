@@ -1,4 +1,5 @@
 #pragma once
+#include "Math/MyMath.h"
 #include <memory>
 class CharaStatusData;
 //ステータスを管理します
@@ -60,6 +61,9 @@ public:
 
 	//ダメージ
 	void OnDamage(int power,int at, CharaStatus::AttackWeight aw);
+	//ノックバック
+	Vector3 GetKnockBack(const Vector3& pos, float power, float up);
+
 	//回復
 	void Heal(int value);
 	//完全回復
@@ -74,6 +78,9 @@ public:
 	bool IsHit()const { return m_isHit; }
 	//リアクションをするか
 	bool IsHitReaction()const { return m_isHitReaction; };
+
+	//持ち主の位置
+	void SetOwnerPos(const Vector3& pos) { m_ownerPos = pos; };
 private:
 	//ステータス
 	int					m_maxHp;	//最大体力
@@ -95,6 +102,8 @@ private:
 	//初期値
 	std::shared_ptr<CharaStatusData> m_charaStatusData;
 
+	//持ち主
+	Vector3 m_ownerPos;
 private:
 	//ダメージ計算
 	int GetDamage(int power, int at);
