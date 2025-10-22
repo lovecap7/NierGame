@@ -4,6 +4,8 @@
 #include <list>
 #include <memory>
 #include "../Actor/Actor.h"
+#include <unordered_set>
+
 class Actor;
 class AttackData;
 class CharacterBase;
@@ -43,8 +45,12 @@ protected:
     float m_knockBackV;
     //ノックバック大きさ
     float m_knockBackPower;
+
     //当てたことのあるActorのIDを覚えておく
-    std::list<int> m_hitId;
+    //unordered_setのリンク
+    //https://jp-seemore.com/iot/24421/#google_vignette
+    std::unordered_set<int> m_hitId;
+
     //持ち主
     std::weak_ptr<CharacterBase> m_pOwner;
     //当たったことがある

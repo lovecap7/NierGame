@@ -109,50 +109,14 @@ void PlayerStateLightAttack::Update()
 	CountFrame();
 	
 	//武器
-	if (owner->GetWeapon(PlayerAnimData::WeaponType::LightSword).expired())return;
-	auto weapon = owner->GetWeapon(PlayerAnimData::WeaponType::LightSword).lock();
+	if (owner->GetWeapon(AnimData::WeaponType::LightSword).expired())return;
+	auto weapon = owner->GetWeapon(AnimData::WeaponType::LightSword).lock();
 
 	//モデル
 	auto model = owner->GetModel();
 
 	//発生フレームになったら
-	if (m_frame >= m_attackData->m_startFrame)
-	{
-		//持続が切れたら
-		if (m_isAppearedAttack && m_pAttack.expired())
-		{
-			//多段ヒット攻撃の処理
-			if (m_attackData->m_isMultipleHit && m_attackData->m_nextAttackName != L"None")
-			{
-				//多段ヒット攻撃
-				LoadNextMultipleHitAttack(owner);
-			}
-			//ジャスト回避攻撃の透明になるを解除
-			if (m_isJust)
-			{
-				owner->SetIsDraw(true);
-			}
-			
-			//重力を受ける
-			owner->GetRb()->SetIsGravity(true);
-		}
-		else
-		{
-			//持続中は空中なら落下しない
-			if (!owner->IsFloor() && m_attackData->m_animName != kJumpAttackName)
-			{
-				//重力を受けない
-				owner->GetRb()->SetIsGravity(false);
-				owner->GetRb()->SetVecY(0.0f);
-			}
-		}
-
-		//まだ攻撃が発生していないなら発生
-		if (!m_isAppearedAttack)
-		{
-			CreateAttack(owner, weapon);
-		}
-	}
+	UpdateStartAttack(owner, weapon);
 
 
 	//長押ししているフレームをカウント
@@ -244,6 +208,53 @@ void PlayerStateLightAttack::Update()
 	{
 		//縦の移動量をリセット
 		owner->GetRb()->SetVecY(0.0f);
+	}
+}
+
+void PlayerStateLightAttack::UpdateStartAttack(std::shared_ptr<Player>& owner, std::shared_ptr<Weapon>& weapon)
+{
+	if (m_frame >= m_attackData->m_startFrame)
+	{
+		//持続が切れたら
+		if (m_isAppearedAttack && m_pAttack.expired())
+		{
+			//多段ヒット攻撃の処理
+			if (m_attackData->m_isMultipleHit && m_attackData->m_nextAttackName != L"None")
+			{
+				//多段ヒット攻撃
+				LoadNextMultipleHitAttack(owner);
+			}
+			//ジャスト回避攻撃の透明になるを解除
+			if (m_isJust)
+			{
+				owner->SetIsDraw(true);
+			}
+			//重力を受ける
+			owner->GetRb()->SetIsGravity(true);
+		}
+		else
+		{
+			//持続中は空中なら落下しない
+			//切り上げ攻撃とジャスト回避攻撃以外
+			if (!owner->IsFloor() && 
+				!(m_attackData->m_animName == kJumpAttackName || m_isJust))
+			{
+				//重力を受けない
+				owner->GetRb()->SetIsGravity(false);
+				owner->GetRb()->SetVecY(0.0f);
+			}
+			else
+			{
+				//重力を受ける
+				owner->GetRb()->SetIsGravity(true);
+			}
+		}
+
+		//まだ攻撃が発生していないなら発生
+		if (!m_isAppearedAttack)
+		{
+			CreateAttack(owner, weapon);
+		}
 	}
 }
 

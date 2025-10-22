@@ -11,7 +11,7 @@
 namespace
 {
 	//確認回数
-	constexpr int kTryNum = 30;
+	constexpr int kTryNum = 3;
 	//重力
 	const Vector3 kGroundGravity = { 0.0f, -5.0f, 0.0f };
 	const Vector3 kAirGravity = { 0.0f, -0.5f, 0.0f };
@@ -110,16 +110,16 @@ void Physics::Update()
 		//チェックの必要がないなら
 		if (!isOneMore)break;
 	}
+	// 当たり通知
+	for (auto& collInfo : onCollideInfo)
+	{
+		collInfo.OnCollide();
+	}
 	//位置確定
 	for (auto& coll : m_collidables)
 	{
 		//位置を確定
 		coll->Complete();
-	}
-	// 当たり通知
-	for (auto& collInfo : onCollideInfo)
-	{
-		collInfo.OnCollide();
 	}
 }
 

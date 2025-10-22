@@ -147,6 +147,11 @@
     <ClCompile Include="Game\Actor\ActorManager.cpp" />
     <ClCompile Include="Game\Actor\Character\CharacterBase.cpp" />
     <ClCompile Include="Game\Actor\Character\CharacterStateBase.cpp" />
+    <ClCompile Include="Game\Actor\Character\Enemy\EnemyBase.cpp" />
+    <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateBase.cpp" />
+    <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateHit.cpp" />
+    <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateIdle.cpp" />
+    <ClCompile Include="Game\Actor\Character\Enemy\NormalEnemy.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\Player.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\PlayerStateAttackBase.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\PlayerStateHeavyAttack.cpp" />
@@ -199,7 +204,7 @@
     <ClCompile Include="General\CSV\CharaStatusData.cpp" />
     <ClCompile Include="General\CSV\CSVData.cpp" />
     <ClCompile Include="General\CSV\CSVDataLoader.cpp" />
-    <ClCompile Include="General\CSV\PlayerAnimData.cpp" />
+    <ClCompile Include="General\CSV\AnimData.cpp" />
     <ClCompile Include="General\CSV\PodData.cpp" />
     <ClCompile Include="General\Input.cpp" />
     <ClCompile Include="General\Math\MathSub.cpp" />
@@ -226,6 +231,11 @@
     <ClInclude Include="Game\Actor\ActorManager.h" />
     <ClInclude Include="Game\Actor\Character\CharacterBase.h" />
     <ClInclude Include="Game\Actor\Character\CharacterStateBase.h" />
+    <ClInclude Include="Game\Actor\Character\Enemy\EnemyBase.h" />
+    <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateBase.h" />
+    <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateHit.h" />
+    <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateIdle.h" />
+    <ClInclude Include="Game\Actor\Character\Enemy\NormalEnemy.h" />
     <ClInclude Include="Game\Actor\Character\Player\Player.h" />
     <ClInclude Include="Game\Actor\Character\Player\PlayerStateAttackBase.h" />
     <ClInclude Include="Game\Actor\Character\Player\PlayerStateHeavyAttack.h" />
@@ -278,7 +288,7 @@
     <ClInclude Include="General\CSV\CharaStatusData.h" />
     <ClInclude Include="General\CSV\CSVData.h" />
     <ClInclude Include="General\CSV\CSVDataLoader.h" />
-    <ClInclude Include="General\CSV\PlayerAnimData.h" />
+    <ClInclude Include="General\CSV\AnimData.h" />
     <ClInclude Include="General\CSV\PodData.h" />
     <ClInclude Include="General\Game.h" />
     <ClInclude Include="General\Input.h" />

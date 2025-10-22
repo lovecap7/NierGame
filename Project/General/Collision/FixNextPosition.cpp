@@ -500,6 +500,10 @@ bool FixNextPosition::HitFloorCP(const std::shared_ptr<Collidable> coll, const V
 	float lowHitPosY = rb->GetPos().y;
 	//床と当たったか
 	bool isHitFloor = false;
+
+	//当たらなかった場合の高さ
+	float defaultLowHitPosY = 0.0f;
+
 	for (int i = 0; i < hitNum; ++i)
 	{
 		//下向きの法線ベクトルなら飛ばす
@@ -507,6 +511,10 @@ bool FixNextPosition::HitFloorCP(const std::shared_ptr<Collidable> coll, const V
 		VECTOR pos1 = dim[i].Position[0];
 		VECTOR pos2 = dim[i].Position[1];
 		VECTOR pos3 = dim[i].Position[2];
+
+		//床の高さのデフォルト値を設定
+		defaultLowHitPosY = MathSub::Max(pos1.y, pos2.y, pos3.y);
+
 		// 足の下にポリゴンがあるかをチェック
 		 HITRESULT_LINE lineResult = HitCheck_Line_Triangle(headPos.ToDxLibVector(), VAdd(headPos.ToDxLibVector(), VGet(0.0f, kCheckUnder, 0.0f)), pos1, pos2, pos3);
 
@@ -529,11 +537,18 @@ bool FixNextPosition::HitFloorCP(const std::shared_ptr<Collidable> coll, const V
 	{
 		//床の高さに合わせる
 		lowHitPosY += shortDis + kOverlapGap;
-		rb->SetPosY(lowHitPosY);
-		rb->SetVecY(0.0f);
-		//床に当たっているので
-		coll->SetIsFloor(true);
 	}
+	else
+	{
+		//当たっていないならデフォルトの高さに合わせる
+		lowHitPosY = defaultLowHitPosY + shortDis + kOverlapGap;
+	}
+
+	rb->SetPosY(lowHitPosY);
+	rb->SetVecY(0.0f);
+	//床に当たっているので
+	coll->SetIsFloor(true);
+
 	return isHitFloor;
 }
 

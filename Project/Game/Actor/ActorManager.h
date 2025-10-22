@@ -30,7 +30,7 @@ public:
 	//終了処理
 	void End();
 	//CSVからアクターを作成
-	void CreateActorCSV(const char* folderName,const char* fileName);
+	void CreateActorCSV(const wchar_t* folderName,const wchar_t* fileName);
 
 	//カメラのセット
 	void SetCamera(std::weak_ptr<PlayerCamera> pCamera) { m_pCamera = pCamera; };

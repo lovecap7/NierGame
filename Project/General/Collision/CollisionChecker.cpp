@@ -469,27 +469,29 @@ bool CollisionChecker::ParallelCC(const std::shared_ptr<Collidable> collA, const
 	//Å’Z‹——£‚ðo‚·
 	float dis = ac.Magnitude();
 	//ˆê“x“ü‚ê‚Ä‚¨‚­
-	collDataA->SetNearPos(cPosA);
-	collDataB->SetNearPos(cPosC);
+	Vector3 nearPosA = cPosA;
+	Vector3 nearPosB = cPosC;
 	//’Z‚¢‚È‚ç
 	if (dis > ad.Magnitude())
 	{
 		dis = ad.Magnitude();
-		collDataA->SetNearPos(cPosA);
-		collDataB->SetNearPos(cPosD);
+		nearPosA = cPosA;
+		nearPosB = cPosD;
 	}
 	if (dis > bc.Magnitude())
 	{
 		dis = bc.Magnitude();
-		collDataA->SetNearPos(cPosB);
-		collDataB->SetNearPos(cPosC);
+		nearPosA = cPosB;
+		nearPosB = cPosC;
 	}
 	if (dis > bd.Magnitude())
 	{
 		dis = bd.Magnitude();
-		collDataA->SetNearPos(cPosB);
-		collDataB->SetNearPos(cPosD);
+		nearPosA = cPosB;
+		nearPosB = cPosD;
 	}
+	collDataA->SetNearPos(nearPosA);
+	collDataB->SetNearPos(nearPosB);
 
 	//Å’Z‹——£‚æ‚è‘å‚«‚¢‚È‚ç“–‚½‚Á‚Ä‚¢‚È‚¢
 	if (dis >= shortDis)

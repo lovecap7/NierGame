@@ -10,8 +10,8 @@
 
 namespace
 {
-	const char* kAnim = "RobotArmature|Shoot";
-
+	const std::wstring kAttackAnim = L"Attack";
+	const std::wstring kAttackData = L"NormalShot";
 	//位置
 	constexpr float kPodPosRight = -40.0f;
 	constexpr float kPodPosBack = -40.0f;
@@ -25,9 +25,9 @@ PodStateAttack::PodStateAttack(std::weak_ptr<Actor> pod):
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Pod>(m_pOwner.lock());
-	owner->GetModel()->SetAnim(kAnim, true);
+	owner->GetModel()->SetAnim(owner->GetAnim(kAttackAnim).c_str(), true);
 	//攻撃データ
-	m_attackData = owner->GetAttackData(L"NormalShot");
+	m_attackData = owner->GetAttackData(kAttackData);
 }
 
 PodStateAttack::~PodStateAttack()

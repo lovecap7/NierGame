@@ -47,6 +47,10 @@ public:
 	float m_collRadius;
 	//高さ
 	float m_collHeight;
+	//アニメーションのパス
+	std::wstring m_animPath;
+	//攻撃データのパス
+	std::wstring m_attackPath;
 private:
 	//変換
 	void Conversion() override;

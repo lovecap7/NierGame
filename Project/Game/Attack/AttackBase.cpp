@@ -85,25 +85,21 @@ void AttackBase::OnCollide(const std::shared_ptr<Collidable> other)
 		if (otherTag == ownerColl->GetGameTag())return;
 
 		std::shared_ptr<Actor> otherActor = std::dynamic_pointer_cast<Actor>(otherColl);
-		bool isFind = false;
-
+		
 		//ID
 		int otherID = otherActor->GetID();
 
 		//IDがすでに記録されているか確認
-		for (auto id : m_hitId)
+		if (m_hitId.contains(otherID))
 		{
-			if (id == otherID)
-			{
-				isFind = true;
-				break;
-			}
+			//すでに当たっている
+			return; 
 		}
-		//攻撃成功
-		if (!isFind)
+		else
 		{
+			//まだ当たっていない
 			//IDを覚える
-			m_hitId.emplace_back(otherID);
+			m_hitId.insert(otherID);
 
 			//相手
 			auto otherStatus = std::dynamic_pointer_cast<CharacterBase>(otherColl)->GetCharaStatus();

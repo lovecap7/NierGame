@@ -8,8 +8,8 @@
 #define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
 namespace
 {
-	const std::string kPath = "Data/CSV/";
-	const std::string kCSV = ".csv";
+	const std::wstring kPath = L"Data/CSV/";
+	const std::wstring kCSV = L".csv";
 }
 
 CSVDataLoader::CSVDataLoader()
@@ -20,13 +20,13 @@ CSVDataLoader::~CSVDataLoader()
 {
 }
 
-std::vector<std::shared_ptr<CSVData>> CSVDataLoader::LoadCSV(const char* path)
+std::vector<std::shared_ptr<CSVData>> CSVDataLoader::LoadCSV(const wchar_t* path)
 {
 	//データを格納する配列
 	std::vector<std::shared_ptr<CSVData>> datas;
 
 	//パス
-	std::string pPath = kPath + path + kCSV;
+	std::wstring pPath = kPath + path + kCSV;
 	//データをすべて読み込む
 	auto valuesDatas = GetWStringList(pPath.c_str());
 
@@ -43,7 +43,7 @@ std::vector<std::shared_ptr<CSVData>> CSVDataLoader::LoadCSV(const char* path)
 	return datas;
 }
 
-std::vector<std::vector<std::wstring>> CSVDataLoader::GetWStringList(const char* path)
+std::vector<std::vector<std::wstring>> CSVDataLoader::GetWStringList(const wchar_t* path)
 {
 	//返す値
 	std::vector<std::vector<std::wstring>> valuesDatas;

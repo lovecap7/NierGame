@@ -7,8 +7,7 @@
 
 namespace
 {
-	const char* kAnim = "RobotArmature|Idle";
-
+	const std::wstring kIdle = L"Idle";
 	//ˆÊ’u
 	constexpr float kPodPosRight = 0.0f;
 	constexpr float kPodPosBack = 0.0f;
@@ -22,7 +21,7 @@ PodStateGliding::PodStateGliding(std::weak_ptr<Actor> pod):
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Pod>(m_pOwner.lock());
-	owner->GetModel()->SetAnim(kAnim, true);
+	owner->GetModel()->SetAnim(owner->GetAnim(kIdle).c_str(), true);
 }
 
 PodStateGliding::~PodStateGliding()

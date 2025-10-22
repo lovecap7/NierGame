@@ -8,8 +8,7 @@
 
 namespace
 {
-	const char* kAnim = "RobotArmature|Idle";
-
+	const std::wstring kIdle = L"Idle";
 	//位置
 	constexpr float kPodPosRight = -50.0f;
 	constexpr float kPodPosBack = -50.0f;
@@ -25,7 +24,7 @@ PodStateIdle::PodStateIdle(std::weak_ptr<Actor> pod):
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Pod>(m_pOwner.lock());
-	owner->GetModel()->SetAnim(kAnim, true);
+	owner->GetModel()->SetAnim(owner->GetAnim(kIdle).c_str(), true);
 }
 
 PodStateIdle::~PodStateIdle()
@@ -63,8 +62,13 @@ void PodStateIdle::Update()
 	//プレイヤーの近くに移動
 	Vector3 targetPos = owner->GetPlayerPos();
 	//上下に揺れる
-	++m_swayAngle;
-	targetPos.y += (kSwayHeight * std::cos(m_swayAngle * MyMath::DEG_2_RAD));
+	m_swayAngle += 0.05f;
+	if (m_swayAngle > MyMath::PI * 2.0f)
+	{
+		m_swayAngle -= MyMath::PI * 2.0f;
+	}
+	targetPos.y += kSwayHeight * std::cos(m_swayAngle);
+
 
 	//カメラの向き
 	Vector3 cameraDir = owner->GetCameraDir();

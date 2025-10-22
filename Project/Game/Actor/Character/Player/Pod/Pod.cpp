@@ -13,6 +13,13 @@
 #include "../../../../Attack/BulletAttack.h"
 #include <cassert>
 
+namespace
+
+{
+	const std::wstring kAnimPath = L"Player/PodAnimData";
+	const std::wstring kAttackPath = L"Player/PodAttackData";
+}
+
 Pod::Pod(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager, std::weak_ptr<Player> pPlayer) :
 	CharacterBase(actorData, charaStatusData, Shape::Sphere, pActorManager),
 	m_pPlayer(pPlayer),
@@ -28,11 +35,7 @@ Pod::~Pod()
 void Pod::Init()
 {
 	//Physicsに登録
-	Collidable::Init();
-
-	//攻撃データの初期化
-	InitAttackData(std::make_shared<CSVDataLoader>());
-
+	CharacterBase::Init(kAnimPath, kAttackPath);
 	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
 	auto thisPointer = std::dynamic_pointer_cast<Pod>(shared_from_this());
 	m_state = std::make_shared<PodStateIdle>(thisPointer);
@@ -61,17 +64,8 @@ void Pod::Update()
 		m_isGliding = m_pPlayer.lock()->IsGliding();
 	}
 
-	//状態に合わせた更新
-	m_state->Update();
-	//状態が変わったかをチェック
-	if (m_state != m_state->GetNextState())
-	{
-		//状態を変化する
-		m_state = m_state->GetNextState();
-		m_state->Init();
-	}
-	//アニメーションの更新
-	m_model->Update();
+	//共通処理
+	CharacterBase::Update();
 }
 
 void Pod::OnCollide(const std::shared_ptr<Collidable> other)
@@ -122,33 +116,9 @@ Vector3 Pod::GetCameraDir() const
 	return actorManager->GetPlayerCamera().lock()->GetLook();
 }
 
-std::shared_ptr<AttackData> Pod::GetAttackData(std::wstring attackName) const
+std::string Pod::GetAnim(std::wstring state) const
 {
-	std::shared_ptr<AttackData> attackData;
-
+	std::string path = "RobotArmature|";
 	//探す
-	for (auto& data : m_attackDatas)
-	{
-		//条件に合うものがあったら
-		if (data->m_name == attackName)
-		{
-			attackData = data;
-			break;
-		}
-	}
-
-	assert(attackData);
-
-	return attackData;
-}
-
-void Pod::InitAttackData(std::shared_ptr<CSVDataLoader> csvLoader)
-{
-	auto datas = csvLoader->LoadCSV("Player/PodAttackData");
-	//登録
-	for (auto& data : datas)
-	{
-		std::shared_ptr<AttackData> attackData = std::make_shared<AttackData>(data);
-		m_attackDatas.emplace_back(attackData);
-	}
+	return CharacterBase::GetAnim(state, path);
 }

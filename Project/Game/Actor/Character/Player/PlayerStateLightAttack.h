@@ -13,6 +13,8 @@ public:
     void Init()override;
     void Update() override;
 private:
+    //UŒ‚ŠJnˆ—
+    void UpdateStartAttack(std::shared_ptr<Player>& owner, std::shared_ptr<Weapon>& weapon);
     //ˆÚ“®‚©‘Ò‹@‚©
     void ChangeToMoveOrIdle(std::shared_ptr<Player> owner, Input& input);
 private:

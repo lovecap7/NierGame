@@ -14,7 +14,8 @@
 namespace
 {
 	const std::wstring kFirstGroundAttackName = L"SubAttack1";
-	const std::wstring kFirstAirAttackName = L"SubAttackAirStart";
+	const std::wstring kStartAirAttackName = L"SubAttackAirStart";
+	const std::wstring kEndAirAttackName = L"SubAttackAirEnd";
 	const std::wstring kDashAttackName = L"DashAttack";
 	const std::wstring kChargeAttackName = L"SubAttack3";
 	const std::wstring kChargeName = L"SubAttackCharge";
@@ -41,7 +42,7 @@ PlayerStateHeavyAttack::PlayerStateHeavyAttack(std::weak_ptr<Actor> player,bool 
 	else if (!owner->IsFloor())
 	{
 		//空中か地上かで初期攻撃設定
-		m_attackData = owner->GetAttackData(kFirstAirAttackName);
+		m_attackData = owner->GetAttackData(kStartAirAttackName);
 		m_update = &PlayerStateHeavyAttack::AirUpdate;
 		owner->SetCollState(CollisionState::Fall);
 		owner->GetRb()->SetVec(Vector3::Zero());
@@ -94,20 +95,8 @@ void PlayerStateHeavyAttack::Update()
 	(this->*m_update)(owner, input);
 }
 
-void PlayerStateHeavyAttack::GroundUpdate(std::shared_ptr<Player> owner, Input& input)
+void PlayerStateHeavyAttack::UpdateStartFrame(std::shared_ptr<Player>& owner, std::shared_ptr<Weapon>& weapon)
 {
-	// 回避
-	if (input.IsBuffered("B") && owner->IsAvoidable())
-	{
-		return ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
-	}
-	//フレームのカウント
-	CountFrame();
-	auto model = owner->GetModel();
-	if (owner->GetWeapon(PlayerAnimData::WeaponType::BigSword).expired())return;
-	auto weapon = owner->GetWeapon(PlayerAnimData::WeaponType::BigSword).lock();
-
-	// 攻撃発生処理
 	if (m_frame >= m_attackData->m_startFrame)
 	{
 		//持続終了時に今の攻撃が多段ヒット攻撃なら次の攻撃を読み込む
@@ -116,6 +105,14 @@ void PlayerStateHeavyAttack::GroundUpdate(std::shared_ptr<Player> owner, Input& 
 			if (m_attackData->m_isMultipleHit && m_attackData->m_nextAttackName != L"None")
 			{
 				LoadNextMultipleHitAttack(owner);
+
+				//空中攻撃の時
+				if (m_update == &PlayerStateHeavyAttack::AirUpdate)
+				{
+					//落下していく
+					owner->GetRb()->SetIsGravity(true);
+					owner->GetRb()->SetVecY(m_attackData->m_param1);
+				}
 			}
 		}
 		//攻撃作成
@@ -124,81 +121,8 @@ void PlayerStateHeavyAttack::GroundUpdate(std::shared_ptr<Player> owner, Input& 
 			CreateAttack(owner, weapon);
 		}
 	}
-	//位置更新
-	UpdateAttackPosition(owner,weapon);
-
-	//多段ヒット攻撃中はキャンセル攻撃をしない
-	if (!m_attackData->m_isMultipleHit)
-	{
-		//チャージ攻撃関連の処理(チャージ中なら早期リターン)
-		if (LoadNextChargeOrCombo(owner, input, model))return;
-	}
-
-	// アニメーション終了時
-	if (model->IsFinishAnim())
-	{
-		return ChangeToMoveOrIdle(owner, input);
-	}
-
-	// 移動
-	UpdateMove(owner, input, model);
 }
 
-void PlayerStateHeavyAttack::AirUpdate(std::shared_ptr<Player> owner, Input& input)
-{
-	//武器を持つ
-	owner->HaveBigSword();
-	//フレームのカウント
-	CountFrame();
-
-	auto model = owner->GetModel();
-	if (owner->GetWeapon(PlayerAnimData::WeaponType::BigSword).expired())return;
-	auto weapon = owner->GetWeapon(PlayerAnimData::WeaponType::BigSword).lock();
-
-	if (m_frame >= m_attackData->m_startFrame)
-	{
-		//多段ヒット攻撃の処理
-		if (m_isAppearedAttack && m_pAttack.expired())
-		{
-			if (m_attackData->m_isMultipleHit && m_attackData->m_nextAttackName != L"None")
-			{
-				//多段ヒット攻撃
-				LoadNextMultipleHitAttack(owner);
-				//落下していく
-				owner->GetRb()->SetIsGravity(true);
-				owner->GetRb()->SetVecY(m_attackData->m_param1);
-			}
-		}
-		//攻撃発生
-		if (!m_isAppearedAttack)
-		{
-			CreateAttack(owner, weapon);
-		}
-	}
-
-	// 着地処理
-	if (owner->IsFloor())
-	{
-		//着地時のアニメーション読み込み
-		if (m_attackData->m_animName != m_attackData->m_nextAttackName)
-		{
-			m_attackData = owner->GetAttackData(m_attackData->m_nextAttackName);
-			m_isAppearedAttack = false;
-			model->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), false);
-			m_frame = 0.0f;
-			DeleteAttack();
-			return;
-		}
-
-		if (model->IsFinishAnim())
-		{
-			return ChangeToMoveOrIdle(owner, input);
-		}
-	}
-	//移動と攻撃位置更新
-	UpdateMove(owner, input, model);
-	UpdateAttackPosition(owner, weapon);
-}
 
 bool PlayerStateHeavyAttack::LoadNextChargeOrCombo(std::shared_ptr<Player> owner, Input& input, std::shared_ptr<Model> model)
 {
@@ -271,5 +195,78 @@ void PlayerStateHeavyAttack::ChangeToMoveOrIdle(std::shared_ptr<Player> owner, I
 	else
 	{
 		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
+	}
+}
+
+
+void PlayerStateHeavyAttack::GroundUpdate(std::shared_ptr<Player> owner, Input& input)
+{
+	// 回避
+	if (input.IsBuffered("B") && owner->IsAvoidable())
+	{
+		return ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
+	}
+	//フレームのカウント
+	CountFrame();
+	auto model = owner->GetModel();
+	if (owner->GetWeapon(AnimData::WeaponType::BigSword).expired())return;
+	auto weapon = owner->GetWeapon(AnimData::WeaponType::BigSword).lock();
+
+	// 攻撃発生処理
+	UpdateStartFrame(owner, weapon);
+	//位置更新
+	UpdateAttackPosition(owner, weapon);
+	// 移動
+	UpdateMove(owner, input, model);
+
+	//多段ヒット攻撃中はキャンセル攻撃をしない
+	if (!m_attackData->m_isMultipleHit)
+	{
+		//チャージ攻撃関連の処理(チャージ中なら早期リターン)
+		if (LoadNextChargeOrCombo(owner, input, model))return;
+	}
+
+	// アニメーション終了時
+	if (model->IsFinishAnim())
+	{
+		return ChangeToMoveOrIdle(owner, input);
+	}
+}
+
+
+
+void PlayerStateHeavyAttack::AirUpdate(std::shared_ptr<Player> owner, Input& input)
+{
+	//武器を持つ
+	owner->HaveBigSword();
+	//フレームのカウント
+	CountFrame();
+
+	auto model = owner->GetModel();
+	if (owner->GetWeapon(AnimData::WeaponType::BigSword).expired())return;
+	auto weapon = owner->GetWeapon(AnimData::WeaponType::BigSword).lock();
+
+	// 攻撃発生処理
+	UpdateStartFrame(owner, weapon);
+	//移動と攻撃位置更新
+	UpdateMove(owner, input, model);
+	UpdateAttackPosition(owner, weapon);
+
+	// 着地処理
+	if (owner->IsFloor() && model->IsFinishAnim())
+	{
+		//着地時のアニメーション読み込み
+		if (m_attackData->m_animName != m_attackData->m_nextAttackName)
+		{
+			m_attackData = owner->GetAttackData(m_attackData->m_nextAttackName);
+			m_isAppearedAttack = false;
+			model->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), false);
+			m_frame = 0.0f;
+			DeleteAttack();
+			return;
+		}
+
+		//着地アニメーションが終了後
+		return ChangeToMoveOrIdle(owner, input);
 	}
 }

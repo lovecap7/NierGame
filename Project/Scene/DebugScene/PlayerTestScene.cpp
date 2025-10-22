@@ -10,10 +10,6 @@
 #include "../../General/CSV/ActorData.h"
 #include "../../General/CSV/CharaStatusData.h"
 
-#include "../../Game/Actor/DebugActor/DebugAttack.h"
-#include "../../Game/Actor/DebugActor/DebugEnemy.h"
-#include "../../Game/Actor/DebugActor/DebugPlayer.h"
-
 PlayerTestScene::PlayerTestScene(SceneController& controller) :
 	SceneBase(controller)
 {
@@ -37,38 +33,12 @@ void PlayerTestScene::Init()
 	//アクター
 	m_actorManager = std::make_shared<ActorManager>();
 	m_actorManager->Init();
-	m_actorManager->CreateActorCSV("DebugScene","CharacterData");
-	m_actorManager->CreateActorCSV("DebugScene","StageData");
+	m_actorManager->CreateActorCSV(L"DebugScene",L"CharacterData");
+	m_actorManager->CreateActorCSV(L"DebugScene",L"StageData");
 	//カメラセット
 	m_actorManager->SetCamera(camera);
 	//攻撃マネージャーセット
 	m_actorManager->SetAttackManager(m_attackManager);
-
-	//攻撃デバッグ
-	auto atData = std::make_shared<ActorData>();
-	atData->m_pos = Vector3(100,100,300);
-	atData->m_collRadius = 100.0f;
-	atData->m_gameTag = GameTag::Attack;
-	atData->m_isTrough = false;
-	atData->m_isGravity = false;
-	atData->m_isTrigger = true;
-	auto attack = std::make_shared<DebugAttack>(atData, m_actorManager);
-	m_actorManager->Entry(attack);
-
-	//敵デバッグ
-	auto enemyData = std::make_shared<ActorData>();
-	enemyData->m_pos = Vector3(500, 100, 300);
-	enemyData->m_collRadius = 100.0f;
-	enemyData->m_gameTag = GameTag::Enemy;
-	enemyData->m_isTrough = false;
-	enemyData->m_isGravity = false;
-	enemyData->m_isTrigger = false;
-	enemyData->m_priority = Priority::Static;
-	auto charaData = std::make_shared<CharaStatusData>();
-	charaData->m_hp = 1000000;
-
-	auto enemy = std::make_shared<DebugEnemy>(enemyData, charaData, m_actorManager);
-	m_actorManager->Entry(enemy);
 }
 
 void PlayerTestScene::Update()

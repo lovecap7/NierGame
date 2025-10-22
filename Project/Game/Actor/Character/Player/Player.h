@@ -1,7 +1,7 @@
 #pragma once
 #include "../CharacterBase.h"
 #include "../../../../General/Math/MyMath.h"
-#include "../../../../General/CSV/PlayerAnimData.h"
+#include "../../../../General/CSV/AnimData.h"
 #include "../../../../General/CSV/AttackData.h"
 #include <memory>
 #include <map>
@@ -34,14 +34,7 @@ public:
 	void Complete() override;
 	//終了処理
 	void End()override;
-	//ステートにアクセスさせる関数
-	//リジッドボディ
-	std::shared_ptr<Rigidbody> GetRb() const { return m_rb; }
-	//コリジョン
-	std::shared_ptr<ColliderBase> GetColl() const { return m_collisionData; }
-	//コリジョンの状態を設定
-	void SetCollState(CollisionState collState) { m_collState = collState; }
-	CollisionState GetCollState()const { return m_collState; };
+	
 	//カメラの回転量
 	Quaternion GetCameraRot()const;
 
@@ -68,11 +61,11 @@ public:
 	void UpdateJustAvoid();
 
 	//持ってる武器情報
-	PlayerAnimData::WeaponType GetHaveWeaponType()const { return m_haveWeaponType; };
+	AnimData::WeaponType GetHaveWeaponType()const { return m_haveWeaponType; };
 
 	//武器の参照
 	void SetSword(std::weak_ptr<Weapon> weapon,bool isLightSword);
-	std::weak_ptr<Weapon> GetWeapon(PlayerAnimData::WeaponType type)const;
+	std::weak_ptr<Weapon> GetWeapon(AnimData::WeaponType type)const;
 
 	//片手剣を持つ
 	void HaveLightSword();
@@ -92,9 +85,6 @@ public:
 private:
 	//カメラ
 	std::weak_ptr<PlayerCamera> GetPlayerCamera()const;
-
-	//アニメーションの読み込み
-	void InitAnimData(std::shared_ptr<CSVDataLoader> csvLoader);
 private:
 	//ジャンプ回数
 	int m_jumpNum;
@@ -112,14 +102,10 @@ private:
 	std::weak_ptr<Weapon> m_pBigSword;
 
 	//武器の状態
-	PlayerAnimData::WeaponType m_haveWeaponType;
+	AnimData::WeaponType m_haveWeaponType;
 
 	//武器を収めるまでのフレームをカウント
 	float m_putAwayCountFrame;
-
-	//アニメーションデータ
-	std::vector<std::shared_ptr<PlayerAnimData>> m_animDatas;
-
 	//描画しない
 	bool m_isDraw;
 };

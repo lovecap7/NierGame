@@ -1,0 +1,3 @@
+﻿状態,武器,アニメーション
+Idle,None,RobotArmature|Idle
+Attack,None,RobotArmature|Shoot

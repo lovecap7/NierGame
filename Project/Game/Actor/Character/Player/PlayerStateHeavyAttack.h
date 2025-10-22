@@ -25,6 +25,8 @@ private:
     bool LoadNextChargeOrCombo(std::shared_ptr<Player> owner, Input& input, std::shared_ptr<Model> model);
     //移動か待機か
     void ChangeToMoveOrIdle(std::shared_ptr<Player> owner, Input& input);
+	//攻撃開始処理
+    void UpdateStartFrame(std::shared_ptr<Player>& owner, std::shared_ptr<Weapon>& weapon);
 private:
     //地上
     void GroundUpdate(std::shared_ptr<Player> owner, Input& input);

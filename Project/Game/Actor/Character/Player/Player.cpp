@@ -35,6 +35,7 @@ namespace
 
 	//武器を収めるまでのフレーム
 	constexpr float kPutAwayFrame = 60.0f * 5.0f;
+
 }
 
 Player::Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager) :
@@ -44,7 +45,7 @@ Player::Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatus
 	m_isJustAvoided(false),
 	m_noDamageFrame(0.0f),
 	m_putAwayCountFrame(0.0f),
-	m_haveWeaponType(PlayerAnimData::WeaponType::None),
+	m_haveWeaponType(AnimData::WeaponType::None),
 	m_isAirAttacked(false),
 	m_isDraw(true)
 {
@@ -56,16 +57,8 @@ Player::~Player()
 
 void Player::Init()
 {
-	//Physicsに登録
-	Collidable::Init();
-
-	//CSVを読み込む
-	auto csvLoader = std::make_shared<CSVDataLoader>();
-	//アニメーションデータ
-	InitAnimData(csvLoader);
-	//攻撃データ
-	InitAttackData(csvLoader, "Player/PlayerAttackData");
-
+	//共通初期化
+	CharacterBase::Init(m_actorData->m_animPath.c_str(), m_actorData->m_attackPath.c_str());
 	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
 	auto thisPointer = std::dynamic_pointer_cast<Player>(shared_from_this());
 	m_state = std::make_shared<PlayerStateIdle>(thisPointer);
@@ -130,23 +123,11 @@ void Player::Update()
 		m_putAwayCountFrame -= GetTimeScale();
 	}
 
-	//状態に合わせた更新
-	m_state->Update();
-	//状態が変わったかをチェック
-	if (m_state != m_state->GetNextState())
-	{
-		//状態を変化する
-		m_state = m_state->GetNextState();
-		m_state->Init();
-	}
-	//アニメーションの更新
-	m_model->Update();
+	//共通処理
+	CharacterBase::Update();
 
 	//ジャスト回避無敵時間
 	UpdateJustAvoid();
-
-	//状態のリセット
-	m_charaStatus->InitHitState();
 
 	//武器を描画するか
 	if (!m_pBigSword.expired() && !m_pLightSword.expired())
@@ -159,16 +140,6 @@ void Player::Update()
 
 void Player::OnCollide(const std::shared_ptr<Collidable> other)
 {
-	//デバッグ
-	if (other->GetGameTag() == GameTag::Attack)
-	{
-		if (m_charaStatus->IsHitReaction())
-		{
-#if _DEBUG
-			printf("残りの体力 : %d\n", m_charaStatus->GetNowHP());
-#endif
-		}
-	}
 }
 
 void Player::Draw() const
@@ -211,6 +182,14 @@ void Player::Complete()
 		auto camera = GetPlayerCamera().lock();
 		camera->SetPlayerPos(m_rb->m_pos);
 		camera->SetPlayerVec(m_rb->GetMoveVec());
+	}
+
+	bool isHit = m_charaStatus->IsHit();
+	if (isHit)
+	{
+#if _DEBUG
+		printf("プレイヤーの残りの体力 : %d\n", m_charaStatus->GetNowHP());
+#endif
 	}
 }
 
@@ -303,9 +282,9 @@ void Player::SetSword(std::weak_ptr<Weapon> weapon, bool isLightSword)
 	
 }
 
-std::weak_ptr<Weapon> Player::GetWeapon(PlayerAnimData::WeaponType type) const
+std::weak_ptr<Weapon> Player::GetWeapon(AnimData::WeaponType type) const
 {
-	if (type == PlayerAnimData::WeaponType::LightSword)
+	if (type == AnimData::WeaponType::LightSword)
 	{
 		return m_pLightSword;
 	}
@@ -330,7 +309,7 @@ void Player::HaveLightSword()
 	m_putAwayCountFrame = kPutAwayFrame;
 
 	//片手剣を持っている
-	m_haveWeaponType = PlayerAnimData::WeaponType::LightSword;
+	m_haveWeaponType = AnimData::WeaponType::LightSword;
 }
 
 void Player::HaveBigSword()
@@ -348,7 +327,7 @@ void Player::HaveBigSword()
 	m_putAwayCountFrame = kPutAwayFrame;
 
 	//大剣を持っている
-	m_haveWeaponType = PlayerAnimData::WeaponType::BigSword;
+	m_haveWeaponType = AnimData::WeaponType::BigSword;
 }
 
 void Player::PutAwaySword()
@@ -363,7 +342,7 @@ void Player::PutAwaySword()
 	bigSword->SetIsBattle(false);
 
 	//武器を持っていない
-	m_haveWeaponType = PlayerAnimData::WeaponType::None;
+	m_haveWeaponType = AnimData::WeaponType::None;
 }
 
 std::string Player::GetAnim(std::wstring state)const
@@ -371,17 +350,7 @@ std::string Player::GetAnim(std::wstring state)const
 	std::string path = "Player|";
 
 	//探す
-	for (auto& data : m_animDatas)
-	{
-		//条件に合うものがあったら
-		if (data->m_stateName == state && data->m_weaponType == m_haveWeaponType)
-		{
-			path += data->m_animName;
-			break;
-		}
-	}
-
-	return path;
+	return CharacterBase::GetAnim(state, path, m_haveWeaponType);
 }
 
 bool Player::IsGliding() const
@@ -407,14 +376,4 @@ std::weak_ptr<PlayerCamera> Player::GetPlayerCamera() const
 		}
 	}
 	return camera;
-}
-void Player::InitAnimData(std::shared_ptr<CSVDataLoader> csvLoader)
-{
-	auto datas = csvLoader->LoadCSV("Player/PlayerAnimData");
-	//登録
-	for (auto& data : datas)
-	{
-		std::shared_ptr<PlayerAnimData> animData = std::make_shared<PlayerAnimData>(data);
-		m_animDatas.emplace_back(animData);
-	}
 }

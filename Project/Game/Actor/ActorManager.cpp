@@ -9,13 +9,16 @@
 #include "Stage/StageObject.h"
 #include "Character/CharacterBase.h"
 #include "Character/Player/Player.h"
+#include "Character/Enemy/NormalEnemy.h"
 #include "Character/Player/Weapon/Weapon.h"
 #include "Character/Player/Pod/Pod.h"
 
 
 namespace
 {
-	const std::string kCharaStatusDataName = "CharaStatusData";
+	const std::wstring kCharaStatusDataName = L"CharaStatusData";
+	const std::wstring kWeaponDataName = L"Player/WeaponData";
+	const std::wstring kPodDataName = L"Player/PodData";
 }
 
 ActorManager::ActorManager()
@@ -86,15 +89,15 @@ void ActorManager::End()
 	deleteActer.clear();
 }
 
-void ActorManager::CreateActorCSV(const char* folderName, const char* fileName)
+void ActorManager::CreateActorCSV(const wchar_t* folderName, const wchar_t* fileName)
 {
 	//CSVを読み込む
 	std::shared_ptr<CSVDataLoader> csvLoader = std::make_shared<CSVDataLoader>();
-	std::string path = folderName + std::string("/") + fileName;
+	std::wstring path = folderName + std::wstring(L"/") + fileName;
 	auto csvDatas = csvLoader->LoadCSV(path.c_str());
 
 	//キャラクターのステータスを読み込む
-	std::string charaStatusPath = folderName + std::string("/") + kCharaStatusDataName;
+	std::wstring charaStatusPath = folderName + std::wstring(L"/") + kCharaStatusDataName;
 	auto csvStatusDatas = csvLoader->LoadCSV(charaStatusPath.c_str());
 
 	//アクターの作成
@@ -144,6 +147,12 @@ std::shared_ptr<CharacterBase> ActorManager::CreateChara(GameTag tag, std::share
 	{
 		chara = std::make_shared<Player>(actorData, charaStatusData, shared_from_this());
 	}
+	else if (tag == GameTag::Enemy)
+	{
+		//敵キャラクター
+		//今回はノーマルエネミーのみ
+		chara = std::make_shared<NormalEnemy>(actorData, charaStatusData, shared_from_this());
+	}
 	//nullチェック
 	assert(chara);
 	return chara;
@@ -153,7 +162,7 @@ void ActorManager::SetUpPlayer(std::shared_ptr<Player> player)
 {
 	//CSVを読み込む
 	std::shared_ptr<CSVDataLoader> csvLoader = std::make_shared<CSVDataLoader>();
-	std::string path = "Player" + std::string("/") + "WeaponData";
+	std::wstring path = kWeaponDataName;
 	auto csvDatas = csvLoader->LoadCSV(path.c_str());
 	//武器作成
 	for (auto& data : csvDatas)
@@ -180,7 +189,7 @@ void ActorManager::SetUpPlayer(std::shared_ptr<Player> player)
 		}
 	}
 	//ポッドのデータ読み込み
-	path = "Player" + std::string("/") + "PodData";
+	path = kPodDataName;
 	csvDatas = csvLoader->LoadCSV(path.c_str());
 	//データを変換
 	auto podData = std::make_shared<PodData>(csvDatas.back());

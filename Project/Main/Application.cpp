@@ -10,6 +10,7 @@ namespace
 {
 	//ターゲットFPS
 	const int kTargetFPS = 60;
+	const int kWarningFPS = 40;
 	//ミリ秒
 	float kMillisecond = 1000.0f;
 	//マイクロ秒
@@ -166,6 +167,15 @@ void Application::Run()
 		default:
 			break;
 		}
+
+
+		//もしもFPSが低下したら
+		if (DxLib::GetFPS() <= kWarningFPS)
+		{
+
+			printf("FPS Low!: %.2f\n", DxLib::GetFPS());
+		}
+
 #endif
 
 		//画面の切り替わりを待つ必要がある

@@ -1,0 +1,3 @@
+﻿状態,武器,アニメーション
+Idle,None,Robot|Idle
+Hit,None,Robot|HitRecieve_2

@@ -6,6 +6,8 @@
 #include "../../../General/CSV/CSVDataLoader.h"
 #include "../../../General/CSV/CSVData.h"
 #include "../../../General/CSV/AttackData.h"
+#include "CharacterStateBase.h"
+#include "CharacterStateBase.h"
 #include <cassert>
 CharacterBase::CharacterBase(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, Shape shape, std::weak_ptr<ActorManager> pActorManager) :
 	Actor(actorData,shape,pActorManager),
@@ -13,6 +15,36 @@ CharacterBase::CharacterBase(std::shared_ptr<ActorData> actorData, std::shared_p
 	m_charaStatus()
 {
 	m_charaStatus = std::make_shared<CharaStatus>(charaStatusData);
+}
+
+void CharacterBase::Init(std::wstring animPath, std::wstring attackPath)
+{
+	//Physicsに登録
+	Collidable::Init();
+	//CSVを読み込む
+	auto csvLoader = std::make_shared<CSVDataLoader>();
+	//アニメーションデータ
+	InitAnimData(csvLoader, animPath);
+	//攻撃データ
+	InitAttackData(csvLoader, attackPath);
+}
+
+void CharacterBase::Update()
+{
+	//状態に合わせた更新
+	m_state->Update();
+	//状態が変わったかをチェック
+	if (m_state != m_state->GetNextState())
+	{
+		//状態を変化する
+		m_state = m_state->GetNextState();
+		m_state->Init();
+	}
+	//アニメーションの更新
+	m_model->Update();
+
+	//状態のリセット
+	m_charaStatus->InitHitState();
 }
 
 std::shared_ptr<CharaStatus> CharacterBase::GetCharaStatus() const
@@ -57,8 +89,22 @@ std::shared_ptr<AttackData> CharacterBase::GetAttackData(std::wstring attackName
 	return attackData;
 }
 
+std::string CharacterBase::GetAnim(std::wstring state, std::string path,AnimData::WeaponType type)const
+{
+	//探す
+	for (auto& data : m_animDatas)
+	{
+		//条件に合うものがあったら
+		if (data->m_stateName == state && data->m_weaponType == type)
+		{
+			path += data->m_animName;
+			break;
+		}
+	}
 
-void CharacterBase::InitAttackData(std::shared_ptr<CSVDataLoader> csvLoader, std::string path)
+	return path;
+}
+void CharacterBase::InitAttackData(std::shared_ptr<CSVDataLoader> csvLoader, std::wstring path)
 {
 	auto datas = csvLoader->LoadCSV(path.c_str());
 	//登録
@@ -66,5 +112,16 @@ void CharacterBase::InitAttackData(std::shared_ptr<CSVDataLoader> csvLoader, std
 	{
 		std::shared_ptr<AttackData> attackData = std::make_shared<AttackData>(data);
 		m_attackDatas.emplace_back(attackData);
+	}
+}
+
+void CharacterBase::InitAnimData(std::shared_ptr<CSVDataLoader> csvLoader,std::wstring path)
+{
+	auto datas = csvLoader->LoadCSV(path.c_str());
+	//登録
+	for (auto& data : datas)
+	{
+		std::shared_ptr<AnimData> animData = std::make_shared<AnimData>(data);
+		m_animDatas.emplace_back(animData);
 	}
 }

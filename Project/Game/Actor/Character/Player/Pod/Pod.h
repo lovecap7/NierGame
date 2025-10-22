@@ -43,29 +43,24 @@ public:
 	Vector3 GetPlayerDir()const;
 	//カメラの向き
 	Vector3 GetCameraDir()const;
-
-	//攻撃データ
-	std::shared_ptr<AttackData> GetAttackData(std::wstring attackName)const;
 	//弾
 	std::vector<std::shared_ptr<BulletAttack>> GetBullets()const { return m_bullets; };
 
 	//滑空状態
 	bool IsGliding()const { return m_isGliding; };
 	void SetIsGliding(bool isGliding) { m_isGliding = isGliding; };
+
+	//アニメーション取得
+	std::string GetAnim(std::wstring state) const;
+
 private:
 	//プレイヤーの参照
 	std::weak_ptr<Player> m_pPlayer;
-
-	//攻撃データ
-	std::vector<std::shared_ptr<AttackData>> m_attackDatas;
 
 	//弾を打つ際にその都度newすると負荷がかかり重くなるのであらかじめ作っておく
 	std::vector<std::shared_ptr<BulletAttack>> m_bullets;
 
 	//滑空状態
 	bool m_isGliding;
-private:
-	//攻撃データを読み込む
-	void InitAttackData(std::shared_ptr<CSVDataLoader> csvLoader);
 };
 

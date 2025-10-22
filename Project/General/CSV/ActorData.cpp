@@ -11,29 +11,33 @@ ActorData::ActorData():
 	m_pos(),
 	m_rot(),
 	m_scale(),
-	m_modelPath(),
+	m_modelPath(L"None"),
 	m_priority(Priority::None),
 	m_isTrough(true),
 	m_isTrigger(false),
 	m_isGravity(false),
 	m_collRadius(0.0f),
-	m_collHeight(0.0f)
+	m_collHeight(0.0f),
+	m_animPath(L"None"),
+	m_attackPath(L"None")
 {
 }
 
 ActorData::ActorData(std::shared_ptr<CSVData> data):
-	m_actorID(0),
+	m_actorID(),
 	m_actorType(ActorType::None),
-	m_pos(),	
+	m_pos(),
 	m_rot(),
 	m_scale(),
-	m_modelPath(),
+	m_modelPath(L"None"),
 	m_priority(Priority::None),
 	m_isTrough(true),
 	m_isTrigger(false),
 	m_isGravity(false),
 	m_collRadius(0.0f),
-	m_collHeight(0.0f)
+	m_collHeight(0.0f),
+	m_animPath(L"None"),
+	m_attackPath(L"None")
 {
 	//データを取得
 	this->m_data = data->GetData();
@@ -115,4 +119,10 @@ void ActorData::Conversion()
 
 	//高さ
 	m_collHeight = std::stof(m_data[19]);
+
+	//アニメーションのパス
+	m_animPath = m_data[20];
+
+	//攻撃データのパス
+	m_attackPath = m_data[21];
 }

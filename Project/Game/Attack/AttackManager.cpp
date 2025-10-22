@@ -14,7 +14,7 @@ AttackManager::~AttackManager()
 {
 }
 
-//アクターを追加
+//攻撃を追加
 void AttackManager::Entry(std::shared_ptr<AttackBase> attack)
 {
 	//すでに登録されているならしない
@@ -67,27 +67,12 @@ void AttackManager::End()
 //消滅フラグをチェックして削除
 void AttackManager::CheckDelete()
 {
-	std::list<std::shared_ptr<AttackBase>> deleteAttack;
-	for (int i = 0;i < 3;++i)
-	{
-		bool isOneMore = false;
-		auto thisPointer = shared_from_this();
-		for (auto& attack : m_attacks)
-		{
-			bool isDead = attack->IsDelete();//死亡したかをチェック
-			if (isDead)
-			{
-				isOneMore = true;
-				//削除候補
-				deleteAttack.emplace_back(attack);
-			}
+	//消滅フラグが立っているものを削除
+	m_attacks.remove_if([](const std::shared_ptr<AttackBase>& attack) {
+		if (attack->IsDelete()) {
+			attack->End();
+			return true;
 		}
-		//削除
-		for (auto& actor : deleteAttack)
-		{
-			thisPointer->Exit(actor);
-		}
-		deleteAttack.clear();
-		if (!isOneMore)break;
-	}
+		return false;
+		});
 }
