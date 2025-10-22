@@ -68,7 +68,7 @@ private:
 	/// <summary>
 	/// 床の高さに合わせる カプセル
 	/// </summary>
-	bool HitFloorCP(const std::shared_ptr<Collidable> other, const Vector3& headPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis);
+	bool HitFloorCP(const std::shared_ptr<Collidable> other, const Vector3& legPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis);
 	/// <summary>
 	/// 天井に当たった時の処理 カプセル
 	/// </summary>

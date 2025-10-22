@@ -343,18 +343,15 @@ void FixNextPosition::FixNextPosCP(const std::shared_ptr<Collidable> collA, cons
 	//壁と当たっているなら
 	if (isWall)
 	{
+		
 		//壁に当たっているので
 		collA->SetIsWall(true);
 
 		//補正するベクトルを返す
 		Vector3 overlapVec = HitWallCP(headPos, legPos, m_wallNum, *m_wall, radius);
 
-		//位置を補正
-		Vector3 newPos = rbA->GetNextPos() + overlapVec;
-		rbA->SetPos(newPos);
-
-		//横方向の速度をリセット（めり込み反動防止）
-		rbA->SetMoveVec(Vector3::Zero());
+		//ベクトルを補正
+		rbA->AddVec(overlapVec);
 	}
 
 
@@ -472,7 +469,7 @@ Vector3 FixNextPosition::HitWallCP(const Vector3& headPos, const Vector3& legPos
 			//現状の最短
 			hitShortDis = dis;
 			//法線
-			nom = Vector3{ dim[i].Normal.x,0.0f ,dim[i].Normal.z };
+			nom = dim[i].Normal;
 		}
 	}
 	//押し戻し
@@ -489,7 +486,7 @@ Vector3 FixNextPosition::HitWallCP(const Vector3& headPos, const Vector3& legPos
 }
 
 
-bool FixNextPosition::HitFloorCP(const std::shared_ptr<Collidable> coll, const Vector3& headPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis)
+bool FixNextPosition::HitFloorCP(const std::shared_ptr<Collidable> coll, const Vector3& legPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis)
 {
 	//リジッドボディ
 	auto rb = coll->m_rb;
@@ -516,12 +513,12 @@ bool FixNextPosition::HitFloorCP(const std::shared_ptr<Collidable> coll, const V
 		defaultLowHitPosY = MathSub::Max(pos1.y, pos2.y, pos3.y);
 
 		// 足の下にポリゴンがあるかをチェック
-		 HITRESULT_LINE lineResult = HitCheck_Line_Triangle(headPos.ToDxLibVector(), VAdd(headPos.ToDxLibVector(), VGet(0.0f, kCheckUnder, 0.0f)), pos1, pos2, pos3);
+		 HITRESULT_LINE lineResult = HitCheck_Line_Triangle(legPos.ToDxLibVector(), VAdd(legPos.ToDxLibVector(), VGet(0.0f, kCheckUnder, 0.0f)), pos1, pos2, pos3);
 
 		if (lineResult.HitFlag)
 		{
 			 //距離
-			 float dis = VSize(VSub(lineResult.Position, headPos.ToDxLibVector()));
+			 float dis = VSize(VSub(lineResult.Position, legPos.ToDxLibVector()));
 			 //初回または前回より距離が短いなら
 			 if (hitShortDis > dis)
 			 {
@@ -538,10 +535,15 @@ bool FixNextPosition::HitFloorCP(const std::shared_ptr<Collidable> coll, const V
 		//床の高さに合わせる
 		lowHitPosY += shortDis + kOverlapGap;
 	}
-	else
+	else if(defaultLowHitPosY < legPos.y)
 	{
 		//当たっていないならデフォルトの高さに合わせる
 		lowHitPosY = defaultLowHitPosY + shortDis + kOverlapGap;
+	}
+	else
+	{
+		//当たっていないなら何もしない
+		return isHitFloor;
 	}
 
 	rb->SetPosY(lowHitPosY);

@@ -19,6 +19,12 @@ namespace
 	const std::wstring kJump2 = L"Jump2";
 	//ジャンプ一回目
 	constexpr int kFirstJump = 1;
+	//減速率
+	constexpr float kAirDecel = 0.9f;
+	//空中加速度
+	constexpr float kAirAccel = 2.0f;
+	//壁に当たってる時の加速度倍率
+	constexpr float kWallAccelRate = 0.1f;
 }
 
 PlayerStateJump::PlayerStateJump(std::weak_ptr<Actor> player) :
@@ -107,16 +113,51 @@ void PlayerStateJump::Update()
 
 void PlayerStateJump::MoveJump(Input& input, std::shared_ptr<Player> owner, std::shared_ptr<CharaStatus> status)
 {
+	auto rb = owner->GetRb();
+	//現在の移動速度
+	Vector3 currentVel = rb->GetMoveVec();
+
 	//移動の入力があるなら
 	if (input.GetStickInfo().IsLeftStickInput())
 	{
-		auto rb = owner->GetRb();
-		//移動
-		Vector3 vec = InputMoveVec(owner, input);
-		vec *= status->GetMS();
-		//空中移動
-		rb->SetMoveVec(vec);
+
+		//入力方向ベクトル
+		Vector3 inputDir = InputMoveVec(owner, input);
+		inputDir = inputDir.Normalize();
+
+		//空中移動加速度
+		Vector3 addForce = inputDir * kAirAccel;
+
+		//壁に当たってたら
+		if (owner->IsWall())
+		{
+			addForce *= kWallAccelRate; // 壁に当たっている場合は半分に
+		}
+
+		//今の速度に力を加える
+		currentVel += addForce;
+
+		//最大速度制限
+		float maxSpeed = status->GetMS(); // ステータスに設定された移動速度を上限とする
+
+		
+		float horizontalSpeed = currentVel.Magnitude();
+		if (horizontalSpeed > maxSpeed)
+		{
+			float ratio = maxSpeed / horizontalSpeed;
+			currentVel.x *= ratio;
+			currentVel.z *= ratio;
+		}
+		//更新
+		rb->SetMoveVec(currentVel);
+
 		//モデルの向き
-		owner->GetModel()->SetDir(Vector2(vec.x, vec.z));
+		owner->GetModel()->SetDir(inputDir.XZ());
+	}
+	//ない場合は減速してく
+	else
+	{
+		//空中移動
+		rb->SpeedDown(kAirDecel);
 	}
 }

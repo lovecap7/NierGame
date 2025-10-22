@@ -6,6 +6,7 @@
 #include "../General/Collision/Physics.h"
 #include "../Scene/SceneController.h"
 #include  <cassert>
+#include <chrono>
 namespace
 {
 	//ターゲットFPS
@@ -168,12 +169,13 @@ void Application::Run()
 			break;
 		}
 
-
+		auto fps = DxLib::GetFPS();
 		//もしもFPSが低下したら
-		if (DxLib::GetFPS() <= kWarningFPS)
+		if (fps <= kWarningFPS)
 		{
-
-			printf("FPS Low!: %.2f\n", DxLib::GetFPS());
+			SYSTEMTIME lt;
+			GetLocalTime(&lt);
+			printf("FPS Low! fps = %.2f : Time = %02d:%02d\n", fps, lt.wHour, lt.wMinute);
 		}
 
 #endif
