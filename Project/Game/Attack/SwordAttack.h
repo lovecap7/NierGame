@@ -10,6 +10,8 @@ class SwordAttack :
 public:
     SwordAttack(std::shared_ptr<AttackData> attackData, std::weak_ptr<CharacterBase> pOwner);
     ~SwordAttack();
+	//XV
+	void Update() override;
     //•`‰æ
     void Draw()const override;
     //“–‚½‚Á‚½

@@ -183,7 +183,6 @@
     <ClCompile Include="Game\Attack\CapsuleAttackBase.cpp" />
     <ClCompile Include="Game\Attack\SphereAttackBase.cpp" />
     <ClCompile Include="Game\Attack\SwordAttack.cpp" />
-    <ClCompile Include="Game\Camera\Camera.cpp" />
     <ClCompile Include="Game\Camera\CameraBase.cpp" />
     <ClCompile Include="Game\Camera\CameraController.cpp" />
     <ClCompile Include="Game\Camera\PlayerCamera.cpp" />
@@ -268,7 +267,6 @@
     <ClInclude Include="Game\Attack\CapsuleAttackBase.h" />
     <ClInclude Include="Game\Attack\SphereAttackBase.h" />
     <ClInclude Include="Game\Attack\SwordAttack.h" />
-    <ClInclude Include="Game\Camera\Camera.h" />
     <ClInclude Include="Game\Camera\CameraBase.h" />
     <ClInclude Include="Game\Camera\CameraController.h" />
     <ClInclude Include="Game\Camera\PlayerCamera.h" />

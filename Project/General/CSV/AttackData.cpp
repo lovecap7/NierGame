@@ -19,7 +19,8 @@ AttackData::AttackData():
 	m_param2(0.0f),
 	m_param3(0.0f),
 	m_moveSpeed(0.0f),
-	m_moveFrame(0)
+	m_moveFrame(0),
+	m_attackOriginPos(AttackOriginPos::Owner)
 {
 
 }
@@ -40,7 +41,8 @@ AttackData::AttackData(std::shared_ptr<CSVData> data):
 	m_length(0.0f),
 	m_param1(0.0f),
 	m_param2(0.0f),
-	m_param3(0.0f)
+	m_param3(0.0f),
+	m_attackOriginPos(AttackOriginPos::Owner)
 {
 	//データを取得
 	this->m_data = data->GetData();
@@ -99,11 +101,18 @@ void AttackData::Conversion()
 	//次の攻撃の名前
 	m_nextAttackName = m_data[14];
 
+	//攻撃の発生位置
+	AttackOriginPos oriPos = AttackOriginPos::Owner;
+	if (m_data[15] == L"Owner")oriPos = AttackOriginPos::Owner;
+	else if (m_data[15] == L"Center")oriPos = AttackOriginPos::Center;
+
+	m_attackOriginPos = oriPos;
+
 	//キャンセルフレーム
-	m_cancelFrame = stoi(m_data[15]);
+	m_cancelFrame = stoi(m_data[16]);
 
 	//パラメータ
-	m_param1 = stof(m_data[16]);
-	m_param2 = stof(m_data[17]);
-	m_param3 = stof(m_data[18]);
+	m_param1 = stof(m_data[17]);
+	m_param2 = stof(m_data[18]);
+	m_param3 = stof(m_data[19]);
 }

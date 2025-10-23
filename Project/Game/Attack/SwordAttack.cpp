@@ -11,6 +11,14 @@ SwordAttack::~SwordAttack()
 {
 }
 
+void SwordAttack::Update()
+{
+	//基底の更新
+	AttackBase::Update();
+	//カプセルの更新
+	CapsuleAttackBase::Update();
+}
+
 void SwordAttack::Draw() const
 {
 #if _DEBUG

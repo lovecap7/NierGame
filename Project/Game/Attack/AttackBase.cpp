@@ -1,15 +1,16 @@
 #include "AttackBase.h"
 #include "../Actor/Character/CharacterBase.h"
-#include "../../General/CSV/AttackData.h"
 #include "../../General/Collision/CapsuleCollider.h"
 #include "../../General/Collision/SphereCollider.h"
 #include "../../General/Collision/TorusCollider.h"
 #include "../../General/CharaStatus.h"
+#include "../../General/Collision/Rigidbody.h"
 #include "../../Main/Application.h"
 
 AttackBase::AttackBase(Shape shape, std::shared_ptr<AttackData> attackData, std::weak_ptr<CharacterBase> pOwner) :
 	Collidable(shape),
-	m_pOwner(pOwner)
+	m_pOwner(pOwner),
+	m_oriPos(Vector3::Zero())
 {
 	if (!attackData)return;
 	m_attackPower = attackData->m_attackPower;
@@ -17,6 +18,7 @@ AttackBase::AttackBase(Shape shape, std::shared_ptr<AttackData> attackData, std:
 	m_knockBackPower = attackData->m_knockBackPower; 
 	m_knockBackV = attackData->m_verticalPower;
 	m_keepFrame = attackData->m_keepFrame;
+	m_originPosData = attackData->m_attackOriginPos;
 	m_isHit = false;
 
 	//コライダーの設定
@@ -75,19 +77,17 @@ void AttackBase::OnCollide(const std::shared_ptr<Collidable> other)
 	if (!other)return;
 
 	auto ownerColl = m_pOwner.lock();
-	auto otherColl = other;
 
-	auto otherTag = otherColl->GetGameTag();
+	auto otherTag = other->GetGameTag();
 	//キャラクターなのかをチェック
 	if (otherTag == GameTag::Player || otherTag == GameTag::Enemy)
 	{
 		//自分と同じ種類なら無視
 		if (otherTag == ownerColl->GetGameTag())return;
-
-		std::shared_ptr<Actor> otherActor = std::dynamic_pointer_cast<Actor>(otherColl);
+		auto otherColl = std::dynamic_pointer_cast<CharacterBase>(other);
 		
 		//ID
-		int otherID = otherActor->GetID();
+		int otherID = otherColl->GetID();
 
 		//IDがすでに記録されているか確認
 		if (m_hitId.contains(otherID))
@@ -102,13 +102,22 @@ void AttackBase::OnCollide(const std::shared_ptr<Collidable> other)
 			m_hitId.insert(otherID);
 
 			//相手
-			auto otherStatus = std::dynamic_pointer_cast<CharacterBase>(otherColl)->GetCharaStatus();
+			auto otherStatus = otherColl->GetCharaStatus();
 
 			//攻撃力
 			int at = ownerColl->GetCharaStatus()->GetAT();
 
 			//ダメージを与える
 			otherStatus->OnDamage(m_attackPower, at, m_attackWeight);
+
+
+			if (m_rb && otherStatus->IsHitReaction())
+			{
+				Vector3 attackPos = m_oriPos;
+				//ノックバックを与える
+				Vector3 knockBack = otherStatus->GetKnockBack(otherColl->GetPos(), attackPos, m_knockBackPower, m_knockBackV);
+				otherColl->GetRb()->SetVec(knockBack);
+			}
 
 			//当たった
 			m_isHit = true;

@@ -10,7 +10,8 @@ class CapsuleAttackBase abstract :
 public:
 	CapsuleAttackBase(std::shared_ptr<AttackData> attackData, std::weak_ptr<CharacterBase> pOwner);
 	virtual ~CapsuleAttackBase() {};
-
+	//更新
+	virtual void Update()override;
 	//始点
 	void SetStartPos(const Vector3& pos);
 	//終点

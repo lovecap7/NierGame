@@ -42,51 +42,14 @@ void EnemyManager::Update()
 {
 	if (m_enemys.empty())return;
 
-
-	//カメラロックオン
-	if (m_pActorManager.expired())return;
-	auto actorM = m_pActorManager.lock();
-	if (actorM->GetPlayerCamera().expired())return;
-	auto camera = actorM->GetPlayerCamera().lock();
-
-	//LBでロックオン開始
-	auto& input = Input::GetInstance();
-	if (input.IsTrigger("LB"))
+	//カメラのロックオン
+	if (!m_pActorManager.expired())
 	{
-		//ロックオン中なら解除
-		if (camera->IsLockOn())
+		auto actorM = m_pActorManager.lock();
+		if (!actorM->GetPlayerCamera().expired())
 		{
-			camera->EndLockOn();
-		}
-		//ロックオンしていないなら開始
-		else
-		{
-			//プレイヤーの座標
-			if (actorM->GetPlayer().expired())return;
-			auto player = actorM->GetPlayer().lock();
-			Vector3 playerPos = player->GetNextPos();
-
-			//最も近い敵を探す
-			std::shared_ptr<EnemyBase> nearestEnemy = nullptr;
-			float minDis = 5000.0f; //索敵範囲
-			bool isFind = false;
-			for (auto enemy : m_enemys)
-			{
-				Vector3 enemyPos = enemy->GetNextPos();
-				Vector3 toEnemy = enemyPos - playerPos;
-				float distance = toEnemy.Magnitude();
-				if (distance < minDis)
-				{
-					nearestEnemy = enemy;
-					//発見
-					isFind = true;
-				}
-			}
-			//ロックオン開始
-			if (isFind)
-			{
-				camera->StartLockOn(nearestEnemy);
-			}
+			auto pCamera = actorM->GetPlayerCamera().lock();
+			pCamera->SearchTarget(actorM, m_enemys);
 		}
 	}
 }

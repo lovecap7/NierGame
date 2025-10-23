@@ -19,6 +19,9 @@ public:
 	void Update();
 	//I—¹ˆ—
 	void End();
+
+	//“G‚ÌƒŠƒXƒgæ“¾
+	const std::list<std::shared_ptr<EnemyBase>>& GetEnemys() const { return m_enemys; }
 private:
 	//“G
 	std::list<std::shared_ptr<EnemyBase>> m_enemys;

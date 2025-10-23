@@ -1,7 +1,10 @@
 #pragma once
 #include "CameraBase.h"
 #include <memory>
+#include <list>
 class Actor;
+class ActorManager;
+class EnemyBase;
 class PlayerCamera :
     public CameraBase
 {
@@ -21,7 +24,7 @@ public:
 	//プレイヤーのベクトル
 	void SetPlayerVec(const Vector3& vec) { m_playerVec = vec; }
 	//ターゲット探索
-	void SearchTarget();
+	void SearchTarget(std::shared_ptr<ActorManager> actorM, const std::list<std::shared_ptr<EnemyBase>>& enemys);
 private:
 	//ロックオン対象
 	std::weak_ptr<Actor> m_lockOnTarget;

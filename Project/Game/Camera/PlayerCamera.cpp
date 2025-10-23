@@ -4,7 +4,11 @@
 #include "../../General/Collision/Physics.h"
 #include "../../Main/Application.h"
 #include "../Actor/DebugActor/DebugPlayer.h"
-#include "../../General/Collision/Physics.h"
+#include "../Actor/ActorManager.h"
+#include "../Actor/Character/Enemy/EnemyBase.h"
+#include "../Actor/Character/Enemy/EnemyManager.h"
+#include "../Actor/Character/Player/Player.h"
+#include "../../General/Game.h"
 
 namespace
 {
@@ -91,8 +95,11 @@ void PlayerCamera::Update()
         if (islockOn)
         {
             auto lockOn = m_lockOnTarget.lock();
+
+			Vector3 enemyPos = lockOn->GetPos();
+
             //ターゲットとプレイヤーの間
-            Vector3 lockOnPos = Vector3::Lerp(lockOn->GetPos(), playerPos, 0.5f);
+            Vector3 lockOnPos = Vector3::Lerp(enemyPos, playerPos, 0.5f);
             Vector3 dir = lockOnPos - m_cameraPos;
             if (dir.SqMagnitude() > 0.0f)
             {
@@ -132,6 +139,51 @@ void PlayerCamera::EndLockOn()
 {
 	m_isLockOn = false;
 	m_lockOnTarget.reset();
+}
+
+void PlayerCamera::SearchTarget(std::shared_ptr<ActorManager> actorM, const std::list<std::shared_ptr<EnemyBase>>& enemys)
+{
+    //LBでロックオン開始
+    auto& input = Input::GetInstance();
+    if (input.IsTrigger("LB"))
+    {
+        //ロックオン中なら解除
+        if (IsLockOn())
+        {
+            EndLockOn();
+        }
+        //ロックオンしていないなら開始
+        else
+        {
+            //プレイヤーの座標
+            if (actorM->GetPlayer().expired())return;
+            auto player = actorM->GetPlayer().lock();
+            Vector3 playerPos = player->GetNextPos();
+
+            //最も近い敵を探す
+            std::shared_ptr<EnemyBase> nearestEnemy = nullptr;
+            float minDis = 5000.0f; //索敵範囲
+            bool isFind = false;
+
+            for (auto enemy : enemys)
+            {
+                Vector3 enemyPos = enemy->GetNextPos();
+                Vector3 toEnemy = enemyPos - playerPos;
+                float distance = toEnemy.Magnitude();
+                if (distance < minDis)
+                {
+                    nearestEnemy = enemy;
+                    //発見
+                    isFind = true;
+                }
+            }
+            //ロックオン開始
+            if (isFind)
+            {
+                StartLockOn(nearestEnemy);
+            }
+        }
+    }
 }
 
 void PlayerCamera::UpdateCameraDirection(const Vector3& targetDir, float followSpeed)

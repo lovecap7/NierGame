@@ -66,6 +66,14 @@ public:
 	//次の攻撃の名前
 	std::wstring m_nextAttackName;
 
+	//攻撃の基準位置
+	enum class AttackOriginPos : int
+	{
+		Owner = 0, //持ち主の位置
+		Center = 1,//攻撃の中心位置
+	};
+	AttackOriginPos m_attackOriginPos;
+
 	//キャンセル
 	int m_cancelFrame;
 

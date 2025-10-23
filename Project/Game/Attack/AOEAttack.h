@@ -6,6 +6,8 @@ class AOEAttack :
 public:
     AOEAttack(std::shared_ptr<AttackData> attackData, std::weak_ptr<CharacterBase> pOwner);
     ~AOEAttack();
+	//XV
+	void Update() override;
     //•`‰æ
     void Draw()const override;
     //“–‚½‚Á‚½

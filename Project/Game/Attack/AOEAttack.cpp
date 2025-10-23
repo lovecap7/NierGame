@@ -11,6 +11,14 @@ AOEAttack::~AOEAttack()
 {
 }
 
+void AOEAttack::Update()
+{
+	//AttackBaseの更新
+	AttackBase::Update();
+	//球の更新
+	SphereAttackBase::Update();
+}
+
 void AOEAttack::Draw() const
 {
 #if _DEBUG

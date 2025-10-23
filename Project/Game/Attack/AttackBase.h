@@ -5,6 +5,7 @@
 #include <memory>
 #include "../Actor/Actor.h"
 #include <unordered_set>
+#include "../../General/CSV/AttackData.h"
 
 class Actor;
 class AttackData;
@@ -55,5 +56,11 @@ protected:
     std::weak_ptr<CharacterBase> m_pOwner;
     //“–‚½‚Á‚½‚±‚Æ‚ª‚ ‚é
     bool m_isHit;
+
+    //Šî€ˆÊ’uî•ñ
+	AttackData::AttackOriginPos m_originPosData;
+
+    //’†SÀ•W
+	Vector3 m_oriPos;
 };
 

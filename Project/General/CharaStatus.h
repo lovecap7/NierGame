@@ -62,7 +62,7 @@ public:
 	//ダメージ
 	void OnDamage(int power,int at, CharaStatus::AttackWeight aw);
 	//ノックバック
-	Vector3 GetKnockBack(const Vector3& pos, float power, float up);
+	Vector3 GetKnockBack(const Vector3& charPos, const Vector3& attackPos, float power, float up);
 
 	//回復
 	void Heal(int value);
@@ -78,9 +78,6 @@ public:
 	bool IsHit()const { return m_isHit; }
 	//リアクションをするか
 	bool IsHitReaction()const { return m_isHitReaction; };
-
-	//持ち主の位置
-	void SetOwnerPos(const Vector3& pos) { m_ownerPos = pos; };
 private:
 	//ステータス
 	int					m_maxHp;	//最大体力

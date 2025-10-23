@@ -26,13 +26,13 @@ void BulletAttack::Update()
 	//AttackBase::Update()でfalseになってしまうのでここで結果を保持
 	bool isHit = m_isHit;
 
-	// 攻撃基底の更新（ここで寿命カウントが進む）
+	//攻撃基底の更新（ここで寿命カウントが進む）
 	AttackBase::Update();
+	//球の更新
+	SphereAttackBase::Update();
 
 	//非アクティブ化条件をまとめる
-	bool shouldDeactivate =
-		isHit ||				//当たった
-		(m_keepFrame <= 0.0f);  //寿命切れ
+	bool shouldDeactivate = isHit || (m_keepFrame <= 0.0f);
 	if (shouldDeactivate)
 	{
 		m_keepFrame = 0.0f;
