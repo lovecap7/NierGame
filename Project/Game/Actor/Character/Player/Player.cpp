@@ -176,12 +176,13 @@ void Player::Complete()
 	{
 		m_jumpNum = 0;
 	}
-	//ƒJƒƒ‰‚ÉˆÊ’u‚ð“n‚·
+	//ƒJƒƒ‰‚Éî•ñ‚ð“n‚·
 	if (!GetPlayerCamera().expired())
 	{
 		auto camera = GetPlayerCamera().lock();
 		camera->SetPlayerPos(m_rb->m_pos);
 		camera->SetPlayerVec(m_rb->GetMoveVec());
+		camera->SetPlayerDir(m_model->GetDir());
 	}
 
 	bool isHit = m_charaStatus->IsHit();

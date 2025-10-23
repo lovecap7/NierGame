@@ -5,6 +5,7 @@
 class Actor;
 class ActorManager;
 class EnemyBase;
+class Input;
 class PlayerCamera :
     public CameraBase
 {
@@ -23,6 +24,8 @@ public:
 	void SetPlayerPos(const Vector3& pos) { m_playerPos = pos; }
 	//プレイヤーのベクトル
 	void SetPlayerVec(const Vector3& vec) { m_playerVec = vec; }
+	//プレイヤーの向き
+	void SetPlayerDir(const Vector3& dir) { m_playerDir = dir; }
 	//ターゲット探索
 	void SearchTarget(std::shared_ptr<ActorManager> actorM, const std::list<std::shared_ptr<EnemyBase>>& enemys);
 private:
@@ -34,10 +37,22 @@ private:
 	Vector3 m_playerPos;
 	//プレイヤーのベクトル
 	Vector3 m_playerVec;
-	//Lerp率
-	float m_lerpRate;
+	//プレイヤーの向き
+	Vector3 m_playerDir;
+
+	//ロックオン時のカメラが右と左どちらに移動するか
+	float m_lockOnSide;
+	float m_nextlockOnSide;
 private:
-	//カメラの向きを更新
-	void UpdateCameraDirection(const Vector3& targetDir, float followSpeed);
+	//通常時の更新
+	void NormalUpdate(Input& input, Vector3& targetPos);
+	//ロックオン時の更新
+	void LockOnUpdate(Input& input, Vector3& targetPos);
+	
+	//向きの更新
+	void UpdateDirection(Vector3 newFront);
+	//スティックの角度更新
+	void UpdateStickAngle(Input& input);
+
 };
 

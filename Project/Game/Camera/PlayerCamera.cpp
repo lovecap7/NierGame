@@ -19,13 +19,23 @@ namespace
     constexpr float kLimitAngle = 80.0f;        //上下限界角度
     constexpr float kInputToAngle = 0.1f;       //スティック入力→角度変換係数
     constexpr float kCameraHeight = 150.0f;     //プレイヤーからのカメラ高さ
+    //操作してないときの旋回速度
+    constexpr float kReturnSpeed = 0.02f; // 戻るスピード
 
-    //追従・補間設定定数
-    constexpr float kNormalFollowLerp = 0.005f;  //通常時の追従速度
-    constexpr float kForwardFollowLerp = 0.2f;  //プレイヤーが前進中の追従速度
-    constexpr float kLerpBlendSpeed = 0.001f;     //lerp率の補間速度
-    constexpr float kDotThreshold = 0.7f;       //前進中」と判定するためのDot閾値
-    constexpr float kLockOnFollowSpeed = 0.1f;  //ロックオン時の回転追従速度
+	//ロックオン時の設定
+    //カメラオフセット（右に寄せる）
+    constexpr float kRightOffset = 150.0f;   // 右オフセット距離
+    constexpr float kBackOffset = 350.0f;   // 後方距離
+    constexpr float kUpOffset = 200.0f;   // 上方向オフセット
+    constexpr float kFollowSpeed = 0.15f;
+    constexpr float kRotFollowSpeed = 0.2f; // 追従回転速度
+	//右向きを決める内積
+	constexpr float kRightDot = 0.7f;
+    //ロックオン中のカメラ操作時の視点
+	constexpr float kLockOnViewInput = 100.0f;
+
+	//索敵範囲
+	constexpr float kSearchRange = 5000.0f;
 }
 
 PlayerCamera::PlayerCamera() :
@@ -33,7 +43,8 @@ PlayerCamera::PlayerCamera() :
 	m_isLockOn(false),
 	m_lockOnTarget(),
 	m_playerPos(Vector3::Zero()),
-    m_lerpRate(0.0f)
+    m_lockOnSide(kRightOffset),
+    m_nextlockOnSide(kRightOffset)
 {
 }
 
@@ -51,7 +62,8 @@ void PlayerCamera::Init()
 	m_cameraPos = Vector3::Zero();
 	m_isLockOn = false;
 	m_playerPos = Vector3::Zero();
-    m_lerpRate = kNormalFollowLerp;
+    m_lockOnSide = kRightOffset;
+    m_nextlockOnSide = kRightOffset;
 }
 
 void PlayerCamera::Update()
@@ -65,67 +77,16 @@ void PlayerCamera::Update()
     bool islockOn = m_isLockOn && !m_lockOnTarget.expired();
 
     auto& input = Input::GetInstance();
-    //入力が入っているとき
-    if (input.GetStickInfo().IsRightStickInput())
+    if(islockOn)
     {
-        Vector2 stick(input.GetStickInfo().rightStickX * kInputToAngle, input.GetStickInfo().rightStickY * kInputToAngle);
-        //入力による回転
-        float rotH = stick.x * kHorizontalSpeed;
-        float rotV = stick.y * kVerticalSpeed;
-
-        //左右回転（Up軸）
-        auto qH = Quaternion::AngleAxis(rotH * MyMath::DEG_2_RAD, Vector3::Up());
-        m_front = qH * m_front;
-        m_right = qH * m_right;
-
-        //上下回転（Right軸）
-        m_vertexAngle = MathSub::ClampFloat((m_vertexAngle + rotV), -kLimitAngle, kLimitAngle);
-        auto qV = Quaternion::AngleAxis(m_vertexAngle * MyMath::DEG_2_RAD, m_right);
-        m_look = qV * m_front;
-        if (m_look.SqMagnitude() > 0.0f)
-        {
-            m_look = m_look.Normalize();
-        }
-
-        //回転量の保存
-        m_rotH = qH * m_rotH;
-    }
+		//ロックオン更新
+		LockOnUpdate(input, targetPos);
+	}
     else
     {
-        if (islockOn)
-        {
-            auto lockOn = m_lockOnTarget.lock();
-
-			Vector3 enemyPos = lockOn->GetPos();
-
-            //ターゲットとプレイヤーの間
-            Vector3 lockOnPos = Vector3::Lerp(enemyPos, playerPos, 0.5f);
-            Vector3 dir = lockOnPos - m_cameraPos;
-            if (dir.SqMagnitude() > 0.0f)
-            {
-                dir = dir.Normalize();
-            }
-            Vector3 flatDir = dir;
-            flatDir.y = 0.0f;
-            UpdateCameraDirection(flatDir, kLockOnFollowSpeed); //ロックオンは即座に反映
-        }
+		//通常更新
+        NormalUpdate(input, targetPos);
     }
-    //理想カメラ位置
-    Vector3 nextPos;
-    nextPos = targetPos - m_look * m_distance;
-    //位置補正
-    nextPos = Physics::GetInstance().GetCameraRatCastNearEndPos(targetPos, nextPos);
-    //位置確定
-    m_cameraPos = nextPos;
-    //視点確定
-    //ロックオン中ならターゲットをロックオン対象にする
-    Vector3 viewPos = targetPos;
-    m_viewPos = viewPos;
-    // DxLibに反映
-    SetCameraPositionAndTarget_UpVecY(
-        m_cameraPos.ToDxLibVector(),
-        m_viewPos.ToDxLibVector()
-    );
 }
 
 void PlayerCamera::StartLockOn(std::weak_ptr<Actor> lockOnTarget)
@@ -162,7 +123,7 @@ void PlayerCamera::SearchTarget(std::shared_ptr<ActorManager> actorM, const std:
 
             //最も近い敵を探す
             std::shared_ptr<EnemyBase> nearestEnemy = nullptr;
-            float minDis = 5000.0f; //索敵範囲
+            float minDis = kSearchRange; //索敵範囲
             bool isFind = false;
 
             for (auto enemy : enemys)
@@ -186,32 +147,192 @@ void PlayerCamera::SearchTarget(std::shared_ptr<ActorManager> actorM, const std:
     }
 }
 
-void PlayerCamera::UpdateCameraDirection(const Vector3& targetDir, float followSpeed)
+void PlayerCamera::NormalUpdate(Input& input, Vector3& targetPos)
 {
-    Vector3 normTargetDir = targetDir;
-    if (normTargetDir.SqMagnitude() > 0.0f)
+    //入力が入っているとき
+    if (input.GetStickInfo().IsRightStickInput())
     {
-        normTargetDir = normTargetDir.Normalize();
+		//スティック入力でカメラ回転
+        UpdateStickAngle(input);
+    }
+    else
+    {
+        //プレイヤーが移動を開始したらだんだんプレイヤーの向きにカメラをうごかす
+        if (m_playerVec.SqMagnitude() > 0.0f)
+        {
+            Vector3 playerForward = m_playerDir;
+            playerForward.y = 0.0f; // 水平面に限定
+            if (playerForward.SqMagnitude() > 0.0f)
+            {
+                playerForward = playerForward.Normalize();
+                //前方向をもとに他の方向の更新
+                UpdateDirection(Vector3::Lerp(m_front, playerForward, kReturnSpeed));
+            }
+        }
     }
 
-    // targetDirに向かってfrontを補間
-    m_front = Vector3::Lerp(m_front, normTargetDir, followSpeed);
-    if (m_front.SqMagnitude() > 0.0f)
+    //理想カメラ位置
+    Vector3 nextPos;
+    nextPos = targetPos - m_look * m_distance;
+    //位置補正
+    nextPos = Physics::GetInstance().GetCameraRatCastNearEndPos(targetPos, nextPos);
+    //位置確定
+    m_cameraPos = nextPos;
+    //視点確定
+    Vector3 viewPos = targetPos;
+    m_viewPos = viewPos;
+    // DxLibに反映
+    SetCameraPositionAndTarget_UpVecY(
+        m_cameraPos.ToDxLibVector(),
+        m_viewPos.ToDxLibVector()
+    );
+}
+
+void PlayerCamera::LockOnUpdate(Input& input, Vector3& targetPos)
+{
+    if (m_lockOnTarget.expired()) return;
+    auto lockOnTarget = m_lockOnTarget.lock();
+
+    //プレイヤーとターゲットの位置
+    Vector3 playerPos = m_playerPos;
+    Vector3 enemyPos = lockOnTarget->GetNextPos();
+
+    //プレイヤーから敵方向を求める
+    Vector3 toEnemy = (enemyPos - playerPos);
+    if (toEnemy.SqMagnitude() > 0.0f)
     {
-        m_front = m_front.Normalize();
+        toEnemy = toEnemy.Normalize();
     }
-    // 向きベクトル更新
+
+    //中点（注視点）を計算
+    Vector3 center = (playerPos + enemyPos) * 0.5f;
+    center.y += kCameraHeight; // 少し上を見る
+    targetPos = center;
+
+    // カメラの理想位置
+    Vector3 basePos = playerPos;
+
+
+    //入力が入っているとき
+	bool isStickInput = input.GetStickInfo().IsRightStickInput();
+    if (isStickInput)
+    {
+        //スティック入力でカメラ回転
+        UpdateStickAngle(input);
+
+		//理想位置計算
+		basePos.y += kCameraHeight; // 少し上を見る
+        basePos += m_look * -kBackOffset;
+
+		//視点はプレイヤーからターゲットへのベクトルの少し前方
+		targetPos = playerPos + toEnemy * kLockOnViewInput;
+		targetPos.y += kCameraHeight;
+    }
+    else
+    {
+        //水平方向リセット
+		m_vertexAngle = 0.0f;
+
+        //プレイヤー右方向を求める
+        Vector3 playerRight = Vector3::Up().Cross(toEnemy);
+        if (playerRight.SqMagnitude() > 0.0f)
+        {
+            playerRight = playerRight.Normalize();
+        }
+
+        //プレイヤーが右を向いているなら左に動く
+        if (m_playerDir.Dot(playerRight) > kRightDot)
+        {
+            m_nextlockOnSide = -kRightOffset;
+        }
+        //プレイヤーが左を向いているなら右に動く
+        else if (m_playerDir.Dot(playerRight) < -kRightDot)
+        {
+            m_nextlockOnSide = kRightOffset;
+        }
+        m_lockOnSide = MathSub::Lerp(m_lockOnSide, m_nextlockOnSide, 0.05f);
+
+        basePos -= (toEnemy * kBackOffset);
+        basePos += (playerRight * m_lockOnSide);                // 横にオフセット
+        basePos += Vector3::Up() * kUpOffset;                   //上にオフセット
+    }
+    Vector3 idealCamPos = basePos;
+    //衝突補正（壁など）
+    Vector3 nextPos = Physics::GetInstance().GetCameraRatCastNearEndPos(targetPos, idealCamPos);
+
+    //補間してなめらかに追従
+    m_cameraPos = Vector3::Lerp(m_cameraPos, nextPos, kFollowSpeed);
+
+    //視点を更新
+    m_viewPos = Vector3::Lerp(m_viewPos, targetPos, kFollowSpeed);
+
+    if (!isStickInput)
+    {
+        //前方向の更新
+        Vector3 frontDir = (m_viewPos - m_cameraPos);
+        frontDir.y = 0.0f;  // 水平面に限定
+        if (frontDir.SqMagnitude() > 0.0f)
+        {
+            frontDir = frontDir.Normalize();
+        }
+        //前方向をもとに他の方向の更新
+        UpdateDirection(Vector3::Lerp(m_front, frontDir, kRotFollowSpeed));
+    }
+
+    //反映 
+    DxLib::SetCameraPositionAndTarget_UpVecY(
+        m_cameraPos.ToDxLibVector(),
+        m_viewPos.ToDxLibVector()
+    );
+}
+
+void PlayerCamera::UpdateDirection(Vector3 newFront)
+{
+	m_front = newFront;
+    if(m_front.SqMagnitude() > 0.0f)
+    {
+		m_front = m_front.Normalize();
+	}
+
+	//右方向更新
     m_right = Vector3::Up().Cross(m_front);
     if (m_right.SqMagnitude() > 0.0f)
     {
         m_right = m_right.Normalize();
-    }
+	}
+
+    // 縦角反映
     m_look = Quaternion::AngleAxis(m_vertexAngle * MyMath::DEG_2_RAD, m_right) * m_front;
     if (m_look.SqMagnitude() > 0.0f)
     {
         m_look = m_look.Normalize();
     }
 
-    // 水平方向のクォータニオンを保存
+    // クォータニオン更新
     m_rotH = Quaternion::CalcHorizontalQuat(m_front);
+}
+
+void PlayerCamera::UpdateStickAngle(Input& input)
+{
+    Vector2 stick(input.GetStickInfo().rightStickX * kInputToAngle, input.GetStickInfo().rightStickY * kInputToAngle);
+    //入力による回転
+    float rotH = stick.x * kHorizontalSpeed;
+    float rotV = stick.y * kVerticalSpeed;
+
+    //左右回転（Up軸）
+    auto qH = Quaternion::AngleAxis(rotH * MyMath::DEG_2_RAD, Vector3::Up());
+    m_front = qH * m_front;
+    m_right = qH * m_right;
+
+    //上下回転（Right軸）
+    m_vertexAngle = MathSub::ClampFloat((m_vertexAngle + rotV), -kLimitAngle, kLimitAngle);
+    auto qV = Quaternion::AngleAxis(m_vertexAngle * MyMath::DEG_2_RAD, m_right);
+    m_look = qV * m_front;
+    if (m_look.SqMagnitude() > 0.0f)
+    {
+        m_look = m_look.Normalize();
+    }
+
+    //回転量の保存
+    m_rotH = qH * m_rotH;
 }
