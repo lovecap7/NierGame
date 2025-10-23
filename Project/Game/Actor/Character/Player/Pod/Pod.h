@@ -3,9 +3,9 @@
 #include <memory>
 #include <vector>
 #include <string>
+#include "../Player.h"
 class ActorManager;
 class Collidable;
-class Player;
 class Rigidbody;
 class ActorData;
 class CharaStatusData;
@@ -41,6 +41,9 @@ public:
 	Vector3 GetPlayerPos()const;
 	//Player向き
 	Vector3 GetPlayerDir()const;
+	//ターゲット
+	Player::TargetInfo GetPlayerTargetInfo()const;
+
 	//カメラの向き
 	Vector3 GetCameraDir()const;
 	//弾
@@ -52,7 +55,6 @@ public:
 
 	//アニメーション取得
 	std::string GetAnim(std::wstring state) const;
-
 private:
 	//プレイヤーの参照
 	std::weak_ptr<Player> m_pPlayer;

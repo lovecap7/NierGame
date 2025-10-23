@@ -2,6 +2,8 @@
 #include "PodStateAttack.h"
 #include "PodStateGliding.h"
 #include "Pod.h"
+#include "../Player.h"
+#include "../../Enemy/EnemyBase.h"
 #include "../../../../../General/Model.h"
 #include "../../../../../General/Collision/Rigidbody.h"
 #include "../../../../../General/Input.h"
@@ -69,17 +71,17 @@ void PodStateIdle::Update()
 	}
 	targetPos.y += kSwayHeight * std::cos(m_swayAngle);
 
-
+	
 	//カメラの向き
-	Vector3 cameraDir = owner->GetCameraDir();
+	Vector3 dir = GetPodDir(owner);
 
 	//今の座標
 	Vector3 nowPos = owner->GetPos();
 
 	//座標
-	Vector3 nextPos = Vector3::Lerp(nowPos, GetPodPos(targetPos,cameraDir,kPodPosUp,kPodPosRight,kPodPosBack), kLerpRate);
+	Vector3 nextPos = Vector3::Lerp(nowPos, GetPodPos(targetPos, dir,kPodPosUp,kPodPosRight,kPodPosBack), kLerpRate);
 	owner->GetRb()->SetVec(nextPos - nowPos);
 
 	//向きをカメラに合わせる
-	owner->GetModel()->SetDir(cameraDir.XZ());
+	owner->GetModel()->SetDir(dir.XZ());
 }

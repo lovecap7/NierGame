@@ -6,6 +6,7 @@
 #include <memory>
 #include <map>
 #include <string>
+#include <list>
 
 class ActorManager;
 class CharacterStateBase;
@@ -16,6 +17,7 @@ class PlayerCamera;
 class Weapon;
 class CSVDataLoader;
 class AttackBase;
+class EnemyBase;
 class Player :
 	public CharacterBase
 {
@@ -82,9 +84,26 @@ public:
 
 	//描画
 	void SetIsDraw(bool isDraw) { m_isDraw = isDraw; };
+
+	//ターゲット情報
+	struct TargetInfo
+	{
+		TargetInfo():
+			m_isFound(false),
+			m_pTarget()
+		{
+		}
+		//発見したかどうか
+		bool m_isFound;
+		//参照
+		std::weak_ptr<EnemyBase> m_pTarget;
+	};
+	TargetInfo GetTargetInfo()const { return m_targetInfo; };
 private:
 	//カメラ
 	std::weak_ptr<PlayerCamera> GetPlayerCamera()const;
+	//ターゲットを探す
+	void SearchTarget(Input& input, std::shared_ptr<PlayerCamera> camera, const std::list<std::shared_ptr<EnemyBase>>& enemys);
 private:
 	//ジャンプ回数
 	int m_jumpNum;
@@ -108,5 +127,8 @@ private:
 	float m_putAwayCountFrame;
 	//描画しない
 	bool m_isDraw;
+	
+	//現在のターゲット情報
+	TargetInfo m_targetInfo;
 };
 

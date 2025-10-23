@@ -5,9 +5,6 @@
 #include "../../Main/Application.h"
 #include "../Actor/DebugActor/DebugPlayer.h"
 #include "../Actor/ActorManager.h"
-#include "../Actor/Character/Enemy/EnemyBase.h"
-#include "../Actor/Character/Enemy/EnemyManager.h"
-#include "../Actor/Character/Player/Player.h"
 #include "../../General/Game.h"
 
 namespace
@@ -33,9 +30,6 @@ namespace
 	constexpr float kRightDot = 0.7f;
     //ロックオン中のカメラ操作時の視点
 	constexpr float kLockOnViewInput = 100.0f;
-
-	//索敵範囲
-	constexpr float kSearchRange = 5000.0f;
 }
 
 PlayerCamera::PlayerCamera() :
@@ -100,51 +94,6 @@ void PlayerCamera::EndLockOn()
 {
 	m_isLockOn = false;
 	m_lockOnTarget.reset();
-}
-
-void PlayerCamera::SearchTarget(std::shared_ptr<ActorManager> actorM, const std::list<std::shared_ptr<EnemyBase>>& enemys)
-{
-    //LBでロックオン開始
-    auto& input = Input::GetInstance();
-    if (input.IsTrigger("LB"))
-    {
-        //ロックオン中なら解除
-        if (IsLockOn())
-        {
-            EndLockOn();
-        }
-        //ロックオンしていないなら開始
-        else
-        {
-            //プレイヤーの座標
-            if (actorM->GetPlayer().expired())return;
-            auto player = actorM->GetPlayer().lock();
-            Vector3 playerPos = player->GetNextPos();
-
-            //最も近い敵を探す
-            std::shared_ptr<EnemyBase> nearestEnemy = nullptr;
-            float minDis = kSearchRange; //索敵範囲
-            bool isFind = false;
-
-            for (auto enemy : enemys)
-            {
-                Vector3 enemyPos = enemy->GetNextPos();
-                Vector3 toEnemy = enemyPos - playerPos;
-                float distance = toEnemy.Magnitude();
-                if (distance < minDis)
-                {
-                    nearestEnemy = enemy;
-                    //発見
-                    isFind = true;
-                }
-            }
-            //ロックオン開始
-            if (isFind)
-            {
-                StartLockOn(nearestEnemy);
-            }
-        }
-    }
 }
 
 void PlayerCamera::NormalUpdate(Input& input, Vector3& targetPos)

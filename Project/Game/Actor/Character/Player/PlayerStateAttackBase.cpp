@@ -1,5 +1,6 @@
 #include "PlayerStateAttackBase.h"
 #include "Weapon/Weapon.h"
+#include "../Enemy/EnemyBase.h"
 #include "../../../Attack/SwordAttack.h"
 #include "../../../Attack/AOEAttack.h"
 #include "../../../../General/Model.h"
@@ -97,9 +98,25 @@ void PlayerStateAttackBase::UpdateMove(std::shared_ptr<Player> owner, Input& inp
 	Vector3 moveVec = Vector3::Zero();
 	if (m_frame < m_attackData->m_moveFrame)
 	{
-		model->SetDir(InputMoveVec(owner, input).XZ());
+		//向き
+		Vector3 dir = InputMoveVec(owner, input);
+		if(owner->GetTargetInfo().m_isFound)
+		{
+			if(!owner->GetTargetInfo().m_pTarget.expired())
+			{
+				auto target = owner->GetTargetInfo().m_pTarget.lock();
+				//ターゲットがいるならターゲット方向へ向く
+				dir = (target->GetPos() - owner->GetPos());
+				if (dir.SqMagnitude() > 0.0f)
+				{
+					dir = dir.Normalize();
+				}
+			}
+		}
+		//モデルの向き
+		model->SetDir(dir.XZ());
 		moveVec = model->GetDir() * m_attackData->m_moveSpeed;
 	}
-
+	//移動
 	owner->GetRb()->SetMoveVec(moveVec);
 }

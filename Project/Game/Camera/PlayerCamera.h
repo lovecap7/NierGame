@@ -4,7 +4,6 @@
 #include <list>
 class Actor;
 class ActorManager;
-class EnemyBase;
 class Input;
 class PlayerCamera :
     public CameraBase
@@ -26,8 +25,6 @@ public:
 	void SetPlayerVec(const Vector3& vec) { m_playerVec = vec; }
 	//プレイヤーの向き
 	void SetPlayerDir(const Vector3& dir) { m_playerDir = dir; }
-	//ターゲット探索
-	void SearchTarget(std::shared_ptr<ActorManager> actorM, const std::list<std::shared_ptr<EnemyBase>>& enemys);
 private:
 	//ロックオン対象
 	std::weak_ptr<Actor> m_lockOnTarget;

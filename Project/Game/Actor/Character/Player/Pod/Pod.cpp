@@ -1,6 +1,5 @@
 #include "Pod.h"
 #include "PodStateIdle.h"
-#include "../Player.h"
 #include "../../CharacterStateBase.h"
 #include "../../../ActorManager.h"
 #include "../../../../Camera/PlayerCamera.h"
@@ -104,6 +103,15 @@ Vector3 Pod::GetPlayerDir() const
 	if (m_pPlayer.expired())return Vector3::Forward();
 	//座標
 	return m_pPlayer.lock()->GetModel()->GetDir();
+}
+
+Player::TargetInfo Pod::GetPlayerTargetInfo() const
+{
+	Player::TargetInfo info;
+	if (m_pPlayer.expired())return info;
+	info = m_pPlayer.lock()->GetTargetInfo();
+	//ターゲット
+	return info;
 }
 
 Vector3 Pod::GetCameraDir() const

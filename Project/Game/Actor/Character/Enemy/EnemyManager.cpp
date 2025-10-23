@@ -41,17 +41,6 @@ void EnemyManager::Init()
 void EnemyManager::Update()
 {
 	if (m_enemys.empty())return;
-
-	//カメラのロックオン
-	if (!m_pActorManager.expired())
-	{
-		auto actorM = m_pActorManager.lock();
-		if (!actorM->GetPlayerCamera().expired())
-		{
-			auto pCamera = actorM->GetPlayerCamera().lock();
-			pCamera->SearchTarget(actorM, m_enemys);
-		}
-	}
 }
 
 void EnemyManager::End()

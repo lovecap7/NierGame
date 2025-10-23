@@ -4,6 +4,8 @@
 #include "PlayerStateAvoid.h"
 #include "PlayerStateFall.h"
 #include "Weapon/Weapon.h"
+#include "../Enemy/EnemyManager.h"
+#include "../Enemy/EnemyBase.h"
 #include "../../../../General/game.h"
 #include "../../../../General/Collision/CapsuleCollider.h"
 #include "../../../../General/Collision/Rigidbody.h"
@@ -36,6 +38,8 @@ namespace
 	//武器を収めるまでのフレーム
 	constexpr float kPutAwayFrame = 60.0f * 5.0f;
 
+	//索敵範囲
+	constexpr float kSearchRange = 5000.0f;
 }
 
 Player::Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager) :
@@ -73,6 +77,16 @@ void Player::Update()
 {
 	//入力の取得
 	auto& input = Input::GetInstance();
+
+	//ターゲットの検索
+	if (!m_pActorManager.expired() && !GetPlayerCamera().expired())
+	{
+		auto actorM = m_pActorManager.lock();
+		auto camera = GetPlayerCamera().lock();
+		SearchTarget(input, camera,actorM->GetEnemyManager()->GetEnemys());
+	}
+	
+
 
 #if _DEBUG
 	if (input.IsTrigger("FullRecovery"))
@@ -377,4 +391,61 @@ std::weak_ptr<PlayerCamera> Player::GetPlayerCamera() const
 		}
 	}
 	return camera;
+}
+
+void Player::SearchTarget(Input& input, std::shared_ptr<PlayerCamera> camera, const std::list<std::shared_ptr<EnemyBase>>& enemys)
+{
+	//ターゲットがいなくなったら発見フラグをfalseにする
+	if(m_targetInfo.m_pTarget.expired())
+	{
+		m_targetInfo.m_isFound = false;
+		if (camera->IsLockOn())
+		{
+			//解除
+			camera->EndLockOn();
+		}
+	}
+
+	//LBでロックオン開始
+	if (input.IsTrigger("LB"))
+	{
+		//ロックオン中なら解除
+		if (camera->IsLockOn())
+		{
+			//解除
+			camera->EndLockOn();
+			m_targetInfo.m_isFound = false;
+		}
+		//ロックオンしていないなら開始
+		else
+		{
+			//プレイヤーの座標
+			Vector3 playerPos = GetPos();
+
+			//最も近い敵を探す
+			std::shared_ptr<EnemyBase> nearestEnemy = nullptr;
+			float minDis = kSearchRange; //索敵範囲
+			bool isFind = false;
+
+			for (auto enemy : enemys)
+			{
+				Vector3 enemyPos = enemy->GetNextPos();
+				Vector3 toEnemy = enemyPos - playerPos;
+				float distance = toEnemy.Magnitude();
+				if (distance < minDis)
+				{
+					nearestEnemy = enemy;
+					//発見
+					isFind = true;
+				}
+			}
+			//ロックオン開始
+			if (isFind)
+			{
+				camera->StartLockOn(nearestEnemy);
+				m_targetInfo.m_pTarget = nearestEnemy;
+			}
+			m_targetInfo.m_isFound = isFind;
+		}
+	}
 }

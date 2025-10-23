@@ -64,17 +64,17 @@ void PodStateAttack::Update()
 	//プレイヤーの近くに移動
 	Vector3 targetPos = owner->GetPlayerPos();
 	//カメラの向き
-	Vector3 cameraDir = owner->GetCameraDir();
+	Vector3 dir = GetPodDir(owner);
 
 	//今の座標
 	Vector3 nowPos = owner->GetPos();
 
 	//座標
-	Vector3 nextPos = Vector3::Lerp(nowPos, GetPodPos(targetPos, cameraDir, kPodPosUp, kPodPosRight, kPodPosBack), kLerpRate);
+	Vector3 nextPos = Vector3::Lerp(nowPos, GetPodPos(targetPos, dir, kPodPosUp, kPodPosRight, kPodPosBack), kLerpRate);
 	owner->GetRb()->SetVec(nextPos - nowPos);
 
 	//向きをカメラに合わせる
-	owner->GetModel()->SetDir(cameraDir.XZ());
+	owner->GetModel()->SetDir(dir.XZ());
 
 	//カウント
 	CountFrame();
@@ -92,7 +92,7 @@ void PodStateAttack::Update()
 				//Activeにしつつフラグ等のリセット
 				bullet->Reset(m_attackData->m_keepFrame);
 				bullet->SetPos(owner->GetPos());
-				bullet->SetMoveVec(cameraDir * m_attackData->m_moveSpeed);
+				bullet->SetMoveVec(dir * m_attackData->m_moveSpeed);
 				owner->SetAttack(bullet);
 				break;
 			}
