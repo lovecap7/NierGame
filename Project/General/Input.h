@@ -203,7 +203,7 @@ public:
    /// </summary>
    /// <param name="action">アクション名</param>
    /// <returns>先行入力が有効ならtrue</returns>
-	bool IsBuffered(const std::string& action) const;
+	bool IsBuffered(const std::string& action);
 
 private:
 	/// <summary>

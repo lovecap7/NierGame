@@ -45,8 +45,12 @@ void NormalEnemy::Init()
 
 void NormalEnemy::Update()
 {
+	//攻撃クールタイム更新
+	CountAttackCoolTime();
 	//共通処理
 	CharacterBase::Update();
+	//ロックオンの位置
+	UpdateLockOnViewPos();
 }
 
 

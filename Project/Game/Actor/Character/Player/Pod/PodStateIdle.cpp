@@ -79,7 +79,7 @@ void PodStateIdle::Update()
 	Vector3 nowPos = owner->GetPos();
 
 	//À•W
-	Vector3 nextPos = Vector3::Lerp(nowPos, GetPodPos(targetPos, dir,kPodPosUp,kPodPosRight,kPodPosBack), kLerpRate);
+	Vector3 nextPos = Vector3::Lerp(nowPos, GetPodPos(targetPos, dir, kPodPosUp, kPodPosRight, kPodPosBack), kLerpRate);
 	owner->GetRb()->SetVec(nextPos - nowPos);
 
 	//Œü‚«‚ðƒJƒƒ‰‚É‡‚í‚¹‚é

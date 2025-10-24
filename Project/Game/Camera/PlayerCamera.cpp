@@ -3,8 +3,8 @@
 #include "../../General/Collision/SphereCollider.h"
 #include "../../General/Collision/Physics.h"
 #include "../../Main/Application.h"
-#include "../Actor/DebugActor/DebugPlayer.h"
 #include "../Actor/ActorManager.h"
+#include "../Actor/Actor.h"
 #include "../../General/Game.h"
 
 namespace
@@ -16,16 +16,17 @@ namespace
     constexpr float kLimitAngle = 80.0f;        //上下限界角度
     constexpr float kInputToAngle = 0.1f;       //スティック入力→角度変換係数
     constexpr float kCameraHeight = 150.0f;     //プレイヤーからのカメラ高さ
+	constexpr float kNormalFollowSpeed = 0.3f;  //通常時の追従速度
     //操作してないときの旋回速度
     constexpr float kReturnSpeed = 0.02f; // 戻るスピード
 
 	//ロックオン時の設定
     //カメラオフセット（右に寄せる）
-    constexpr float kRightOffset = 150.0f;   // 右オフセット距離
-    constexpr float kBackOffset = 350.0f;   // 後方距離
-    constexpr float kUpOffset = 200.0f;   // 上方向オフセット
-    constexpr float kFollowSpeed = 0.15f;
-    constexpr float kRotFollowSpeed = 0.2f; // 追従回転速度
+    constexpr float kRightOffset = 150.0f;  //右オフセット距離
+    constexpr float kBackOffset = 350.0f;   //後方距離
+    constexpr float kUpOffset = 200.0f;     //上方向オフセット
+	constexpr float kLockOnFollowSpeed = 0.15f;   //ロックオン中の追従速度
+    constexpr float kRotFollowSpeed = 0.2f; //追従回転速度
 	//右向きを決める内積
 	constexpr float kRightDot = 0.7f;
     //ロックオン中のカメラ操作時の視点
@@ -126,9 +127,9 @@ void PlayerCamera::NormalUpdate(Input& input, Vector3& targetPos)
     //位置補正
     nextPos = Physics::GetInstance().GetCameraRatCastNearEndPos(targetPos, nextPos);
     //位置確定
-    m_cameraPos = nextPos;
+    m_cameraPos = Vector3::Lerp(m_cameraPos, nextPos, 0.3f);
     //視点確定
-    Vector3 viewPos = targetPos;
+    Vector3 viewPos = Vector3::Lerp(m_viewPos, targetPos, 0.3f);
     m_viewPos = viewPos;
     // DxLibに反映
     SetCameraPositionAndTarget_UpVecY(
@@ -210,10 +211,10 @@ void PlayerCamera::LockOnUpdate(Input& input, Vector3& targetPos)
     Vector3 nextPos = Physics::GetInstance().GetCameraRatCastNearEndPos(targetPos, idealCamPos);
 
     //補間してなめらかに追従
-    m_cameraPos = Vector3::Lerp(m_cameraPos, nextPos, kFollowSpeed);
+    m_cameraPos = Vector3::Lerp(m_cameraPos, nextPos, kLockOnFollowSpeed);
 
     //視点を更新
-    m_viewPos = Vector3::Lerp(m_viewPos, targetPos, kFollowSpeed);
+    m_viewPos = Vector3::Lerp(m_viewPos, targetPos, kLockOnFollowSpeed);
 
     if (!isStickInput)
     {

@@ -149,6 +149,7 @@
     <ClCompile Include="Game\Actor\Character\CharacterStateBase.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyBase.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyManager.cpp" />
+    <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateAttack.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateBase.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateHit.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateIdle.cpp" />
@@ -173,8 +174,6 @@
     <ClCompile Include="Game\Actor\Character\Player\Weapon\Weapon.cpp" />
     <ClCompile Include="Game\Actor\DebugActor\DebugAttack.cpp" />
     <ClCompile Include="Game\Actor\DebugActor\DebugEnemy.cpp" />
-    <ClCompile Include="Game\Actor\DebugActor\DebugPlayer.cpp" />
-    <ClCompile Include="Game\Actor\DebugActor\DebugWeapon.cpp" />
     <ClCompile Include="Game\Actor\Stage\StageObject.cpp" />
     <ClCompile Include="Game\Attack\AOEAttack.cpp" />
     <ClCompile Include="Game\Attack\AttackBase.cpp" />
@@ -233,6 +232,7 @@
     <ClInclude Include="Game\Actor\Character\CharacterStateBase.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyBase.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyManager.h" />
+    <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateAttack.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateBase.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateHit.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateIdle.h" />
@@ -257,8 +257,6 @@
     <ClInclude Include="Game\Actor\Character\Player\Weapon\Weapon.h" />
     <ClInclude Include="Game\Actor\DebugActor\DebugAttack.h" />
     <ClInclude Include="Game\Actor\DebugActor\DebugEnemy.h" />
-    <ClInclude Include="Game\Actor\DebugActor\DebugPlayer.h" />
-    <ClInclude Include="Game\Actor\DebugActor\DebugWeapon.h" />
     <ClInclude Include="Game\Actor\Stage\StageObject.h" />
     <ClInclude Include="Game\Attack\AOEAttack.h" />
     <ClInclude Include="Game\Attack\AttackBase.h" />

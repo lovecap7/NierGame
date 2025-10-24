@@ -48,6 +48,7 @@ void PlayerStateIdle::Update()
 {
 	auto& input = Input::GetInstance();
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
+
 	//Ž€–S
 	if (owner->GetCharaStatus()->IsDead())
 	{

@@ -8,6 +8,15 @@
 #include "../../../../General/Collision/Rigidbody.h"
 #include "Player.h"
 
+namespace
+{
+	//移動量の倍率
+	constexpr float kLowSpeedRate = 0.5f;
+	constexpr float kHighSpeedRate = 3.0f;
+	//距離の影響割合
+	constexpr float kDistanceRate = 0.01f;
+}
+
 PlayerStateAttackBase::PlayerStateAttackBase(std::weak_ptr<Actor> player):
 	PlayerStateBase(player),
 	m_isAppearedAttack(false),
@@ -84,12 +93,17 @@ void PlayerStateAttackBase::UpdateAttackPosition(std::shared_ptr<Player> owner, 
 	}
 }
 
-void PlayerStateAttackBase::LoadNextMultipleHitAttack(std::shared_ptr<Player> owner)
+void PlayerStateAttackBase::LoadNextMultipleHitAttack(std::shared_ptr<Player> owner, std::shared_ptr<Weapon> weapon)
 {
 	if (!m_attackData)return;
 	// 多段ヒット処理
 	m_attackData = owner->GetAttackData(m_attackData->m_nextAttackName);
 	m_isAppearedAttack = false;
+	//攻撃作成
+	if (m_frame >= m_attackData->m_startFrame)
+	{
+		CreateAttack(owner, weapon);
+	}
 }
 
 void PlayerStateAttackBase::UpdateMove(std::shared_ptr<Player> owner, Input& input, std::shared_ptr<Model> model)
@@ -98,8 +112,13 @@ void PlayerStateAttackBase::UpdateMove(std::shared_ptr<Player> owner, Input& inp
 	Vector3 moveVec = Vector3::Zero();
 	if (m_frame < m_attackData->m_moveFrame)
 	{
+		//速度
+		float speed = m_attackData->m_moveSpeed;
+
 		//向き
 		Vector3 dir = InputMoveVec(owner, input);
+
+		//ターゲットがいるならターゲット方向へ向く
 		if(owner->GetTargetInfo().m_isFound)
 		{
 			if(!owner->GetTargetInfo().m_pTarget.expired())
@@ -111,11 +130,17 @@ void PlayerStateAttackBase::UpdateMove(std::shared_ptr<Player> owner, Input& inp
 				{
 					dir = dir.Normalize();
 				}
+
+				//ターゲットとの距離が近いなら移動量を減らし遠いなら増やす
+				float dis = (target->GetPos() - owner->GetPos()).Magnitude();
+				speed *= MathSub::ClampFloat(dis * kDistanceRate, kLowSpeedRate, kHighSpeedRate);
 			}
 		}
 		//モデルの向き
 		model->SetDir(dir.XZ());
-		moveVec = model->GetDir() * m_attackData->m_moveSpeed;
+
+		//移動量
+		moveVec = model->GetDir() * speed;
 	}
 	//移動
 	owner->GetRb()->SetMoveVec(moveVec);

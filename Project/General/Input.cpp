@@ -354,13 +354,13 @@ bool Input::IsRepeate(const std::string& action, int deltaTime)const
 	return false;
 }
 
-bool Input::IsBuffered(const std::string& action) const
+bool Input::IsBuffered(const std::string& action)
 {
 	auto it = m_inputBufferFrame.find(action);
 	if (it == m_inputBufferFrame.end()) return false;
 
 	//‚Ü‚¾—LŒøŽžŠÔ“à‚È‚çtrue
-	return it->second > 0;
+	return  it->second > 0;
 }
 
 void Input::UpdateBuffer()

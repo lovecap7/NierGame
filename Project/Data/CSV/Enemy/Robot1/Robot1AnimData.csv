@@ -1,3 +1,7 @@
 ﻿状態,武器,アニメーション
 Idle,None,Robot|Idle
+Walk,None,Robot|Walk
+Run,None,Robot|Run
 Hit,None,Robot|HitRecieve_2
+Punch,None,Robot|Punch
+Punch,None,Robot|PunchRush

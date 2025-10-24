@@ -1,5 +1,6 @@
 #include "EnemyStateIdle.h"
 #include "EnemyStateHit.h"
+#include "EnemyStateAttack.h"
 #include "EnemyBase.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Input.h"
@@ -37,6 +38,13 @@ void EnemyStateIdle::Update()
 	{
 		//ヒット状態ならヒットステートへ
 		ChangeState(std::make_shared<EnemyStateHit>(m_pOwner));
+		return;
+	}
+	//攻撃可能なら
+	if (owner->IsEnableAttack())
+	{
+		//攻撃状態へ
+		ChangeState(std::make_shared<EnemyStateAttack>(m_pOwner));
 		return;
 	}
 

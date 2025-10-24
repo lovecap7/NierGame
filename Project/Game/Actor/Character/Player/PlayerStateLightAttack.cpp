@@ -7,6 +7,7 @@
 #include "PlayerStateJump.h"
 #include "PlayerStateFall.h"
 #include "Weapon/Weapon.h"
+#include "../Enemy/EnemyBase.h"
 #include "../../../Attack/SwordAttack.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Input.h"
@@ -29,13 +30,16 @@ PlayerStateLightAttack::PlayerStateLightAttack(std::weak_ptr<Actor> player, bool
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	owner->SetCollState(CollisionState::Move);
 
+	//リジッドボディ
+	auto rb = owner->GetRb();
+
 	//空中にいるなら
 	if (!owner->IsFloor())
 	{
 		//重力を受けない
-		owner->GetRb()->SetIsGravity(false);
+		rb->SetIsGravity(false);
 		//縦の移動量をリセット
-		owner->GetRb()->SetVecY(0.0f);
+		rb->SetVecY(0.0f);
 		//空中攻撃をした
 		owner->SetIsAirAttacked(true);
 	}
@@ -49,11 +53,26 @@ PlayerStateLightAttack::PlayerStateLightAttack(std::weak_ptr<Actor> player, bool
 		//攻撃データ取得
 		m_attackData = owner->GetAttackData(kJustAttackName);
 		//上昇
-		owner->GetRb()->SetVecY(m_attackData->m_param1);
+		rb->SetVecY(m_attackData->m_param1);
 		//この攻撃の場合重力を受ける
-		owner->GetRb()->SetIsGravity(true);
+		rb->SetIsGravity(true);
 		//透明
 		owner->SetIsDraw(false);
+
+		//もしもターゲットがいる場合近くまで移動
+		auto targetInfo = owner->GetTargetInfo();
+		if (targetInfo.m_isFound)
+		{
+			auto target = targetInfo.m_pTarget.lock();
+			//ターゲット座標
+			Vector3 targetPos = target->GetPos();
+			//ターゲットへのベクトル
+			Vector3 toTarget = targetPos - owner->GetPos();
+			//正規化
+			toTarget = toTarget.Normalize();
+			//近くまで移動
+			rb->SetPos(targetPos + (toTarget * -200.0f));
+		}
 	}
 	//ジャンプ中なら
 	else if (isJump)
@@ -61,9 +80,9 @@ PlayerStateLightAttack::PlayerStateLightAttack(std::weak_ptr<Actor> player, bool
 		//攻撃データ取得
 		m_attackData = owner->GetAttackData(kJumpAttackName);
 		//上昇
-		owner->GetRb()->SetVecY(m_attackData->m_param1);
+		rb->SetVecY(m_attackData->m_param1);
 		//この攻撃の場合重力を受ける
-		owner->GetRb()->SetIsGravity(true);
+		rb->SetIsGravity(true);
 		//空中攻撃をしたことはなし
 		owner->SetIsAirAttacked(false);
 	}
@@ -222,7 +241,8 @@ void PlayerStateLightAttack::UpdateStartAttack(std::shared_ptr<Player>& owner, s
 			if (m_attackData->m_isMultipleHit && m_attackData->m_nextAttackName != L"None")
 			{
 				//多段ヒット攻撃
-				LoadNextMultipleHitAttack(owner);
+				LoadNextMultipleHitAttack(owner,weapon);
+				return;
 			}
 			//ジャスト回避攻撃の透明になるを解除
 			if (m_isJust)

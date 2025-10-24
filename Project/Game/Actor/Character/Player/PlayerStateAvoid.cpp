@@ -108,6 +108,7 @@ PlayerStateAvoid::PlayerStateAvoid(std::weak_ptr<Actor> player) :
 PlayerStateAvoid::~PlayerStateAvoid()
 {
 	if (m_pOwner.expired())return;
+
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	owner->GetRb()->SetIsGravity(true);
 
@@ -153,6 +154,18 @@ void PlayerStateAvoid::Update()
 		{
 			m_isLightAttack = false;
 			m_isHeavyAttack = true;
+		}
+	}
+	else
+	{
+		//入力がないかつジャスト回避成功していない場合即終了
+		if (!input.GetStickInfo().IsLeftStickInput() && m_frame > 20.0f)
+		{
+			//無敵解除
+			owner->GetCharaStatus()->SetIsNoDamage(false);
+			//待機へ
+			ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
+			return;
 		}
 	}
 

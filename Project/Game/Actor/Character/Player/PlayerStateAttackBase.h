@@ -28,7 +28,7 @@ protected:
     //UŒ‚”­¶
     void CreateAttack(std::shared_ptr<Player> owner, std::shared_ptr<Weapon> weapon);
     //‘½’iƒqƒbƒgUŒ‚
-    void LoadNextMultipleHitAttack(std::shared_ptr<Player> owner);
+    void LoadNextMultipleHitAttack(std::shared_ptr<Player> owner, std::shared_ptr<Weapon> weapon);
     //UŒ‚ˆÊ’u‚ÌXV
     void UpdateAttackPosition(std::shared_ptr<Player> owner, std::shared_ptr<Weapon> weapon);
     //UŒ‚‚É‚æ‚éˆÚ“®

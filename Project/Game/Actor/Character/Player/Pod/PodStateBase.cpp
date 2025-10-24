@@ -11,17 +11,17 @@ PodStateBase::~PodStateBase()
 {
 }
 
-Vector3 PodStateBase::GetPodPos(Vector3 targetPos, Vector3 cameraDir, float upH, float right, float back)
+Vector3 PodStateBase::GetPodPos(Vector3 targetPos, Vector3 dir, float upH, float right, float back)
 {
 	//ターゲットの近くに移動
 	targetPos.y += upH;
 	//カメラに対して右
-	Vector3 rightDir = cameraDir.Cross(Vector3::Up());
+	Vector3 rightDir = dir.Cross(Vector3::Up());
 	if (rightDir.SqMagnitude() > 0.0f)
 	{
 		rightDir = rightDir.Normalize();
 	}
-	targetPos += rightDir * right + cameraDir * back;
+	targetPos += rightDir * right + dir * back;
 	//座標
 	Vector3 nextPos = targetPos;
 	return nextPos;
@@ -33,8 +33,7 @@ Vector3 PodStateBase::GetPodDir(std::shared_ptr<Pod> owner)
 	//ターゲットがいるならターゲット方向を見る
 	if (owner->GetPlayerTargetInfo().m_isFound)
 	{
-		Vector3 toTarget = owner->GetPlayerTargetInfo().m_pTarget.lock()->GetNextPos() - owner->GetPos();
-		toTarget.y = 0.0f;
+		Vector3 toTarget = owner->GetPlayerTargetInfo().m_pTarget.lock()->GetLockOnViewPos() - owner->GetPos();
 		if (toTarget.SqMagnitude() > 0.0f)
 		{
 			dir = toTarget.Normalize();

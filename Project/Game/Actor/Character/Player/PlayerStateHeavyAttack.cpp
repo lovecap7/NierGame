@@ -104,8 +104,6 @@ void PlayerStateHeavyAttack::UpdateStartFrame(std::shared_ptr<Player>& owner, st
 		{
 			if (m_attackData->m_isMultipleHit && m_attackData->m_nextAttackName != L"None")
 			{
-				LoadNextMultipleHitAttack(owner);
-
 				//‹ó’†UŒ‚‚Ì
 				if (m_update == &PlayerStateHeavyAttack::AirUpdate)
 				{
@@ -113,6 +111,8 @@ void PlayerStateHeavyAttack::UpdateStartFrame(std::shared_ptr<Player>& owner, st
 					owner->GetRb()->SetIsGravity(true);
 					owner->GetRb()->SetVecY(m_attackData->m_param1);
 				}
+				LoadNextMultipleHitAttack(owner,weapon);
+				return;
 			}
 		}
 		//UŒ‚ì¬

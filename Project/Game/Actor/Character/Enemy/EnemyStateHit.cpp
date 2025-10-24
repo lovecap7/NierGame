@@ -46,4 +46,10 @@ void EnemyStateHit::Update()
 		ChangeState(std::make_shared<EnemyStateIdle>(m_pOwner));
 		return;
 	}
+	//—Ž‰º‘¬“x‚ð—Ž‚Æ‚·
+	auto rb = owner->GetRb();
+	if (rb->GetVec().y < 0.0f)
+	{
+		rb->SetVecY(rb->GetVec().y * 0.1f);
+	}
 }

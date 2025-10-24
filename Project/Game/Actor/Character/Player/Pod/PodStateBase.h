@@ -11,7 +11,7 @@ public:
     virtual ~PodStateBase();
 protected:
 	//ポッドの位置取得
-    Vector3 GetPodPos(Vector3 targetPos, Vector3 cameraDir, float upH, float right, float back);
+    Vector3 GetPodPos(Vector3 targetPos, Vector3 dir, float upH, float right, float back);
 	//ポッドの向き取得
 	Vector3 GetPodDir(std::shared_ptr<Pod> owner);
 };
