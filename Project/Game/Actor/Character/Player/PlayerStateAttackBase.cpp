@@ -11,10 +11,10 @@
 namespace
 {
 	//ˆÚ“®—Ê‚Ì”{—¦
-	constexpr float kLowSpeedRate = 0.5f;
+	constexpr float kLowSpeedRate = 0.1f;
 	constexpr float kHighSpeedRate = 3.0f;
 	//‹——£‚Ì‰e‹¿Š„‡
-	constexpr float kDistanceRate = 0.01f;
+	constexpr float kDistanceRate = 0.005f;
 }
 
 PlayerStateAttackBase::PlayerStateAttackBase(std::weak_ptr<Actor> player):
@@ -136,6 +136,7 @@ void PlayerStateAttackBase::UpdateMove(std::shared_ptr<Player> owner, Input& inp
 				speed *= MathSub::ClampFloat(dis * kDistanceRate, kLowSpeedRate, kHighSpeedRate);
 			}
 		}
+
 		//ƒ‚ƒfƒ‹‚ÌŒü‚«
 		model->SetDir(dir.XZ());
 

@@ -28,6 +28,8 @@ namespace
 	constexpr float kNoDamageFrame = 30.0f;
 	//ジャスト回避終了前
 	constexpr float kFisishJustAvoidFrame = 5.0f;
+	//終了可能フレーム
+	constexpr float kEnableFinishAvoidFrame = 14.0f;
 }
 
 PlayerStateAvoid::PlayerStateAvoid(std::weak_ptr<Actor> player) :
@@ -65,6 +67,7 @@ PlayerStateAvoid::PlayerStateAvoid(std::weak_ptr<Actor> player) :
 		isBack = true;
 		vec = Vector3::Back();
 	}
+	m_isBack = isBack;
 	//カメラの向きに合わせて移動方向を変える
 	vec = owner->GetCameraRot() * vec;
 	//回避方向設定
@@ -75,13 +78,13 @@ PlayerStateAvoid::PlayerStateAvoid(std::weak_ptr<Actor> player) :
 	{
 		owner->GetModel()->SetAnim(owner->GetAnim(kForwardAvoid).c_str(), false);
 		//モデルの向き
-		owner->GetModel()->SetDir(Vector2(vec.x, vec.z));
+		owner->GetModel()->SetDir(vec.XZ());
 	}
 	else
 	{
 		owner->GetModel()->SetAnim(owner->GetAnim(kBackAvoid).c_str(), false);
 		//モデルの向き
-		owner->GetModel()->SetDir(Vector2(-vec.x, -vec.z));
+		owner->GetModel()->SetDir(vec.XZ() * -1);
 	}
 
 	auto status = owner->GetCharaStatus();
@@ -159,7 +162,7 @@ void PlayerStateAvoid::Update()
 	else
 	{
 		//入力がないかつジャスト回避成功していない場合即終了
-		if (!input.GetStickInfo().IsLeftStickInput() && m_frame > 20.0f)
+		if (!input.IsPress("B") && m_frame > kEnableFinishAvoidFrame)
 		{
 			//無敵解除
 			owner->GetCharaStatus()->SetIsNoDamage(false);
@@ -202,7 +205,7 @@ void PlayerStateAvoid::Update()
 	}
 
 	//回避移動
-	MoveAvoid(app, owner);
+	MoveAvoid(input, app, owner);
 }
 
 void PlayerStateAvoid::InitJustAvoid(std::shared_ptr<Model> model, std::shared_ptr<Player> owner)
@@ -254,8 +257,22 @@ void PlayerStateAvoid::UpdateJustAvoid(std::shared_ptr<Player> owner, std::share
 	}
 }
 
-void PlayerStateAvoid::MoveAvoid(Application& app, std::shared_ptr<Player> owner)
+void PlayerStateAvoid::MoveAvoid(Input& input, Application& app, std::shared_ptr<Player> owner)
 {
+	bool isInput = input.GetStickInfo().IsLeftStickInput();
+	//移動
+	if (isInput)
+	{
+		//入力方向に変更
+		m_avoidDir = InputMoveVec(owner, input);
+		//モデルの向き
+		Vector3 dir = m_avoidDir;
+		if (m_isBack)
+		{
+			dir *= -1;
+		}
+		owner->GetModel()->SetDir(dir.XZ());
+	}
 	float timeScale = app.GetTimeScale();
 	m_speed = MathSub::Lerp(m_speed, m_endSpeed, kLerpSpeedRate);
 	Vector3 vec = m_avoidDir * m_speed * timeScale;

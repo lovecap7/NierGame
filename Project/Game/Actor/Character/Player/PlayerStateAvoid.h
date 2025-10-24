@@ -4,6 +4,7 @@
 class Actor;
 class Player;
 class Model;
+class Input;
 class Application;
 class PlayerStateAvoid :
     public PlayerStateBase, public std::enable_shared_from_this<PlayerStateAvoid>
@@ -27,11 +28,13 @@ private:
     //ジャスト回避終了後に行う行動
     bool m_isLightAttack;
     bool m_isHeavyAttack;
+    //後退してるか
+	bool m_isBack;
 private:
     //ジャスト回避初期化
     void InitJustAvoid(std::shared_ptr<Model> model, std::shared_ptr<Player> owner);
     //ジャスト回避更新
     void UpdateJustAvoid(std::shared_ptr<Player> owner, std::shared_ptr<Model> model, Application& app);
     //回避移動
-    void MoveAvoid(Application& app, std::shared_ptr<Player> owner);
+    void MoveAvoid(Input& input, Application& app, std::shared_ptr<Player> owner);
 };
