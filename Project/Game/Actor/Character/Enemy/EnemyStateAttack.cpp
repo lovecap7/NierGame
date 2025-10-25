@@ -5,44 +5,23 @@
 #include "../../../Attack/AttackBase.h"
 #include "../../../Attack/SwordAttack.h"
 #include "../../../Attack/AOEAttack.h"
+#include "../../../Attack/BulletAttack.h"
 #include "../../../../General/Math/MyMath.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/CSV/AttackData.h"
 #include "../../../../General/Collision/Rigidbody.h"
 
-namespace
-{
-	const std::wstring kAttack1DataName = L"Attack1";
-	const std::wstring kAttack2DataName = L"Attack2";
-	const std::wstring kAttack3DataName = L"Attack3";
-}
 
-EnemyStateAttack::EnemyStateAttack(std::weak_ptr<Actor> enemy):
+EnemyStateAttack::EnemyStateAttack(std::weak_ptr<Actor> enemy, std::shared_ptr<AttackData> attackData):
 	EnemyStateBase(enemy),
-	m_isAppearedAttack(false)
+	m_isAppearedAttack(false),
+	m_isShotBullet(false)
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());
 
-	int index = MyMath::GetRand(1, 3);
-	std::wstring attackDataName;
-	switch (index)
-	{
-	case 1:
-		attackDataName = kAttack1DataName;
-		break;
-	case 2:
-		attackDataName = kAttack2DataName;
-		break;
-	case 3:
-		attackDataName = kAttack3DataName;
-		break;
-	default:
-		attackDataName = kAttack1DataName;
-		break;
-	}
 	//UŒ‚ƒf[ƒ^
-	m_attackData = owner->GetAttackData(attackDataName);
+	m_attackData = attackData;
 	//ƒAƒjƒ[ƒVƒ‡ƒ“ƒZƒbƒg
 	owner->GetModel()->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), true);
 
@@ -50,8 +29,12 @@ EnemyStateAttack::EnemyStateAttack(std::weak_ptr<Actor> enemy):
 
 EnemyStateAttack::~EnemyStateAttack()
 {
-	//UŒ‚íœ
-	DeleteAttack();
+	//’e‚ÍÁ‚³‚È‚¢
+	if (!m_isShotBullet)
+	{
+		//UŒ‚íœ
+		DeleteAttack();
+	}
 	//UŒ‚ƒN[ƒ‹ƒ^ƒCƒ€İ’è
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());
@@ -99,7 +82,7 @@ void EnemyStateAttack::Update()
 	}
 }
 
-void EnemyStateAttack::UpdateStartAttack(std::shared_ptr<EnemyBase>& owner)
+void EnemyStateAttack::UpdateStartAttack(std::shared_ptr<EnemyBase> owner)
 {
 	if (m_frame >= m_attackData->m_startFrame)
 	{
@@ -111,6 +94,7 @@ void EnemyStateAttack::UpdateStartAttack(std::shared_ptr<EnemyBase>& owner)
 			{
 				//‘½’iƒqƒbƒgUŒ‚
 				LoadNextMultipleHitAttack(owner);
+				return;
 			}
 		}
 		//‚Ü‚¾UŒ‚‚ª”­¶‚µ‚Ä‚¢‚È‚¢‚È‚ç”­¶
@@ -120,6 +104,7 @@ void EnemyStateAttack::UpdateStartAttack(std::shared_ptr<EnemyBase>& owner)
 		}
 	}
 }
+
 void EnemyStateAttack::DeleteAttack()
 {
 	if (m_pAttack.expired())return;
@@ -140,6 +125,17 @@ void EnemyStateAttack::CreateAttack(std::shared_ptr<EnemyBase> owner)
 	{
 		attack = std::make_shared<AOEAttack>(m_attackData, owner);
 	}
+	else if(m_attackData->m_attackType == AttackData::AttackType::Bullet)
+	{
+		attack = std::make_shared<BulletAttack>(m_attackData, owner);
+		//’e‚Ì‰ŠúˆÊ’u‚Æ•ûŒü‚ğİ’è
+		auto bulletAttack = std::dynamic_pointer_cast<BulletAttack>(attack);
+		auto model = owner->GetModel();
+		bulletAttack->SetMoveVec(model->GetDir() * m_attackData->m_param2);
+		bulletAttack->SetPos(MV1GetFramePosition(model->GetModelHandle(), static_cast<int>(m_attackData->m_param1)));
+		//’e‚ğ‘Å‚Á‚½
+		m_isShotBullet = true;
+	}
 	owner->SetAttack(attack);
 	m_pAttack = attack;
 	m_isAppearedAttack = true;
@@ -151,6 +147,11 @@ void EnemyStateAttack::LoadNextMultipleHitAttack(std::shared_ptr<EnemyBase> owne
 	// ‘½’iƒqƒbƒgˆ—
 	m_attackData = owner->GetAttackData(m_attackData->m_nextAttackName);
 	m_isAppearedAttack = false;
+	//UŒ‚ì¬
+	if (m_frame >= m_attackData->m_startFrame)
+	{
+		CreateAttack(owner);
+	}
 }
 
 void EnemyStateAttack::UpdateMove(std::shared_ptr<EnemyBase> owner, std::shared_ptr<Model> model)

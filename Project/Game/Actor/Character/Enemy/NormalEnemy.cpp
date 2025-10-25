@@ -14,6 +14,7 @@
 #include "../../../../General/CSV/CSVDataLoader.h"
 #include "../../../../General/CSV/CSVData.h"
 #include "../../../../General/CSV/AttackData.h"
+#include "../../../../General/CSV/EnemyAttackKeyData.h"
 #include "../../../../General/MyDraw.h"
 #include <DxLib.h>
 #include <cmath>
@@ -32,6 +33,8 @@ void NormalEnemy::Init()
 	auto& csvLoader = CSVDataLoader::GetInstance();
 	auto pathData = csvLoader.LoadCSV(m_actorData->m_csvPathData.c_str()).front()->GetData();
 
+	assert(pathData.size() > 0);
+
 	//共通初期化
 	CharacterBase::Init(pathData[0].c_str(), pathData[1].c_str());
 	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
@@ -41,6 +44,23 @@ void NormalEnemy::Init()
 	m_state->ChangeState(m_state);
 	//モデルの高さ調整
 	m_model->SetModelHeightAdjust(-m_actorData->m_collRadius);
+
+	//攻撃のキーを取得
+	auto oriAttackKeys = csvLoader.LoadCSV(pathData[2].c_str());
+	for (auto& data : oriAttackKeys)
+	{
+		std::shared_ptr<EnemyAttackKeyData> attackKeyData = std::make_shared<EnemyAttackKeyData>(data);
+		//近接攻撃
+		if (attackKeyData->m_attackRangeType == EnemyAttackKeyData::AttackRangeType::Melee)
+		{
+			m_meleeAttackKeys.emplace_back(attackKeyData->m_attackKeyName);
+		}
+		//遠距離攻撃
+		else if (attackKeyData->m_attackRangeType == EnemyAttackKeyData::AttackRangeType::LongRange)
+		{
+			m_longRangeAttackKeys.emplace_back(attackKeyData->m_attackKeyName);
+		}
+	}
 }
 
 

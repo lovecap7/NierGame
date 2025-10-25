@@ -2,6 +2,8 @@
 #include "../CharacterBase.h"
 #include "../../../../General/TargetInfo.h"
 #include <memory>
+#include <vector>
+#include <string>
 class ActorData;
 class CharaStatusData;
 class ActorManager;
@@ -30,8 +32,16 @@ public:
 	Vector3 GetToTargetVec() const;
 	//ターゲット情報取得
 	TargetInfo GetTargetInfo() const { return m_targetInfo; }
+
 	//近距離攻撃範囲
 	bool IsInMeleeRange() const;
+	//遠距離攻撃可能か
+	bool IsEnableLongRangeAttack() const;
+	//近接攻撃可能か
+	bool IsEnableMeleeAttack() const;
+
+	//今の距離から攻撃を返す(空も返す可能性もあるのでnullチェックが必要)
+	std::shared_ptr<AttackData> GetAttackByDistance()const;
 protected:
 	//攻撃クールタイム
 	float m_attackCoolTime;
@@ -43,10 +53,15 @@ protected:
 	TargetInfo m_targetInfo;
 	//警戒状態
 	bool m_isAlerted;
+	//攻撃のキー
+	std::vector<std::wstring> m_meleeAttackKeys;	//近接攻撃のキー
+	std::vector<std::wstring> m_longRangeAttackKeys;//遠距離攻撃のキー
 protected:
 	//カウント
 	void CountAttackCoolTime();
 	//ロックオンされたときに見られる座標設定
 	void UpdateLockOnViewPos();
+	//ランダムに攻撃を取得
+	std::shared_ptr<AttackData> GetRandomAttack(std::vector<std::wstring> keys) const;
 };
 

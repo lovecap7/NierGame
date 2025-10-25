@@ -9,13 +9,13 @@ class EnemyStateAttack :
 	public EnemyStateBase, public std::enable_shared_from_this<EnemyStateAttack>
 {
 public:
-	EnemyStateAttack(std::weak_ptr<Actor> enemy);
+	EnemyStateAttack(std::weak_ptr<Actor> enemy,std::shared_ptr<AttackData> attackData);
 	virtual ~EnemyStateAttack();
 	virtual void Init() override;
 	virtual void Update() override;
 private:
 	//UŒ‚ŠJnXV
-	void UpdateStartAttack(std::shared_ptr<EnemyBase>& owner);
+	void UpdateStartAttack(std::shared_ptr<EnemyBase> owner);
 	//UŒ‚íœ
 	void DeleteAttack();
 	//UŒ‚ì¬
@@ -33,5 +33,7 @@ private:
 	bool m_isAppearedAttack;
 	//UŒ‚‚ÌQÆ
 	std::weak_ptr<AttackBase> m_pAttack;
+	//’e‚ğ‘Å‚Á‚½
+	bool m_isShotBullet;
 };
 

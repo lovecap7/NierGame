@@ -205,6 +205,7 @@
     <ClCompile Include="General\CSV\CSVData.cpp" />
     <ClCompile Include="General\CSV\CSVDataLoader.cpp" />
     <ClCompile Include="General\CSV\AnimData.cpp" />
+    <ClCompile Include="General\CSV\EnemyAttackKeyData.cpp" />
     <ClCompile Include="General\CSV\PodData.cpp" />
     <ClCompile Include="General\Input.cpp" />
     <ClCompile Include="General\Math\MathSub.cpp" />
@@ -289,6 +290,7 @@
     <ClInclude Include="General\CSV\CSVData.h" />
     <ClInclude Include="General\CSV\CSVDataLoader.h" />
     <ClInclude Include="General\CSV\AnimData.h" />
+    <ClInclude Include="General\CSV\EnemyAttackKeyData.h" />
     <ClInclude Include="General\CSV\PodData.h" />
     <ClInclude Include="General\Game.h" />
     <ClInclude Include="General\Input.h" />

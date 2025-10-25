@@ -20,6 +20,8 @@ private:
     //状態遷移
     using UpdateFunc_t = void(PlayerStateHeavyAttack::*)(std::shared_ptr<Player> owner,Input& input);
     UpdateFunc_t m_update;
+    //ジャスト回避
+	bool m_isJust;
 private:
     //チャージ攻撃をするか(チャージ中はtrueを返す)
     bool LoadNextChargeOrCombo(std::shared_ptr<Player> owner, Input& input, std::shared_ptr<Model> model);
@@ -27,7 +29,7 @@ private:
     void ChangeToMoveOrIdle(std::shared_ptr<Player> owner, Input& input);
 	//攻撃開始処理
     void UpdateStartFrame(std::shared_ptr<Player>& owner, std::shared_ptr<Weapon>& weapon);
-private:
+
     //地上
     void GroundUpdate(std::shared_ptr<Player> owner, Input& input);
     //空中

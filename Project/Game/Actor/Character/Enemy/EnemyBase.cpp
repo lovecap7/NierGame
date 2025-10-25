@@ -29,6 +29,7 @@ void EnemyBase::UpdateLockOnViewPos()
 	m_lockOnViewPos = (start + end) * 0.5f;
 }
 
+
 void EnemyBase::SearchTarget(std::shared_ptr<Player> player)
 {
 	//前回の発見状態を保存
@@ -101,3 +102,40 @@ void EnemyBase::CountAttackCoolTime()
 	if (m_attackCoolTime <= 0.0f)return;
 	m_attackCoolTime -= GetTimeScale();
 }
+
+bool EnemyBase::IsEnableLongRangeAttack() const
+{
+	//遠距離攻撃キーがあり、かつ近接範囲外なら可能
+	return (m_longRangeAttackKeys.size() > 0) && !IsInMeleeRange();
+}
+
+bool EnemyBase::IsEnableMeleeAttack() const
+{
+	//近接攻撃キーがあり、かつ近接範囲内なら可能
+	return (m_meleeAttackKeys.size() > 0) && IsInMeleeRange();
+}
+
+std::shared_ptr<AttackData> EnemyBase::GetAttackByDistance() const
+{
+	//攻撃データ
+	std::shared_ptr<AttackData> attackData;
+
+	//遠距離攻撃可能なら
+	if (IsEnableLongRangeAttack())
+	{
+		attackData = GetRandomAttack(m_longRangeAttackKeys);
+	}
+	//近接攻撃可能なら
+	else if (IsEnableMeleeAttack())
+	{
+		attackData = GetRandomAttack(m_meleeAttackKeys);
+	}
+
+	return attackData;
+}
+std::shared_ptr<AttackData> EnemyBase::GetRandomAttack(std::vector<std::wstring> keys) const
+{
+	int index = MyMath::GetRand(0, keys.size() - 1);
+	return GetAttackData(keys[index]);
+}
+

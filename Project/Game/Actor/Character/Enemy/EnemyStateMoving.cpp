@@ -55,9 +55,14 @@ void EnemyStateMoving::Update()
 	//UŒ‚‰Â”\‚È‚ç
 	if (owner->IsEnableAttack())
 	{
-		//UŒ‚ó‘Ô‚Ö
-		ChangeState(std::make_shared<EnemyStateAttack>(m_pOwner));
-		return;
+		//UŒ‚ƒf[ƒ^æ“¾(‹——£‚©‚ç)
+		auto attackData = owner->GetAttackByDistance();
+		if(attackData)
+		{
+			//UŒ‚ó‘Ô‚Ö
+			ChangeState(std::make_shared<EnemyStateAttack>(m_pOwner, attackData));
+			return;
+		}
 	}
 	//‘Ò‹@ó‘Ô‚Ö
 	if (!owner->GetTargetInfo().m_isFound || 

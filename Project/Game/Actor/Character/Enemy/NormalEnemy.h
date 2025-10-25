@@ -42,6 +42,5 @@ public:
 	//ƒRƒŠƒWƒ‡ƒ“‚Ìó‘Ô‚ğİ’è
 	void SetCollState(CollisionState collState) { m_collState = collState; }
 	CollisionState GetCollState()const { return m_collState; };
-
 };
 

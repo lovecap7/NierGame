@@ -62,6 +62,8 @@ void Player::Init()
 	auto& csvLoader = CSVDataLoader::GetInstance();
 	auto pathData = csvLoader.LoadCSV(m_actorData->m_csvPathData.c_str()).front()->GetData();
 
+	assert(pathData.size() > 0);
+
 	//共通初期化
 	CharacterBase::Init(pathData[0].c_str(), pathData[1].c_str());
 	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する

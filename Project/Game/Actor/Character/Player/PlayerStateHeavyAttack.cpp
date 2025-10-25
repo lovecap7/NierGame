@@ -36,6 +36,7 @@ PlayerStateHeavyAttack::PlayerStateHeavyAttack(std::weak_ptr<Actor> player,bool 
 	//ジャスト回避
 	if (isJust)
 	{
+		m_isJust = isJust;
 		//攻撃データ取得
 		m_attackData = owner->GetAttackData(kJustAttackName);
 	}
@@ -66,10 +67,14 @@ PlayerStateHeavyAttack::PlayerStateHeavyAttack(std::weak_ptr<Actor> player,bool 
 
 PlayerStateHeavyAttack::~PlayerStateHeavyAttack()
 {
-	if (auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock()))
+	if (m_pOwner.expired()) return;
+	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
+	owner->GetRb()->SetIsGravity(true);
+	DeleteAttack();
+	//ジャストアタックなら無敵解除
+	if (!m_isJust)
 	{
-		owner->GetRb()->SetIsGravity(true);
-		DeleteAttack();
+		owner->GetCharaStatus()->SetIsNoDamage(false);
 	}
 }
 
@@ -92,6 +97,13 @@ void PlayerStateHeavyAttack::Update()
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	auto& input = Input::GetInstance();
 
+	//無敵
+	if( m_isJust)
+	{
+		owner->GetCharaStatus()->SetIsNoDamage(true);
+	}
+
+	//状態ごとの更新処理
 	(this->*m_update)(owner, input);
 }
 

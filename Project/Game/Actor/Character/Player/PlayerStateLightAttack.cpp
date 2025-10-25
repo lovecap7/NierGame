@@ -102,6 +102,11 @@ PlayerStateLightAttack::~PlayerStateLightAttack()
 	owner->GetRb()->SetIsGravity(true);
 	//攻撃削除
 	DeleteAttack();
+	//ジャストアタックなら無敵解除
+	if (m_isJust)
+	{
+		owner->GetCharaStatus()->SetIsNoDamage(false);
+	}
 }
 
 void PlayerStateLightAttack::Init()
@@ -136,6 +141,12 @@ void PlayerStateLightAttack::Update()
 
 	//発生フレームになったら
 	UpdateStartAttack(owner, weapon);
+
+	//ジャストアタック中無敵
+	if( m_isJust)
+	{
+		owner->GetCharaStatus()->SetIsNoDamage(true);
+	}
 
 
 	//長押ししているフレームをカウント
