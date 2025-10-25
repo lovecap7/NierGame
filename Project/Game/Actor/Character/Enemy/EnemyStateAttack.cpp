@@ -160,7 +160,7 @@ void EnemyStateAttack::UpdateMove(std::shared_ptr<EnemyBase> owner, std::shared_
 	if (m_frame < m_attackData->m_moveFrame)
 	{
 		//Œü‚«
-		Vector3 dir = Vector3::Forward();
+		Vector3 dir = owner->GetToTargetVec();
 		//ƒ‚ƒfƒ‹‚ÌŒü‚«
 		model->SetDir(dir.XZ());
 		moveVec = model->GetDir() * m_attackData->m_moveSpeed;

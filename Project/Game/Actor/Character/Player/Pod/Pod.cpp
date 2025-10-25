@@ -105,9 +105,9 @@ Vector3 Pod::GetPlayerDir() const
 	return m_pPlayer.lock()->GetModel()->GetDir();
 }
 
-Player::TargetInfo Pod::GetPlayerTargetInfo() const
+TargetInfo Pod::GetPlayerTargetInfo() const
 {
-	Player::TargetInfo info;
+	TargetInfo info;
 	if (m_pPlayer.expired())return info;
 	info = m_pPlayer.lock()->GetTargetInfo();
 	//ターゲット

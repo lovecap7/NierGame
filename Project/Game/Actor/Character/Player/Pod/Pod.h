@@ -42,7 +42,7 @@ public:
 	//Player向き
 	Vector3 GetPlayerDir()const;
 	//ターゲット
-	Player::TargetInfo GetPlayerTargetInfo()const;
+	TargetInfo GetPlayerTargetInfo()const;
 
 	//カメラの向き
 	Vector3 GetCameraDir()const;

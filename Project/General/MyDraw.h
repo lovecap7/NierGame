@@ -2,6 +2,7 @@
 #include<DxLib.h>
 #include<cassert>
 #include<array>
+#include"Math/MyMath.h"
 namespace MyDraw {
 	inline void DrawRotaGraph(int x, int y, float scale, float angle, int handle, int psH, bool alpha, int secondH = -1) {
 		std::array<DxLib::VERTEX2DSHADER, 4> vertices = {};
@@ -135,5 +136,25 @@ namespace MyDraw {
 		MyDraw::DrawRotaGraph(x, y, scale, angle, handle, psH, true);
 		// シェーダーをオフに
 		DxLib::SetUsePixelShader(-1);
+	}
+	
+	//3D円描画
+	inline void Draw3DCircle(Vector3 pos, float radius, int segmentCount = 36, unsigned int color = GetColor(255, 255, 255))
+	{
+		float angleStep = MyMath::TwoPI_F / segmentCount;
+
+		for (int i = 0; i < segmentCount; ++i) {
+			float angle1 = angleStep * i;
+			float angle2 = angleStep * (i + 1);
+
+			float x1 = pos.x + cosf(angle1) * radius;
+			float z1 = pos.z + sinf(angle1) * radius;
+
+			float x2 = pos.x + cosf(angle2) * radius;
+			float z2 = pos.z + sinf(angle2) * radius;
+
+			// Y座標は固定（XZ平面上の円）
+			DrawLine3D(VECTOR{ x1, pos.y, z1 }, VECTOR{ x2, pos.y, z2 }, color);
+		}
 	}
 }

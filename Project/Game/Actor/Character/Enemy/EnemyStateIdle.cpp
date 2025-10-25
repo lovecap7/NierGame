@@ -1,6 +1,7 @@
 #include "EnemyStateIdle.h"
 #include "EnemyStateHit.h"
 #include "EnemyStateAttack.h"
+#include "EnemyStateMoving.h"
 #include "EnemyBase.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Input.h"
@@ -46,6 +47,15 @@ void EnemyStateIdle::Update()
 		//UŒ‚ó‘Ô‚Ö
 		ChangeState(std::make_shared<EnemyStateAttack>(m_pOwner));
 		return;
+	}
+	//ˆÚ“®ó‘Ô‚Ö
+	if(owner->GetTargetInfo().m_isFound)
+	{
+		if (!owner->IsInMeleeRange())
+		{
+			ChangeState(std::make_shared<EnemyStateMoving>(m_pOwner));
+			return;
+		}
 	}
 
 	//ˆÚ“®—ÊƒŠƒZƒbƒg

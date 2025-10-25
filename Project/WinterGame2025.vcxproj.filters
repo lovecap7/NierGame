@@ -258,6 +258,9 @@
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateAttack.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateMoving.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main\Application.h">
@@ -266,7 +269,7 @@
     <ClInclude Include="General\Game.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="General\ShaderDrawUtil.h">
+    <ClInclude Include="General\MyDraw.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="General\ShaderPostProcess.h">
@@ -531,6 +534,12 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateAttack.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="General\TargetInfo.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateMoving.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

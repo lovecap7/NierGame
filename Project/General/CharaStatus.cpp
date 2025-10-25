@@ -11,7 +11,7 @@ namespace
 	constexpr float randomMax = 1.1f;
 }
 
-CharaStatus::CharaStatus(std::shared_ptr<CharaStatusData> charaStatusData):
+CharaStatus::CharaStatus(std::shared_ptr<CharaStatusData> charaStatusData) :
 	m_maxHp(0),
 	m_nowHp(0),
 	m_at(0),
@@ -23,7 +23,10 @@ CharaStatus::CharaStatus(std::shared_ptr<CharaStatusData> charaStatusData):
 	m_isHit(false),
 	m_isHitReaction(false),
 	m_charaStatusData(charaStatusData),
-	m_ownerPos()
+	m_ownerPos(),
+	m_searchAngle(0.0f),
+	m_searchRange(0.0f),
+	m_meleeAttackRange(0.0f)
 {
 	//‰Šú‰»
 	Init();
@@ -45,6 +48,9 @@ void CharaStatus::Init()
 		m_ms = m_charaStatusData->m_ms;
 		m_jp = m_charaStatusData->m_jp;
 		m_ar = m_charaStatusData->m_ar;
+		m_searchAngle = m_charaStatusData->m_searchAngle;
+		m_searchRange = m_charaStatusData->m_searchRange;
+		m_meleeAttackRange = m_charaStatusData->m_meleeAttackRange;
 		m_isNoDamage = false;
 		InitHitState();
 	}

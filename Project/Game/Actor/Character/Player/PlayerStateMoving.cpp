@@ -160,5 +160,5 @@ void PlayerStateMoving::Move(std::shared_ptr<Player> owner, Input& input)
 	owner->GetRb()->SetMoveVec(vec);
 
 	//ƒ‚ƒfƒ‹‚ÌŒü‚«
-	owner->GetModel()->SetDir(Vector2(vec.x, vec.z));
+	owner->GetModel()->SetDir(vec.XZ());
 }

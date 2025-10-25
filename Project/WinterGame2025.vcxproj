@@ -153,6 +153,7 @@
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateBase.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateHit.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateIdle.cpp" />
+    <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateMoving.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\NormalEnemy.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\Player.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\PlayerStateAttackBase.cpp" />
@@ -236,6 +237,7 @@
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateBase.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateHit.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateIdle.h" />
+    <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateMoving.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\NormalEnemy.h" />
     <ClInclude Include="Game\Actor\Character\Player\Player.h" />
     <ClInclude Include="Game\Actor\Character\Player\PlayerStateAttackBase.h" />
@@ -298,9 +300,10 @@
     <ClInclude Include="General\Math\Vector2.h" />
     <ClInclude Include="General\Math\Vector3.h" />
     <ClInclude Include="General\Model.h" />
-    <ClInclude Include="General\ShaderDrawUtil.h" />
+    <ClInclude Include="General\MyDraw.h" />
     <ClInclude Include="General\ShaderPostProcess.h" />
     <ClInclude Include="General\StringUtil.h" />
+    <ClInclude Include="General\TargetInfo.h" />
     <ClInclude Include="Main\Application.h" />
     <ClInclude Include="Scene\DebugScene\DebugSelectScene.h" />
     <ClInclude Include="Scene\DebugScene\PlayerTestScene.h" />

@@ -78,6 +78,11 @@ public:
 	bool IsHit()const { return m_isHit; }
 	//リアクションをするか
 	bool IsHitReaction()const { return m_isHitReaction; };
+
+	//索敵半径
+	float GetSearchRange()const { return m_searchRange; };
+	float GetSearchAngle()const { return m_searchAngle; };
+	float GetMeleeAttackRange()const { return m_meleeAttackRange; };
 private:
 	//ステータス
 	int					m_maxHp;	//最大体力
@@ -87,6 +92,9 @@ private:
 	float				m_ms;		//移動速度
 	float				m_jp;		//ジャンプ力
 	CharaStatus::Armor  m_ar;		//アーマー
+	float 			m_searchRange; //索敵半径
+	float 			m_searchAngle; //索敵アングル
+	float 			m_meleeAttackRange; //近接攻撃距離
 	
 	//状態
 	//無敵

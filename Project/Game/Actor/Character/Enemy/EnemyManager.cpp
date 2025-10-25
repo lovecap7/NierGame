@@ -6,6 +6,12 @@
 #include "../../../../General/Input.h"
 #include "../../../../General/Math/MyMath.h"
 
+namespace
+{
+	//活動範囲
+	constexpr float kActiveRange = 5000.0f;
+}
+
 EnemyManager::EnemyManager(std::weak_ptr<ActorManager> actorM):
 	m_enemys(),
 	m_pActorManager(actorM)
@@ -41,6 +47,30 @@ void EnemyManager::Init()
 void EnemyManager::Update()
 {
 	if (m_enemys.empty())return;
+	//プレイヤーとの距離で活動範囲を判定する
+	if (m_pActorManager.expired())return;
+	auto actorManager = m_pActorManager.lock();
+	if (actorManager->GetPlayer().expired())return;
+	auto player = actorManager->GetPlayer().lock();
+	Vector3 playerPos = player->GetRb()->GetNextPos();
+	for (auto& enemy : m_enemys)
+	{
+		//活動範囲内か
+		bool isActive = false;
+
+		//距離を計算
+		Vector3 enemyPos = enemy->GetRb()->GetNextPos();
+		float distance = (playerPos - enemyPos).Magnitude();
+		//活動範囲内なら活動
+		isActive = distance <= kActiveRange;
+		enemy->SetIsActive(isActive);
+
+		//プレイヤーを発見
+		if (isActive)
+		{
+			enemy->SearchTarget(player);
+		}
+	}
 }
 
 void EnemyManager::End()

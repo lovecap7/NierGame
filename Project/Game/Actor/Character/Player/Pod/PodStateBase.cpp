@@ -33,10 +33,14 @@ Vector3 PodStateBase::GetPodDir(std::shared_ptr<Pod> owner)
 	//ターゲットがいるならターゲット方向を見る
 	if (owner->GetPlayerTargetInfo().m_isFound)
 	{
-		Vector3 toTarget = owner->GetPlayerTargetInfo().m_pTarget.lock()->GetLockOnViewPos() - owner->GetPos();
-		if (toTarget.SqMagnitude() > 0.0f)
+		auto target = owner->GetPlayerTargetInfo().m_pTarget.lock();
+		if(target->GetGameTag() == GameTag::Enemy)
 		{
-			dir = toTarget.Normalize();
+			Vector3 toTarget = std::dynamic_pointer_cast<EnemyBase>(target)->GetLockOnViewPos() - owner->GetPos();
+			if (toTarget.SqMagnitude() > 0.0f)
+			{
+				dir = toTarget.Normalize();
+			}
 		}
 	}
 	return dir;

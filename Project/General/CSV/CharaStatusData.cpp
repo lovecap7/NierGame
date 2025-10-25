@@ -5,7 +5,10 @@ CharaStatusData::CharaStatusData() :
 	m_at(0),
 	m_df(0),
 	m_ms(0.0f),
-	m_ar(CharaStatus::Armor::Light)
+	m_ar(CharaStatus::Armor::Light),
+	m_searchAngle(0.0f),
+	m_searchRange(0.0f),
+	m_meleeAttackRange(0.0f)
 {
 }
 
@@ -45,4 +48,10 @@ void CharaStatusData::Conversion()
 	m_jp = stof(m_data[6]);
 	//ƒA[ƒ}[
 	m_ar = static_cast<CharaStatus::Armor>(stoi(m_data[7]));
+	//õ“G”¼Œa
+	m_searchRange = stof(m_data[8]);
+	//õ“GƒAƒ“ƒOƒ‹
+	m_searchAngle = stof(m_data[9]) * MyMath::DEG_2_RAD;
+	//‹ßÚUŒ‚‹——£
+	m_meleeAttackRange = stof(m_data[10]);
 }

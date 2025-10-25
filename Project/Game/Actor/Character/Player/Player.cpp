@@ -37,9 +37,6 @@ namespace
 
 	//武器を収めるまでのフレーム
 	constexpr float kPutAwayFrame = 60.0f * 5.0f;
-
-	//索敵範囲
-	constexpr float kSearchRange = 5000.0f;
 }
 
 Player::Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager) :
@@ -398,11 +395,18 @@ void Player::SearchTarget(Input& input, std::shared_ptr<PlayerCamera> camera, co
 	//ターゲットがいなくなったら発見フラグをfalseにする
 	if(m_targetInfo.m_pTarget.expired())
 	{
-		m_targetInfo.m_isFound = false;
-		if (camera->IsLockOn())
+		ResetTarget(camera);
+	}
+	else
+	{
+		//ターゲットがいるなら距離を確認
+		auto target = m_targetInfo.m_pTarget.lock();
+		Vector3 toTarget = target->GetNextPos() - GetPos();
+		float distance = toTarget.Magnitude();
+		//範囲外になったラ解除
+		if (distance > m_charaStatus->GetSearchRange())
 		{
-			//解除
-			camera->EndLockOn();
+			ResetTarget(camera);
 		}
 	}
 
@@ -412,9 +416,7 @@ void Player::SearchTarget(Input& input, std::shared_ptr<PlayerCamera> camera, co
 		//ロックオン中なら解除
 		if (camera->IsLockOn())
 		{
-			//解除
-			camera->EndLockOn();
-			m_targetInfo.m_isFound = false;
+			ResetTarget(camera);
 		}
 		//ロックオンしていないなら開始
 		else
@@ -424,7 +426,7 @@ void Player::SearchTarget(Input& input, std::shared_ptr<PlayerCamera> camera, co
 
 			//最も近い敵を探す
 			std::shared_ptr<EnemyBase> nearestEnemy = nullptr;
-			float minDis = kSearchRange; //索敵範囲
+			float minDis = m_charaStatus->GetSearchRange(); //索敵範囲
 			bool isFind = false;
 
 			for (auto enemy : enemys)
@@ -447,5 +449,15 @@ void Player::SearchTarget(Input& input, std::shared_ptr<PlayerCamera> camera, co
 			}
 			m_targetInfo.m_isFound = isFind;
 		}
+	}
+}
+
+void Player::ResetTarget(std::shared_ptr<PlayerCamera> camera)
+{
+	m_targetInfo.m_isFound = false;
+	if (camera->IsLockOn())
+	{
+		//解除
+		camera->EndLockOn();
 	}
 }

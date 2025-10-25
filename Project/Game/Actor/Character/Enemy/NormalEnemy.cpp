@@ -14,13 +14,10 @@
 #include "../../../../General/CSV/CSVDataLoader.h"
 #include "../../../../General/CSV/CSVData.h"
 #include "../../../../General/CSV/AttackData.h"
+#include "../../../../General/MyDraw.h"
 #include <DxLib.h>
 #include <cmath>
 #include <cassert>
-
-namespace
-{
-}
 
 NormalEnemy::NormalEnemy(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager):
 	EnemyBase(actorData, charaStatusData, pActorManager)
@@ -45,6 +42,8 @@ void NormalEnemy::Init()
 
 void NormalEnemy::Update()
 {
+	//”ñŠˆ“®’†‚ÍXV‚µ‚È‚¢
+	if (!m_isActive)return;
 	//UŒ‚ƒN[ƒ‹ƒ^ƒCƒ€XV
 	CountAttackCoolTime();
 	//‹¤’Êˆ—
@@ -60,6 +59,8 @@ void NormalEnemy::OnCollide(const std::shared_ptr<Collidable> other)
 
 void NormalEnemy::Draw() const
 {
+	//”ñŠˆ“®’†‚Í•`‰æ‚µ‚È‚¢
+	if (!m_isActive)return;
 #if _DEBUG
 	//Õ“Ë”»’è
 	DrawCapsule3D(
@@ -71,6 +72,24 @@ void NormalEnemy::Draw() const
 		0x00ff00,
 		false
 	);
+	//À•W
+	auto pos = m_rb->m_pos;
+	//‹–ìŠp
+	float viewingAngle = m_charaStatus->GetSearchAngle();
+	//õ“G‹——£
+	float searchDistance = m_charaStatus->GetSearchRange();
+	//õ“G”ÍˆÍ
+	MyDraw::Draw3DCircle(pos, searchDistance, 36, 0x0000ff);
+	//Œ©‚Ä‚é•ûŒü
+	auto forward = m_model->GetDir();
+	forward = forward * searchDistance;
+	//‹–ìŠp
+	auto viewDir1 = Quaternion::AngleAxis(viewingAngle / 2.0f, Vector3::Up()) * forward;
+	auto viewDir2 = Quaternion::AngleAxis(-viewingAngle / 2.0f, Vector3::Up()) * forward;
+	//•`‰æ
+	DrawLine3D(pos.ToDxLibVector(), (pos + forward).ToDxLibVector(), 0xff0000);
+	DrawLine3D(pos.ToDxLibVector(), (pos + viewDir1).ToDxLibVector(), 0xff0000);
+	DrawLine3D(pos.ToDxLibVector(), (pos + viewDir2).ToDxLibVector(), 0xff0000);
 #endif
 	m_model->Draw();
 }
