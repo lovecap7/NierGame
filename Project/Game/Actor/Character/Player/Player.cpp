@@ -58,8 +58,12 @@ Player::~Player()
 
 void Player::Init()
 {
+	//必要なパスを取得
+	auto& csvLoader = CSVDataLoader::GetInstance();
+	auto pathData = csvLoader.LoadCSV(m_actorData->m_csvPathData.c_str()).front()->GetData();
+
 	//共通初期化
-	CharacterBase::Init(m_actorData->m_animPath.c_str(), m_actorData->m_attackPath.c_str());
+	CharacterBase::Init(pathData[0].c_str(), pathData[1].c_str());
 	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
 	auto thisPointer = std::dynamic_pointer_cast<Player>(shared_from_this());
 	m_state = std::make_shared<PlayerStateIdle>(thisPointer);

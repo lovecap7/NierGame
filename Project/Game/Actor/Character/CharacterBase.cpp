@@ -7,7 +7,6 @@
 #include "../../../General/CSV/CSVData.h"
 #include "../../../General/CSV/AttackData.h"
 #include "CharacterStateBase.h"
-#include "CharacterStateBase.h"
 #include <cassert>
 CharacterBase::CharacterBase(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, Shape shape, std::weak_ptr<ActorManager> pActorManager) :
 	Actor(actorData,shape,pActorManager),
@@ -22,7 +21,7 @@ void CharacterBase::Init(std::wstring animPath, std::wstring attackPath)
 	//Physics‚É“o˜^
 	Collidable::Init();
 	//CSV‚ğ“Ç‚İ‚Ş
-	auto csvLoader = std::make_shared<CSVDataLoader>();
+	auto& csvLoader = CSVDataLoader::GetInstance();
 	//ƒAƒjƒ[ƒVƒ‡ƒ“ƒf[ƒ^
 	InitAnimData(csvLoader, animPath);
 	//UŒ‚ƒf[ƒ^
@@ -104,9 +103,9 @@ std::string CharacterBase::GetAnim(std::wstring state, std::string path,AnimData
 
 	return path;
 }
-void CharacterBase::InitAttackData(std::shared_ptr<CSVDataLoader> csvLoader, std::wstring path)
+void CharacterBase::InitAttackData(CSVDataLoader& csvLoader, std::wstring path)
 {
-	auto datas = csvLoader->LoadCSV(path.c_str());
+	auto datas = csvLoader.LoadCSV(path.c_str());
 	//“o˜^
 	for (auto& data : datas)
 	{
@@ -115,9 +114,9 @@ void CharacterBase::InitAttackData(std::shared_ptr<CSVDataLoader> csvLoader, std
 	}
 }
 
-void CharacterBase::InitAnimData(std::shared_ptr<CSVDataLoader> csvLoader,std::wstring path)
+void CharacterBase::InitAnimData(CSVDataLoader& csvLoader,std::wstring path)
 {
-	auto datas = csvLoader->LoadCSV(path.c_str());
+	auto datas = csvLoader.LoadCSV(path.c_str());
 	//“o˜^
 	for (auto& data : datas)
 	{

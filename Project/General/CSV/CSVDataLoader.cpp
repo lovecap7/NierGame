@@ -12,12 +12,11 @@ namespace
 	const std::wstring kCSV = L".csv";
 }
 
-CSVDataLoader::CSVDataLoader()
+CSVDataLoader& CSVDataLoader::GetInstance()
 {
-}
-
-CSVDataLoader::~CSVDataLoader()
-{
+	//この時点でメモリが確保されてアプリ終了まで残る
+	static CSVDataLoader csvDataLoader;
+	return csvDataLoader;
 }
 
 std::vector<std::shared_ptr<CSVData>> CSVDataLoader::LoadCSV(const wchar_t* path)

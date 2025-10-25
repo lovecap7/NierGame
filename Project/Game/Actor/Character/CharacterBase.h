@@ -44,9 +44,9 @@ public:
 
 protected:
     //攻撃データを読み込む
-    void InitAttackData(std::shared_ptr<CSVDataLoader> csvLoader, std::wstring path);
+    void InitAttackData(CSVDataLoader& csvLoader, std::wstring path);
     //アニメーションの読み込み
-    void InitAnimData(std::shared_ptr<CSVDataLoader> csvLoader, std::wstring path);
+    void InitAnimData(CSVDataLoader& csvLoader, std::wstring path);
 protected:
     //キャラクターの状態
     std::shared_ptr<CharacterStateBase> m_state;
