@@ -88,8 +88,9 @@ void EnemyStateAttack::UpdateStartAttack(std::shared_ptr<EnemyBase> owner)
 	if (m_frame >= m_attackData->m_startFrame)
 	{
 		//Ž‘±‚ªØ‚ê‚½‚ç
-		if (m_isAppearedAttack && m_pAttack.expired())
+		if (m_isAppearedAttack && (m_pAttack.expired() || m_attackData->m_attackType == AttackData::AttackType::Bullet))
 		{
+			
 			//‘½’iƒqƒbƒgUŒ‚‚Ìˆ—
 			if (m_attackData->m_isMultipleHit && m_attackData->m_nextAttackName != L"None")
 			{

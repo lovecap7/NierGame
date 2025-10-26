@@ -442,6 +442,9 @@ void Player::SearchTarget(Input& input, std::shared_ptr<PlayerCamera> camera, co
 				float distance = toEnemy.Magnitude();
 				if (distance < minDis)
 				{
+					//‹——£‚ÌXV
+					minDis = distance;
+					//“G‚ð•ÛŽ
 					nearestEnemy = enemy;
 					//”­Œ©
 					isFind = true;
