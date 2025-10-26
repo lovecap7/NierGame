@@ -89,7 +89,7 @@ Vector3 Vector3::Lerp(const Vector3& start, const Vector3& end, float t)
     return rV;
 }
 
-Vector2 Vector3::XZ()
+Vector2 Vector3::XZ() const
 {
     Vector2 rV;
     rV.x = this->x;
@@ -97,7 +97,7 @@ Vector2 Vector3::XZ()
     return rV;
 }
 
-Vector2 Vector3::ZY()
+Vector2 Vector3::ZY()const
 {
     Vector2 rV;
     rV.x = this->z;
@@ -105,7 +105,7 @@ Vector2 Vector3::ZY()
     return rV;
 }
 
-Vector2 Vector3::XY()
+Vector2 Vector3::XY()const
 {
     Vector2 rV;
     rV.x = this->x;

@@ -65,5 +65,8 @@ private:
 
 	//プレイヤーの準備
 	void SetUpPlayer(std::shared_ptr<Player> player);
+
+	//削除予定のアクターの削除
+	void CheckDelete();
 };
 

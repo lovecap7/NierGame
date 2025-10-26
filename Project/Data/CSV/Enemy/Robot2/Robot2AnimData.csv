@@ -9,3 +9,4 @@ FallHitAir,None,Robot|Hit_AirFall
 Shoot,None,Robot|Shoot
 Shoot2,None,Robot|Shoot2
 Down,None,Robot|Down
+Death,None,Robot|Death

@@ -8,6 +8,7 @@
 #include "../../General/StringUtil.h"
 #include "../../General/Math/MyMath.h"
 
+
 DebugSelectScene::DebugSelectScene(SceneController& controller) :
 	SceneBase(controller),
 	m_currentMenu(Menu::Title)
@@ -34,7 +35,7 @@ void DebugSelectScene::Update()
 			m_controller.ChangeScene(std::make_shared<TitleScene>(m_controller));
 			break;
 		case Menu::Game:
-			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller));
+			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, GetStageNameByIndex(StageIndex::Stage1)));
 			break;
 		case Menu::PlayerTest:
 			m_controller.ChangeScene(std::make_shared<PlayerTestScene>(m_controller));

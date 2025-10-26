@@ -151,6 +151,7 @@
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateAttack.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateBase.cpp" />
+    <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateDeath.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateDown.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateFall.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateHit.cpp" />
@@ -177,6 +178,8 @@
     <ClCompile Include="Game\Actor\Character\Player\Weapon\Weapon.cpp" />
     <ClCompile Include="Game\Actor\DebugActor\DebugAttack.cpp" />
     <ClCompile Include="Game\Actor\DebugActor\DebugEnemy.cpp" />
+    <ClCompile Include="Game\Actor\Stage\BattleArea.cpp" />
+    <ClCompile Include="Game\Actor\Stage\BattleAreaManager.cpp" />
     <ClCompile Include="Game\Actor\Stage\StageObject.cpp" />
     <ClCompile Include="Game\Attack\AOEAttack.cpp" />
     <ClCompile Include="Game\Attack\AttackBase.cpp" />
@@ -238,6 +241,7 @@
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyManager.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateAttack.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateBase.h" />
+    <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateDeath.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateDown.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateFall.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateHit.h" />
@@ -264,6 +268,8 @@
     <ClInclude Include="Game\Actor\Character\Player\Weapon\Weapon.h" />
     <ClInclude Include="Game\Actor\DebugActor\DebugAttack.h" />
     <ClInclude Include="Game\Actor\DebugActor\DebugEnemy.h" />
+    <ClInclude Include="Game\Actor\Stage\BattleArea.h" />
+    <ClInclude Include="Game\Actor\Stage\BattleAreaManager.h" />
     <ClInclude Include="Game\Actor\Stage\StageObject.h" />
     <ClInclude Include="Game\Attack\AOEAttack.h" />
     <ClInclude Include="Game\Attack\AttackBase.h" />
@@ -308,6 +314,7 @@
     <ClInclude Include="General\Model.h" />
     <ClInclude Include="General\MyDraw.h" />
     <ClInclude Include="General\ShaderPostProcess.h" />
+    <ClInclude Include="General\StageIndex.h" />
     <ClInclude Include="General\StringUtil.h" />
     <ClInclude Include="General\TargetInfo.h" />
     <ClInclude Include="Main\Application.h" />

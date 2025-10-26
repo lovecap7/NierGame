@@ -61,19 +61,19 @@ public:
 	/// XZ‚Ì¬•ª‚ğ‚Â‚×‚­‚Q‚ğ•Ô‚·
 	/// </summary>
 	/// <returns></returns>
-	Vector2 XZ();
+	Vector2 XZ()const;
 
 	/// <summary>
 	/// ZY‚Ì¬•ª‚ğ‚Â‚×‚­‚Q‚ğ•Ô‚·
 	/// </summary>
 	/// <returns></returns>
-	Vector2 ZY();
+	Vector2 ZY()const;
 
 	/// <summary>
 	/// XY‚Ì¬•ª‚ğ‚Â‚×‚­‚Q‚ğ•Ô‚·
 	/// </summary>
 	/// <returns></returns>
-	Vector2 XY();
+	Vector2 XY()const;
 	
 	/// <summary>
 	/// Slerp(‹…–ÊüŒ`•âŠÔ)‚ğs‚¢‚Ü‚·B

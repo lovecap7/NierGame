@@ -1,0 +1,7 @@
+﻿名前,ID,アクタータイプ,座標X,座標Y,座標Z,回転X,回転Y,回転Z,大きさX,大きさY,大きさZ,モデルのパス,優先度,ゲームタグ,当たり判定無視,トリガー,重力を受ける,コリジョンの半径,コリジョンの高さ,パスをまとめたパス
+Cube,11,Stage,-25.9,4.15,-0.3,0,0,0,10,10,100,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube,7,Stage,20.1,4.15,-0.3,0,0,0,10,10,100,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube,4,Stage,-2.95,0.58,-4.77,0,0,0,50,1,10,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube,3,Stage,-2.95,0.96,-4.77,0,0,0,50,2,4,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube,8,Stage,-2,4.15,-44.3,0,0,0,100,10,10,Collision/Cube,Static,Object,0,0,0,0,0,None
+Plane,9,Stage,0,0,0,0,0,0,10,1,10,Collision/Plane,Static,Object,0,0,0,0,0,None

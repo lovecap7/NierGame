@@ -2,6 +2,7 @@
 #include "EnemyBase.h"
 #include "EnemyStateIdle.h"
 #include "EnemyStateHit.h"
+#include "EnemyStateDeath.h"
 #include "../../../Attack/AttackBase.h"
 #include "../../../Attack/SwordAttack.h"
 #include "../../../Attack/AOEAttack.h"
@@ -53,6 +54,14 @@ void EnemyStateAttack::Update()
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());
 
+	//ステータス
+	auto status = owner->GetCharaStatus();
+	//死亡
+	if (status->IsDead())
+	{
+		ChangeState(std::make_shared<EnemyStateDeath>(m_pOwner));
+		return;
+	}
 	//ヒット状態
 	if (owner->GetCharaStatus()->IsHitReaction())
 	{

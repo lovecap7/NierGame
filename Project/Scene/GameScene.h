@@ -1,16 +1,19 @@
 #pragma once
 #include "SceneBase.h"
 #include <memory>
+#include <string>
 class Input;
 class CameraController;
 class SceneController;
 class ActorManager;
+class BattleAreaManager;
+class AttackManager;
 
 class GameScene :
     public SceneBase
 {
 public:
-    GameScene(SceneController& controller);
+    GameScene(SceneController& controller,std::wstring stageName);
     ~GameScene();
     /// <summary>
     /// 派生クラスで実装を実装
@@ -24,10 +27,21 @@ public:
     virtual void Restart() override {};
     //デバッグ用
     virtual void DebugDraw() const override;
+   
 private:
-	//アクターマネージャー
-	std::shared_ptr<ActorManager> m_actorManager;
-	//カメラ
-	std::shared_ptr<CameraController> m_cameraController;
+    //アクターマネージャー
+    std::shared_ptr<ActorManager> m_actorManager;
+
+    //攻撃
+    std::shared_ptr<AttackManager> m_attackManager;
+
+    //エリアマネージャー
+    std::shared_ptr<BattleAreaManager> m_battleAreaManager;
+
+    //カメラ
+    std::shared_ptr<CameraController> m_cameraController;
+
+    //ステージ名
+    std::wstring m_stageName;
 };
 

@@ -80,6 +80,8 @@ void ActorManager::Update()
 	}
 	//敵マネージャーの更新
 	m_pEnemyManager->Update();
+	//削除
+	CheckDelete();
 }
 
 void ActorManager::Draw() const
@@ -224,4 +226,22 @@ void ActorManager::SetUpPlayer(std::shared_ptr<Player> player)
 
 	//マネージャーにエントリー
 	Entry(pod);
+}
+
+//消滅フラグをチェックして削除
+void ActorManager::CheckDelete()
+{
+	//消滅フラグが立っているものを削除
+	m_actors.remove_if([=](const std::shared_ptr<Actor>& actor) {
+		if (actor->IsDelete()) {
+			actor->End();
+			//敵ならエネミーマネージャーからも削除
+			if (actor->GetGameTag() == GameTag::Enemy)
+			{
+				m_pEnemyManager->Exit(std::dynamic_pointer_cast<EnemyBase>(actor));
+			}
+			return true;
+		}
+		return false;
+		});
 }

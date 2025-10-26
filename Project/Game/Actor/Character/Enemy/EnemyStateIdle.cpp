@@ -3,6 +3,7 @@
 #include "EnemyStateAttack.h"
 #include "EnemyStateMoving.h"
 #include "EnemyStateFall.h"
+#include "EnemyStateDeath.h"
 #include "EnemyBase.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Input.h"
@@ -36,6 +37,15 @@ void EnemyStateIdle::Update()
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());	
+
+	//ステータス
+	auto status = owner->GetCharaStatus();
+	//死亡
+	if (status->IsDead())
+	{
+		ChangeState(std::make_shared<EnemyStateDeath>(m_pOwner));
+		return;
+	}
 	//ヒット状態
 	if (owner->GetCharaStatus()->IsHitReaction())
 	{

@@ -1,5 +1,6 @@
 #pragma once
 #include "../SceneBase.h"
+#include "../../General/StageIndex.h"
 class DebugSelectScene :
     public SceneBase
 {

@@ -4,7 +4,6 @@
 #include "SceneController.h"
 #include "GameScene.h"
 
-
 TitleScene::TitleScene(SceneController& controller):
 	SceneBase(controller)
 {
@@ -24,7 +23,7 @@ void TitleScene::Update()
 	auto& input = Input::GetInstance();
 	if (input.IsTrigger("A"))
 	{
-		m_controller.ChangeScene(std::make_unique<GameScene>(m_controller));
+		m_controller.ChangeScene(std::make_unique<GameScene>(m_controller,GetStageNameByIndex(StageIndex::Stage1)));
 		return;
 	}
 }

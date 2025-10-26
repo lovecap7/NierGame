@@ -3,6 +3,7 @@
 #include "EnemyStateHit.h"
 #include "EnemyStateAttack.h"
 #include "EnemyStateFall.h"
+#include "EnemyStateDeath.h"
 #include "EnemyBase.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Input.h"
@@ -45,7 +46,14 @@ void EnemyStateMoving::Update()
 
 	//フレームカウント
 	CountFrame();
-
+	//ステータス
+	auto status = owner->GetCharaStatus();
+	//死亡
+	if (status->IsDead())
+	{
+		ChangeState(std::make_shared<EnemyStateDeath>(m_pOwner));
+		return;
+	}
 	//ヒット状態
 	if (owner->GetCharaStatus()->IsHitReaction())
 	{
