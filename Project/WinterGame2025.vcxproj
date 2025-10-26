@@ -151,6 +151,8 @@
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateAttack.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateBase.cpp" />
+    <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateDown.cpp" />
+    <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateFall.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateHit.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateIdle.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateMoving.cpp" />
@@ -236,6 +238,8 @@
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyManager.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateAttack.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateBase.h" />
+    <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateDown.h" />
+    <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateFall.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateHit.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateIdle.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateMoving.h" />

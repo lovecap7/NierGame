@@ -71,11 +71,7 @@ PlayerStateHeavyAttack::~PlayerStateHeavyAttack()
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	owner->GetRb()->SetIsGravity(true);
 	DeleteAttack();
-	//ジャストアタックなら無敵解除
-	if (!m_isJust)
-	{
-		owner->GetCharaStatus()->SetIsNoDamage(false);
-	}
+	owner->GetCharaStatus()->SetIsNoDamage(false);
 }
 
 void PlayerStateHeavyAttack::Init()

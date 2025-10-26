@@ -8,3 +8,4 @@ Fall,None,Robot|Fall
 FallHitAir,None,Robot|Hit_AirFall
 Punch,None,Robot|Punch
 PunchRush,None,Robot|PunchRush
+Down,None,Robot|Down

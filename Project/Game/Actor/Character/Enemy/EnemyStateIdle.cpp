@@ -2,6 +2,7 @@
 #include "EnemyStateHit.h"
 #include "EnemyStateAttack.h"
 #include "EnemyStateMoving.h"
+#include "EnemyStateFall.h"
 #include "EnemyBase.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Input.h"
@@ -20,6 +21,7 @@ EnemyStateIdle::EnemyStateIdle(std::weak_ptr<Actor> enemy) :
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());
 	owner->GetModel()->SetAnim(owner->GetAnim(kIdle).c_str(), true);
+	owner->SetCollState(CollisionState::Normal);
 }
 
 EnemyStateIdle::~EnemyStateIdle()
@@ -39,6 +41,12 @@ void EnemyStateIdle::Update()
 	{
 		//ヒット状態ならヒットステートへ
 		ChangeState(std::make_shared<EnemyStateHit>(m_pOwner));
+		return;
+	}
+	//落下
+	if(!owner->IsFloor())
+	{
+		ChangeState(std::make_shared<EnemyStateFall>(m_pOwner, false));
 		return;
 	}
 	//攻撃可能なら

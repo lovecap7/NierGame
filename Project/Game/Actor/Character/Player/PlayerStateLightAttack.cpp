@@ -102,11 +102,7 @@ PlayerStateLightAttack::~PlayerStateLightAttack()
 	owner->GetRb()->SetIsGravity(true);
 	//攻撃削除
 	DeleteAttack();
-	//ジャストアタックなら無敵解除
-	if (m_isJust)
-	{
-		owner->GetCharaStatus()->SetIsNoDamage(false);
-	}
+	owner->GetCharaStatus()->SetIsNoDamage(false);
 }
 
 void PlayerStateLightAttack::Init()

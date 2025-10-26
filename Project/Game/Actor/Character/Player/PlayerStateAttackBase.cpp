@@ -11,7 +11,7 @@
 namespace
 {
 	//ˆÚ“®—Ê‚Ì”{—¦
-	constexpr float kLowSpeedRate = 0.1f;
+	constexpr float kLowSpeedRate = 0.5f;
 	constexpr float kHighSpeedRate = 3.0f;
 	//‹——£‚Ì‰e‹¿Š„‡
 	constexpr float kDistanceRate = 0.005f;
