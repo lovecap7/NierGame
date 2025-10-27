@@ -10,7 +10,8 @@ BattleArea::BattleArea(std::weak_ptr<StageObject> start, std::weak_ptr<StageObje
 	m_startArea(start),
 	m_endArea(end),
 	m_isBattleStart(false),
-	m_isNoEnemys(false)
+	m_isNoEnemys(false),
+	m_update(&BattleArea::UpdatePlayerSearvh)
 {
 }
 
@@ -23,24 +24,16 @@ void BattleArea::Init(const std::weak_ptr<EnemyManager> enemyManager)
 	if (enemyManager.expired())return;
 	//範囲内の敵を取得
 	InitInEnemys(enemyManager.lock());
+	//壁をオフ
+	OffWall();
 }
 
 void BattleArea::Update(const std::shared_ptr<ActorManager> actorManager)
 {
 	if (!actorManager)return;
 	if (actorManager->GetPlayer().expired())return;
-
-	//まだプレイヤーが範囲内にいないなら
-	if (!m_isBattleStart)
-	{
-		//プレイヤーが入ったかチェック
-		CheckInPlayer(actorManager->GetPlayer().lock());
-	}
-	else
-	{
-		//敵が生きてるか
-		CheckDeathEnemys();
-	}
+	//状態ごとの更新処理
+	(this->*m_update)(actorManager);
 }
 
 void BattleArea::InitInEnemys(const std::shared_ptr<EnemyManager> enemyManager)
@@ -52,7 +45,6 @@ void BattleArea::InitInEnemys(const std::shared_ptr<EnemyManager> enemyManager)
 		//範囲内の敵の参照を取得
 		if (IsInArea(enemy->GetPos()))
 		{
-			//敵をカウントしていく
 			m_areaEnemies.emplace_back(enemy);
 		}
 	}
@@ -91,9 +83,51 @@ bool BattleArea::IsInArea(const Vector3& pos) const
 	//範囲内にいるかチェック
 	return Vector2::IsPointInRect(startPos.XZ(), endPos.XZ(), pos.XZ());
 }
+
+void BattleArea::OnWall()
+{
+	if (m_startArea.expired() || m_endArea.expired())return;
+	//壁を展開
+	m_startArea.lock()->SetIsThrough(false);
+	m_endArea.lock()->SetIsThrough(false);
+}
+
+void BattleArea::OffWall()
+{
+	if (m_startArea.expired() || m_endArea.expired())return;
+	//壁を貫通
+	m_startArea.lock()->SetIsThrough(true);
+	m_endArea.lock()->SetIsThrough(true);
+}
+
 void BattleArea::End()
 {
 	m_areaEnemies.clear();
 	m_startArea.reset();
 	m_endArea.reset();
+}
+
+void BattleArea::UpdatePlayerSearvh(const std::shared_ptr<ActorManager> actorManager)
+{
+	//プレイヤーが入ったかチェック
+	CheckInPlayer(actorManager->GetPlayer().lock());
+	if (m_isBattleStart)
+	{	
+		//壁を展開
+		OnWall();
+		m_update = &BattleArea::UpdateBattle;
+		return;
+	}
+}
+
+void BattleArea::UpdateBattle(const std::shared_ptr<ActorManager> actorManager)
+{
+	//敵が生きてるか
+	CheckDeathEnemys();
+	//敵をすべて倒したら
+	if (m_isNoEnemys)
+	{
+		//壁をなくす
+		OffWall();
+	}
 }

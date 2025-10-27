@@ -1,5 +1,5 @@
 #include "GameScene.h"
-#include "TitleScene.h"
+#include "ResultScene.h"
 #include <Dxlib.h>
 #include  "../General/Input.h"
 #include "SceneController.h"
@@ -11,7 +11,10 @@
 #include "../General/Collision/Physics.h"
 #include "../General/CSV/ActorData.h"
 #include "../General/CSV/CharaStatusData.h"
-
+#include "../General/AssetManager.h"
+#include "../General/Fader.h"
+#include "../General/ShaderPostProcess.h"
+#include "../Main/Application.h"
 GameScene::GameScene(SceneController& controller, std::wstring stageName) :
 	SceneBase(controller),
 	m_stageName(stageName)
@@ -49,6 +52,9 @@ void GameScene::Init()
 	//エリアマネージャー
 	m_battleAreaManager = std::make_shared<BattleAreaManager>();
 	m_battleAreaManager->Init(stageName, m_actorManager);
+
+	//フェードイン
+	Fader::GetInstance().FadeIn();
 }
 
 void GameScene::Update()
@@ -58,6 +64,22 @@ void GameScene::Update()
 	m_attackManager->Update();
 	m_cameraController->Update();
 	m_battleAreaManager->Update(m_actorManager);
+	
+	auto& input = Input::GetInstance();
+
+	auto& fader = Fader::GetInstance();
+	//フェードアウトしたら
+	if (fader.IsFinishFadeOut())
+	{
+		m_controller.ChangeScene(std::make_unique<ResultScene>(m_controller));
+		return;
+	}
+	//もしもすべてのエリアを突破したら
+	if ((m_battleAreaManager->IsEndAllArea() || input.IsTrigger("GameClear")) && !fader.IsFadeNow())
+	{
+		//フェードアウト
+		fader.FadeOut();
+	}
 }
 
 void GameScene::Draw()
@@ -71,6 +93,10 @@ void GameScene::End()
 	m_actorManager->End();
 	m_attackManager->End();
 	m_battleAreaManager->End();
+	//アセットも削除
+	AssetManager::GetInstance().DeleteModelHandle();
+	//ポストエフェクトを解除
+	Application::GetInstance().GetPostProcess()->ResetPostEffectState();
 }
 
 void GameScene::DebugDraw() const

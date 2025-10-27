@@ -23,6 +23,8 @@
 #include <DxLib.h>
 #include <cmath>
 #include <cassert>
+#include "../../../../General/ShaderPostProcess.h"
+#include "../../../../Main/Application.h"
 
 namespace
 {
@@ -37,6 +39,11 @@ namespace
 
 	//武器を収めるまでのフレーム
 	constexpr float kPutAwayFrame = 60.0f * 5.0f;
+
+	//グリッジフレーム
+	constexpr float kGlitchFrame = 10.0f;
+	constexpr float kGlitchStartFrame = 230.0f;
+	constexpr float kGlitchEndFrame = kGlitchStartFrame + kGlitchFrame;
 }
 
 Player::Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager) :
@@ -48,7 +55,8 @@ Player::Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatus
 	m_putAwayCountFrame(0.0f),
 	m_haveWeaponType(AnimData::WeaponType::None),
 	m_isAirAttacked(false),
-	m_isDraw(true)
+	m_isDraw(true),
+	m_glitchFrame(0.0f)
 {
 }
 
@@ -99,6 +107,12 @@ void Player::Update()
 		//数フレーム無敵
 		SetNoDamageFrame(60.0f);
 	}
+	
+	if (input.IsTrigger("Pinch"))
+	{
+		//ピンチに
+		m_charaStatus->SetNowHP(m_charaStatus->GetMaxHP() / 3);
+	}
 
 	////タイムスケール
 	//if (input.IsTrigger("Y"))
@@ -128,6 +142,8 @@ void Player::Update()
 
 #endif
 
+
+
 	//武器を収める
 	if (m_putAwayCountFrame <= 0.0f)
 	{
@@ -139,6 +155,9 @@ void Player::Update()
 		//カウント
 		m_putAwayCountFrame -= GetTimeScale();
 	}
+
+	//体力に応じてポストエフェクトをかける
+	UpdatePinch();
 
 	//共通処理
 	CharacterBase::Update();
@@ -468,5 +487,45 @@ void Player::ResetTarget(std::shared_ptr<PlayerCamera> camera)
 	{
 		//解除
 		camera->EndLockOn();
+	}
+}
+
+void Player::UpdatePinch()
+{
+	//グリッジ
+	auto& app = Application::GetInstance();
+	auto& postEff = app.GetPostProcess();
+
+	//ピンチ
+	if (m_charaStatus->IsPinchHP())
+	{
+		if (m_glitchFrame <= 0.0f)
+		{
+			//グリッジと白黒
+			postEff->AddPostEffectState(ShaderPostProcess::PostEffectState::Glitch);
+			postEff->AddPostEffectState(ShaderPostProcess::PostEffectState::Gray);
+		}
+		m_glitchFrame += GetTimeScale();
+		if (m_glitchFrame >= kGlitchEndFrame)
+		{
+			m_glitchFrame = 0.0f;
+		}
+		else if (m_glitchFrame >= kGlitchStartFrame)
+		{
+			postEff->SetShakeStrength(5.0f);
+			postEff->SetBlockScele(5.0f);
+			postEff->SetNoiseSpeed(50.0f);
+		}
+		else
+		{
+			postEff->SetShakeStrength(0.0f);
+			postEff->SetBlockScele(0.0f);
+			postEff->SetNoiseSpeed(0.0f);
+		}
+	}
+	//通常
+	else
+	{
+		m_glitchFrame = 0.0f;
 	}
 }

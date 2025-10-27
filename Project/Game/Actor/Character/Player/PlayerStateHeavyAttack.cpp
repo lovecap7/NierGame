@@ -103,7 +103,7 @@ void PlayerStateHeavyAttack::Update()
 	(this->*m_update)(owner, input);
 }
 
-void PlayerStateHeavyAttack::UpdateStartFrame(std::shared_ptr<Player>& owner, std::shared_ptr<Weapon>& weapon)
+void PlayerStateHeavyAttack::UpdateStartFrame(std::shared_ptr<Player> owner, std::shared_ptr<Weapon> weapon)
 {
 	if (m_frame >= m_attackData->m_startFrame)
 	{

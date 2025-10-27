@@ -81,6 +81,11 @@ void BattleAreaManager::End()
 	}
 }
 
+bool BattleAreaManager::IsEndAllArea() const
+{
+	return m_areas.size() <= 0;
+}
+
 void BattleAreaManager::CheckDeleteArea()
 {
 	std::vector<std::shared_ptr<BattleArea>> deleteAreas;

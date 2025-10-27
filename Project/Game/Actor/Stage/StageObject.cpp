@@ -37,8 +37,8 @@ void StageObject::OnCollide(const std::shared_ptr<Collidable> other)
 
 void StageObject::Draw() const
 {
-	//“–‚½‚è”»’è‚ð‚·‚é‚È‚ç•`‰æ‚µ‚È‚¢
-	//if (!m_isThrough)return;
+	//“–‚½‚è”»’è‚ð‚·‚é‚È‚ç•`‰æ‚·‚é
+	if (m_isThrough)return;
 	m_model->Draw();
 }
 

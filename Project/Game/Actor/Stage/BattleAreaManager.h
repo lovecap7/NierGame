@@ -16,6 +16,9 @@ public:
 	void Update(std::shared_ptr<ActorManager> actorManager);
 	//終了処理
 	void End();
+
+	//すべてのエリアを突破した
+	bool IsEndAllArea()const;
 private:
 	//エリア
 	std::vector<std::shared_ptr<BattleArea>> m_areas;

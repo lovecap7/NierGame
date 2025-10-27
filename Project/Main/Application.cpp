@@ -5,6 +5,7 @@
 #include "../General/Input.h"
 #include "../General/Collision/Physics.h"
 #include "../Scene/SceneController.h"
+#include "../General/Fader.h"
 #include  <cassert>
 #include <chrono>
 namespace
@@ -90,6 +91,10 @@ void Application::Run()
 	//レンダーターゲット(Drawの書き込み先)
 	auto RT = MakeScreen(Game::kScreenWidth, Game::kScreenHeight);
 
+	//フェード
+	auto& fader = Fader::GetInstance();
+	fader.Init();
+
 	//ゲームループ
 	while (ProcessMessage() != -1) // Windowsが行う処理を待つ
 	{
@@ -124,6 +129,8 @@ void Application::Run()
 		{
 			//ターゲット
 			SetDrawScreen(RT);
+			//フェード
+			fader.Update();
 			//画面全体をクリア
 			ClearDrawScreen();
 			sceneController->Update();
@@ -132,6 +139,8 @@ void Application::Run()
 		}
 		//描画
 		sceneController->Draw();
+		//フェード
+		fader.Draw();
 
 		//裏描画
 		SetDrawScreen(DX_SCREEN_BACK);

@@ -31,6 +31,11 @@ void ShaderPostProcess::Init()
 	m_cbuff2 = static_cast<CBuff2*>(GetBufferShaderConstantBuffer(m_cbuff2Handle));
 	m_cbuff2->justRate = 0.0f;
 
+	//設定用
+	m_optionCbuff.blockScale = 1.0f;
+	m_optionCbuff.noiseSpeed = 1.0f;
+	m_optionCbuff.shakeStrength = 1.0f;
+
 	//ポストエフェクト
 	m_psHandle = LoadPixelShader(L"Shader/PostEffects.pso");
 	assert(m_psHandle >= 0);
@@ -41,9 +46,9 @@ void ShaderPostProcess::Update()
 	if (m_cbuff1->state & static_cast<int>(PostEffectState::Glitch))
 	{
 		//更新
-		m_cbuff1->shakeStrength = MyMath::GetRandF(0.0f,0.5f);
-		m_cbuff1->blockScale = MyMath::GetRandF(0.0f, 10.0f);
-		m_cbuff1->noiseSpeed = MyMath::GetRandF(0.0f, 10.0f);
+		m_cbuff1->shakeStrength = MyMath::GetRandF(0.0f, m_optionCbuff.shakeStrength);
+		m_cbuff1->blockScale = MyMath::GetRandF(0.0f, m_optionCbuff.blockScale);
+		m_cbuff1->noiseSpeed = MyMath::GetRandF(0.0f, m_optionCbuff.noiseSpeed);
 	}
 	//ジャスト回避をしているなら
 	if (m_cbuff1->state & static_cast<int>(PostEffectState::JustAvoid))
@@ -88,4 +93,19 @@ void ShaderPostProcess::SetJustAvoidEffectTime(const float time)
 		m_justFrame = 1.0f;
 	}
 	m_countJustFrame = 0;
+}
+
+void ShaderPostProcess::SetBlockScele(float scale)
+{
+	m_optionCbuff.blockScale = abs(scale);
+}
+
+void ShaderPostProcess::SetNoiseSpeed(float speed)
+{
+	m_optionCbuff.noiseSpeed = abs(speed);
+}
+
+void ShaderPostProcess::SetShakeStrength(float shake)
+{
+	m_optionCbuff.shakeStrength = abs(shake);
 }

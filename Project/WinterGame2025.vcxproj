@@ -212,6 +212,7 @@
     <ClCompile Include="General\CSV\AnimData.cpp" />
     <ClCompile Include="General\CSV\EnemyAttackKeyData.cpp" />
     <ClCompile Include="General\CSV\PodData.cpp" />
+    <ClCompile Include="General\Fader.cpp" />
     <ClCompile Include="General\Input.cpp" />
     <ClCompile Include="General\Math\MathSub.cpp" />
     <ClCompile Include="General\Math\Matrix3x3.cpp" />
@@ -228,6 +229,7 @@
     <ClCompile Include="Scene\DebugScene\DebugSelectScene.cpp" />
     <ClCompile Include="Scene\DebugScene\PlayerTestScene.cpp" />
     <ClCompile Include="Scene\GameScene.cpp" />
+    <ClCompile Include="Scene\ResultScene.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
     <ClCompile Include="Scene\SceneController.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
@@ -302,6 +304,7 @@
     <ClInclude Include="General\CSV\AnimData.h" />
     <ClInclude Include="General\CSV\EnemyAttackKeyData.h" />
     <ClInclude Include="General\CSV\PodData.h" />
+    <ClInclude Include="General\Fader.h" />
     <ClInclude Include="General\Game.h" />
     <ClInclude Include="General\Input.h" />
     <ClInclude Include="General\Math\MathSub.h" />
@@ -323,6 +326,7 @@
     <ClInclude Include="Scene\Debug\DebugSelectScene.h" />
     <ClInclude Include="Scene\Debug\PlayerTestScene.h" />
     <ClInclude Include="Scene\GameScene.h" />
+    <ClInclude Include="Scene\ResultScene.h" />
     <ClInclude Include="Scene\SceneBase.h" />
     <ClInclude Include="Scene\SceneController.h" />
     <ClInclude Include="Scene\TitleScene.h" />

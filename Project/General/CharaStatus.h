@@ -83,6 +83,10 @@ public:
 	float GetSearchRange()const { return m_searchRange; };
 	float GetSearchAngle()const { return m_searchAngle; };
 	float GetMeleeAttackRange()const { return m_meleeAttackRange; };
+
+	//ピンチ
+	bool IsPinchHP()const;
+
 private:
 	//ステータス
 	int					m_maxHp;	//最大体力

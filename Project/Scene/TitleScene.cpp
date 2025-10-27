@@ -3,6 +3,8 @@
 #include  "../General/Input.h"
 #include "SceneController.h"
 #include "GameScene.h"
+#include "../General/Fader.h"
+#include "../General/Game.h"
 
 TitleScene::TitleScene(SceneController& controller):
 	SceneBase(controller)
@@ -15,22 +17,30 @@ TitleScene::~TitleScene()
 
 void TitleScene::Init()
 {
-	
+	Fader::GetInstance().FadeIn();
 }
 
 void TitleScene::Update()
 {
 	auto& input = Input::GetInstance();
-	if (input.IsTrigger("A"))
+
+	auto& fader = Fader::GetInstance();
+	//フェードアウトしきったら
+	if (fader.IsFinishFadeOut())
 	{
-		m_controller.ChangeScene(std::make_unique<GameScene>(m_controller,GetStageNameByIndex(StageIndex::Stage1)));
+		m_controller.ChangeScene(std::make_unique<GameScene>(m_controller, GetStageNameByIndex(StageIndex::Stage1)));
 		return;
+	}
+
+	if (input.IsTrigger("A") && !fader.IsFadeNow())
+	{
+		fader.FadeOut();
 	}
 }
 
 void TitleScene::Draw()
 {
-
+	DrawCircle(Game::kScreenCenterX, Game::kScreenCenterY, 100, 0xff0000, true);
 }
 
 void TitleScene::End()

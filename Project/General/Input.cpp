@@ -44,6 +44,8 @@ void Input::Init()
 	m_inputActionMap["Y"]		= { {InputType::kKeyboard,KEY_INPUT_Y}		, {InputType::kPad,PAD_INPUT_4} };
 #if _DEBUG
 	m_inputActionMap["DebugScene"] = { {InputType::kKeyboard,KEY_INPUT_D}};
+	m_inputActionMap["GameClear"] = { {InputType::kKeyboard,KEY_INPUT_C}};
+	m_inputActionMap["Pinch"] = { {InputType::kKeyboard,KEY_INPUT_X}};
 	m_inputActionMap["AddFPS"] = { {InputType::kKeyboard,KEY_INPUT_6}};
 	m_inputActionMap["SubFPS"] = { {InputType::kKeyboard,KEY_INPUT_5}};
 	m_inputActionMap["AddTimeScale"] = { {InputType::kKeyboard,KEY_INPUT_8}};
@@ -63,10 +65,10 @@ void Input::Init()
 
 void Input::Update()
 {
+	if (!m_isUpdate)return;
+
 	//‘O‚ÌƒtƒŒ[ƒ€‚Ì“ü—Íî•ñ‚ğ•Û‘¶‚·‚é
 	m_lastInput = m_currentInput;
-
-	if (!m_isUpdate)return;
 
 	//‚·‚×‚Ä‚Ì“ü—Í‚ğæ“¾‚·‚é
 	char keyState[256] = {};

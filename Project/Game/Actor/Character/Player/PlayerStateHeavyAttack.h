@@ -28,7 +28,7 @@ private:
     //移動か待機か
     void ChangeToMoveOrIdle(std::shared_ptr<Player> owner, Input& input);
 	//攻撃開始処理
-    void UpdateStartFrame(std::shared_ptr<Player>& owner, std::shared_ptr<Weapon>& weapon);
+    void UpdateStartFrame(std::shared_ptr<Player> owner, std::shared_ptr<Weapon> weapon);
 
     //地上
     void GroundUpdate(std::shared_ptr<Player> owner, Input& input);

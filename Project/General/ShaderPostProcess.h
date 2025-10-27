@@ -26,6 +26,13 @@ public:
 	void ResetPostEffectState() { m_cbuff1->state = static_cast<int>(PostEffectState::Normal); }
 	//ジャスト回避エフェクトの時間を設定
 	void SetJustAvoidEffectTime(const float time);
+
+	//グリッジのブロックノイズの大きさ
+	void SetBlockScele(float scale);
+	//ノイズの速度
+	void SetNoiseSpeed(float speed);
+	//揺れの強さ
+	void SetShakeStrength(float shake);
 private:
 	//グリッジ用の定数バッファ
 	struct CBuff1
@@ -50,6 +57,10 @@ private:
 	//定数バッファのポインタ
 	CBuff1* m_cbuff1;
 	CBuff2* m_cbuff2;
+
+	//設定用バッファ
+	CBuff1 m_optionCbuff;
+
 	//シェーダハンドル
 	int m_psHandle;
 

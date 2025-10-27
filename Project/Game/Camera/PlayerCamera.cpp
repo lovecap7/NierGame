@@ -143,6 +143,8 @@ void PlayerCamera::LockOnUpdate(Input& input, Vector3& targetPos)
     if (m_lockOnTarget.expired()) return;
     auto lockOnTarget = m_lockOnTarget.lock();
 
+    Vector3 lockPos = targetPos;
+
     //プレイヤーとターゲットの位置
     Vector3 playerPos = m_playerPos;
     Vector3 enemyPos = lockOnTarget->GetNextPos();
@@ -155,9 +157,9 @@ void PlayerCamera::LockOnUpdate(Input& input, Vector3& targetPos)
     }
 
     //中点（注視点）を計算
-    Vector3 center = (playerPos + enemyPos) * 0.5f;
+    Vector3 center = Vector3::Lerp(playerPos , enemyPos,0.5f);
     center.y += kCameraHeight; // 少し上を見る
-    targetPos = center;
+    lockPos = center;
 
     // カメラの理想位置
     Vector3 basePos = playerPos;
@@ -175,8 +177,8 @@ void PlayerCamera::LockOnUpdate(Input& input, Vector3& targetPos)
         basePos += m_look * -kBackOffset;
 
 		//視点はプレイヤーからターゲットへのベクトルの少し前方
-		targetPos = playerPos + toEnemy * kLockOnViewInput;
-		targetPos.y += kCameraHeight;
+        lockPos = playerPos + toEnemy * kLockOnViewInput;
+        lockPos.y += kCameraHeight;
     }
     else
     {
@@ -208,13 +210,13 @@ void PlayerCamera::LockOnUpdate(Input& input, Vector3& targetPos)
     }
     Vector3 idealCamPos = basePos;
     //衝突補正（壁など）
-    Vector3 nextPos = Physics::GetInstance().GetCameraRatCastNearEndPos(targetPos, idealCamPos);
+    Vector3 nextPos = Physics::GetInstance().GetCameraRatCastNearEndPos(lockPos, idealCamPos);
 
     //補間してなめらかに追従
     m_cameraPos = Vector3::Lerp(m_cameraPos, nextPos, kLockOnFollowSpeed);
 
     //視点を更新
-    m_viewPos = Vector3::Lerp(m_viewPos, targetPos, kLockOnFollowSpeed);
+    m_viewPos = Vector3::Lerp(m_viewPos, lockPos, kLockOnFollowSpeed);
 
     if (!isStickInput)
     {

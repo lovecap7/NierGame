@@ -1,6 +1,8 @@
 #include "CharaStatus.h"
 #include "Math/MyMath.h"
 #include "CSV/CharaStatusData.h"
+#include "ShaderPostProcess.h"
+#include "../Main/Application.h"
 #include <cmath>
 
 namespace
@@ -102,11 +104,24 @@ void CharaStatus::Heal(int value)
 {
 	m_nowHp += abs(value);
 	m_nowHp = MathSub::ClampInt(m_nowHp, 0, m_maxHp);
+	if (!IsPinchHP())
+	{
+		//ポストエフェクト解除
+		auto& app = Application::GetInstance();
+		auto& postEff = app.GetPostProcess();
+		postEff->SubPostEffectState(ShaderPostProcess::PostEffectState::Glitch);
+		postEff->SubPostEffectState(ShaderPostProcess::PostEffectState::Gray);
+	}
 }
 
 void CharaStatus::FullRecovery()
 {
-	m_nowHp = m_maxHp;
+	Heal(m_maxHp);
+}
+
+bool CharaStatus::IsPinchHP() const
+{
+	return m_nowHp <= (m_maxHp / 3);
 }
 
 int CharaStatus::GetDamage(int power, int at)

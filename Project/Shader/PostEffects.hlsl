@@ -65,7 +65,7 @@ PS_OUTPUT main(PS_INPUT input)
 {
     PS_OUTPUT output;
 
-    bool isUseGlitch = (state & STATE_GLITCH);
+    bool isUseGlitch = (state & STATE_GLITCH) && !(blockScale <= 0.0 && noiseSpeed <= 0.0 && shakeStrength <= 0.0);
     bool isUseGray = (state & STATE_MONOCHROME);
     bool isUseJust = (state & STATE_JUSTAVOID);
     
@@ -75,6 +75,7 @@ PS_OUTPUT main(PS_INPUT input)
     //状態が「グリッチ」または「グリッチ+モノクロ」の場合
     if (isUseGlitch)
     {
+        
         ///グリッチ効果///
         float2 gv = input.uv; //グリッチ用のUV座標
 
@@ -113,21 +114,33 @@ PS_OUTPUT main(PS_INPUT input)
         //色味を微妙に調整（青み・緑みを少し強調）
         color.g *= 1.07;
         color.b *= 1.04;
-    }
-    
-    //ジャスト回避
-    if (isUseJust)
-    {
+        
          //UV
         float2 uv = input.uv;
  
         float d = length(uv - 0.5);
 
-        float lerpRate = saturate(justRate);
+        float lerpRate = saturate(1.0f);
         float4 vignetteColor = lerp(color, float4(0.0, 0.0, 0.0, 1.0), lerpRate);
 
         float vignetteDistance = pow(saturate(d * 1.5), 2);
 
+        color = lerp(color, vignetteColor, vignetteDistance);
+    }
+    
+    //ジャスト回避
+    if (isUseJust)
+    {
+        float2 uv = input.uv;
+ 
+        float d = length(uv - 0.5);
+        
+        float lerpRate = saturate(justRate);
+        
+        float4 vignetteColor = lerp(color, float4(0.0, 0.0, 0.0, 1.0), lerpRate);
+
+        float vignetteDistance = pow(saturate(d * 1.1), 2);
+        
         color = lerp(color, vignetteColor, vignetteDistance);
     }
 

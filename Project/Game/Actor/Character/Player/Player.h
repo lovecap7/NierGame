@@ -95,6 +95,8 @@ private:
 	void SearchTarget(Input& input, std::shared_ptr<PlayerCamera> camera, const std::list<std::shared_ptr<EnemyBase>>& enemys);
 	//ターゲットリセット
 	void ResetTarget(std::shared_ptr<PlayerCamera> camera);
+	//体力がピンチの時の処理
+	void UpdatePinch();
 private:
 	//ジャンプ回数
 	int m_jumpNum;
@@ -121,5 +123,8 @@ private:
 	
 	//現在のターゲット情報
 	TargetInfo m_targetInfo;
+
+	//グリッジフレーム
+	float m_glitchFrame;
 };
 

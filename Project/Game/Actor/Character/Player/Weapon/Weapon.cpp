@@ -56,11 +56,10 @@ void Weapon::Draw() const
 
 void Weapon::End()
 {
-    // Physics ‚©‚ç‰ğœ
-    Collidable::End();
-
     // ƒ‚ƒfƒ‹‚ğ‰ğ•ú
     m_model->End();
+    // Physics ‚©‚ç‰ğœ
+    Collidable::End();
 }
 
 void Weapon::OnCollide(const std::shared_ptr<Collidable> other)

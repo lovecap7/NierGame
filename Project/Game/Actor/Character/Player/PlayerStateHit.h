@@ -9,5 +9,10 @@ public:
     void Init()override;
     void Update() override;
 private:
+    //グリッジフレーム
+    float m_glitchFrame;
+    float m_glitchScale;
+    float m_glitchSpeed;
+    float m_glitchkStrengt;
 };
 

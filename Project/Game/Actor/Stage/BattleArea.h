@@ -40,5 +40,17 @@ private:
 	void CheckDeathEnemys();
 	//範囲内に座標があるかチェック
 	bool IsInArea(const Vector3& pos) const;
+	//壁を展開
+	void OnWall() ;
+	void OffWall();
+
+private:
+	//状態遷移
+	using UpdateFunc_t = void(BattleArea::*)(const std::shared_ptr<ActorManager> actorManager);
+	UpdateFunc_t m_update;
+	//プレイヤー索敵状態
+	void UpdatePlayerSearvh(const std::shared_ptr<ActorManager> actorManager);
+	//敵がすべて死んだか
+	void UpdateBattle(const std::shared_ptr<ActorManager> actorManager);
 };
 
