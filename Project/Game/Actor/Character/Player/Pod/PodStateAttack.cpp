@@ -20,6 +20,8 @@ namespace
 	constexpr float kLerpRate = 0.5f;
 	//弾を打つ高さのオフセット
 	constexpr float kShotPosYOffset = 30.0f;
+	//弾のばらつき
+	constexpr float kDispersion = 0.04f;
 }
 
 PodStateAttack::PodStateAttack(std::weak_ptr<Actor> pod):
@@ -98,7 +100,14 @@ void PodStateAttack::Update()
 				bulletPos.y += kShotPosYOffset;
 				bullet->SetPos(bulletPos);
 
-				bullet->SetMoveVec(dir * m_attackData->m_moveSpeed);
+				//向きは少し向きをばらつかせる
+				Vector3 bulletDir = dir;
+				bulletDir += Vector3(MyMath::GetRandF(-kDispersion, kDispersion), MyMath::GetRandF(-kDispersion, kDispersion), MyMath::GetRandF(-kDispersion, kDispersion));
+				if (bulletDir.SqMagnitude() > 0.0f)
+				{
+					bulletDir = bulletDir.Normalize();
+				}
+				bullet->SetMoveVec(bulletDir * m_attackData->m_moveSpeed);
 				owner->SetAttack(bullet);
 				break;
 			}

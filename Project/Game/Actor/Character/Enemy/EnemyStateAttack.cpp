@@ -6,7 +6,7 @@
 #include "../../../Attack/AttackBase.h"
 #include "../../../Attack/SwordAttack.h"
 #include "../../../Attack/AOEAttack.h"
-#include "../../../Attack/BulletAttack.h"
+#include "../../../Attack/EnemyBulletAttack.h"
 #include "../../../../General/Math/MyMath.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/CSV/AttackData.h"
@@ -138,12 +138,28 @@ void EnemyStateAttack::CreateAttack(std::shared_ptr<EnemyBase> owner)
 	}
 	else if(m_attackData->m_attackType == AttackData::AttackType::Bullet)
 	{
-		attack = std::make_shared<BulletAttack>(m_attackData, owner);
+		attack = std::make_shared<EnemyBulletAttack>(m_attackData, owner);
 		//弾の初期位置と方向を設定
-		auto bulletAttack = std::dynamic_pointer_cast<BulletAttack>(attack);
+		auto bulletAttack = std::dynamic_pointer_cast<EnemyBulletAttack>(attack);
 		auto model = owner->GetModel();
-		bulletAttack->SetMoveVec(model->GetDir() * m_attackData->m_param2);
+
+		//XZ方向はモデルの向き
+		Vector3 bulletDir = model->GetDir();
+		//Y方向はプレイヤーへのベクトル
+		bulletDir.y = owner->GetToTargetVec().y;
+		//正規化
+		if (bulletDir.SqMagnitude() > 0.0f)
+		{
+			bulletDir = bulletDir.Normalize();
+		}
+		//移動
+		bulletAttack->SetMoveVec(bulletDir * m_attackData->m_param2);
+		//発射座標
 		bulletAttack->SetPos(MV1GetFramePosition(model->GetModelHandle(), static_cast<int>(m_attackData->m_param1)));
+
+		//壊れるか
+		bulletAttack->SetIsDestructible(m_attackData->m_param3 != 0.0f);
+
 		//弾を打った
 		m_isShotBullet = true;
 	}

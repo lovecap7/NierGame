@@ -40,6 +40,9 @@ private:
 	//ロックオン時のカメラが右と左どちらに移動するか
 	float m_lockOnSide;
 	float m_nextlockOnSide;
+
+	//カメラ操作が最後に行われて何フレーム経過したかをカウント
+	float m_lastInputCountFrame;
 private:
 	//通常時の更新
 	void NormalUpdate(Input& input, Vector3& targetPos);

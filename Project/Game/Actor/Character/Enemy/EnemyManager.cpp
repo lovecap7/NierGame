@@ -60,27 +60,28 @@ void EnemyManager::Update()
 		bool isActive = false;
 
 		//エリア内で戦闘中でないなら
-		if (!m_isInAreaBattle)
+		if (m_isInAreaBattle)
 		{
-			if (enemy->IsInArea())
-			{
-				//エリア内の敵は非アクティブ
-				enemy->SetIsActive(isActive);
-				continue;
-			}
-		}
-		else
-		{
-			if (!enemy->IsInArea())
+			if (!enemy->IsInArea() || !enemy->IsActive())
 			{
 				//エリア外の敵は処理不要
 				continue;
 			}
+			enemy->SearchTarget(player);
+			continue;
+
 		}
 
 		//距離を計算
 		Vector3 enemyPos = enemy->GetRb()->GetNextPos();
 		float distance = (playerPos - enemyPos).Magnitude();
+		//エリア内の敵なら
+		if (enemy->IsInArea())
+		{
+			//エリア内の敵は非アクティブ
+			enemy->SetIsActive(isActive);
+			continue;
+		}
 		//活動範囲内なら活動
 		isActive = distance <= kActiveRange;
 		enemy->SetIsActive(isActive);

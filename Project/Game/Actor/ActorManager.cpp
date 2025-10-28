@@ -73,13 +73,13 @@ void ActorManager::Init()
 
 void ActorManager::Update()
 {
+	//敵マネージャーの更新
+	m_pEnemyManager->Update();
 	//アクターの更新
 	for (auto& actor : m_actors)
 	{
 		actor->Update();
 	}
-	//敵マネージャーの更新
-	m_pEnemyManager->Update();
 	//削除
 	CheckDelete();
 }

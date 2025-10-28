@@ -24,12 +24,6 @@ public:
 	virtual ~NormalEnemy();
 	//初期化処理
 	void Init()override;
-	//更新処理
-	void Update() override;
-	//衝突イベント関数
-	void OnCollide(const std::shared_ptr<Collidable> other)override;
-	//描画
-	void Draw()const override;
 	//更新処理による結果の確定
 	void Complete() override;
 	//終了処理

@@ -19,6 +19,9 @@ namespace
 	constexpr float kNormalFollowSpeed = 0.3f;  //通常時の追従速度
     //操作してないときの旋回速度
     constexpr float kReturnSpeed = 0.02f; // 戻るスピード
+    //操作していないときに旋回するまでのフレーム
+    constexpr float kLastInputCountFrame = 60.0f * 2.0f;
+
 
 	//ロックオン時の設定
     //カメラオフセット（右に寄せる）
@@ -39,7 +42,8 @@ PlayerCamera::PlayerCamera() :
 	m_lockOnTarget(),
 	m_playerPos(Vector3::Zero()),
     m_lockOnSide(kRightOffset),
-    m_nextlockOnSide(kRightOffset)
+    m_nextlockOnSide(kRightOffset),
+    m_lastInputCountFrame(0.0f)
 {
 }
 
@@ -104,11 +108,15 @@ void PlayerCamera::NormalUpdate(Input& input, Vector3& targetPos)
     {
 		//スティック入力でカメラ回転
         UpdateStickAngle(input);
+        m_lastInputCountFrame = 0.0f;
     }
     else
     {
+        //操作していないフレームをカウント
+        m_lastInputCountFrame += Application::GetInstance().GetTimeScale();
+
         //プレイヤーが移動を開始したらだんだんプレイヤーの向きにカメラをうごかす
-        if (m_playerVec.SqMagnitude() > 0.0f)
+        if (m_playerVec.SqMagnitude() > 0.0f && m_lastInputCountFrame >= kLastInputCountFrame)
         {
             Vector3 playerForward = m_playerDir;
             playerForward.y = 0.0f; // 水平面に限定

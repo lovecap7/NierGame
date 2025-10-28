@@ -11,11 +11,11 @@ public:
     BulletAttack(std::shared_ptr<AttackData> attackData, std::weak_ptr<CharacterBase> pOwner);
     ~BulletAttack();
     //更新
-    void Update() override;
+    virtual void Update() override;
     //描画
-    void Draw()const override;
+    virtual void Draw()const override;
     //当たった時
-    void OnCollide(const std::shared_ptr<Collidable> other) override;
+    virtual void OnCollide(const std::shared_ptr<Collidable> other) override;
 
     //リセット
     void Reset(float keepFrame);
@@ -26,7 +26,7 @@ public:
     //アクティブ
     void SetActive(bool isActive) { m_isActive = isActive; };
     bool IsActive()const { return m_isActive; };
-private:
+protected:
     //移動
     Vector3 m_moveVec;
 

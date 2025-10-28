@@ -29,7 +29,7 @@ namespace
 	//ジャスト回避終了前
 	constexpr float kFisishJustAvoidFrame = 5.0f;
 	//終了可能フレーム
-	constexpr float kEnableFinishAvoidFrame = 14.0f;
+	constexpr float kEnableFinishAvoidFrame = 20.0f;
 }
 
 PlayerStateAvoid::PlayerStateAvoid(std::weak_ptr<Actor> player) :
@@ -166,8 +166,18 @@ void PlayerStateAvoid::Update()
 		{
 			//無敵解除
 			owner->GetCharaStatus()->SetIsNoDamage(false);
-			//待機へ
-			ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
+			if (input.GetStickInfo().IsLeftStickInput())
+			{
+				//走る
+				ChangeState(std::make_shared<PlayerStateMoving>(m_pOwner, true));
+				return;
+			}
+			else
+			{
+				//待機
+				ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
+				return;
+			}
 			return;
 		}
 	}

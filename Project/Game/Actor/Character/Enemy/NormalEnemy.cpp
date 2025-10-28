@@ -15,7 +15,6 @@
 #include "../../../../General/CSV/CSVData.h"
 #include "../../../../General/CSV/AttackData.h"
 #include "../../../../General/CSV/EnemyAttackKeyData.h"
-#include "../../../../General/MyDraw.h"
 #include <DxLib.h>
 #include <cmath>
 #include <cassert>
@@ -61,62 +60,6 @@ void NormalEnemy::Init()
 			m_longRangeAttackKeys.emplace_back(attackKeyData->m_attackKeyName);
 		}
 	}
-}
-
-
-void NormalEnemy::Update()
-{
-	//非活動中は更新しない
-	if (!m_isActive)return;
-
-	//攻撃クールタイム更新
-	CountAttackCoolTime();
-	//共通処理
-	CharacterBase::Update();
-	//ロックオンの位置
-	UpdateLockOnViewPos();
-}
-
-
-void NormalEnemy::OnCollide(const std::shared_ptr<Collidable> other)
-{
-}
-
-void NormalEnemy::Draw() const
-{
-	//非活動中は描画しない
-	if (!m_isActive)return;
-#if _DEBUG
-	//衝突判定
-	DrawCapsule3D(
-		m_rb->m_pos.ToDxLibVector(),
-		std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetEndPos().ToDxLibVector(),
-		std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetRadius(),
-		16,
-		0x00ff00,
-		0x00ff00,
-		false
-	);
-	//座標
-	auto pos = m_rb->m_pos;
-	//視野角
-	float viewingAngle = m_charaStatus->GetSearchAngle();
-	//索敵距離
-	float searchDistance = m_charaStatus->GetSearchRange();
-	//索敵範囲
-	MyDraw::Draw3DCircle(pos, searchDistance, 36, 0x0000ff);
-	//見てる方向
-	auto forward = m_model->GetDir();
-	forward = forward * searchDistance;
-	//視野角
-	auto viewDir1 = Quaternion::AngleAxis(viewingAngle / 2.0f, Vector3::Up()) * forward;
-	auto viewDir2 = Quaternion::AngleAxis(-viewingAngle / 2.0f, Vector3::Up()) * forward;
-	//描画
-	DrawLine3D(pos.ToDxLibVector(), (pos + forward).ToDxLibVector(), 0xff0000);
-	DrawLine3D(pos.ToDxLibVector(), (pos + viewDir1).ToDxLibVector(), 0xff0000);
-	DrawLine3D(pos.ToDxLibVector(), (pos + viewDir2).ToDxLibVector(), 0xff0000);
-#endif
-	m_model->Draw();
 }
 
 void NormalEnemy::Complete()

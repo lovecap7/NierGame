@@ -14,6 +14,14 @@ class EnemyBase abstract:
 public:
 	EnemyBase(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager);
 	virtual ~EnemyBase();
+
+	//更新処理
+	virtual void Update() override;
+	//衝突イベント関数
+	void OnCollide(const std::shared_ptr<Collidable> other)override {};
+	//描画
+	void Draw()const override;
+
 	//攻撃クールタイム取得
 	float GetAttackCoolTime() const { return m_attackCoolTime; }
 	//攻撃可能
