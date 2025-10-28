@@ -8,7 +8,8 @@ EnemyBase::EnemyBase(std::shared_ptr<ActorData> actorData, std::shared_ptr<Chara
 	CharacterBase(actorData, charaStatusData, Shape::Capsule, pActorManager),
 	m_attackCoolTime(0.0f),
 	m_isActive(true),
-	m_isAlerted(true)
+	m_isAlerted(true),
+	m_isInArea(false)
 {
 }
 

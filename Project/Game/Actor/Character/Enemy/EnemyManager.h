@@ -22,10 +22,18 @@ public:
 
 	//敵のリスト取得
 	const std::list<std::shared_ptr<EnemyBase>>& GetEnemys() const { return m_enemys; }
+
+	//エリア内で戦闘が起きたときの処理
+	void InAreaBattle(std::list<std::shared_ptr<EnemyBase>> activeEnemy);
+	//エリア内での戦闘終了
+	void FinishInAreaBattle();
 private:
 	//敵
 	std::list<std::shared_ptr<EnemyBase>> m_enemys;
 	//アクターマネージャーの参照
 	std::weak_ptr<ActorManager> m_pActorManager;
+
+	//エリア内で戦闘中
+	bool m_isInAreaBattle;
 };
 

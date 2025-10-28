@@ -20,6 +20,10 @@ public:
 	void End();
 	//敵がいるか
 	bool IsNoEnemys()const { return m_isNoEnemys; };
+	//エリア内にプレイヤーがいるか
+	bool IsInArea()const { return m_isBattleStart; };
+	//エリア内の敵
+	std::list<std::shared_ptr<EnemyBase>> GetAreaEnemys();
 private:
 	//範囲内の敵
 	std::list<std::weak_ptr<EnemyBase>> m_areaEnemies;
@@ -39,7 +43,7 @@ private:
 	//範囲内の敵がすべて倒されたか
 	void CheckDeathEnemys();
 	//範囲内に座標があるかチェック
-	bool IsInArea(const Vector3& pos) const;
+	bool IsInArea(const Vector3& pos, float radius) const;
 	//壁を展開
 	void OnWall() ;
 	void OffWall();

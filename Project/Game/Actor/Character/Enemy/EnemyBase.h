@@ -24,6 +24,9 @@ public:
 	Vector3 GetLockOnViewPos() const { return m_lockOnViewPos; }
 	//活動取得
 	bool IsActive() const { return m_isActive; }
+	//エリア内か
+	bool IsInArea() const { return m_isInArea; }
+	void SetIsInArea(bool isInArea) { m_isInArea = isInArea; };
 	//活動設定
 	void SetIsActive(bool isActive) { m_isActive = isActive; }
 	//索敵
@@ -49,6 +52,8 @@ protected:
 	Vector3 m_lockOnViewPos;
 	//活動
 	bool m_isActive;
+	//エリア内か
+	bool m_isInArea;
 	//ターゲット情報
 	TargetInfo m_targetInfo;
 	//警戒状態

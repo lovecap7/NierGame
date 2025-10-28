@@ -68,6 +68,7 @@ void NormalEnemy::Update()
 {
 	//非活動中は更新しない
 	if (!m_isActive)return;
+
 	//攻撃クールタイム更新
 	CountAttackCoolTime();
 	//共通処理

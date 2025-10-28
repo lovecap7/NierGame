@@ -21,6 +21,10 @@ public:
     void SetIsThrough(bool isThrough) { m_isThrough = isThrough; };
     //•`‰æ‚·‚é‚©
     void SetIsDraw(bool isDraw) { m_isDraw = isDraw; };
+    //‘å‚«‚³‚ð•Ô‚·
+    float GetScaleZ()const;
+    //ƒ‚ƒfƒ‹‚ÌŒü‚«
+    Vector3 GetDir()const;
 private:
     //•`‰æ‚·‚é‚©
     bool m_isDraw;

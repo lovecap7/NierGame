@@ -424,14 +424,23 @@ void Player::SearchTarget(Input& input, std::shared_ptr<PlayerCamera> camera, co
 	}
 	else
 	{
-		//ターゲットがいるなら距離を確認
-		auto target = m_targetInfo.m_pTarget.lock();
-		Vector3 toTarget = target->GetNextPos() - GetPos();
-		float distance = toTarget.Magnitude();
-		//範囲外になったラ解除
-		if (distance > m_charaStatus->GetSearchRange())
+		auto target = std::dynamic_pointer_cast<EnemyBase>(m_targetInfo.m_pTarget.lock());
+
+		//アクティブじゃないなら解除
+		if(!target->IsActive())
 		{
 			ResetTarget(camera);
+		}
+		else
+		{
+			//ターゲットがいるなら距離を確認
+			Vector3 toTarget = target->GetNextPos() - GetPos();
+			float distance = toTarget.Magnitude();
+			//範囲外になったラ解除
+			if (distance > m_charaStatus->GetSearchRange())
+			{
+				ResetTarget(camera);
+			}
 		}
 	}
 
@@ -456,6 +465,9 @@ void Player::SearchTarget(Input& input, std::shared_ptr<PlayerCamera> camera, co
 
 			for (auto enemy : enemys)
 			{
+				//活動していないなら無視
+				if (!enemy->IsActive())continue;
+
 				Vector3 enemyPos = enemy->GetNextPos();
 				Vector3 toEnemy = enemyPos - playerPos;
 				float distance = toEnemy.Magnitude();

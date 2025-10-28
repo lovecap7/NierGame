@@ -5,6 +5,7 @@
 #include "../Character/Enemy/EnemyManager.h"
 #include "../Character/Enemy/EnemyBase.h"
 #include "../../../General/Collision/Physics.h"
+#include "../../../General/Collision/CapsuleCollider.h"
 
 BattleArea::BattleArea(std::weak_ptr<StageObject> start, std::weak_ptr<StageObject> end):
 	m_startArea(start),
@@ -43,8 +44,10 @@ void BattleArea::InitInEnemys(const std::shared_ptr<EnemyManager> enemyManager)
 	for (auto& enemy : enemys)
 	{
 		//範囲内の敵の参照を取得
-		if (IsInArea(enemy->GetPos()))
+		if (IsInArea(enemy->GetPos(),0.0f))
 		{
+			//エリア内である
+			enemy->SetIsInArea(true);
 			m_areaEnemies.emplace_back(enemy);
 		}
 	}
@@ -53,9 +56,10 @@ void BattleArea::InitInEnemys(const std::shared_ptr<EnemyManager> enemyManager)
 void BattleArea::CheckInPlayer(std::shared_ptr<Player> player)
 {
 	//座標から範囲に入ったかをチェック
-	auto playerPos = player->GetPos();
+	Vector3 playerPos = player->GetPos();
+	float playerRadius = std::dynamic_pointer_cast<CapsuleCollider>(player->GetColl())->GetRadius();
 	//範囲内にいるかチェック
-	m_isBattleStart = IsInArea(playerPos);
+	m_isBattleStart = IsInArea(playerPos, playerRadius);
 }
 
 void BattleArea::CheckDeathEnemys()
@@ -74,11 +78,23 @@ void BattleArea::CheckDeathEnemys()
 	m_isNoEnemys = true;
 }
 
-bool BattleArea::IsInArea(const Vector3& pos) const
+bool BattleArea::IsInArea(const Vector3& pos,float radius) const
 {
 	if (m_startArea.expired() || m_endArea.expired())return false;
-	auto startPos = m_startArea.lock()->GetPos();
-	auto endPos = m_endArea.lock()->GetPos();
+	auto startWall = m_startArea.lock();
+	auto endWall = m_endArea.lock();
+
+	//始点
+	Vector3 startPos = startWall->GetPos();
+	float radiusS = startWall->GetScaleZ() * 100.0f;
+	Vector3 startDir = startWall->GetDir();
+	//終点
+	Vector3 endPos = endWall->GetPos();
+	float radiusE = endWall->GetScaleZ() * 100.0f;
+	Vector3 endDir = endWall->GetDir();
+
+	startPos += startDir * (radiusS + radius);
+	endPos += endDir * (radiusE + radius);
 
 	//範囲内にいるかチェック
 	return Vector2::IsPointInRect(startPos.XZ(), endPos.XZ(), pos.XZ());
@@ -105,6 +121,18 @@ void BattleArea::End()
 	m_areaEnemies.clear();
 	m_startArea.reset();
 	m_endArea.reset();
+}
+
+std::list<std::shared_ptr<EnemyBase>> BattleArea::GetAreaEnemys()
+{
+	std::list<std::shared_ptr<EnemyBase>> activeEnemys;
+
+	for (auto enemy : m_areaEnemies)
+	{
+		if (enemy.expired())continue;
+		activeEnemys.emplace_back(enemy.lock());
+	}
+	return activeEnemys;
 }
 
 void BattleArea::UpdatePlayerSearvh(const std::shared_ptr<ActorManager> actorManager)

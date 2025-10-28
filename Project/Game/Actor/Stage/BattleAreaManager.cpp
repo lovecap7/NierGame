@@ -2,6 +2,7 @@
 #include "BattleArea.h"
 #include "StageObject.h"
 #include "../ActorManager.h"
+#include "../Character/Enemy/EnemyManager.h"
 #include "../../../General/CSV/CSVDataLoader.h"
 #include "../../../General/CSV/ActorData.h"
 
@@ -59,6 +60,9 @@ void BattleAreaManager::Init(std::wstring stageName, std::shared_ptr<ActorManage
 	{
 		area->Init(actorManager->GetEnemyManager());
 	}
+
+	//エネミーマネージャー
+	m_pEnemyManager = actorManager->GetEnemyManager();
 }
 
 void BattleAreaManager::Update(std::shared_ptr<ActorManager> actorManager)
@@ -66,7 +70,15 @@ void BattleAreaManager::Update(std::shared_ptr<ActorManager> actorManager)
 	//更新
 	for (auto area : m_areas)
 	{
+		//更新
 		area->Update(actorManager);
+		//エリア内で戦闘が起きているなら
+		if (area->IsInArea())
+		{
+			if (m_pEnemyManager.expired())continue;
+			//エリア外の敵の活動を停止
+			m_pEnemyManager.lock()->InAreaBattle(area->GetAreaEnemys());
+		}
 	}
 	//削除チェック
 	CheckDeleteArea();
@@ -95,6 +107,9 @@ void BattleAreaManager::CheckDeleteArea()
 		if (area->IsNoEnemys())
 		{
 			deleteAreas.emplace_back(area);
+			if (m_pEnemyManager.expired())continue;
+			//エリア内で戦闘終了
+			m_pEnemyManager.lock()->FinishInAreaBattle();
 		}
 	}
 	for (auto& area : deleteAreas)

@@ -18,6 +18,8 @@ namespace
 	constexpr float kPodPosUp = 70.0f;
 	//線形補間
 	constexpr float kLerpRate = 0.5f;
+	//弾を打つ高さのオフセット
+	constexpr float kShotPosYOffset = 30.0f;
 }
 
 PodStateAttack::PodStateAttack(std::weak_ptr<Actor> pod):
@@ -80,7 +82,7 @@ void PodStateAttack::Update()
 	CountFrame();
 
 	//発生フレームになったら弾を打つ
-	if (m_attackData->m_startFrame >= m_frame)
+	if (m_attackData->m_startFrame <= m_frame)
 	{
 		//弾を打つ
 		auto bullets = owner->GetBullets();
@@ -91,7 +93,11 @@ void PodStateAttack::Update()
 			{
 				//Activeにしつつフラグ等のリセット
 				bullet->Reset(m_attackData->m_keepFrame);
-				bullet->SetPos(owner->GetPos());
+				//ポッドの少し上
+				Vector3 bulletPos = owner->GetPos();
+				bulletPos.y += kShotPosYOffset;
+				bullet->SetPos(bulletPos);
+
 				bullet->SetMoveVec(dir * m_attackData->m_moveSpeed);
 				owner->SetAttack(bullet);
 				break;

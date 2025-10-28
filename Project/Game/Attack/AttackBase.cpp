@@ -1,5 +1,6 @@
 #include "AttackBase.h"
 #include "../Actor/Character/CharacterBase.h"
+#include "../Actor/Character/Enemy/EnemyBase.h"
 #include "../../General/Collision/CapsuleCollider.h"
 #include "../../General/Collision/SphereCollider.h"
 #include "../../General/Collision/TorusCollider.h"
@@ -84,6 +85,16 @@ void AttackBase::OnCollide(const std::shared_ptr<Collidable> other)
 	{
 		//©•ª‚Æ“¯‚¶í—Ş‚È‚ç–³‹
 		if (otherTag == ownerColl->GetGameTag())return;
+		//“G‚È‚ç
+		if (otherTag == GameTag::Enemy)
+		{
+			//Šˆ“®’†‚Å‚È‚¢‚È‚çUŒ‚‚Í‹ò‚ç‚í‚È‚¢
+			if (!std::dynamic_pointer_cast<EnemyBase>(other)->IsActive())
+			{
+				return;
+			}
+		}
+
 		auto otherColl = std::dynamic_pointer_cast<CharacterBase>(other);
 		
 		//ID

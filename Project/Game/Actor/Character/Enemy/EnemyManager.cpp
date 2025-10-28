@@ -14,7 +14,8 @@ namespace
 
 EnemyManager::EnemyManager(std::weak_ptr<ActorManager> actorM):
 	m_enemys(),
-	m_pActorManager(actorM)
+	m_pActorManager(actorM),
+	m_isInAreaBattle(false)
 {
 }
 
@@ -58,6 +59,25 @@ void EnemyManager::Update()
 		//活動範囲内か
 		bool isActive = false;
 
+		//エリア内で戦闘中でないなら
+		if (!m_isInAreaBattle)
+		{
+			if (enemy->IsInArea())
+			{
+				//エリア内の敵は非アクティブ
+				enemy->SetIsActive(isActive);
+				continue;
+			}
+		}
+		else
+		{
+			if (!enemy->IsInArea())
+			{
+				//エリア外の敵は処理不要
+				continue;
+			}
+		}
+
 		//距離を計算
 		Vector3 enemyPos = enemy->GetRb()->GetNextPos();
 		float distance = (playerPos - enemyPos).Magnitude();
@@ -71,6 +91,7 @@ void EnemyManager::Update()
 			enemy->SearchTarget(player);
 		}
 	}
+	
 }
 
 void EnemyManager::End()
@@ -86,4 +107,26 @@ void EnemyManager::End()
 		Exit(enemy);
 	}
 	deleteEnemy.clear();
+}
+
+void EnemyManager::InAreaBattle(std::list<std::shared_ptr<EnemyBase>> activeEnemy)
+{
+	//戦闘中
+	m_isInAreaBattle = true;
+	//活動する敵
+	for (auto& enemy : m_enemys)
+	{
+		//一度すべて活動停止
+		enemy->SetIsActive(false);
+	}
+	for (auto& enemy : activeEnemy)
+	{
+		//活動するもののみ
+		enemy->SetIsActive(true);
+	}
+}
+
+void EnemyManager::FinishInAreaBattle()
+{
+	m_isInAreaBattle = false;
 }

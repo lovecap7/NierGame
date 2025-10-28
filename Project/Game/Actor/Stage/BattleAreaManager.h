@@ -5,6 +5,7 @@
 
 class ActorManager;
 class BattleArea;
+class EnemyManager;
 class BattleAreaManager
 {
 public:
@@ -22,7 +23,8 @@ public:
 private:
 	//エリア
 	std::vector<std::shared_ptr<BattleArea>> m_areas;
-
+	//エネミーマネージャー
+	std::weak_ptr<EnemyManager> m_pEnemyManager;
 private:
 	//終了したエリアの削除
 	void CheckDeleteArea();

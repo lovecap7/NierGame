@@ -16,6 +16,7 @@ StageObject::~StageObject()
 
 void StageObject::Init()
 {
+	m_isDraw = m_isTrigger;
 	if (m_isThrough)return;
 	Collidable::Init();
 	MV1SetupCollInfo(m_model->GetModelHandle(), -1);
@@ -52,4 +53,14 @@ void StageObject::End()
 	m_model->End();
 	if (m_isThrough)return;
 	Collidable::End();
+}
+
+float StageObject::GetScaleZ() const
+{
+	return m_model->GetScale().z;
+}
+
+Vector3 StageObject::GetDir() const
+{
+	return m_model->GetDir();
 }
