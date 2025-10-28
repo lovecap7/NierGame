@@ -19,7 +19,11 @@ public:
     void End()override;
     //‚·‚è”²‚¯‚é‚©
     void SetIsThrough(bool isThrough) { m_isThrough = isThrough; };
+    //•`‰æ‚·‚é‚©
+    void SetIsDraw(bool isDraw) { m_isDraw = isDraw; };
 private:
+    //•`‰æ‚·‚é‚©
+    bool m_isDraw;
 };
 
 

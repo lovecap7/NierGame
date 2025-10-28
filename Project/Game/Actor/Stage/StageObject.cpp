@@ -5,7 +5,8 @@
 #include "../../../General/Collision/PolygonCollider.h"
 #include "../../../General/Model.h"
 StageObject::StageObject(std::shared_ptr<ActorData> actorData, std::weak_ptr<ActorManager> pActorManager):
-	Actor(actorData,Shape::Polygon,pActorManager)
+	Actor(actorData,Shape::Polygon,pActorManager),
+	m_isDraw(true)
 {
 }
 
@@ -37,8 +38,8 @@ void StageObject::OnCollide(const std::shared_ptr<Collidable> other)
 
 void StageObject::Draw() const
 {
-	//“–‚½‚è”»’è‚ð‚·‚é‚È‚ç•`‰æ‚·‚é
-	if (m_isThrough)return;
+	//•`‰æ‚·‚é‚©
+	if (!m_isDraw)return;
 	m_model->Draw();
 }
 
