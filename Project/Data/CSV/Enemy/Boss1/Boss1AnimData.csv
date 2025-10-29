@@ -3,9 +3,9 @@ Idle,None,RobotArmature|Idle
 Walk,None,RobotArmature|Walk
 Run,None,RobotArmature|Run
 Hit,None,RobotArmature|HitRecieve_1
-HitAir,None,RobotArmature|HitRecieve_1
+HitAir,None,RobotArmature|HitAir
 Fall,None,RobotArmature|Fall
-FallHitAir,None,RobotArmature|Hit_AirFall
+FallHitAir,None,RobotArmature|HitAirFall
 PunchAttack,None,RobotArmature|Punch
 JumpAttack,None,RobotArmature|JumpAttack
 JumpAttackComb,None,RobotArmature|JumpAttackComb
