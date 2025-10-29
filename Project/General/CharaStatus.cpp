@@ -154,6 +154,11 @@ bool CharaStatus::CheckHitReaction(AttackWeight aw, Armor am)
 	return (aw > am);
 }
 
+void CharaStatus::InitArmor()
+{
+	m_ar = m_charaStatusData->m_ar;
+}
+
 
 CharaStatus::AttackWeight operator+(const CharaStatus::AttackWeight& left, const CharaStatus::AttackWeight& right)
 {

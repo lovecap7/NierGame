@@ -91,6 +91,8 @@ public:
 
 	//ターゲット情報
 	TargetInfo GetTargetInfo()const { return m_targetInfo; };
+
+	
 private:
 	//カメラ
 	std::weak_ptr<PlayerCamera> GetPlayerCamera()const;
@@ -98,8 +100,10 @@ private:
 	void SearchTarget(Input& input, std::shared_ptr<PlayerCamera> camera, const std::list<std::shared_ptr<EnemyBase>>& enemys);
 	//ターゲットリセット
 	void ResetTarget(std::shared_ptr<PlayerCamera> camera);
-	//体力がピンチの時の処理
-	void UpdatePinch();
+	//攻撃を喰らった際のポストエフェクト
+	void UpdateHit();
+	//武器を収める
+	void UpdatePutAwayWeapon();
 private:
 	//ジャンプ回数
 	int m_jumpNum;
@@ -127,7 +131,12 @@ private:
 	//現在のターゲット情報
 	TargetInfo m_targetInfo;
 
-	//グリッジフレーム
+	//グリッジ
 	float m_glitchFrame;
+	float m_glitchCountFrame;
+	float m_glitchScale;
+	float m_glitchSpeed;
+	float m_glitchkStrengt;
+	bool m_isHitGlitch;
 };
 

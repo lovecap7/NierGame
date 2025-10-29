@@ -27,7 +27,8 @@ namespace
 PlayerStateHeavyAttack::PlayerStateHeavyAttack(std::weak_ptr<Actor> player,bool isDash, bool isJust):
 	PlayerStateAttackBase(player),
 	m_nextAttackName(),
-	m_update(&PlayerStateHeavyAttack::GroundUpdate)
+	m_update(&PlayerStateHeavyAttack::GroundUpdate),
+	m_isJust(isJust)
 {
 	if (m_pOwner.expired()) return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
@@ -63,8 +64,11 @@ PlayerStateHeavyAttack::PlayerStateHeavyAttack(std::weak_ptr<Actor> player,bool 
 			m_attackData = owner->GetAttackData(kFirstGroundAttackName);
 		}
 	}
-
+	//アニメーション
 	owner->GetModel()->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), false);
+
+	//アーマー
+	owner->ChangeArmor(m_attackData->m_armor);
 }
 
 PlayerStateHeavyAttack::~PlayerStateHeavyAttack()
@@ -74,6 +78,9 @@ PlayerStateHeavyAttack::~PlayerStateHeavyAttack()
 	owner->GetRb()->SetIsGravity(true);
 	DeleteAttack();
 	owner->GetCharaStatus()->SetIsNoDamage(false);
+
+	//アーマーをもとに戻す
+	owner->InitArmor();
 }
 
 void PlayerStateHeavyAttack::Init()

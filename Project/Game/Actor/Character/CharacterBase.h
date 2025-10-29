@@ -4,10 +4,10 @@
 #include <map>
 #include <string>
 #include "../../../General/CSV/AnimData.h"
+#include "../../../General/CharaStatus.h"
 class CharacterStateBase;
 class ActorManager;
 class ActorData;
-class CharaStatus;
 class CharaStatusData;
 class AttackBase;
 class CSVDataLoader;
@@ -42,6 +42,10 @@ public:
     //アニメーションの検索
     virtual std::string GetAnim(std::wstring state, std::string path = "", AnimData::WeaponType type = AnimData::WeaponType::None) const;
 
+    //アーマーを変える
+    void ChangeArmor(CharaStatus::Armor armor);
+    //アーマーを元に戻す
+    void InitArmor();
 protected:
     //攻撃データを読み込む
     void InitAttackData(CSVDataLoader& csvLoader, std::wstring path);

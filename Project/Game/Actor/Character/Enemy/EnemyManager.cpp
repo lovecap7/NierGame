@@ -62,9 +62,10 @@ void EnemyManager::Update()
 		//エリア内で戦闘中でないなら
 		if (m_isInAreaBattle)
 		{
-			if (!enemy->IsInArea() || !enemy->IsActive())
+			if (!enemy->IsInArea())
 			{
-				//エリア外の敵は処理不要
+				//エリア外の敵は非アクティブ
+				enemy->SetIsActive(false);
 				continue;
 			}
 			enemy->SearchTarget(player);

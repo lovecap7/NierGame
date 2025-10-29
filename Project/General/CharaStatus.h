@@ -35,7 +35,9 @@ public:
 
 	//アーマー
 	CharaStatus::Armor GetArmor()const { return m_ar; };
-	CharaStatus::Armor SetArmor(CharaStatus::Armor ar) { m_ar = ar; };
+	void SetArmor(CharaStatus::Armor ar) { m_ar = ar; };
+	//アーマーの初期化
+	void InitArmor();
 
 	//体力
 	int GetMaxHP()const { return m_maxHp; };

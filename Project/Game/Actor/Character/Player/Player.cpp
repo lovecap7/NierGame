@@ -40,8 +40,16 @@ namespace
 	//武器を収めるまでのフレーム
 	constexpr float kPutAwayFrame = 60.0f * 5.0f;
 
-	//グリッジフレーム
-	constexpr float kGlitchFrame = 10.0f;
+	//ヒットグリッジ(通常)
+	constexpr float kGlitchFrame = 20.0f;
+	constexpr float kGlitchScale = 100.0f;
+	constexpr float kGlitchSpeed = 10.0f;
+	constexpr float kGlitchStrengt = 100.0f;
+	//ヒットグリッジ(ピンチ)
+	constexpr float kPinchGlitchScale = 100.0f;
+	constexpr float kPinchGlitchSpeed = 10.0f;
+	constexpr float kPinchGlitchStrengt = 300.0f;
+	constexpr float kGlitchPinchFrame = 10.0f;
 	constexpr float kGlitchStartFrame = 230.0f;
 	constexpr float kGlitchEndFrame = kGlitchStartFrame + kGlitchFrame;
 }
@@ -56,7 +64,12 @@ Player::Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatus
 	m_haveWeaponType(AnimData::WeaponType::None),
 	m_isAirAttacked(false),
 	m_isDraw(true),
-	m_glitchFrame(0.0f)
+	m_glitchFrame(0.0f),
+	m_glitchCountFrame(0.0f),
+	m_glitchScale(0.0f),
+	m_glitchSpeed(0.0f),
+	m_glitchkStrengt(0.0f),
+	m_isHitGlitch(false)
 {
 }
 
@@ -141,23 +154,12 @@ void Player::Update()
 
 
 #endif
-
-
+	//体力に応じてポストエフェクトをかける
+	UpdateHit();
 
 	//武器を収める
-	if (m_putAwayCountFrame <= 0.0f)
-	{
-		m_putAwayCountFrame = 0.0f;
-		PutAwaySword();
-	}
-	else
-	{
-		//カウント
-		m_putAwayCountFrame -= GetTimeScale();
-	}
+	UpdatePutAwayWeapon();
 
-	//体力に応じてポストエフェクトをかける
-	UpdatePinch();
 
 	//共通処理
 	CharacterBase::Update();
@@ -508,42 +510,100 @@ void Player::ResetTarget(std::shared_ptr<PlayerCamera> camera)
 	}
 }
 
-void Player::UpdatePinch()
+void Player::UpdateHit()
 {
 	//グリッジ
 	auto& app = Application::GetInstance();
 	auto& postEff = app.GetPostProcess();
 
-	//ピンチ
-	if (m_charaStatus->IsPinchHP())
+	//ダメージを受けたら
+	if (m_charaStatus->IsHit() && !m_charaStatus->IsNoDamage())
 	{
-		if (m_glitchFrame <= 0.0f)
+		//グリッジ
+		postEff->AddPostEffectState(ShaderPostProcess::PostEffectState::Glitch);
+
+		//初期化
+		m_glitchFrame = kGlitchFrame;
+		m_glitchScale = kGlitchScale;
+		m_glitchSpeed = kGlitchSpeed;
+		m_glitchkStrengt = kGlitchStrengt;
+
+		//攻撃を喰らった
+		m_isHitGlitch = true;
+
+		//カウントリセット
+		m_glitchCountFrame = 0.0f;
+	}
+
+	//カウント
+	m_glitchCountFrame += GetTimeScale();
+
+	//攻撃を喰らった際の処理
+	if (m_isHitGlitch)
+	{
+		//終了フレーム
+		if (m_glitchCountFrame >= m_glitchFrame || m_charaStatus->IsNoDamage())
 		{
-			//グリッジと白黒
-			postEff->AddPostEffectState(ShaderPostProcess::PostEffectState::Glitch);
-			postEff->AddPostEffectState(ShaderPostProcess::PostEffectState::Gray);
-		}
-		m_glitchFrame += GetTimeScale();
-		if (m_glitchFrame >= kGlitchEndFrame)
-		{
-			m_glitchFrame = 0.0f;
-		}
-		else if (m_glitchFrame >= kGlitchStartFrame)
-		{
-			postEff->SetShakeStrength(5.0f);
-			postEff->SetBlockScele(5.0f);
-			postEff->SetNoiseSpeed(50.0f);
+			//グリッジを削除
+			postEff->SubPostEffectState(ShaderPostProcess::PostEffectState::Glitch);
+			//リセット
+			m_isHitGlitch = false;
 		}
 		else
 		{
-			postEff->SetShakeStrength(0.0f);
-			postEff->SetBlockScele(0.0f);
-			postEff->SetNoiseSpeed(0.0f);
+			//グリッジフレーム間の処理
+			//だんだん弱く
+			float rate = m_glitchCountFrame / m_glitchFrame;
+			postEff->SetBlockScele(MathSub::Lerp(m_glitchScale, 0.0f, rate));
+			postEff->SetNoiseSpeed(MathSub::Lerp(m_glitchSpeed, 0.0f, rate));
+			postEff->SetShakeStrength(MathSub::Lerp(m_glitchkStrengt, 0.0f, rate));
 		}
 	}
-	//通常
 	else
 	{
-		m_glitchFrame = 0.0f;
+		//ピンチ
+		if (m_charaStatus->IsPinchHP())
+		{
+			//グレーに
+			postEff->AddPostEffectState(ShaderPostProcess::PostEffectState::Gray);
+			//グリッジ
+			postEff->AddPostEffectState(ShaderPostProcess::PostEffectState::Glitch);
+			if (m_glitchCountFrame >= kGlitchEndFrame)
+			{
+				m_glitchCountFrame = 0.0f;
+			}
+			else if (m_glitchCountFrame >= kGlitchStartFrame)
+			{
+				postEff->SetShakeStrength(kPinchGlitchStrengt);
+				postEff->SetBlockScele(kPinchGlitchScale);
+				postEff->SetNoiseSpeed(kPinchGlitchSpeed);
+			}
+			else
+			{
+				postEff->SetShakeStrength(0.0f);
+				postEff->SetBlockScele(0.0f);
+				postEff->SetNoiseSpeed(0.0f);
+			}
+		}
+		//通常
+		else
+		{
+			m_glitchCountFrame = 0.0f;
+		}
+	}
+}
+
+void Player::UpdatePutAwayWeapon()
+{
+	//武器を収める
+	if (m_putAwayCountFrame <= 0.0f)
+	{
+		m_putAwayCountFrame = 0.0f;
+		PutAwaySword();
+	}
+	else
+	{
+		//カウント
+		m_putAwayCountFrame -= GetTimeScale();
 	}
 }

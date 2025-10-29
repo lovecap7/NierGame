@@ -103,6 +103,18 @@ std::string CharacterBase::GetAnim(std::wstring state, std::string path,AnimData
 
 	return path;
 }
+
+void CharacterBase::ChangeArmor(CharaStatus::Armor armor)
+{
+	m_charaStatus->SetArmor(armor);
+}
+
+void CharacterBase::InitArmor()
+{
+	m_charaStatus->InitArmor();
+}
+
+
 void CharacterBase::InitAttackData(CSVDataLoader& csvLoader, std::wstring path)
 {
 	auto datas = csvLoader.LoadCSV(path.c_str());

@@ -71,6 +71,9 @@ void PlayerStateAttackBase::CreateAttack(std::shared_ptr<Player> owner, std::sha
 		//回転終了
 		weapon->FinisiThrowAndRoll();
 	}
+
+	//アーマー
+	owner->ChangeArmor(m_attackData->m_armor);
 }
 
 void PlayerStateAttackBase::UpdateAttackPosition(std::shared_ptr<Player> owner, std::shared_ptr<Weapon> weapon)

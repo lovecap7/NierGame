@@ -95,6 +95,9 @@ PlayerStateLightAttack::PlayerStateLightAttack(std::weak_ptr<Actor> player, bool
 	}
 	//アニメーション
 	owner->GetModel()->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), false);
+
+	//アーマー
+	owner->ChangeArmor(m_attackData->m_armor);
 }
 
 PlayerStateLightAttack::~PlayerStateLightAttack()
@@ -105,6 +108,9 @@ PlayerStateLightAttack::~PlayerStateLightAttack()
 	//攻撃削除
 	DeleteAttack();
 	owner->GetCharaStatus()->SetIsNoDamage(false);
+
+	//アーマーをもとに戻す
+	owner->InitArmor();
 }
 
 void PlayerStateLightAttack::Init()

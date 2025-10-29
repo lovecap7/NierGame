@@ -36,6 +36,9 @@ public:
 	//攻撃の重さ
 	CharaStatus::AttackWeight m_attackWeight;
 
+	//アーマー
+	CharaStatus::Armor m_armor;
+
 	//ノックバックの大きさ
 	float m_knockBackPower;
 

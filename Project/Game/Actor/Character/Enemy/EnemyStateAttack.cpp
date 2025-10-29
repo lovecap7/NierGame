@@ -27,7 +27,8 @@ EnemyStateAttack::EnemyStateAttack(std::weak_ptr<Actor> enemy, std::shared_ptr<A
 	//アニメーションセット
 	owner->GetModel()->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), true);
 
-
+	//アーマー
+	owner->ChangeArmor(m_attackData->m_armor);
 }
 
 EnemyStateAttack::~EnemyStateAttack()
@@ -42,6 +43,8 @@ EnemyStateAttack::~EnemyStateAttack()
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());
 	owner->SetAttackCoolTime(m_attackData->m_cancelFrame);
+	//アーマーをもとに戻す
+	owner->InitArmor();
 }
 
 void EnemyStateAttack::Init()
