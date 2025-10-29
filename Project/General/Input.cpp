@@ -45,6 +45,7 @@ void Input::Init()
 #if _DEBUG
 	m_inputActionMap["DebugScene"] = { {InputType::kKeyboard,KEY_INPUT_D}};
 	m_inputActionMap["GameClear"] = { {InputType::kKeyboard,KEY_INPUT_C}};
+	m_inputActionMap["EnemyDead"] = { {InputType::kKeyboard,KEY_INPUT_E}};
 	m_inputActionMap["Pinch"] = { {InputType::kKeyboard,KEY_INPUT_X}};
 	m_inputActionMap["AddFPS"] = { {InputType::kKeyboard,KEY_INPUT_6}};
 	m_inputActionMap["SubFPS"] = { {InputType::kKeyboard,KEY_INPUT_5}};

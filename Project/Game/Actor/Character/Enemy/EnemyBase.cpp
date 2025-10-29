@@ -88,8 +88,8 @@ bool EnemyBase::IsEnableAttack() const
 void EnemyBase::UpdateLockOnViewPos()
 {
 	//ロックオン座標
-	Vector3 start = m_rb->GetNextPos();
-	Vector3 end = std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetNextEndPos(m_rb->GetVecWithTS());
+	Vector3 start = m_rb->GetPos();
+	Vector3 end = std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetEndPos();
 	m_lockOnViewPos = (start + end) * 0.5f;
 }
 

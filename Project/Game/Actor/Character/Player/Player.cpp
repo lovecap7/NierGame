@@ -216,7 +216,7 @@ void Player::Complete()
 	if (!GetPlayerCamera().expired())
 	{
 		auto camera = GetPlayerCamera().lock();
-		camera->SetPlayerPos(m_rb->m_pos);
+		camera->SetPlayerPos(GetCenterPos());
 		camera->SetPlayerVec(m_rb->GetMoveVec());
 		camera->SetPlayerDir(m_model->GetDir());
 	}
@@ -237,6 +237,12 @@ void Player::End()
 	m_model->End();
 	//“o˜^‰ðœ
 	Collidable::End();
+}
+
+Vector3 Player::GetCenterPos() const
+{
+	Vector3 centerPos = (m_rb->GetPos() + std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetEndPos()) * 0.5f;
+	return centerPos;
 }
 
 Quaternion Player::GetCameraRot() const

@@ -5,6 +5,7 @@
 #include "../../Main/Application.h"
 #include "../Actor/ActorManager.h"
 #include "../Actor/Actor.h"
+#include "../Actor/Character/Enemy/EnemyBase.h"
 #include "../../General/Game.h"
 
 namespace
@@ -15,7 +16,7 @@ namespace
     constexpr float kVerticalSpeed = 0.02f;     //垂直回転速度
     constexpr float kLimitAngle = 80.0f;        //上下限界角度
     constexpr float kInputToAngle = 0.1f;       //スティック入力→角度変換係数
-    constexpr float kCameraHeight = 150.0f;     //プレイヤーからのカメラ高さ
+    constexpr float kCameraHeight = 100.0f;     //プレイヤーからのカメラ高さ
 	constexpr float kNormalFollowSpeed = 0.3f;  //通常時の追従速度
     //操作してないときの旋回速度
     constexpr float kReturnSpeed = 0.02f; // 戻るスピード
@@ -27,7 +28,7 @@ namespace
     //カメラオフセット（右に寄せる）
     constexpr float kRightOffset = 150.0f;  //右オフセット距離
     constexpr float kBackOffset = 350.0f;   //後方距離
-    constexpr float kUpOffset = 200.0f;     //上方向オフセット
+    constexpr float kUpOffset = 100.0f;     //上方向オフセット
 	constexpr float kLockOnFollowSpeed = 0.15f;   //ロックオン中の追従速度
     constexpr float kRotFollowSpeed = 0.2f; //追従回転速度
 	//右向きを決める内積
@@ -150,12 +151,13 @@ void PlayerCamera::LockOnUpdate(Input& input, Vector3& targetPos)
 {
     if (m_lockOnTarget.expired()) return;
     auto lockOnTarget = m_lockOnTarget.lock();
+    if (lockOnTarget->GetGameTag() != GameTag::Enemy)return;
 
     Vector3 lockPos = targetPos;
 
     //プレイヤーとターゲットの位置
     Vector3 playerPos = m_playerPos;
-    Vector3 enemyPos = lockOnTarget->GetNextPos();
+    Vector3 enemyPos = std::dynamic_pointer_cast<EnemyBase>(lockOnTarget)->GetLockOnViewPos();
 
     //プレイヤーから敵方向を求める
     Vector3 toEnemy = (enemyPos - playerPos);

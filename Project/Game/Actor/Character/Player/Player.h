@@ -38,6 +38,9 @@ public:
 	//終了処理
 	void End()override;
 	
+	//中心座標
+	Vector3 GetCenterPos()const;
+
 	//カメラの回転量
 	Quaternion GetCameraRot()const;
 

@@ -6,6 +6,8 @@
 #include "PlayerStateHeavyAttack.h"
 #include "PlayerStateJump.h"
 #include "PlayerStateFall.h"
+#include "PlayerStateHit.h"
+#include "PlayerStateDeath.h"
 #include "Weapon/Weapon.h"
 #include "../Enemy/EnemyBase.h"
 #include "../../../Attack/SwordAttack.h"
@@ -117,11 +119,23 @@ void PlayerStateLightAttack::Update()
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 
 	auto& input = Input::GetInstance();
+	//Ž€–S
+	if (owner->GetCharaStatus()->IsDead())
+	{
+		ChangeState(std::make_shared<PlayerStateDeath>(m_pOwner));
+		return;
+	}
 	//‰ñ”ð
 	if (input.IsBuffered("B") && owner->IsAvoidable() && !m_isJust)
 	{
 		//‰ñ”ð
 		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
+		return;
+	}
+	//‚â‚ç‚ê
+	if (owner->GetCharaStatus()->IsHitReaction())
+	{
+		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner));
 		return;
 	}
 

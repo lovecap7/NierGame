@@ -41,9 +41,7 @@ PlayerStateHit::PlayerStateHit(std::weak_ptr<Actor> player) :
 	owner->SetCollState(CollisionState::Normal);
 
 	auto status = owner->GetCharaStatus();
-	//–³“G
-	status->SetIsNoDamage(true);
-
+	
 	//ƒOƒŠƒbƒW
 	auto& app = Application::GetInstance();
 	auto& postEff = app.GetPostProcess();
@@ -71,9 +69,7 @@ PlayerStateHit::~PlayerStateHit()
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	auto status = owner->GetCharaStatus();
-	//–³“G
-	status->SetIsNoDamage(false);
-
+	
 	auto& app = Application::GetInstance();
 	auto& postEff = app.GetPostProcess();
 	postEff->SetBlockScele(0.0f);

@@ -3,6 +3,7 @@
 #include "EnemyStateIdle.h"
 #include "EnemyStateHit.h"
 #include "EnemyStateDeath.h"
+#include "../Player/Player.h"
 #include "../../../Attack/AttackBase.h"
 #include "../../../Attack/SwordAttack.h"
 #include "../../../Attack/AOEAttack.h"
@@ -143,10 +144,26 @@ void EnemyStateAttack::CreateAttack(std::shared_ptr<EnemyBase> owner)
 		auto bulletAttack = std::dynamic_pointer_cast<EnemyBulletAttack>(attack);
 		auto model = owner->GetModel();
 
+		//発射座標
+		Vector3 bulletPos = MV1GetFramePosition(model->GetModelHandle(), static_cast<int>(m_attackData->m_param1));
+		bulletAttack->SetPos(bulletPos);
+
 		//XZ方向はモデルの向き
 		Vector3 bulletDir = model->GetDir();
-		//Y方向はプレイヤーへのベクトル
-		bulletDir.y = owner->GetToTargetVec().y;
+
+		//ターゲットがいるとき
+		if (owner->GetTargetInfo().m_isFound)
+		{
+			auto player = std::dynamic_pointer_cast<Player>(owner->GetTargetInfo().m_pTarget.lock());
+			Vector3 targetDir = player->GetCenterPos() - bulletPos;
+			if (targetDir.SqMagnitude() > 0.0f)
+			{
+				targetDir = targetDir.Normalize();
+			}
+			bulletDir.y = targetDir.y;
+		}
+
+
 		//正規化
 		if (bulletDir.SqMagnitude() > 0.0f)
 		{
@@ -154,8 +171,6 @@ void EnemyStateAttack::CreateAttack(std::shared_ptr<EnemyBase> owner)
 		}
 		//移動
 		bulletAttack->SetMoveVec(bulletDir * m_attackData->m_param2);
-		//発射座標
-		bulletAttack->SetPos(MV1GetFramePosition(model->GetModelHandle(), static_cast<int>(m_attackData->m_param1)));
 
 		//壊れるか
 		bulletAttack->SetIsDestructible(m_attackData->m_param3 != 0.0f);

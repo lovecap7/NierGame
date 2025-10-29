@@ -93,6 +93,20 @@ void EnemyManager::Update()
 		}
 	}
 	
+#if _DEBUG
+	if (Input::GetInstance().IsTrigger("EnemyDead"))
+	{
+		for (auto& enemy : m_enemys)
+		{
+			//Šˆ“®’†‚Ì“G
+			if (enemy->IsActive())
+			{
+				enemy->Delete();
+			}
+		}
+	}
+#endif
+
 }
 
 void EnemyManager::End()
