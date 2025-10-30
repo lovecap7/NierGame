@@ -19,6 +19,12 @@
 #include <cmath>
 #include <cassert>
 
+namespace
+{
+	//敵キャラのパスデータ数
+	constexpr int kPathNum = 4;
+}
+
 NormalEnemy::NormalEnemy(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager):
 	EnemyBase(actorData, charaStatusData, pActorManager)
 {
@@ -32,10 +38,10 @@ void NormalEnemy::Init()
 	auto& csvLoader = CSVDataLoader::GetInstance();
 	auto pathData = csvLoader.LoadCSV(m_actorData->m_csvPathData.c_str()).front()->GetData();
 
-	assert(pathData.size() > 0);
-
+	assert(pathData.size() >= kPathNum);
 	//共通初期化
-	CharacterBase::Init(pathData[0].c_str(), pathData[1].c_str());
+	CharacterBase::Init(pathData[0].c_str(), pathData[1].c_str(), pathData[2].c_str());
+
 	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
 	auto thisPointer = std::dynamic_pointer_cast<NormalEnemy>(shared_from_this());
 	m_state = std::make_shared<EnemyStateIdle>(thisPointer);
@@ -45,7 +51,7 @@ void NormalEnemy::Init()
 	m_model->SetModelHeightAdjust(-m_actorData->m_collRadius);
 
 	//攻撃のキーを取得
-	auto oriAttackKeys = csvLoader.LoadCSV(pathData[2].c_str());
+	auto oriAttackKeys = csvLoader.LoadCSV(pathData[3].c_str());
 	for (auto& data : oriAttackKeys)
 	{
 		std::shared_ptr<EnemyAttackKeyData> attackKeyData = std::make_shared<EnemyAttackKeyData>(data);

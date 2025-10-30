@@ -13,10 +13,10 @@
 #include <cassert>
 
 namespace
-
 {
 	const std::wstring kAnimPath = L"Player/PodAnimData";
 	const std::wstring kAttackPath = L"Player/PodAttackData";
+	const std::wstring kEffectPath = L"";
 }
 
 Pod::Pod(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager, std::weak_ptr<Player> pPlayer) :
@@ -33,8 +33,9 @@ Pod::~Pod()
 
 void Pod::Init()
 {
-	//Physicsに登録
-	CharacterBase::Init(kAnimPath, kAttackPath);
+	//共通初期化
+	CharacterBase::Init(kAnimPath, kAttackPath, kEffectPath);
+
 	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
 	auto thisPointer = std::dynamic_pointer_cast<Pod>(shared_from_this());
 	m_state = std::make_shared<PodStateIdle>(thisPointer);

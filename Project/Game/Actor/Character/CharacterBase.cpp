@@ -6,6 +6,8 @@
 #include "../../../General/CSV/CSVDataLoader.h"
 #include "../../../General/CSV/CSVData.h"
 #include "../../../General/CSV/AttackData.h"
+#include "../../../General/CSV/EffectData.h"
+#include "../../../General/AssetManager.h"
 #include "CharacterStateBase.h"
 #include <cassert>
 CharacterBase::CharacterBase(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, Shape shape, std::weak_ptr<ActorManager> pActorManager) :
@@ -16,7 +18,7 @@ CharacterBase::CharacterBase(std::shared_ptr<ActorData> actorData, std::shared_p
 	m_charaStatus = std::make_shared<CharaStatus>(charaStatusData);
 }
 
-void CharacterBase::Init(std::wstring animPath, std::wstring attackPath)
+void CharacterBase::Init(std::wstring animPath, std::wstring attackPath, std::wstring effectPath)
 {
 	//Physics‚É“o˜^
 	Collidable::Init();
@@ -26,7 +28,10 @@ void CharacterBase::Init(std::wstring animPath, std::wstring attackPath)
 	InitAnimData(csvLoader, animPath);
 	//UŒ‚ƒf[ƒ^
 	InitAttackData(csvLoader, attackPath);
+	//ƒGƒtƒFƒNƒg‚Ì€”õ
+	InitEffectData(csvLoader, effectPath);
 }
+
 
 void CharacterBase::Update()
 {
@@ -104,6 +109,24 @@ std::string CharacterBase::GetAnim(std::wstring state, std::string path,AnimData
 	return path;
 }
 
+std::wstring CharacterBase::GetEffectPath(std::wstring effectName) const
+{
+	std::wstring path;
+
+	//’T‚·
+	for (auto& data : m_effectDatas)
+	{
+		//ðŒ‚É‡‚¤‚à‚Ì‚ª‚ ‚Á‚½‚ç
+		if (data->m_name == effectName)
+		{
+			path = data->m_path;
+			break;
+		}
+	}
+
+	return path;
+}
+
 void CharacterBase::ChangeArmor(CharaStatus::Armor armor)
 {
 	m_charaStatus->SetArmor(armor);
@@ -134,5 +157,17 @@ void CharacterBase::InitAnimData(CSVDataLoader& csvLoader,std::wstring path)
 	{
 		std::shared_ptr<AnimData> animData = std::make_shared<AnimData>(data);
 		m_animDatas.emplace_back(animData);
+	}
+}
+
+void CharacterBase::InitEffectData(CSVDataLoader& csvLoader, std::wstring effectPath)
+{
+	auto effectDatas = csvLoader.LoadCSV(effectPath.c_str());
+	//“o˜^
+	for (auto data : effectDatas)
+	{
+		auto effectData = std::make_shared<EffectData>(data);
+		m_effectDatas.emplace_back(effectData);
+		AssetManager::GetInstance().GetEffectHandle(effectData->m_path);
 	}
 }

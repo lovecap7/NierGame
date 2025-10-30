@@ -58,17 +58,18 @@ std::vector<std::vector<std::wstring>> CSVDataLoader::GetWStringList(const wchar
 	//もしもファイルを開けなかったら
 	if (!file.is_open())
 	{
-		return valuesDatas;//空のリストを返す
+		return valuesDatas;	//空のリストを返す
 	}
 	//1行ずつ読み取る用の変数
 	std::wstring line;
 	//最初のヘッダーから要素数をカウント
 	bool isHeader = false;
 	std::vector<std::wstring> header;	//要素をまとめた配列
+
 	//CSVの終わりまで読み取る
-	// getlineで読み取っていく(読み取り位置（内部の「ポインタ」）は、ループのたびに前に進みます)
+	//getlineで読み取っていく(読み取り位置（内部の「ポインタ」）は、ループのたびに前に進みます)
 	//1行ずつ読み取っていき読み取る行がなくなったらfalseになる
-	while (std::getline(file, line))//1行ずつ読み取る
+	while (std::getline(file, line))	//1行ずつ読み取る
 	{
 		//行をカンマ区切りで1つずつ読み込むための準備
 		std::wstringstream ss(line);			//文字列をストリーム(getlineで読み取るため)に変換
@@ -91,6 +92,7 @@ std::vector<std::vector<std::wstring>> CSVDataLoader::GetWStringList(const wchar
 		//データを配列に追加
 		valuesDatas.emplace_back(values);
 	}
+
 	//暗黙ムーブが走るのでおそらく大丈夫
 	return valuesDatas;
 }

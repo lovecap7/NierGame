@@ -23,13 +23,22 @@ public:
 		static AssetManager instance;
 		return instance;
 	}
+
 	//モデルの取得
 	int GetModelHandle(std::wstring path);
 	//モデルのリソースの削除
 	void DeleteModelHandle();
+
+	//エフェクトの取得
+	int GetEffectHandle(std::wstring path);
+	//エフェクトのリソースの削除
+	void DeleteEffectHandle();
+
 private:
 	//モデルリソース
 	std::map<std::wstring,int>m_modelHandles;
+	//エフェクトリソース
+	std::map<std::wstring, int>m_effectHandle;
 
 };
 

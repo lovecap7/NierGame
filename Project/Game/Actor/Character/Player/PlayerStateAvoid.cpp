@@ -10,6 +10,7 @@
 #include "../../../../General/CharaStatus.h"
 #include "../../../../Main/Application.h"
 #include "../../../../General/ShaderPostProcess.h"
+#include "../../../../General/Effect/EffekseerManager.h"
 namespace
 {
 	constexpr float kSpeedDif = 10.0f;
@@ -23,7 +24,7 @@ namespace
 	//ジャスト回避フレーム
 	constexpr float kJustFrame = 15.0f;
 	//スロー速度
-	constexpr float kSlowSpeed = 0.5f;
+	constexpr float kSlowSpeed = 0.1f;
 	//無敵フレーム
 	constexpr float kNoDamageFrame = 30.0f;
 	//ジャスト回避終了前
@@ -232,6 +233,9 @@ void PlayerStateAvoid::InitJustAvoid(std::shared_ptr<Model> model, std::shared_p
 	//スローモーション
 	auto& app = Application::GetInstance();
 	app.SetTimeScale(kSlowSpeed);
+
+	owner->EnableIsMyScale();
+
 	//シェーダー
 	app.GetPostProcess()->SetJustAvoidEffectTime(model->GetTotalAnimFrame());
 	app.GetPostProcess()->AddPostEffectState(ShaderPostProcess::PostEffectState::JustAvoid);
@@ -241,6 +245,9 @@ void PlayerStateAvoid::InitJustAvoid(std::shared_ptr<Model> model, std::shared_p
 
 	//無敵
 	owner->GetCharaStatus()->SetIsNoDamage(true);
+
+	//エフェクト
+	EffekseerManager::GetInstance().CreateTrackActorEffect(owner->GetEffectPath(L"JustAvoid"), owner);
 }
 
 void PlayerStateAvoid::UpdateJustAvoid(std::shared_ptr<Player> owner, std::shared_ptr<Model> model, Application& app)

@@ -6,6 +6,7 @@
 #include "../General/Collision/Physics.h"
 #include "../Scene/SceneController.h"
 #include "../General/Fader.h"
+#include "../General/Effect/EffekseerManager.h"
 #include  <cassert>
 #include <chrono>
 namespace
@@ -68,6 +69,9 @@ bool Application::Init()
 	SetWriteZBuffer3D(true);
 	//バックカリングを行う(ポリゴンの裏面を描画しないようにする)
 	SetUseBackCulling(true);
+
+	//エフェクト関連
+	EffekseerManager::GetInstance().InitEffekseer();
 
 	//変数の初期化
 	m_timeScale = kTimeScale;
@@ -210,6 +214,8 @@ void Application::Terminate()
 {
 	//ポストエフェクトの終了
 	m_postProcess->End();
+	//エフェクト関連
+	EffekseerManager::GetInstance().EndEffekseer();
 	//ＤＸライブラリ使用の終了処理
 	DxLib_End();				
 }

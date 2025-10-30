@@ -15,9 +15,13 @@
 #include "../General/Fader.h"
 #include "../General/ShaderPostProcess.h"
 #include "../Main/Application.h"
+#include "../General/Effect/EffekseerManager.h"
+
+
 GameScene::GameScene(SceneController& controller, std::wstring stageName) :
 	SceneBase(controller),
-	m_stageName(stageName)
+	m_stageName(stageName),
+	m_effectManager(EffekseerManager::GetInstance())
 {
 
 }
@@ -53,6 +57,9 @@ void GameScene::Init()
 	m_battleAreaManager = std::make_shared<BattleAreaManager>();
 	m_battleAreaManager->Init(stageName, m_actorManager);
 
+	//エフェクト
+	m_effectManager.Init();
+
 	//フェードイン
 	Fader::GetInstance().FadeIn();
 }
@@ -64,6 +71,7 @@ void GameScene::Update()
 	m_attackManager->Update();
 	m_cameraController->Update();
 	m_battleAreaManager->Update(m_actorManager);
+	m_effectManager.Update();
 	
 	auto& input = Input::GetInstance();
 
@@ -86,6 +94,7 @@ void GameScene::Draw()
 {
 	m_actorManager->Draw();
 	m_attackManager->Draw();
+	m_effectManager.Draw();
 }
 
 void GameScene::End()
@@ -93,6 +102,7 @@ void GameScene::End()
 	m_actorManager->End();
 	m_attackManager->End();
 	m_battleAreaManager->End();
+	m_effectManager.End();
 	//アセットも削除
 	AssetManager::GetInstance().DeleteModelHandle();
 	//ポストエフェクトを解除

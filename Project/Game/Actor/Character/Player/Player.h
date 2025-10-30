@@ -92,7 +92,6 @@ public:
 	//ターゲット情報
 	TargetInfo GetTargetInfo()const { return m_targetInfo; };
 
-	
 private:
 	//カメラ
 	std::weak_ptr<PlayerCamera> GetPlayerCamera()const;

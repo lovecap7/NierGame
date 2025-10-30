@@ -211,8 +211,12 @@
     <ClCompile Include="General\CSV\CSVData.cpp" />
     <ClCompile Include="General\CSV\CSVDataLoader.cpp" />
     <ClCompile Include="General\CSV\AnimData.cpp" />
+    <ClCompile Include="General\CSV\EffectData.cpp" />
     <ClCompile Include="General\CSV\EnemyAttackKeyData.cpp" />
     <ClCompile Include="General\CSV\PodData.cpp" />
+    <ClCompile Include="General\Effect\EffekseerManager.cpp" />
+    <ClCompile Include="General\Effect\NormalEffect.cpp" />
+    <ClCompile Include="General\Effect\TrackActorEffect.cpp" />
     <ClCompile Include="General\Fader.cpp" />
     <ClCompile Include="General\Input.cpp" />
     <ClCompile Include="General\Math\MathSub.cpp" />
@@ -304,8 +308,12 @@
     <ClInclude Include="General\CSV\CSVData.h" />
     <ClInclude Include="General\CSV\CSVDataLoader.h" />
     <ClInclude Include="General\CSV\AnimData.h" />
+    <ClInclude Include="General\CSV\EffectData.h" />
     <ClInclude Include="General\CSV\EnemyAttackKeyData.h" />
     <ClInclude Include="General\CSV\PodData.h" />
+    <ClInclude Include="General\Effect\EffekseerManager.h" />
+    <ClInclude Include="General\Effect\NormalEffect.h" />
+    <ClInclude Include="General\Effect\TrackActorEffect.h" />
     <ClInclude Include="General\Fader.h" />
     <ClInclude Include="General\Game.h" />
     <ClInclude Include="General\Input.h" />

@@ -139,7 +139,7 @@ PS_OUTPUT main(PS_INPUT input)
         
         float4 vignetteColor = lerp(color, float4(0.0, 0.0, 0.0, 1.0), lerpRate);
 
-        float vignetteDistance = pow(saturate(d * 1.1), 2);
+        float vignetteDistance = pow(saturate(d * 1.5), 2);
         
         color = lerp(color, vignetteColor, vignetteDistance);
     }

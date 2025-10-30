@@ -8,6 +8,7 @@ class SceneController;
 class ActorManager;
 class BattleAreaManager;
 class AttackManager;
+class EffekseerManager;
 
 class GameScene :
     public SceneBase
@@ -43,5 +44,8 @@ private:
 
     //ステージ名
     std::wstring m_stageName;
+
+    //エフェクト
+    EffekseerManager& m_effectManager;
 };
 
