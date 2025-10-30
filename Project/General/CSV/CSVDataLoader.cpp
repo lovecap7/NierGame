@@ -5,7 +5,7 @@
 #include "ActorData.h"
 #include "../StringUtil.h"
 #include <codecvt>
-#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
+
 namespace
 {
 	const std::wstring kPath = L"Data/CSV/";
@@ -41,58 +41,68 @@ std::vector<std::shared_ptr<CSVData>> CSVDataLoader::LoadCSV(const wchar_t* path
 
 	return datas;
 }
-
 std::vector<std::vector<std::wstring>> CSVDataLoader::GetWStringList(const wchar_t* path)
 {
-	//返す値
-	std::vector<std::vector<std::wstring>> valuesDatas;
-	//ファイルを開く
-	std::wifstream file(path);
+    std::vector<std::vector<std::wstring>> valuesDatas;
 
-	//ロケールを設定（環境依存、必要に応じてUTF-8などに変更）
-	//ロケールは文字解釈のルールのこと
-	//もしCSVファイルが UTF-8 で保存されている場合、
-	//Windowsの std::wifstream はデフォルトでUTF-8を正しく解釈できないので設定した
-	file.imbue(std::locale(std::locale(), new std::codecvt_utf8<wchar_t>));
+    //ファイルを開く
+    std::ifstream file(path);
 
-	//もしもファイルを開けなかったら
-	if (!file.is_open())
-	{
-		return valuesDatas;	//空のリストを返す
-	}
-	//1行ずつ読み取る用の変数
-	std::wstring line;
-	//最初のヘッダーから要素数をカウント
-	bool isHeader = false;
-	std::vector<std::wstring> header;	//要素をまとめた配列
+    // ファイルを開けなかった場合は空のリストを返す
+    if (!file.is_open())
+    {
+        return valuesDatas;
+    }
 
-	//CSVの終わりまで読み取る
-	//getlineで読み取っていく(読み取り位置（内部の「ポインタ」）は、ループのたびに前に進みます)
-	//1行ずつ読み取っていき読み取る行がなくなったらfalseになる
-	while (std::getline(file, line))	//1行ずつ読み取る
-	{
-		//行をカンマ区切りで1つずつ読み込むための準備
-		std::wstringstream ss(line);			//文字列をストリーム(getlineで読み取るため)に変換
-		std::wstring part;					//分解して取り出した1要素
-		std::vector<std::wstring> values;	//要素をまとめた配列
-		//カンマ区切りで取り出していく
-		//ssから,区切りで取り出していきpartに入れていく
-		while (std::getline(ss, part, L',')) {
-			values.emplace_back(part);           //分割された項目をリストに追加
-		}
-		//最初の行
-		if (!isHeader)
-		{
-			header = values;
-			isHeader = true;
-			continue;
-		}
-		//要素数チェック
-		if (values.size() < header.size())continue;//ない場合は不正な行なので飛ばす
-		//データを配列に追加
-		valuesDatas.emplace_back(values);
-	}
+    //ファイル内容を一括で読み込み(UTF-8)
+    std::string utf8Data((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 
-	//暗黙ムーブが走るのでおそらく大丈夫
-	return valuesDatas;
+    //ファイルが空の場合は空のリストを返す
+    if (utf8Data.empty()) {
+        return valuesDatas;
+    }
+
+    //UTF-8からUTF-16 (wstring) に変換
+    int wideSize = MultiByteToWideChar(CP_UTF8, 0, utf8Data.c_str(), static_cast<int>(utf8Data.size()), nullptr, 0);
+    std::wstring wdata(wideSize, 0);
+    MultiByteToWideChar(CP_UTF8, 0, utf8Data.c_str(), static_cast<int>(utf8Data.size()), &wdata[0], wideSize);
+
+    //行ごとに処理
+    std::wstringstream ws(wdata);
+    std::wstring line;
+    bool isHeader = false;
+    std::vector<std::wstring> header;
+
+    //CSVの終わりまで読み取る
+    //getlineで1行ずつ読み取る
+    while (std::getline(ws, line))
+    {
+        //行をカンマ区切りで1つずつ分解する準備
+        std::wstringstream ss(line);
+        std::wstring part;
+        std::vector<std::wstring> values;
+
+        //カンマ区切りで分解してリストに追加
+        while (std::getline(ss, part, L','))
+        {
+            values.emplace_back(part);
+        }
+
+        //ヘッダー
+        if (!isHeader)
+        {
+            header = values;
+            isHeader = true;
+            continue;
+        }
+
+        //要素数チェック（ヘッダーより少ない場合は不正な行としてスキップ）
+        if (values.size() < header.size()) continue;
+
+        //データを配列に追加
+        valuesDatas.emplace_back(values);
+    }
+
+    //暗黙ムーブが走るのでコピーコストは問題なし
+    return valuesDatas;
 }

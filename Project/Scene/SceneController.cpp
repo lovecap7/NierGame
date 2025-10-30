@@ -101,6 +101,8 @@ void SceneController::UpdateBaseScene()
 	//更新処理
 	m_scenes.front()->Update();
 }
+
+#if _DEBUG
 void SceneController::DebugDraw() const
 {
 	//デバッグ描画
@@ -109,3 +111,4 @@ void SceneController::DebugDraw() const
 		scenes->DebugDraw();
 	}
 }
+#endif

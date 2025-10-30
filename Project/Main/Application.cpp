@@ -104,9 +104,9 @@ void Application::Run()
 	{
 		//今回のループが始まった時間を覚えておく
 		LONGLONG time = GetNowHiPerformanceCount();
-#if _DEBUG
 		//更新
 		input.Update();
+#if _DEBUG
 		if (input.IsTrigger("Glitch"))
 		{
 			m_postProcess->AddPostEffectState(ShaderPostProcess::PostEffectState::Glitch);
