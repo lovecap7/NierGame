@@ -27,8 +27,8 @@ namespace
 	//ロックオン時の設定
     //カメラオフセット（右に寄せる）
     constexpr float kRightOffset = 150.0f;  //右オフセット距離
-    constexpr float kBackOffset = 350.0f;   //後方距離
-    constexpr float kUpOffset = 100.0f;     //上方向オフセット
+    constexpr float kBackOffset = 450.0f;   //後方距離
+    constexpr float kUpOffset = 150.0f;     //上方向オフセット
 	constexpr float kLockOnFollowSpeed = 0.15f;   //ロックオン中の追従速度
     constexpr float kRotFollowSpeed = 0.2f; //追従回転速度
 	//右向きを決める内積

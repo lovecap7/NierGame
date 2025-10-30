@@ -14,14 +14,14 @@ public:
 	virtual void Init() override;
 	virtual void Update() override;
 private:
-	//攻撃開始更新
-	void UpdateStartAttack(std::shared_ptr<EnemyBase> owner);
+	//フレームによる攻撃の更新
+	void UpdateAttackFrame(std::shared_ptr<EnemyBase> owner);
 	//攻撃削除
 	void DeleteAttack();
 	//攻撃作成
 	void CreateAttack(std::shared_ptr<EnemyBase> owner);
 	//多段ヒット攻撃読み込み
-	void LoadNextMultipleHitAttack(std::shared_ptr<EnemyBase> owner);
+	void ComboAttack(std::shared_ptr<EnemyBase> owner);
 	//攻撃移動更新
 	void UpdateMove(std::shared_ptr<EnemyBase> owner, std::shared_ptr<Model> model);
 	//攻撃位置の更新
@@ -35,5 +35,6 @@ private:
 	std::weak_ptr<AttackBase> m_pAttack;
 	//弾を打った
 	bool m_isShotBullet;
+
 };
 

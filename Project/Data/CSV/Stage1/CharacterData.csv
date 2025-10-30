@@ -6,4 +6,4 @@ Robot2,38,Character,-11.52604,0.14,-5.318634,0,196.75,0,0.3,0.3,0.3,Enemy/Normal
 Robot1,24,Character,-4.5,0.14,12.6,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
 Robot2,29,Character,2,0.14,14.9,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot2,Middle,Enemy,0,0,1,30,120,Enemy/Robot2/Robot2PathData
 Robot2,33,Character,-11.52604,0.14,15.06137,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot2,Middle,Enemy,0,0,1,30,120,Enemy/Robot2/Robot2PathData
-Boss1,61,Character,-4.4,1,62.2,0,196.75,0,2.5,2.5,2.5,Enemy/Boss/Boss1,High,Enemy,0,0,1,400,700,Enemy/Boss1/Boss1PathData
+Boss1,61,Character,-4.4,1,62.2,0,196.75,0,2.5,2.5,2.5,Enemy/Boss/Boss1,High,Enemy,0,0,1,400,400,Enemy/Boss1/Boss1PathData

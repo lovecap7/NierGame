@@ -13,7 +13,9 @@
 #include "../../../../General/Effect/EffekseerManager.h"
 namespace
 {
+	//速度
 	constexpr float kSpeedDif = 10.0f;
+	//だんだん早くなっていく
 	constexpr float kLerpSpeedRate = 0.1f;
 	
 	//アニメーション
@@ -24,9 +26,9 @@ namespace
 	//ジャスト回避フレーム
 	constexpr float kJustFrame = 15.0f;
 	//スロー速度
-	constexpr float kSlowSpeed = 0.1f;
+	constexpr float kSlowSpeed = 0.05f;
 	//無敵フレーム
-	constexpr float kNoDamageFrame = 30.0f;
+	constexpr float kNoDamageFrame = 15.0f;
 	//ジャスト回避終了前
 	constexpr float kFisishJustAvoidFrame = 5.0f;
 	//終了可能フレーム
@@ -226,7 +228,7 @@ void PlayerStateAvoid::InitJustAvoid(std::shared_ptr<Model> model, std::shared_p
 	m_isJustAvoid = true;
 
 	//ジャスト回避
-	model->SetAnim(owner->GetAnim(kJustAvoid).c_str(), false);
+	model->SetAnim(owner->GetAnim(kJustAvoid).c_str(), false, 1.0f);
 
 	//終了フレーム
 	m_finishJustAvoid = model->GetTotalAnimFrame() - kFisishJustAvoidFrame;
@@ -249,6 +251,9 @@ void PlayerStateAvoid::InitJustAvoid(std::shared_ptr<Model> model, std::shared_p
 
 	//エフェクト
 	EffekseerManager::GetInstance().CreateTrackActorEffect(owner->GetEffectPath(kJustAvoid), owner);
+
+	//プレイヤーを非表示に
+	owner->SetIsDraw(false);
 }
 
 void PlayerStateAvoid::UpdateJustAvoid(std::shared_ptr<Player> owner, std::shared_ptr<Model> model, Application& app)
@@ -273,6 +278,8 @@ void PlayerStateAvoid::UpdateJustAvoid(std::shared_ptr<Player> owner, std::share
 			owner->DisableIsMyScale();
 			//無効
 			owner->DisableIsMyScale();
+			//描画する
+			owner->SetIsDraw(true);
 		}
 	}
 }

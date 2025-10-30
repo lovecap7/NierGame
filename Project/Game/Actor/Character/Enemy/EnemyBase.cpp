@@ -4,10 +4,20 @@
 #include "../../../../General/Model.h"
 #include "../Player/Player.h"
 #include "../../../../General/MyDraw.h"
+#include "../../../../General/Effect/EffekseerManager.h"
+#include "../../../../General/Effect/NormalEffect.h"
+#include "../../../../General/CSV/CSVDataLoader.h"
+#include "../../../../General/CSV/CSVData.h"
+#include "../../../../General/CSV/AttackData.h"
+#include "../../../../General/CSV/EnemyAttackKeyData.h"
+#include "../../ActorManager.h"
+
 namespace
 {
 	//警戒状態なら索敵範囲を広げる
 	constexpr float kAlertedDisRate = 2.0f;
+	//目の数
+	constexpr int kEyeNum = 2;
 }
 
 EnemyBase::EnemyBase(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager):
@@ -15,7 +25,11 @@ EnemyBase::EnemyBase(std::shared_ptr<ActorData> actorData, std::shared_ptr<Chara
 	m_attackCoolTime(0.0f),
 	m_isActive(true),
 	m_isAlerted(true),
-	m_isInArea(false)
+	m_isInArea(false),
+	m_rightEyeIndex(0),
+	m_leftEyeIndex(0),
+	m_nearEyeIndex(0),
+	m_eyeEffect()
 {
 }
 
@@ -33,6 +47,8 @@ void EnemyBase::Update()
 	CharacterBase::Update();
 	//ロックオンの位置
 	UpdateLockOnViewPos();
+	//目の位置更新
+	UpdateEyeEffect();
 }
 
 
@@ -217,3 +233,75 @@ std::shared_ptr<AttackData> EnemyBase::GetRandomAttack(std::vector<std::wstring>
 	return GetAttackData(keys[index]);
 }
 
+
+void EnemyBase::InitLightUpEyesEff()
+{
+	if (m_pActorManager.expired())return;
+	auto actorM = m_pActorManager.lock();
+	if (actorM->GetPlayer().expired())return;
+
+	Vector3 effPos;
+
+	//右目の位置
+	Vector3 rightEyePos = MV1GetFramePosition(m_model->GetModelHandle(), m_rightEyeIndex);
+	//左目の位置
+	Vector3 leftEyePos = MV1GetFramePosition(m_model->GetModelHandle(), m_leftEyeIndex);
+	//プレイヤーの位置
+	Vector3 playerPos = actorM->GetPlayer().lock()->GetPos();
+
+	//近いほうを採用
+	float rightDis = (playerPos - rightEyePos).Magnitude();
+	float leftDis = (playerPos - leftEyePos).Magnitude();
+
+	if (rightDis > leftDis)
+	{
+		//左目採用
+		effPos = leftEyePos;
+		m_nearEyeIndex = m_leftEyeIndex;
+	}
+	else
+	{
+		//右目採用
+		effPos = rightEyePos;
+		m_nearEyeIndex = m_rightEyeIndex;
+	}
+	//エフェクトを作成
+	m_eyeEffect = EffekseerManager::GetInstance().CreateEffect(GetEffectPath(L"EyeLight"), effPos);
+}
+
+void EnemyBase::InitAttackKey(CSVDataLoader& csvLoader, std::wstring path)
+{
+	auto oriAttackKeys = csvLoader.LoadCSV(path.c_str());
+	for (auto& data : oriAttackKeys)
+	{
+		std::shared_ptr<EnemyAttackKeyData> attackKeyData = std::make_shared<EnemyAttackKeyData>(data);
+		//近接攻撃
+		if (attackKeyData->m_attackRangeType == EnemyAttackKeyData::AttackRangeType::Melee)
+		{
+			m_meleeAttackKeys.emplace_back(attackKeyData->m_attackKeyName);
+		}
+		//遠距離攻撃
+		else if (attackKeyData->m_attackRangeType == EnemyAttackKeyData::AttackRangeType::LongRange)
+		{
+			m_longRangeAttackKeys.emplace_back(attackKeyData->m_attackKeyName);
+		}
+	}
+}
+
+void EnemyBase::InitEyeIndex(CSVDataLoader& csvLoader, std::wstring path)
+{
+	auto eyeDatas = csvLoader.LoadCSV(path.c_str());
+	for (auto& eyeData : eyeDatas)
+	{
+		auto data = eyeData->GetData();
+		if (data.size() < kEyeNum)continue;
+		m_leftEyeIndex = std::stoi(data[0]);
+		m_rightEyeIndex = std::stoi(data[1]);
+	}
+}
+
+void EnemyBase::UpdateEyeEffect()
+{
+	if (m_eyeEffect.expired())return;
+	m_eyeEffect.lock()->SetPos(MV1GetFramePosition(m_model->GetModelHandle(), m_nearEyeIndex));
+}

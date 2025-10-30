@@ -29,6 +29,9 @@ EnemyStateAttack::EnemyStateAttack(std::weak_ptr<Actor> enemy, std::shared_ptr<A
 
 	//アーマー
 	owner->ChangeArmor(m_attackData->m_armor);
+
+	//目を光らせる
+	owner->InitLightUpEyesEff();
 }
 
 EnemyStateAttack::~EnemyStateAttack()
@@ -43,8 +46,6 @@ EnemyStateAttack::~EnemyStateAttack()
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());
 	owner->SetAttackCoolTime(m_attackData->m_cancelFrame);
-	//アーマーをもとに戻す
-	owner->InitArmor();
 }
 
 void EnemyStateAttack::Init()
@@ -80,13 +81,13 @@ void EnemyStateAttack::Update()
 	//モデル
 	auto model = owner->GetModel();
 
-	//発生フレームになったら
-	UpdateStartAttack(owner);
+	//フレームによる攻撃の処理
+	UpdateAttackFrame(owner);
 	//攻撃移動更新
 	UpdateMove(owner, model);
 	//攻撃位置更新
 	UpdateAttackPos(owner);
-
+	
 	//アニメーションが終了したら
 	if (model->IsFinishAnim())
 	{
@@ -96,20 +97,24 @@ void EnemyStateAttack::Update()
 	}
 }
 
-void EnemyStateAttack::UpdateStartAttack(std::shared_ptr<EnemyBase> owner)
+void EnemyStateAttack::UpdateAttackFrame(std::shared_ptr<EnemyBase> owner)
 {
 	if (m_frame >= m_attackData->m_startFrame)
 	{
 		//持続が切れたら
 		if (m_isAppearedAttack && (m_pAttack.expired() || m_attackData->m_attackType == AttackData::AttackType::Bullet))
 		{
-			
 			//多段ヒット攻撃の処理
 			if (m_attackData->m_isMultipleHit && m_attackData->m_nextAttackName != L"None")
 			{
 				//多段ヒット攻撃
-				LoadNextMultipleHitAttack(owner);
+				ComboAttack(owner);
 				return;
+			}
+			else
+			{
+				//アーマーをもとに戻す
+				owner->InitArmor();
 			}
 		}
 		//まだ攻撃が発生していないなら発生
@@ -186,7 +191,7 @@ void EnemyStateAttack::CreateAttack(std::shared_ptr<EnemyBase> owner)
 	m_isAppearedAttack = true;
 }
 
-void EnemyStateAttack::LoadNextMultipleHitAttack(std::shared_ptr<EnemyBase> owner)
+void EnemyStateAttack::ComboAttack(std::shared_ptr<EnemyBase> owner)
 {
 	if (!m_attackData)return;
 	// 多段ヒット処理

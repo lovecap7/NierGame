@@ -7,6 +7,7 @@
 class ActorData;
 class CharaStatusData;
 class ActorManager;
+class NormalEffect;
 class Player;
 class EnemyBase abstract:
     public CharacterBase
@@ -53,6 +54,9 @@ public:
 
 	//今の距離から攻撃を返す(空も返す可能性もあるのでnullチェックが必要)
 	std::shared_ptr<AttackData> GetAttackByDistance()const;
+
+	//目が光るエフェクト
+	void InitLightUpEyesEff();
 protected:
 	//攻撃クールタイム
 	float m_attackCoolTime;
@@ -69,6 +73,14 @@ protected:
 	//攻撃のキー
 	std::vector<std::wstring> m_meleeAttackKeys;	//近接攻撃のキー
 	std::vector<std::wstring> m_longRangeAttackKeys;//遠距離攻撃のキー
+	//右目のインデックス
+	int m_rightEyeIndex;
+	//左目のインデックス
+	int m_leftEyeIndex;
+	//近い目のインデックス
+	int m_nearEyeIndex;
+	//目のエフェクトの参照
+	std::weak_ptr<NormalEffect> m_eyeEffect;
 protected:
 	//カウント
 	void CountAttackCoolTime();
@@ -76,5 +88,11 @@ protected:
 	void UpdateLockOnViewPos();
 	//ランダムに攻撃を取得
 	std::shared_ptr<AttackData> GetRandomAttack(std::vector<std::wstring> keys) const;
+	//攻撃のキーの初期化
+	void InitAttackKey(CSVDataLoader& csvLoader, std::wstring path);
+	//目の位置のインデックス
+	void InitEyeIndex(CSVDataLoader& csvLoader, std::wstring path);
+	//目の位置更新
+	void UpdateEyeEffect();
 };
 

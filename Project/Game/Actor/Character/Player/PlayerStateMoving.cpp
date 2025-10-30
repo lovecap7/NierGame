@@ -99,12 +99,12 @@ void PlayerStateMoving::Update()
 	//UŒ‚
 	if (input.IsBuffered("X"))
 	{
-		ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner,false, status->IsNoDamage()));
 		return;
 	}
 	if (input.IsBuffered("Y"))
 	{
-		ChangeState(std::make_shared<PlayerStateHeavyAttack>(m_pOwner, m_isDash, false));
+		ChangeState(std::make_shared<PlayerStateHeavyAttack>(m_pOwner, m_isDash, status->IsNoDamage()));
 		return;
 	}
 	//‘Ò‹@
