@@ -15,7 +15,9 @@ NormalEffect::NormalEffect(int playHandle, Vector3 pos):
 	m_isDelete(false),
 	m_specificFrame(0),
 	m_isSpecificFrame(false),
-	m_dir(Vector3::Back())
+	m_dir(Vector3::Back()),
+	m_myTimeScale(0.0f),
+	m_isMyTimeScale(false)
 {
 	SetPos(m_pos);
 	SetRot(m_rot);
@@ -29,6 +31,18 @@ NormalEffect::~NormalEffect()
 
 void NormalEffect::Update()
 {
+	//自分のタイムスケールを使うか
+	if (!m_isMyTimeScale)
+	{
+		//使わない場合
+		m_myTimeScale = Application::GetInstance().GetTimeScale();
+	}
+
+	printf("timeScale %f\n", m_myTimeScale);
+
+	//再生
+	Play();
+
 	//指定フレーム再生なら
 	if (m_isSpecificFrame)
 	{
@@ -37,7 +51,9 @@ void NormalEffect::Update()
 			Delete();
 			return;
 		}
-		m_specificFrame -= Application::GetInstance().GetTimeScale();
+
+		//フレーム
+		m_specificFrame -= m_myTimeScale;
 	}
 	else
 	{
@@ -57,7 +73,7 @@ void NormalEffect::End()
 
 void NormalEffect::Play()
 {
-	SetSpeedPlayingEffekseer3DEffect(m_playHandle, m_playSpeed * Application::GetInstance().GetTimeScale());
+	SetSpeedPlayingEffekseer3DEffect(m_playHandle, m_playSpeed * m_myTimeScale);
 }
 
 void NormalEffect::Stop()
@@ -67,8 +83,8 @@ void NormalEffect::Stop()
 
 void NormalEffect::SetPlaySpeed(float speed)
 {
-	m_playHandle = speed;
-	SetSpeedPlayingEffekseer3DEffect(m_playHandle, m_playSpeed * Application::GetInstance().GetTimeScale());
+	m_playSpeed = speed;
+	SetSpeedPlayingEffekseer3DEffect(m_playHandle, m_playSpeed);
 }
 
 void NormalEffect::Delete()
@@ -124,4 +140,20 @@ void NormalEffect::SpecificFrame(float frame)
 {
 	m_specificFrame = frame;
 	m_isSpecificFrame = true;
+}
+
+void NormalEffect::SetTimeScale(float scale)
+{
+	m_myTimeScale = scale;
+	EnableIsMyScale();
+}
+
+void NormalEffect::EnableIsMyScale()
+{
+	m_isMyTimeScale = true;
+}
+
+void NormalEffect::DisableIsMyScale()
+{
+	m_isMyTimeScale = false;
 }

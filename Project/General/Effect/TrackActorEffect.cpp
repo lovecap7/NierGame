@@ -19,8 +19,16 @@ void TrackActorEffect::Update()
 		Delete();
 		return;
 	}
+
+	//ターゲット
+	auto target = m_target.lock();
+
 	//移動
-	SetPos(m_target.lock()->GetPos());
+	SetPos(target->GetPos());
+
+	//タイムスケールを使う
+	SetTimeScale(target->GetTimeScale());
+
 	//更新
 	NormalEffect::Update();
 }

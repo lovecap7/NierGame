@@ -24,6 +24,13 @@ public:
 
 	//指定フレーム再生
 	void SpecificFrame(float frame);
+
+	//タイムスケール
+	void SetTimeScale(float scale);
+	//自分のタイムスケールを使う
+	void EnableIsMyScale();
+	//使わない
+	void DisableIsMyScale();
 protected:
 	//再生ハンドル
 	int m_playHandle;
@@ -42,5 +49,8 @@ protected:
 	bool m_isSpecificFrame;
 	//エフェクトの向き(Z方向)
 	Vector3 m_dir;
+	//タイムスケール
+	float m_myTimeScale;
+	bool m_isMyTimeScale;
 };
 

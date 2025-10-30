@@ -41,7 +41,8 @@ PlayerStateAvoid::PlayerStateAvoid(std::weak_ptr<Actor> player) :
 	m_isJustAvoid(false),
 	m_finishJustAvoid(0.0f),
 	m_isLightAttack(false),
-	m_isHeavyAttack(false)
+	m_isHeavyAttack(false),
+	m_isBack(false)
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
@@ -225,7 +226,7 @@ void PlayerStateAvoid::InitJustAvoid(std::shared_ptr<Model> model, std::shared_p
 	m_isJustAvoid = true;
 
 	//ジャスト回避
-	model->SetAnim(owner->GetAnim(kJustAvoid).c_str(), false, 1.2f);
+	model->SetAnim(owner->GetAnim(kJustAvoid).c_str(), false);
 
 	//終了フレーム
 	m_finishJustAvoid = model->GetTotalAnimFrame() - kFisishJustAvoidFrame;
@@ -233,7 +234,7 @@ void PlayerStateAvoid::InitJustAvoid(std::shared_ptr<Model> model, std::shared_p
 	//スローモーション
 	auto& app = Application::GetInstance();
 	app.SetTimeScale(kSlowSpeed);
-
+	//自分のタイムスケールを使う
 	owner->EnableIsMyScale();
 
 	//シェーダー
@@ -247,7 +248,7 @@ void PlayerStateAvoid::InitJustAvoid(std::shared_ptr<Model> model, std::shared_p
 	owner->GetCharaStatus()->SetIsNoDamage(true);
 
 	//エフェクト
-	EffekseerManager::GetInstance().CreateTrackActorEffect(owner->GetEffectPath(L"JustAvoid"), owner);
+	EffekseerManager::GetInstance().CreateTrackActorEffect(owner->GetEffectPath(kJustAvoid), owner);
 }
 
 void PlayerStateAvoid::UpdateJustAvoid(std::shared_ptr<Player> owner, std::shared_ptr<Model> model, Application& app)
@@ -268,6 +269,8 @@ void PlayerStateAvoid::UpdateJustAvoid(std::shared_ptr<Player> owner, std::share
 		{
 			//元に戻す
 			app.SetTimeScale(1.0f);
+			//自分のタイムスケールを使わない
+			owner->DisableIsMyScale();
 			//無効
 			owner->DisableIsMyScale();
 		}
