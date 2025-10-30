@@ -22,8 +22,10 @@ EnemyStateAttack::EnemyStateAttack(std::weak_ptr<Actor> enemy, std::shared_ptr<A
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());
 	owner->SetCollState(CollisionState::Move);
+
 	//攻撃データ
 	m_attackData = attackData;
+
 	//アニメーションセット
 	owner->GetModel()->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), true);
 

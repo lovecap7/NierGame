@@ -265,6 +265,7 @@ void EnemyBase::InitLightUpEyesEff()
 		effPos = rightEyePos;
 		m_nearEyeIndex = m_rightEyeIndex;
 	}
+
 	//エフェクトを作成
 	m_eyeEffect = EffekseerManager::GetInstance().CreateEffect(GetEffectPath(L"EyeLight"), effPos);
 }

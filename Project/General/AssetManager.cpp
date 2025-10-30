@@ -61,14 +61,12 @@ int AssetManager::GetEffectHandle(std::wstring path)
         handle = LoadEffekseerEffect(loadPath.c_str());
         m_effectHandle[path] = handle;
     }
+
     //ハンドルチェック
-    assert(handle >= 0);
+    //assert(handle >= 0);
 
     //ハンドルを渡す
     return PlayEffekseer3DEffect(handle);
-
-
-    return 0;
 }
 
 void AssetManager::DeleteEffectHandle()

@@ -38,8 +38,6 @@ void NormalEffect::Update()
 		m_myTimeScale = Application::GetInstance().GetTimeScale();
 	}
 
-	printf("timeScale %f\n", m_myTimeScale);
-
 	//çƒê∂
 	Play();
 
