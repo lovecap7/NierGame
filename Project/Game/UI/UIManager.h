@@ -2,23 +2,34 @@
 #include <memory>
 #include <list>
 class UIBase;
-class UIManager
+class UIManager final
 {
+private:
+	//シングルトンの準備
+	UIManager() = default;
+	~UIManager() = default;
+	//コピー禁止
+	UIManager(const UIManager&) = delete;
+	UIManager& operator = (const UIManager&) = delete;
+	//ムーブ禁止
+	UIManager(UIManager&&) = delete;
+	UIManager& operator = (UIManager&&) = delete;
 public:
-	UIManager();
-	~UIManager();
+	//インスタンスを取得
+	static UIManager& GetInstance()
+	{
+		static UIManager instance;
+		return instance;
+	}
 	//登録
-	void Entry(std::shared_ptr<UIBase> attack);
+	void Entry(std::shared_ptr<UIBase> ui);
 	//解除
-	void Exit(std::shared_ptr<UIBase> attack);
-	//初期化
-	void Init();
+	void Exit(std::shared_ptr<UIBase> ui);
+
 	//更新
 	void Update();
 	//描画
 	void Draw()const;
-	//終了処理
-	void End();
 private:
 	std::list<std::shared_ptr<UIBase>> m_uis;
 private:

@@ -1,16 +1,17 @@
 #pragma once
-class UIBase abstract
+class UIBase abstract:
+	public std::enable_shared_from_this<UIBase>
 {
 public:
 	UIBase();
 	~UIBase();
 	//初期化
-	void Init();
-	//更新
-	void Update();
-	//描画
-	void Draw()const;
+	virtual void Init();
 	//終了
-	void End();
+	virtual void End();
+	//更新
+	virtual void Update() abstract;
+	//描画
+	virtual void Draw()const abstract;
 };
 
