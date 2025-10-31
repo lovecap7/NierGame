@@ -105,7 +105,7 @@ void EffekseerManager::Reset()
 std::weak_ptr<NormalEffect> EffekseerManager::CreateEffect(std::wstring path, Vector3 pos)
 {
 	std::shared_ptr<NormalEffect> effect;
-	effect = std::make_shared<NormalEffect>(PlayEffekseer3DEffect(AssetManager::GetInstance().GetEffectHandle(path)), pos);
+	effect = std::make_shared<NormalEffect>(AssetManager::GetInstance().GetEffectHandle(path), pos);
 	Entry(effect);
 	return effect;
 }

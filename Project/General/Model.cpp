@@ -12,9 +12,11 @@ namespace
 	//回転速度
 	constexpr int kModelRotateSpeed = 10;
 	//ヒット効果フレーム
-	constexpr int kHitFrame = 30.0f;
+	constexpr int kHitFrame = 10.0f;
 	//ヒット効果でモデルが大きくなる倍率
-	constexpr float kHiScaleRate = 1.1f;
+	constexpr float kHiScaleRate = 1.05f;
+	//ヒット時に少し暗くする
+	constexpr float kGray = 0.5f;
 }
 
 Model::Model(int modelHandle, VECTOR pos) :
@@ -97,6 +99,7 @@ void Model::Update()
 		--m_hitCountFrame;
 		//もとに戻してく(色)
 		float hitFrame = (1.0f / kHitFrame) * m_timeScale;
+		m_color.r += hitFrame;
 		m_color.g += hitFrame;
 		m_color.b += hitFrame;
 		SetColor(m_color);
@@ -268,8 +271,8 @@ Vector3 Model::GetDir()
 }
 void Model::ModelHit()
 {
-	//赤に
-	SetColor(1.0f, 0.0f, 0.0f, 1.0f);
+	//グレーに
+	SetColor(kGray, kGray, kGray, 1.0f);
 	//フレームをセット
 	m_hitCountFrame = kHitFrame;
 	//少し大きくする

@@ -41,6 +41,11 @@ void EnemyBase::Update()
 {
 	//非活動中は更新しない
 	if (!m_isActive)return;
+	//攻撃を喰らった際
+	if (m_charaStatus->IsHit())
+	{
+		m_model->ModelHit();
+	}
 	//攻撃クールタイム更新
 	CountAttackCoolTime();
 	//共通処理

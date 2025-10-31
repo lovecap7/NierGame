@@ -13,7 +13,7 @@ NormalEffect::NormalEffect(int playHandle, Vector3 pos):
 	m_scale{ kDefaultScale,kDefaultScale,kDefaultScale },
 	m_playSpeed(1.0f),
 	m_isDelete(false),
-	m_specificFrame(0),
+	m_specificFrame(0.0f),
 	m_isSpecificFrame(false),
 	m_dir(Vector3::Back()),
 	m_myTimeScale(0.0f),
