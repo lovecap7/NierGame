@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 class UIBase abstract:
 	public std::enable_shared_from_this<UIBase>
 {

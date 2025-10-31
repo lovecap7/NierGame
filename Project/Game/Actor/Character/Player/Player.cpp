@@ -25,6 +25,8 @@
 #include "../../../../General/ShaderPostProcess.h"
 #include "../../../../Main/Application.h"
 #include "../../../../General/AssetManager.h"
+#include "../../../../Game/UI/Player/PlayerHPUI.h"
+#include "../../../../Game/UI/UIManager.h"
 
 namespace
 {
@@ -97,6 +99,9 @@ void Player::Init()
 	m_state->ChangeState(m_state);
 	//ƒ‚ƒfƒ‹‚Ì‚‚³’²®
 	m_model->SetModelHeightAdjust(-m_actorData->m_collRadius);
+
+	//‘Ì—Í
+	UIManager::GetInstance().Entry(std::make_shared<PlayerHPUI>(m_charaStatus));
 }
 
 

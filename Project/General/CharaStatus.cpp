@@ -159,6 +159,12 @@ void CharaStatus::InitArmor()
 	m_ar = m_charaStatusData->m_ar;
 }
 
+float CharaStatus::GetHPRate() const
+{
+	if (m_maxHp <= 0.0f)return 0.0f;
+	return static_cast<float>(m_nowHp) / static_cast<float>(m_maxHp);
+}
+
 
 CharaStatus::AttackWeight operator+(const CharaStatus::AttackWeight& left, const CharaStatus::AttackWeight& right)
 {

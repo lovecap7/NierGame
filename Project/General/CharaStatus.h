@@ -44,6 +44,7 @@ public:
 	void SetMaxHP(int maxHP) { m_maxHp = maxHP; };
 	int GetNowHP()const { return m_nowHp; };
 	void SetNowHP(int nowHP) { m_nowHp = nowHP; };
+	float GetHPRate()const;
 
 	//çUåÇóÕ
 	int GetAT()const { return m_at; };

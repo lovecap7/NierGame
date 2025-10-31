@@ -12,6 +12,9 @@ namespace
     const std::wstring kEffectPath = L"Data/Effect/";
     const std::wstring kEfk = L".efkefc";
 
+    //画像
+    const std::wstring kImagePath = L"Data/UI/";
+    const std::wstring kPng = L".png";
 }
 
 int AssetManager::GetModelHandle(std::wstring path)
@@ -50,16 +53,16 @@ int AssetManager::GetEffectHandle(std::wstring path)
 {
     int handle = -1;
     //モデルがあったら
-    if (m_effectHandle.find(path) != m_effectHandle.end())
+    if (m_effectHandles.find(path) != m_effectHandles.end())
     {
-        handle = m_effectHandle.at(path);
+        handle = m_effectHandles.at(path);
     }
     else
     {
         //ハンドルをロードする
         std::wstring loadPath = kEffectPath + path + kEfk;
         handle = LoadEffekseerEffect(loadPath.c_str());
-        m_effectHandle[path] = handle;
+        m_effectHandles[path] = handle;
     }
 
     //ハンドルチェック
@@ -75,8 +78,39 @@ int AssetManager::GetEffectHandle(std::wstring path)
 void AssetManager::DeleteEffectHandle()
 {
     //ハンドルをすべて削除
-    for (const auto& [key, value] : m_effectHandle) {
+    for (const auto& [key, value] : m_effectHandles) {
         DeleteEffekseerEffect(value);
     }
-    m_effectHandle.clear();
+    m_effectHandles.clear();
+}
+
+int AssetManager::GetImageHandle(std::wstring path)
+{
+    int handle = -1;
+    //モデルがあったら
+    if (m_imageHandles.find(path) != m_imageHandles.end())
+    {
+        handle = m_imageHandles.at(path);
+    }
+    else
+    {
+        //ハンドルをロードする
+        std::wstring loadPath = kImagePath + path + kPng;
+        handle = LoadGraph(loadPath.c_str());
+        m_imageHandles[path] = handle;
+    }
+
+    //ハンドルチェック
+    assert(handle >= 0);
+
+    return handle;
+}
+
+void AssetManager::DeleteImageHandle()
+{
+    //ハンドルをすべて削除
+    for (const auto& [key, value] : m_imageHandles) {
+        DeleteGraph(value);
+    }
+    m_imageHandles.clear();
 }

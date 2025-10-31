@@ -34,11 +34,16 @@ public:
 	//エフェクトのリソースの削除
 	void DeleteEffectHandle();
 
+	//画像ハンドル
+	int GetImageHandle(std::wstring path);
+	//画像ハンドル削除
+	void DeleteImageHandle();
 private:
 	//モデルリソース
 	std::map<std::wstring,int>m_modelHandles;
 	//エフェクトリソース
-	std::map<std::wstring, int>m_effectHandle;
-
+	std::map<std::wstring, int>m_effectHandles;
+	//画像ハンドル
+	std::map<std::wstring, int>m_imageHandles;
 };
 

@@ -5,15 +5,6 @@
 #include "../../General/CSV/ActorData.h"
 #include "UIBase.h"
 
-UIManager::UIManager():
-	m_uis()
-{
-}
-
-UIManager::~UIManager()
-{
-}
-
 void UIManager::Entry(std::shared_ptr<UIBase> ui)
 {
 	//‚·‚Å‚É“o˜^‚³‚ê‚Ä‚¢‚é‚È‚ç‚µ‚È‚¢

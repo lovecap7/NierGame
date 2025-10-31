@@ -7,6 +7,7 @@
 #include "../Scene/SceneController.h"
 #include "../General/Fader.h"
 #include "../General/Effect/EffekseerManager.h"
+#include "../Game/UI/UIManager.h"
 #include  <cassert>
 #include <chrono>
 namespace
@@ -99,6 +100,9 @@ void Application::Run()
 	auto& fader = Fader::GetInstance();
 	fader.Init();
 
+	//UI
+	auto& uiManager = UIManager::GetInstance();
+
 	//ゲームループ
 	while (ProcessMessage() != -1) // Windowsが行う処理を待つ
 	{
@@ -140,6 +144,7 @@ void Application::Run()
 			sceneController->Update();
 			physics.Update();
 			m_postProcess->Update();
+			uiManager.Update();
 		}
 		//描画
 		sceneController->Draw();
@@ -151,6 +156,9 @@ void Application::Run()
 		ClearDrawScreen();
 		//裏画面にレンダーターゲットを描画
 		m_postProcess->Draw(RT);
+
+		//UIマネージャー
+		uiManager.Draw();
 #if _DEBUG
 		if (input.IsPress("AddTimeScale"))
 		{
@@ -190,7 +198,6 @@ void Application::Run()
 			GetLocalTime(&lt);
 			printf("FPS Low! fps = %.2f : Time = %02d:%02d\n", fps, lt.wHour, lt.wMinute);
 		}
-
 #endif
 
 		//画面の切り替わりを待つ必要がある
