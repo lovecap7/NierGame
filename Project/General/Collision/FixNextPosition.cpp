@@ -555,6 +555,7 @@ bool FixNextPosition::HitFloorCP(const std::shared_ptr<Collidable> coll, const V
 			VECTOR pos3 = dim[i].Position[2];
 
 			HITRESULT_LINE lineBetweenResult = HitCheck_Line_Triangle(headPos.ToDxLibVector(), legPos.ToDxLibVector(),
+
 				pos1, pos2, pos3);
 			if (lineBetweenResult.HitFlag)
 			{
