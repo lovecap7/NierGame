@@ -193,6 +193,8 @@
     <ClCompile Include="Game\Camera\CameraBase.cpp" />
     <ClCompile Include="Game\Camera\CameraController.cpp" />
     <ClCompile Include="Game\Camera\PlayerCamera.cpp" />
+    <ClCompile Include="Game\UI\UIBase.cpp" />
+    <ClCompile Include="Game\UI\UIManager.cpp" />
     <ClCompile Include="General\Animator.cpp" />
     <ClCompile Include="General\AssetManager.cpp" />
     <ClCompile Include="General\CharaStatus.cpp" />
@@ -290,6 +292,8 @@
     <ClInclude Include="Game\Camera\CameraBase.h" />
     <ClInclude Include="Game\Camera\CameraController.h" />
     <ClInclude Include="Game\Camera\PlayerCamera.h" />
+    <ClInclude Include="Game\UI\UIBase.h" />
+    <ClInclude Include="Game\UI\UIManager.h" />
     <ClInclude Include="General\Animator.h" />
     <ClInclude Include="General\AssetManager.h" />
     <ClInclude Include="General\CharaStatus.h" />
