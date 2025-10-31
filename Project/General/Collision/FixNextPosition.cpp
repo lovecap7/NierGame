@@ -538,7 +538,8 @@ bool FixNextPosition::HitFloorCP(const std::shared_ptr<Collidable> coll, const V
 	else if(defaultLowHitPosY < legPos.y)
 	{
 		//当たっていないならデフォルトの高さに合わせる
-		lowHitPosY = abs(defaultLowHitPosY + shortDis + kOverlapGap);
+		lowHitPosY = defaultLowHitPosY + abs(shortDis + kOverlapGap);
+		isHitFloor = true;
 	}
 	else
 	{
@@ -553,8 +554,6 @@ bool FixNextPosition::HitFloorCP(const std::shared_ptr<Collidable> coll, const V
 			VECTOR pos2 = dim[i].Position[1];
 			VECTOR pos3 = dim[i].Position[2];
 
-			//なかった時
-			//頭と足の間にポリゴンがあるかをチェック
 			HITRESULT_LINE lineBetweenResult = HitCheck_Line_Triangle(headPos.ToDxLibVector(), legPos.ToDxLibVector(),
 				pos1, pos2, pos3);
 			if (lineBetweenResult.HitFlag)
@@ -570,11 +569,13 @@ bool FixNextPosition::HitFloorCP(const std::shared_ptr<Collidable> coll, const V
 		//床の高さに合わせる
 		lowHitPosY += abs(shortDis + capsuleHeight + kOverlapGap);
 	}
-
-	rb->SetPosY(lowHitPosY);
-	rb->SetVecY(0.0f);
-	//床に当たっているので
-	coll->SetIsFloor(true);
+	if (isHitFloor)
+	{
+		rb->SetPosY(lowHitPosY);
+		rb->SetVecY(0.0f);
+		//床に当たっているので
+		coll->SetIsFloor(true);
+	}
 
 	return isHitFloor;
 }

@@ -28,7 +28,7 @@ void TitleScene::Update()
 	//フェードアウトしきったら
 	if (fader.IsFinishFadeOut())
 	{
-		m_controller.ChangeScene(std::make_unique<GameScene>(m_controller, GetStageNameByIndex(StageIndex::Stage1)));
+		m_controller.ChangeScene(std::make_unique<GameScene>(m_controller, GetStageNameByIndex(StageIndex::Tutorial)));
 		return;
 	}
 

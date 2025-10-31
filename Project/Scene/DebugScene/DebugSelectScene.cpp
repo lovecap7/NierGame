@@ -34,8 +34,17 @@ void DebugSelectScene::Update()
 		case Menu::Title:
 			m_controller.ChangeScene(std::make_shared<TitleScene>(m_controller));
 			break;
-		case Menu::Game:
+		case Menu::Tutorial:
+			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, GetStageNameByIndex(StageIndex::Tutorial)));
+			break;
+		case Menu::Stage1:
 			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, GetStageNameByIndex(StageIndex::Stage1)));
+			break;
+		case Menu::Stage2:
+			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, GetStageNameByIndex(StageIndex::Tutorial)));
+			break;
+		case Menu::Stage3:
+			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, GetStageNameByIndex(StageIndex::Tutorial)));
 			break;
 		case Menu::PlayerTest:
 			m_controller.ChangeScene(std::make_shared<PlayerTestScene>(m_controller));
@@ -48,13 +57,13 @@ void DebugSelectScene::Update()
 	int menu = static_cast<int>(m_currentMenu);
 	if (input.IsTrigger("Up"))menu--;
 	if (input.IsTrigger("Down"))menu++;
-	menu = MathSub::ClampInt(menu, 0, 2);
+	menu = MathSub::ClampInt(menu, 0, static_cast<int>(Menu::PlayerTest));
 	m_currentMenu = static_cast<Menu>(menu);
 }
 
 void DebugSelectScene::Draw()
 {
-	for (int i = 0;i < 3;i++)
+	for (int i = 0;i <= static_cast<int>(Menu::PlayerTest);i++)
 	{
 		int color = 0xffffff;
 		if (m_currentMenu == static_cast<Menu>(i))
@@ -66,8 +75,17 @@ void DebugSelectScene::Draw()
 		case Menu::Title:
 			DrawString(100, 100 + i * 30, L"Title", color);
 			break;
-		case Menu::Game:
-			DrawString(100, 100 + i * 30, L"Game", color);
+		case Menu::Tutorial:
+			DrawString(100, 100 + i * 30, L"Tutorial", color);
+			break;
+		case Menu::Stage1:
+			DrawString(100, 100 + i * 30, L"Stage1", color);
+			break;
+		case Menu::Stage2:
+			DrawString(100, 100 + i * 30, L"Stage2", color);
+			break;
+		case Menu::Stage3:
+			DrawString(100, 100 + i * 30, L"Stage3", color);
 			break;
 		case Menu::PlayerTest:
 			DrawString(100, 100 + i * 30, L"PlayerTestScene", color);

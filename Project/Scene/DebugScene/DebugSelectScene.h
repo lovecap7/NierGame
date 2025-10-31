@@ -23,8 +23,11 @@ private:
 	enum class Menu : int
 	{
 		Title		= 0,
-		Game		= 1,
-		PlayerTest	= 2,
+		Tutorial	= 1,
+		Stage1		= 2,
+		Stage2		= 3,
+		Stage3		= 4,
+		PlayerTest	= 5,
 	};
 	Menu m_currentMenu = Menu::Title;
 };

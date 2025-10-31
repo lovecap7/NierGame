@@ -5,6 +5,7 @@ enum class StageIndex
 	Stage1,
 	Stage2,
 	Stage3,
+	Tutorial,
 };
 
 inline std::wstring GetStageNameByIndex(StageIndex index)
@@ -20,6 +21,9 @@ inline std::wstring GetStageNameByIndex(StageIndex index)
 		break;
 	case StageIndex::Stage3:
 		name = L"Stage3";
+		break;
+	case StageIndex::Tutorial:
+		name = L"Tutorial";
 		break;
 	default:
 		name = L"Stage1";
