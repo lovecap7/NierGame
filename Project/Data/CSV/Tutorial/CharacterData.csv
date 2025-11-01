@@ -1,9 +1,8 @@
 ﻿名前,ID,アクタータイプ,座標X,座標Y,座標Z,回転X,回転Y,回転Z,大きさX,大きさY,大きさZ,モデルのパス,優先度,ゲームタグ,当たり判定無視,トリガー,重力を受ける,コリジョンの半径,コリジョンの高さ,パスをまとめたパス
-Player,44,Character,0,0,0,0,0,0,1,1,1,Player/Player,Middle,Player,0,0,1,30,100,Player/PlayerPathData
-Boss1,20,Character,0.3000307,10,160.5452,0,196.75,0,2.5,2.5,2.5,Enemy/Boss/Boss1,High,Enemy,0,0,1,400,400,Enemy/Boss1/Boss1PathData
-Robot1,19,Character,-0.13,-3,65.63,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,70,Enemy/Robot1/Robot1PathData
-Robot1,16,Character,-0.13,-3,103.2,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,70,Enemy/Robot1/Robot1PathData
-Robot1,15,Character,-5.31,-3,103.2,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,70,Enemy/Robot1/Robot1PathData
-Robot1,14,Character,4.88,-3,103.2,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,70,Enemy/Robot1/Robot1PathData
-Robot2,18,Character,-5,-5.92,95.62,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot2,Middle,Enemy,0,0,1,30,70,Enemy/Robot2/Robot2PathData
-Robot2,17,Character,5,-5.92,95.53,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot2,Middle,Enemy,0,0,1,30,70,Enemy/Robot2/Robot2PathData
+Player,49,Character,0,0,0,0,0,0,1,1,1,Player/Player,Middle,Player,0,0,1,30,100,Player/PlayerPathData
+Boss1,24,Character,0.3000307,-1.5,160.5452,0,196.75,0,2.5,2.5,2.5,Enemy/Boss/Boss1,High,Enemy,0,0,1,400,400,Enemy/Boss1/Boss1PathData
+Robot1,38,Character,-0.13,-7,65.63,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
+Robot2,21,Character,-6.01,9.1,107.63,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot2,Middle,Enemy,0,0,1,30,120,Enemy/Robot2/Robot2PathData
+Robot2,43,Character,10,9.1,113.1,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot2,Middle,Enemy,0,0,1,30,120,Enemy/Robot2/Robot2PathData
+Robot2,2,Character,-2.905099,9.1,112.5165,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot2,Middle,Enemy,0,0,1,30,120,Enemy/Robot2/Robot2PathData
+Robot2,1,Character,6.895099,9.1,108.2135,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot2,Middle,Enemy,0,0,1,30,120,Enemy/Robot2/Robot2PathData
