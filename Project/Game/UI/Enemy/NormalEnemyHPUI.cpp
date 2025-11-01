@@ -13,14 +13,14 @@ namespace
 	constexpr float kBasePosX = 100.0f;
 	constexpr float kBasePosY = 70.0f;
 	//バーの画像サイズ
-	constexpr float kBarSizeX = 250.0f;
-	constexpr float kBarSizeY = 20.0f;
+	constexpr float kBarSizeX = 100.0f;
+	constexpr float kBarSizeY = 10.0f;
 
 	//ハンドル
-	const std::wstring kHPValue = L"Player/HPValue";
-	const std::wstring kHPValueBack = L"Player/HPValueBack";
-	const std::wstring kHPValueDamage = L"Player/HPValueDamage";
-	const std::wstring kHPValueHeal = L"Player/HPValueHeal";
+	const std::wstring kHPValue = L"Enemy/HPValue";
+	const std::wstring kHPValueBack = L"Enemy/HPValueBack";
+	const std::wstring kHPValueDamage = L"Enemy/HPValueDamage";
+	const std::wstring kHPValueHeal = L"Enemy/HPValueHeal";
 }
 
 NormalEnemyHPUI::NormalEnemyHPUI(std::shared_ptr<CharaStatus> charaStatus, std::weak_ptr<EnemyBase> pEnemy) :

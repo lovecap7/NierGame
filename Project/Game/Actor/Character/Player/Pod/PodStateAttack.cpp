@@ -13,9 +13,9 @@ namespace
 	const std::wstring kAttackAnim = L"Attack";
 	const std::wstring kAttackData = L"NormalShot";
 	//位置
-	constexpr float kPodPosRight = -40.0f;
-	constexpr float kPodPosBack = -40.0f;
-	constexpr float kPodPosUp = 70.0f;
+	constexpr float kPodPosRight = -100.0f;
+	constexpr float kPodPosBack = -100.0f;
+	constexpr float kPodPosUp = 80.0f;
 	//線形補間
 	constexpr float kLerpRate = 0.5f;
 	//弾を打つ高さのオフセット
@@ -74,7 +74,7 @@ void PodStateAttack::Update()
 	Vector3 nowPos = owner->GetPos();
 
 	//座標
-	Vector3 nextPos = Vector3::Lerp(nowPos, GetPodPos(targetPos, dir, kPodPosUp, kPodPosRight, kPodPosBack), kLerpRate);
+	Vector3 nextPos = Vector3::Lerp(nowPos, GetPodPos(targetPos, owner->GetCameraDir(), kPodPosUp, kPodPosRight, kPodPosBack), kLerpRate);
 	owner->GetRb()->SetVec(nextPos - nowPos);
 
 	//向きをカメラに合わせる
