@@ -141,7 +141,7 @@ void PlayerCamera::NormalUpdate(Input& input, Vector3& targetPos)
     Vector3 viewPos = Vector3::Lerp(m_viewPos, targetPos, 0.3f);
     m_viewPos = viewPos;
     // DxLib‚É”½‰f
-    SetCameraPositionAndTarget_UpVecY(
+    DxLib::SetCameraPositionAndTarget_UpVecY(
         m_cameraPos.ToDxLibVector(),
         m_viewPos.ToDxLibVector()
     );

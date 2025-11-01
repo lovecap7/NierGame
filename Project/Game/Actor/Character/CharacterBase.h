@@ -53,6 +53,9 @@ public:
     void ChangeArmor(CharaStatus::Armor armor);
     //アーマーを元に戻す
     void InitArmor();
+
+    //半径
+    virtual float GetRadius()const abstract;
 protected:
     //攻撃データを読み込む
     void InitAttackData(CSVDataLoader& csvLoader, std::wstring path);

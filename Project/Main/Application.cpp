@@ -156,9 +156,9 @@ void Application::Run()
 		ClearDrawScreen();
 		//裏画面にレンダーターゲットを描画
 		m_postProcess->Draw(RT);
-
 		//UIマネージャー
 		uiManager.Draw();
+
 #if _DEBUG
 		if (input.IsPress("AddTimeScale"))
 		{

@@ -40,3 +40,9 @@ void UIManager::Draw() const
 		ui->Draw();
 	}
 }
+
+void UIManager::AllDeleteUI()
+{
+	//ˆê‹C‚É“o˜^‰ğœ
+	m_uis.clear();
+}

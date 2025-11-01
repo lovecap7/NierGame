@@ -11,6 +11,7 @@
 #include "../../../Attack/AttackManager.h"
 #include "../../../Camera/PlayerCamera.h"
 #include "../../../../General/CSV/CSVDataLoader.h"
+#include "../../../UI/Enemy/NormalEnemyHPUI.h"
 #include <DxLib.h>
 #include <cmath>
 #include <cassert>
@@ -51,6 +52,10 @@ void NormalEnemy::Init()
 	m_state->ChangeState(m_state);
 	//ƒ‚ƒfƒ‹‚Ì‚‚³’²®
 	m_model->SetModelHeightAdjust(-m_actorData->m_collRadius);
+
+	//‘Ì—ÍUI
+	auto enemyHPUI = std::make_shared<NormalEnemyHPUI>(m_charaStatus, thisPointer);
+	enemyHPUI->Init();
 }
 
 

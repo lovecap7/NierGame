@@ -101,7 +101,8 @@ void Player::Init()
 	m_model->SetModelHeightAdjust(-m_actorData->m_collRadius);
 
 	//‘Ì—Í
-	UIManager::GetInstance().Entry(std::make_shared<PlayerHPUI>(m_charaStatus));
+	auto playerHPUI = std::make_shared<PlayerHPUI>(m_charaStatus);
+	playerHPUI->Init();
 }
 
 
@@ -416,6 +417,11 @@ bool Player::IsGliding() const
 	return false;
 }
 
+
+float Player::GetRadius() const
+{
+	return std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetRadius();
+}
 
 std::weak_ptr<PlayerCamera> Player::GetPlayerCamera() const
 {

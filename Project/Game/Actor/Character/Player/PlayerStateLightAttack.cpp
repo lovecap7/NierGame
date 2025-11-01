@@ -73,7 +73,7 @@ PlayerStateLightAttack::PlayerStateLightAttack(std::weak_ptr<Actor> player, bool
 			//³‹K‰»
 			toTarget = toTarget.Normalize();
 			//‹ß‚­‚Ü‚ÅˆÚ“®
-			rb->SetPos(targetPos + (toTarget * -200.0f));
+			rb->SetPos(targetPos + (toTarget * -target->GetRadius()));
 		}
 	}
 	//ƒWƒƒƒ“ƒv’†‚È‚ç

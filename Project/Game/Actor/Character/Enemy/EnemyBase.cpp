@@ -108,6 +108,13 @@ bool EnemyBase::IsEnableAttack() const
 	return m_targetInfo.m_isFound && m_attackCoolTime <= 0.0f;
 }
 
+Vector3 EnemyBase::GetHeadPos() const
+{
+	Vector3 headPos = std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetEndPos();
+	headPos.y += GetRadius();
+	return headPos;
+}
+
 void EnemyBase::UpdateLockOnViewPos()
 {
 	//ロックオン座標
@@ -274,6 +281,12 @@ void EnemyBase::InitLightUpEyesEff()
 	//エフェクトを作成
 	m_eyeEffect = EffekseerManager::GetInstance().CreateEffect(GetEffectPath(L"EyeLight"), effPos);
 }
+
+float EnemyBase::GetRadius() const
+{
+	return std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetRadius();
+}
+
 
 void EnemyBase::InitAttackKey(CSVDataLoader& csvLoader, std::wstring path)
 {

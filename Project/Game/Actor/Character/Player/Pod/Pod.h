@@ -55,6 +55,9 @@ public:
 
 	//アニメーション取得
 	std::string GetAnim(std::wstring state) const;
+
+	//半径
+	float GetRadius()const { return 0.0f; };
 private:
 	//プレイヤーの参照
 	std::weak_ptr<Player> m_pPlayer;

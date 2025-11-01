@@ -16,6 +16,7 @@
 #include "../General/ShaderPostProcess.h"
 #include "../Main/Application.h"
 #include "../General/Effect/EffekseerManager.h"
+#include "../Game/UI/UIManager.h"
 
 
 GameScene::GameScene(SceneController& controller, std::wstring stageName) :
@@ -107,6 +108,8 @@ void GameScene::End()
 	AssetManager::GetInstance().DeleteModelHandle();
 	//ポストエフェクトを解除
 	Application::GetInstance().GetPostProcess()->ResetPostEffectState();
+	//UI削除
+	UIManager::GetInstance().AllDeleteUI();
 }
 
 void GameScene::DebugDraw() const

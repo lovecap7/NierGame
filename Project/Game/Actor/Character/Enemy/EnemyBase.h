@@ -29,8 +29,12 @@ public:
 	bool IsEnableAttack() const;
 	//攻撃クールタイム設定
 	void SetAttackCoolTime(float coolTime) { m_attackCoolTime = coolTime; }
+
 	//ロックオンされたときに見られる座標取得
 	Vector3 GetLockOnViewPos() const { return m_lockOnViewPos; }
+	//頭の位置
+	Vector3 GetHeadPos()const;
+
 	//活動取得
 	bool IsActive() const { return m_isActive; }
 	//エリア内か
@@ -57,6 +61,9 @@ public:
 
 	//目が光るエフェクト
 	void InitLightUpEyesEff();
+
+	//半径
+	float GetRadius()const override;
 protected:
 	//攻撃クールタイム
 	float m_attackCoolTime;

@@ -30,6 +30,8 @@ public:
 	void Update();
 	//•`‰æ
 	void Draw()const;
+	//íœ
+	void AllDeleteUI();
 private:
 	std::list<std::shared_ptr<UIBase>> m_uis;
 private:

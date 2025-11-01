@@ -1,8 +1,9 @@
-#include "PlayerHPUI.h"
+#include "NormalEnemyHPUI.h"
 #include "../../../General/AssetManager.h"
 #include "../../../General/CharaStatus.h"
-#include "../../../General/Math/MyMath.h"
+#include "../../Actor/Character/Enemy/EnemyBase.h"
 #include <DxLib.h>
+#include <cassert>
 
 namespace
 {
@@ -20,30 +21,34 @@ namespace
 	const std::wstring kHPValueBack = L"Player/HPValueBack";
 	const std::wstring kHPValueDamage = L"Player/HPValueDamage";
 	const std::wstring kHPValueHeal = L"Player/HPValueHeal";
-	const std::wstring kHPBarFrame = L"Player/HPFrame";
 }
 
-PlayerHPUI::PlayerHPUI(std::shared_ptr<CharaStatus> charaStatus):
-	HPUIBase(charaStatus)
+NormalEnemyHPUI::NormalEnemyHPUI(std::shared_ptr<CharaStatus> charaStatus, std::weak_ptr<EnemyBase> pEnemy) :
+	HPUIBase(charaStatus),
+	m_pEnemy(pEnemy)
+
 {
 	auto& assetManager = AssetManager::GetInstance();
 	m_nowValueHandle = assetManager.GetImageHandle(kHPValue);
 	m_backValueHandle = assetManager.GetImageHandle(kHPValueBack);
 	m_damageValueHandle = assetManager.GetImageHandle(kHPValueDamage);
 	m_healValueHandle = assetManager.GetImageHandle(kHPValueHeal);
-	m_barFrameHandle = assetManager.GetImageHandle(kHPBarFrame);
 	m_beforeNowHP = m_playerStatus->GetNowHP();
 	m_nowHpRate = m_playerStatus->GetHPRate();
 	m_damageValueRate = m_playerStatus->GetHPRate();
 	m_healValueRate = m_playerStatus->GetHPRate();
 }
 
-PlayerHPUI::~PlayerHPUI()
+NormalEnemyHPUI::~NormalEnemyHPUI()
 {
 }
 
-void PlayerHPUI::Update()
+void NormalEnemyHPUI::Update()
 {
+	if (m_pEnemy.expired())return;
+	auto enemy = m_pEnemy.lock();
+	if (!enemy->IsActive())return;
+
 	float nowHP = m_playerStatus->GetNowHP();
 	//体力が前のフレームより低かったら
 	if (nowHP < m_beforeNowHP)
@@ -68,15 +73,21 @@ void PlayerHPUI::Update()
 
 	//体力が回復
 	UpdateHealBar();
+
+	//座標更新
+	m_enemyViewPos = ConvWorldPosToScreenPos(enemy->GetHeadPos().ToDxLibVector());
 }
 
-void PlayerHPUI::Draw() const
+void NormalEnemyHPUI::Draw() const
 {
-	//周りのフレーム
-	DrawRotaGraphF((kBasePosX + kBasePosX + kBarSizeX) * 0.5f, (kBasePosY + kBasePosY + kBarSizeY) * 0.5f, 1.0, 0.0, m_barFrameHandle, true);
+	if (m_pEnemy.expired())return;
+	if (!m_pEnemy.lock()->IsActive())return;
+
+	auto uiPos = m_enemyViewPos;
+	uiPos.x -= (kBarSizeX * 0.5f);
 	//バーの描画
-	DrawExtendGraphF(kBasePosX, kBasePosY, kBasePosX + kBarSizeX, kBasePosY + kBarSizeY, m_backValueHandle, true);
-	DrawExtendGraphF(kBasePosX, kBasePosY, kBasePosX + (kBarSizeX * m_damageValueRate), kBasePosY + kBarSizeY, m_damageValueHandle, true);
-	DrawExtendGraphF(kBasePosX, kBasePosY, kBasePosX + (kBarSizeX * m_healValueRate), kBasePosY + kBarSizeY, m_healValueHandle, true);
-	DrawExtendGraphF(kBasePosX, kBasePosY, kBasePosX + (kBarSizeX * m_nowHpRate), kBasePosY + kBarSizeY, m_nowValueHandle, true);
+	DrawRectGraphF(uiPos.x, uiPos.y, 0, 0, kBarSizeX, kBarSizeY, m_backValueHandle, true);
+	DrawRectGraphF(uiPos.x, uiPos.y, 0, 0, kBarSizeX * m_damageValueRate, kBarSizeY, m_damageValueHandle, true);
+	DrawRectGraphF(uiPos.x, uiPos.y, 0, 0, kBarSizeX * m_healValueRate, kBarSizeY, m_healValueHandle, true);
+	DrawRectGraphF(uiPos.x, uiPos.y, 0, 0, kBarSizeX * m_nowHpRate, kBarSizeY, kBarSizeY, m_nowValueHandle, true);
 }
