@@ -25,7 +25,8 @@ namespace
 
 NormalEnemyHPUI::NormalEnemyHPUI(std::shared_ptr<CharaStatus> charaStatus, std::weak_ptr<EnemyBase> pEnemy) :
 	HPUIBase(charaStatus),
-	m_pEnemy(pEnemy)
+	m_pEnemy(pEnemy),
+	m_isInCameraView(false)
 
 {
 	auto& assetManager = AssetManager::GetInstance();
@@ -75,13 +76,20 @@ void NormalEnemyHPUI::Update()
 	UpdateHealBar();
 
 	//座標更新
-	m_enemyViewPos = ConvWorldPosToScreenPos(enemy->GetHeadPos().ToDxLibVector());
+	VECTOR enemyPos = enemy->GetHeadPos().ToDxLibVector();
+	m_enemyViewPos = ConvWorldPosToScreenPos(enemyPos);
+
+	//カメラに入ってるか
+	m_isInCameraView = !CheckCameraViewClip(enemyPos);
 }
 
 void NormalEnemyHPUI::Draw() const
 {
 	if (m_pEnemy.expired())return;
-	if (!m_pEnemy.lock()->IsActive())return;
+	auto enemy = m_pEnemy.lock();
+	if (!enemy->IsActive())return;
+	//カメラの範囲外の時は描画しない
+	if (!m_isInCameraView)return;
 
 	auto uiPos = m_enemyViewPos;
 	uiPos.x -= (kBarSizeX * 0.5f);

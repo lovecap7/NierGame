@@ -77,16 +77,16 @@ void PlayerStateJump::Update()
 		ChangeState(std::make_shared<PlayerStateDeath>(m_pOwner));
 		return;
 	}
-	//‰ñ”ð
-	if (input.IsBuffered("B") && owner->IsAvoidable())
-	{
-		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
-		return;
-	}
 	//‚â‚ç‚ê
 	if (status->IsHitReaction())
 	{
 		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner));
+		return;
+	}
+	//‰ñ”ð
+	if (input.IsBuffered("B") && owner->IsAvoidable())
+	{
+		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
 		return;
 	}
 	//—Ž‰º

@@ -7,6 +7,7 @@
 #include "../Actor/Actor.h"
 #include "../Actor/Character/Enemy/EnemyBase.h"
 #include "../../General/Game.h"
+#include "../UI/Camera/PlayerCameraUI.h"
 
 namespace
 {
@@ -44,7 +45,8 @@ PlayerCamera::PlayerCamera() :
 	m_playerPos(Vector3::Zero()),
     m_lockOnSide(kRightOffset),
     m_nextlockOnSide(kRightOffset),
-    m_lastInputCountFrame(0.0f)
+    m_lastInputCountFrame(0.0f),
+    m_lockOnUI()
 {
 }
 
@@ -64,6 +66,11 @@ void PlayerCamera::Init()
 	m_playerPos = Vector3::Zero();
     m_lockOnSide = kRightOffset;
     m_nextlockOnSide = kRightOffset;
+
+    //UI
+    auto lockOnUI = std::make_shared<PlayerCameraUI>(std::dynamic_pointer_cast<PlayerCamera>(shared_from_this()));
+    lockOnUI->Init();
+    m_lockOnUI = lockOnUI;
 }
 
 void PlayerCamera::Update()
@@ -101,9 +108,17 @@ void PlayerCamera::EndLockOn()
 	m_isLockOn = false;
 	m_lockOnTarget.reset();
 }
-
 void PlayerCamera::NormalUpdate(Input& input, Vector3& targetPos)
 {
+    //UI‚Ì”ñ•\Ž¦
+    if (!m_lockOnUI.expired())
+    {
+        auto lockOnUI = m_lockOnUI.lock();
+        if (lockOnUI->IsLockOn())
+        {
+            lockOnUI->DisableLockOn();
+        }
+    }
     //“ü—Í‚ª“ü‚Á‚Ä‚¢‚é‚Æ‚«
     if (input.GetStickInfo().IsRightStickInput())
     {
@@ -152,6 +167,16 @@ void PlayerCamera::LockOnUpdate(Input& input, Vector3& targetPos)
     if (m_lockOnTarget.expired()) return;
     auto lockOnTarget = m_lockOnTarget.lock();
     if (lockOnTarget->GetGameTag() != GameTag::Enemy)return;
+
+    //UI‚Ì•\Ž¦
+    if (!m_lockOnUI.expired())
+    {
+        auto lockOnUI = m_lockOnUI.lock();
+        if (!lockOnUI->IsLockOn())
+        {
+            lockOnUI->EnableLockOn(std::dynamic_pointer_cast<EnemyBase>(lockOnTarget));
+        }
+    }
 
     Vector3 lockPos = targetPos;
 

@@ -1,7 +1,9 @@
 #pragma once
 #include "../../General/Collision/Rigidbody.h"
 #include "../../General/Math/MyMath.h"
-class CameraBase abstract
+#include <memory>
+class CameraBase abstract:
+	public std::enable_shared_from_this<CameraBase>
 {
 public:
 	CameraBase();

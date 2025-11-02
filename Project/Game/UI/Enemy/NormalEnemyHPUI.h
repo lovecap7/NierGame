@@ -19,5 +19,7 @@ private:
 	std::weak_ptr<EnemyBase> m_pEnemy;
 	//“G‚ÌÀ•W
 	Vector3 m_enemyViewPos;
+	//ƒJƒƒ‰‚É‰f‚Á‚Ä‚¢‚é‚©
+	bool m_isInCameraView;
 };
 

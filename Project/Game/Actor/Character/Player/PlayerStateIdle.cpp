@@ -62,16 +62,16 @@ void PlayerStateIdle::Update()
 		ChangeState(std::make_shared<PlayerStateFall>(m_pOwner));
 		return;
 	}
-	//‰ñ”ğ
-	if (input.IsBuffered("B") && owner->IsAvoidable())
-	{
-		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
-		return;
-	}
 	//‚â‚ç‚ê
 	if (owner->GetCharaStatus()->IsHitReaction())
 	{
 		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner));
+		return;
+	}
+	//‰ñ”ğ
+	if (input.IsBuffered("B") && owner->IsAvoidable())
+	{
+		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
 		return;
 	}
 	//UŒ‚

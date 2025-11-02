@@ -131,6 +131,12 @@ void PlayerStateLightAttack::Update()
 		ChangeState(std::make_shared<PlayerStateDeath>(m_pOwner));
 		return;
 	}
+	//やられ
+	if (owner->GetCharaStatus()->IsHitReaction())
+	{
+		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner));
+		return;
+	}
 	//回避
 	if (input.IsBuffered("B") && owner->IsAvoidable() && !m_isJust)
 	{
@@ -138,13 +144,6 @@ void PlayerStateLightAttack::Update()
 		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
 		return;
 	}
-	//やられ
-	if (owner->GetCharaStatus()->IsHitReaction())
-	{
-		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner));
-		return;
-	}
-
 	//フレームをカウント
 	CountFrame();
 	
