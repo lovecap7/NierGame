@@ -25,6 +25,8 @@ namespace
 NormalEnemy::NormalEnemy(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager):
 	EnemyBase(actorData, charaStatusData, pActorManager)
 {
+	//É{ÉXÇ≈ÇÕÇ»Ç¢
+	m_isBoss = false;
 }
 NormalEnemy::~NormalEnemy()
 {

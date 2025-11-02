@@ -24,6 +24,7 @@ EnemyBase::EnemyBase(std::shared_ptr<ActorData> actorData, std::shared_ptr<Chara
 	CharacterBase(actorData, charaStatusData, Shape::Capsule, pActorManager),
 	m_attackCoolTime(0.0f),
 	m_isActive(true),
+	m_isBoss(false),
 	m_isAlerted(true),
 	m_isInArea(false),
 	m_rightEyeIndex(0),
@@ -114,13 +115,16 @@ Vector3 EnemyBase::GetHeadPos() const
 	headPos.y += GetRadius();
 	return headPos;
 }
+Vector3 EnemyBase::GetCenterPos() const
+{
+	Vector3 start = m_rb->GetPos();
+	Vector3 end = std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetEndPos();
+	return (start + end) * 0.5f;
+}
 
 void EnemyBase::UpdateLockOnViewPos()
 {
-	//ロックオン座標
-	Vector3 start = m_rb->GetPos();
-	Vector3 end = std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetEndPos();
-	m_lockOnViewPos = (start + end) * 0.5f;
+	m_lockOnViewPos = GetCenterPos();
 }
 
 void EnemyBase::SearchTarget(std::shared_ptr<Player> player)

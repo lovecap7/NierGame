@@ -13,6 +13,7 @@
 #include "Character/Player/Weapon/Weapon.h"
 #include "Character/Player/Pod/Pod.h"
 #include "Character/Enemy/EnemyManager.h"
+#include "Character/Enemy/Boss/Boss1.h"
 
 
 namespace
@@ -166,9 +167,16 @@ std::shared_ptr<CharacterBase> ActorManager::CreateChara(GameTag tag, std::share
 	}
 	else if (tag == GameTag::Enemy)
 	{
-		//敵キャラクター
-		//今回はノーマルエネミーのみ
-		chara = std::make_shared<NormalEnemy>(actorData, charaStatusData, shared_from_this());
+		if (actorData->m_name == L"Boss1")
+		{
+			//ボス1
+			chara = std::make_shared<Boss1>(actorData, charaStatusData, shared_from_this());
+		}
+		else
+		{
+			//敵キャラクター
+			chara = std::make_shared<NormalEnemy>(actorData, charaStatusData, shared_from_this());
+		}
 	}
 	//nullチェック
 	assert(chara);

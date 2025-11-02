@@ -4,6 +4,8 @@
 #include "PlayerStateMoving.h"
 #include "PlayerStateLightAttack.h"
 #include "PlayerStateHeavyAttack.h"
+#include "PlayerStateDeath.h"
+#include "PlayerStateHit.h"
 #include "../../../../General/Input.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Collision/Rigidbody.h"
@@ -142,6 +144,19 @@ void PlayerStateAvoid::Update()
 
 	//入力
 	auto& input = Input::GetInstance();
+
+	//死亡
+	if (owner->GetCharaStatus()->IsDead())
+	{
+		ChangeState(std::make_shared<PlayerStateDeath>(m_pOwner));
+		return;
+	}
+	//やられ
+	if (owner->GetCharaStatus()->IsHitReaction())
+	{
+		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner));
+		return;
+	}
 
 	//フレームカウント
 	CountFrame();

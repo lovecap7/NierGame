@@ -29,15 +29,6 @@ public:
 	void Complete() override;
 	//終了処理
 	void End()override;
-	//ステートにアクセスさせる関数
-	//リジッドボディ
-	std::shared_ptr<Rigidbody> GetRb() const { return m_rb; }
-	//コリジョン
-	std::shared_ptr<ColliderBase> GetColl() const { return m_collisionData; }
-	//コリジョンの状態を設定
-	void SetCollState(CollisionState collState) { m_collState = collState; }
-	CollisionState GetCollState()const { return m_collState; };
 
-	
 };
 

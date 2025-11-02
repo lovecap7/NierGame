@@ -22,9 +22,13 @@ EnemyStateDeath::EnemyStateDeath(std::weak_ptr<Actor> enemy) :
 	owner->GetModel()->SetAnim(owner->GetAnim(kDeath).c_str(), false);
 	owner->SetCollState(CollisionState::Dead);
 
-	//‚Ó‚Á‚Æ‚Î‚³‚ê‚é
-	owner->GetRb()->SetVecY(MyMath::GetRandF(kMinSmashPower, kMaxSmashPower));
-	owner->GetRb()->AddVec(owner->GetToTargetVec() * -MyMath::GetRandF(kMinSmashPower, kMaxSmashPower));
+	//ƒ{ƒX‚Å‚Í‚È‚¢‚È‚ç
+	if (!owner->IsBoss())
+	{
+		//‚Ó‚Á‚Æ‚Î‚³‚ê‚é
+		owner->GetRb()->SetVecY(MyMath::GetRandF(kMinSmashPower, kMaxSmashPower));
+		owner->GetRb()->AddVec(owner->GetToTargetVec() * -MyMath::GetRandF(kMinSmashPower, kMaxSmashPower));
+	}
 
 	//–³“G‚É
 	owner->GetCharaStatus()->SetIsNoDamage(true);

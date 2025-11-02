@@ -23,6 +23,18 @@ public:
 	//描画
 	void Draw()const override;
 
+	//ステートにアクセスさせる関数
+	//リジッドボディ
+	std::shared_ptr<Rigidbody> GetRb() const { return m_rb; }
+	//コリジョン
+	std::shared_ptr<ColliderBase> GetColl() const { return m_collisionData; }
+	//コリジョンの状態を設定
+	void SetCollState(CollisionState collState) { m_collState = collState; }
+	CollisionState GetCollState()const { return m_collState; };
+
+	//ボスかどうか
+	bool IsBoss()const { return m_isBoss; };
+
 	//攻撃クールタイム取得
 	float GetAttackCoolTime() const { return m_attackCoolTime; }
 	//攻撃可能
@@ -34,6 +46,8 @@ public:
 	Vector3 GetLockOnViewPos() const { return m_lockOnViewPos; }
 	//頭の位置
 	Vector3 GetHeadPos()const;
+	//中心
+	Vector3 GetCenterPos()const;
 
 	//活動取得
 	bool IsActive() const { return m_isActive; }
@@ -57,7 +71,7 @@ public:
 	bool IsEnableMeleeAttack() const;
 
 	//今の距離から攻撃を返す(空も返す可能性もあるのでnullチェックが必要)
-	std::shared_ptr<AttackData> GetAttackByDistance()const;
+	virtual std::shared_ptr<AttackData> GetAttackByDistance()const;
 
 	//目が光るエフェクト
 	void InitLightUpEyesEff();
@@ -65,6 +79,8 @@ public:
 	//半径
 	float GetRadius()const override;
 protected:
+	//ボスかどうか
+	bool m_isBoss;
 	//攻撃クールタイム
 	float m_attackCoolTime;
 	//ロックオンされたときに見られる座標
@@ -94,7 +110,7 @@ protected:
 	//ロックオンされたときに見られる座標設定
 	void UpdateLockOnViewPos();
 	//ランダムに攻撃を取得
-	std::shared_ptr<AttackData> GetRandomAttack(std::vector<std::wstring> keys) const;
+	virtual std::shared_ptr<AttackData> GetRandomAttack(std::vector<std::wstring> keys) const;
 	//攻撃のキーの初期化
 	void InitAttackKey(CSVDataLoader& csvLoader, std::wstring path);
 	//目の位置のインデックス

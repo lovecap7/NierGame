@@ -293,6 +293,8 @@ void PlayerStateLightAttack::UpdateStartAttack(std::shared_ptr<Player>& owner, s
 			{
 				//d—Í‚ðŽó‚¯‚é
 				owner->GetRb()->SetIsGravity(true);
+				//‹ó’†UŒ‚‚ð‚µ‚½
+				owner->SetIsAirAttacked(true);
 			}
 		}
 
