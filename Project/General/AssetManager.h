@@ -38,6 +38,10 @@ public:
 	int GetImageHandle(std::wstring path);
 	//画像ハンドル削除
 	void DeleteImageHandle();
+
+	//全て削除
+	void AllDelete();
+
 private:
 	//モデルリソース
 	std::map<std::wstring,int>m_modelHandles;

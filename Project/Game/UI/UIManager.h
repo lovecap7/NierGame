@@ -28,8 +28,10 @@ public:
 
 	//XV
 	void Update();
-	//•`‰æ
-	void Draw()const;
+	//‘O•`‰æ
+	void FrontDraw()const;
+	//Œã•`‰æ
+	void BackDraw()const;
 	//íœ
 	void AllDeleteUI();
 private:

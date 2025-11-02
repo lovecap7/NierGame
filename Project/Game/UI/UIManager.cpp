@@ -32,11 +32,22 @@ void UIManager::Update()
 	}
 }
 
-void UIManager::Draw() const
+void UIManager::FrontDraw() const
 {
 	//•`‰æ
 	for (auto& ui : m_uis)
 	{
+		if (!ui->IsFrontDraw())continue;
+		ui->Draw();
+	}
+}
+
+void UIManager::BackDraw() const
+{
+	//•`‰æ
+	for (auto& ui : m_uis)
+	{
+		if (ui->IsFrontDraw())continue;
 		ui->Draw();
 	}
 }

@@ -14,5 +14,10 @@ public:
 	virtual void Update() abstract;
 	//•`‰æ
 	virtual void Draw()const abstract;
+	//•`‰æ‡
+	bool IsFrontDraw()const { return m_isFrontDraw; };
+protected:
+	//•`‰æ‡
+	bool m_isFrontDraw;
 };
 

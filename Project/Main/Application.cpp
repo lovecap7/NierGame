@@ -108,8 +108,10 @@ void Application::Run()
 	{
 		//今回のループが始まった時間を覚えておく
 		LONGLONG time = GetNowHiPerformanceCount();
+
 		//更新
 		input.Update();
+
 #if _DEBUG
 		if (input.IsTrigger("Glitch"))
 		{
@@ -137,27 +139,40 @@ void Application::Run()
 		{
 			//ターゲット
 			SetDrawScreen(RT);
+
 			//フェード
 			fader.Update();
+
 			//画面全体をクリア
 			ClearDrawScreen();
+
 			sceneController->Update();
+
 			physics.Update();
+
 			m_postProcess->Update();
+
 			uiManager.Update();
 		}
 		//描画
 		sceneController->Draw();
-		//フェード
-		fader.Draw();
+	
+		//前描画
+		uiManager.FrontDraw();
 
 		//裏描画
 		SetDrawScreen(DX_SCREEN_BACK);
 		ClearDrawScreen();
+
 		//裏画面にレンダーターゲットを描画
 		m_postProcess->Draw(RT);
-		//UIマネージャー
-		uiManager.Draw();
+
+		//後描画
+		uiManager.BackDraw();
+
+		//フェード
+		fader.Draw();
+
 
 #if _DEBUG
 		if (input.IsPress("AddTimeScale"))

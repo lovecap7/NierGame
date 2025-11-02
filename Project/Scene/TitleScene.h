@@ -1,9 +1,11 @@
 #pragma once
 #include "SceneBase.h"
 #include "../General/StageIndex.h"
+#include <memory>
 class Input;
 class SceneController;
-
+class CameraController;
+class TitleUI;
 class TitleScene :
     public SceneBase
 {
@@ -23,6 +25,9 @@ public:
     //デバッグ用
     virtual void DebugDraw() const override;
 private:
-    
+    //カメラ
+    std::shared_ptr<CameraController> m_cameraController;
+    //フレームカウント
+    int m_hardShakingCountFrame;
 };
 

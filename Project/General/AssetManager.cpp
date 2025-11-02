@@ -114,3 +114,10 @@ void AssetManager::DeleteImageHandle()
     }
     m_imageHandles.clear();
 }
+
+void AssetManager::AllDelete()
+{
+    DeleteImageHandle();
+    DeleteEffectHandle();
+    DeleteModelHandle();
+}

@@ -1,7 +1,8 @@
 #include "UIBase.h"
 #include "UIManager.h"
 
-UIBase::UIBase()
+UIBase::UIBase():
+	m_isFrontDraw(false)
 {
 }
 
