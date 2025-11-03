@@ -128,20 +128,20 @@ void ActorManager::CreateActorCSV(const wchar_t* folderName, const wchar_t* file
 		auto actorData = std::make_shared<ActorData>(data);
 		//アクターを作成
 		std::shared_ptr<Actor> actor;
-		if (actorData->m_actorType == ActorData::ActorType::Character)
+		if (actorData->GetActorType() == ActorData::ActorType::Character)
 		{
 			for (auto& statusData : csvStatusDatas)
 			{
 				auto tStatusData = std::make_shared<CharaStatusData>(statusData);
 				//IDが一致するなら
-				if (tStatusData->m_id == actorData->m_actorID)
+				if (tStatusData->GetID() == actorData->GetActorID())
 				{
 					//キャラクター作成
-					actor = CreateChara(actorData->m_gameTag, actorData, tStatusData);
+					actor = CreateChara(actorData->GetGameTag(), actorData, tStatusData);
 				}
 			}
 		}
-		else if (actorData->m_actorType == ActorData::ActorType::Stage)
+		else if (actorData->GetActorType() == ActorData::ActorType::Stage)
 		{
 			//ステージ
 			actor = std::make_shared<StageObject>(actorData, shared_from_this());
@@ -149,7 +149,7 @@ void ActorManager::CreateActorCSV(const wchar_t* folderName, const wchar_t* file
 		Entry(actor);
 
 		//プレイヤーなら
-		if (actorData->m_gameTag == GameTag::Player)
+		if (actorData->GetGameTag() == GameTag::Player)
 		{
 			//武器を持たせる
 			SetUpPlayer(std::dynamic_pointer_cast<Player>(actor));
@@ -167,7 +167,7 @@ std::shared_ptr<CharacterBase> ActorManager::CreateChara(GameTag tag, std::share
 	}
 	else if (tag == GameTag::Enemy)
 	{
-		if (actorData->m_name == L"Boss1")
+		if (actorData->GetName() == L"Boss1")
 		{
 			//ボス1
 			chara = std::make_shared<Boss1>(actorData, charaStatusData, shared_from_this());
@@ -205,7 +205,7 @@ void ActorManager::SetUpPlayer(std::shared_ptr<Player> player)
 		Entry(weapon);
 
 		//武器をセット
-		if (weaponData->m_name == L"LightSword")
+		if (weaponData->GetName() == L"LightSword")
 		{
 			//片手剣
 			player->SetSword(weapon,true);
@@ -225,10 +225,10 @@ void ActorManager::SetUpPlayer(std::shared_ptr<Player> player)
 	//必要な情報のみをセットしていく
 	//アクターデータ
 	auto podActorData = std::make_shared<ActorData>();
-	podActorData->m_scale = podData->m_scale;
-	podActorData->m_modelPath = podData->m_modelPath;
+	podActorData->SetScale(podData->GetScale());
+	podActorData->SetModelPath(podData->GetModelPath());
 	auto podStatusData = std::make_shared<CharaStatusData>();
-	podStatusData->m_at = podData->m_at;
+	podStatusData->SetAT(podData->GetAT());
 	//ポッドを作成
 	std::shared_ptr<Pod> pod = std::make_shared<Pod>(podActorData, podStatusData, shared_from_this(), player);
 

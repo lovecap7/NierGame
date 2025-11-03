@@ -19,29 +19,29 @@ Actor::Actor(std::shared_ptr<ActorData> actorData,Shape shape, std::weak_ptr<Act
 	if (!m_actorData)return;
 	//モデル
 	auto& assetManager = AssetManager::GetInstance();
-	int handle = assetManager.GetModelHandle(m_actorData->m_modelPath);
-	m_model = std::make_shared<Model>(handle, m_actorData->m_pos.ToDxLibVector());
+	int handle = assetManager.GetModelHandle(m_actorData->GetModelPath());
+	m_model = std::make_shared<Model>(handle, m_actorData->GetPos().ToDxLibVector());
 	//大きさ
-	m_model->SetScale(m_actorData->m_scale.ToDxLibVector());
+	m_model->SetScale(m_actorData->GetScale().ToDxLibVector());
 	//回転量
-	m_model->SetRot(m_actorData->m_rot.ToDxLibVector());
+	m_model->SetRot(m_actorData->GetRot().ToDxLibVector());
 	//座標
-	m_rb->SetPos(m_actorData->m_pos);
+	m_rb->SetPos(m_actorData->GetPos());
 	//コライダーの設定
 	switch (shape)
 	{
 	case Shape::Sphere:
 	{
 		auto coll = std::dynamic_pointer_cast<SphereCollider>(m_collisionData);
-		coll->SetRadius(m_actorData->m_collRadius);
+		coll->SetRadius(m_actorData->GetCollRadius());
 		break;
 	}
 	case Shape::Capsule:
 	{
 		auto coll = std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData);
-		coll->SetRadius(m_actorData->m_collRadius);
+		coll->SetRadius(m_actorData->GetCollRadius());
 		Vector3 endPos = m_rb->m_pos;
-		endPos.y += m_actorData->m_collHeight;
+		endPos.y += m_actorData->GetCollHeight();
 		coll->SetEndPos(endPos);
 		break;
 	}
@@ -54,17 +54,17 @@ Actor::Actor(std::shared_ptr<ActorData> actorData,Shape shape, std::weak_ptr<Act
 	case Shape::Torus:
 	{
 		auto coll = std::dynamic_pointer_cast<TorusCollider>(m_collisionData);
-		coll->SetRadius(m_actorData->m_collRadius);
-		coll->SetRange(m_actorData->m_collHeight);
+		coll->SetRadius(m_actorData->GetCollRadius());
+		coll->SetRange(m_actorData->GetCollHeight());
 		break;
 	}
 	default:
 		break;
 	};
-	AllSetting(m_actorData->m_priority, m_actorData->m_gameTag, m_actorData->m_isTrough, m_actorData->m_isTrigger, m_actorData->m_isGravity);
+	AllSetting(m_actorData->GetPriority(), m_actorData->GetGameTag(), m_actorData->IsTrough(), m_actorData->IsTrigger(), m_actorData->IsGravity());
 
 	//IDの設定
-	SetID(m_actorData->m_actorID);
+	SetID(m_actorData->GetActorID());
 }
 
 void Actor::SetID(int id)

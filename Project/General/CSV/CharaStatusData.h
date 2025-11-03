@@ -10,6 +10,31 @@ public:
 	CharaStatusData(std::shared_ptr<CSVData> data);
 	~CharaStatusData();
 	//ステータス
+	//ID
+	int	GetID()const { return m_id; };
+	//最大体力
+	int	GetHP()const { return m_hp; };		
+	//攻撃力
+	int	GetAT()const { return m_at; };
+	void SetAT(int at) { m_at = at; };
+	//防御力
+	int GetDF()const { return m_df; };
+	//移動速度
+	float GetMS()const { return m_ms; };
+	//ジャンプ力
+	float GetJP()const { return m_jp; };
+	//アーマー
+	CharaStatus::Armor  GetAR()const { return m_ar; };
+	//索敵半径
+	float GetSearchRange()const { return m_searchRange; };
+	//索敵アングル
+	float GetSearchAngle()const { return m_searchAngle; };
+	//近接攻撃距離
+	float GetMeleeAttackRange()const { return m_meleeAttackRange; };
+private:
+	//変換
+	void Conversion() override;
+	//ステータス
 	int					m_id;		//ID
 	int					m_hp;		//最大体力
 	int					m_at;		//攻撃力
@@ -20,8 +45,5 @@ public:
 	float m_searchRange;			//索敵半径
 	float m_searchAngle;			//索敵アングル
 	float m_meleeAttackRange;			//近接攻撃距離
-private:
-	//変換
-	void Conversion() override;
 };
 

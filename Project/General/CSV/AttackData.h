@@ -13,10 +13,10 @@ public:
 	~AttackData();
 
 	//攻撃の名前
-	std::wstring m_name;
+	std::wstring GetName()const { return m_name; };
 
 	//多段ヒットか
-	bool m_isMultipleHit;
+	bool IsMultipleHit()const { return m_isMultipleHit; };
 
 	enum class AttackType : int
 	{
@@ -27,6 +27,74 @@ public:
 		Punch	= 4, //パンチ
 		AOE		= 5	 //範囲ダメージ
 	};
+	//攻撃タイプ
+	AttackType GetAttackType()const { return m_attackType; };
+
+	//威力
+	int GetAttackPower()const { return m_attackPower; };
+
+	//攻撃の重さ
+	CharaStatus::AttackWeight GetAttackWeight()const { return m_attackWeight; };
+
+	//アーマー
+	CharaStatus::Armor GetArmor()const { return m_armor; };
+
+	//ノックバックの大きさ
+	float GetKnockBackPower(){ return m_knockBackPower; };
+
+	//上方向の力
+	float GetVerticalPower()const { return m_verticalPower; };
+
+	//発生フレーム
+	int GetStartFrame()const { return m_startFrame; };
+
+	//持続フレーム
+	int GetKeepFrame()const { return m_keepFrame; };
+
+	//半径
+	float GetRadius()const { return m_radius; };
+
+	//長さ
+	float GetLength()const { return m_length; };
+
+	//前進速度
+	float GetMoveSpeed()const { return m_moveSpeed; };
+
+	//前進フレーム
+	int GetMoveFrame()const { return m_moveFrame; };
+	
+	//アニメーションの名前
+	std::wstring GetAnimName()const { return m_animName; };
+
+	//次の攻撃の名前
+	std::wstring GetNextAttackName()const { return m_nextAttackName; };
+
+	//攻撃の基準位置
+	enum class AttackOriginPos : int
+	{
+		Owner = 0, //持ち主の位置
+		Center = 1,//攻撃の中心位置
+	};
+	AttackOriginPos GetAttackOriginPos()const { return m_attackOriginPos; };
+
+	//キャンセル
+	int GetCancelFrame()const { return m_cancelFrame; };
+
+	//パラメータ
+	float GetParam1()const { return m_param1; };
+	float GetParam2()const { return m_param2; };
+	float GetParam3()const { return m_param3; };
+	
+private:
+	//変換
+	void Conversion() override;
+
+	//攻撃の名前
+	std::wstring m_name;
+
+	//多段ヒットか
+	bool m_isMultipleHit;
+
 	//攻撃タイプ
 	AttackType m_attackType;
 
@@ -62,7 +130,7 @@ public:
 
 	//前進フレーム
 	int m_moveFrame;
-	
+
 	//アニメーションの名前
 	std::wstring m_animName;
 
@@ -70,11 +138,6 @@ public:
 	std::wstring m_nextAttackName;
 
 	//攻撃の基準位置
-	enum class AttackOriginPos : int
-	{
-		Owner = 0, //持ち主の位置
-		Center = 1,//攻撃の中心位置
-	};
 	AttackOriginPos m_attackOriginPos;
 
 	//キャンセル
@@ -85,8 +148,5 @@ public:
 	float m_param2;
 	float m_param3;
 
-private:
-	//変換
-	void Conversion() override;
 };
 

@@ -55,7 +55,7 @@ PlayerStateLightAttack::PlayerStateLightAttack(std::weak_ptr<Actor> player, bool
 		//攻撃データ取得
 		m_attackData = owner->GetAttackData(kJustAttackName);
 		//上昇
-		rb->SetVecY(m_attackData->m_param1);
+		rb->SetVecY(m_attackData->GetParam1());
 		//この攻撃の場合重力を受ける
 		rb->SetIsGravity(true);
 		//透明
@@ -82,7 +82,7 @@ PlayerStateLightAttack::PlayerStateLightAttack(std::weak_ptr<Actor> player, bool
 		//攻撃データ取得
 		m_attackData = owner->GetAttackData(kJumpAttackName);
 		//上昇
-		rb->SetVecY(m_attackData->m_param1);
+		rb->SetVecY(m_attackData->GetParam1());
 		//この攻撃の場合重力を受ける
 		rb->SetIsGravity(true);
 		//空中攻撃をしたことはなし
@@ -94,10 +94,10 @@ PlayerStateLightAttack::PlayerStateLightAttack(std::weak_ptr<Actor> player, bool
 		m_attackData = owner->GetAttackData(kFirstGroundAttackName);
 	}
 	//アニメーション
-	owner->GetModel()->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), false);
+	owner->GetModel()->SetAnim(owner->GetAnim(m_attackData->GetAnimName()).c_str(), false);
 
 	//アーマー
-	owner->ChangeArmor(m_attackData->m_armor);
+	owner->ChangeArmor(m_attackData->GetArmor());
 }
 
 PlayerStateLightAttack::~PlayerStateLightAttack()
@@ -165,7 +165,7 @@ void PlayerStateLightAttack::Update()
 
 
 	//長押ししているフレームをカウント
-	if (input.IsPress("X") && m_attackData->m_animName != kChargeName && owner->IsFloor())
+	if (input.IsPress("X") && m_attackData->GetAnimName() != kChargeName && owner->IsFloor())
 	{
 		m_chargeCountFrame += owner->GetTimeScale();
 	}
@@ -174,10 +174,10 @@ void PlayerStateLightAttack::Update()
 		m_chargeCountFrame = 0.0f;
 	}
 	//多段ヒット攻撃中はキャンセル攻撃をしない
-	if (!m_attackData->m_isMultipleHit)
+	if (!m_attackData->IsMultipleHit())
 	{
 		//キャンセルフレーム
-		if ((model->GetTotalAnimFrame() - m_attackData->m_cancelFrame) < m_frame)
+		if ((model->GetTotalAnimFrame() - m_attackData->GetCancelFrame()) < m_frame)
 		{
 			//攻撃の条件
 			bool isChargeAttack = m_chargeCountFrame >= kChargeFrame;
@@ -190,7 +190,7 @@ void PlayerStateLightAttack::Update()
 			if (isChargeAttack || isCombAttack)
 			{
 				//次の攻撃名
-				auto nextName = m_attackData->m_nextAttackName;
+				auto nextName = m_attackData->GetNextAttackName();
 
 				//チャージ攻撃をするなら
 				if (isChargeAttack)
@@ -214,7 +214,7 @@ void PlayerStateLightAttack::Update()
 					m_isAppearedAttack = false;
 
 					//アニメーション
-					model->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), false);
+					model->SetAnim(owner->GetAnim(m_attackData->GetAnimName()).c_str(), false);
 
 					//フレームリセット
 					m_frame = 0.0f;
@@ -249,7 +249,7 @@ void PlayerStateLightAttack::Update()
 	//攻撃位置の更新
 	UpdateAttackPosition(owner, weapon);
 	//ジャスト回避の上昇のリセット
-	if (m_isJust && m_frame >= m_attackData->m_moveFrame)
+	if (m_isJust && m_frame >= m_attackData->GetMoveFrame())
 	{
 		//縦の移動量をリセット
 		owner->GetRb()->SetVecY(0.0f);
@@ -258,13 +258,13 @@ void PlayerStateLightAttack::Update()
 
 void PlayerStateLightAttack::UpdateStartAttack(std::shared_ptr<Player>& owner, std::shared_ptr<Weapon>& weapon)
 {
-	if (m_frame >= m_attackData->m_startFrame)
+	if (m_frame >= m_attackData->GetStartFrame())
 	{
 		//持続が切れたら
 		if (m_isAppearedAttack && m_pAttack.expired())
 		{
 			//多段ヒット攻撃の処理
-			if (m_attackData->m_isMultipleHit && m_attackData->m_nextAttackName != L"None")
+			if (m_attackData->IsMultipleHit() && m_attackData->GetNextAttackName() != L"None")
 			{
 				//多段ヒット攻撃
 				LoadNextMultipleHitAttack(owner,weapon);
@@ -283,7 +283,7 @@ void PlayerStateLightAttack::UpdateStartAttack(std::shared_ptr<Player>& owner, s
 			//持続中は空中なら落下しない
 			//切り上げ攻撃とジャスト回避攻撃以外
 			if (!owner->IsFloor() && 
-				!(m_attackData->m_animName == kJumpAttackName || m_isJust))
+				!(m_attackData->GetAnimName() == kJumpAttackName || m_isJust))
 			{
 				//重力を受けない
 				owner->GetRb()->SetIsGravity(false);

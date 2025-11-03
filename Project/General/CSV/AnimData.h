@@ -18,13 +18,20 @@ public:
 		BigSword,
 	};
 	//状態
+	std::wstring GetStateName()const { return m_stateName; };
+	//武器
+	WeaponType GetWeaponType()const { return m_weaponType; };
+	//アニメーション
+	std::string GetAnimName()const { return m_animName; };
+private:
+	//変換
+	void Conversion() override;
+
+	//状態
 	std::wstring m_stateName;
 	//武器
 	WeaponType m_weaponType;
 	//アニメーション
 	std::string m_animName;
-private:
-	//変換
-	void Conversion() override;
 };
 

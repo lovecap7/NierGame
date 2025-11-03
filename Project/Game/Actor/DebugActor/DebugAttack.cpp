@@ -35,7 +35,7 @@ void DebugAttack::Update()
 
 void DebugAttack::Draw() const
 {
-	DrawSphere3D(VGet(m_rb->m_pos.x, m_rb->m_pos.y, m_rb->m_pos.z), m_actorData->m_collRadius, 16, 0xff0000, 0, false);
+	DrawSphere3D(VGet(m_rb->m_pos.x, m_rb->m_pos.y, m_rb->m_pos.z), m_actorData->GetCollRadius(), 16, 0xff0000, 0, false);
 	DrawFormatString(0, 120, 0xffffff, L"Enemy‚ÌTimeScale = %.1f", m_rb->m_myTimeScale);
 }
 

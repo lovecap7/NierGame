@@ -51,7 +51,7 @@ void DebugEnemy::Draw() const
 		color = GetColor(0, 255, 255);
 	}
 
-	DrawSphere3D(VGet(m_rb->m_pos.x, m_rb->m_pos.y, m_rb->m_pos.z), m_actorData->m_collRadius, 16, color, 0, true);
+	DrawSphere3D(VGet(m_rb->m_pos.x, m_rb->m_pos.y, m_rb->m_pos.z), m_actorData->GetCollRadius(), 16, color, 0, true);
 	//‘Ì—Í
 	DrawFormatString(0, 120, 0xffffff, L"Enemy‚Ì‘Ì—Í‚Í = %d", m_charaStatus->GetNowHP());
 }

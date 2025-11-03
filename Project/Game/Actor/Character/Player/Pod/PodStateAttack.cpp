@@ -84,7 +84,7 @@ void PodStateAttack::Update()
 	CountFrame();
 
 	//発生フレームになったら弾を打つ
-	if (m_attackData->m_startFrame <= m_frame)
+	if (m_attackData->GetStartFrame() <= m_frame)
 	{
 		//弾を打つ
 		auto bullets = owner->GetBullets();
@@ -94,7 +94,7 @@ void PodStateAttack::Update()
 			if (!bullet->IsActive())
 			{
 				//Activeにしつつフラグ等のリセット
-				bullet->Reset(m_attackData->m_keepFrame);
+				bullet->Reset(m_attackData->GetKeepFrame());
 				//ポッドの少し上
 				Vector3 bulletPos = owner->GetPos();
 				bulletPos.y += kShotPosYOffset;
@@ -107,7 +107,7 @@ void PodStateAttack::Update()
 				{
 					bulletDir = bulletDir.Normalize();
 				}
-				bullet->SetMoveVec(bulletDir * m_attackData->m_moveSpeed);
+				bullet->SetMoveVec(bulletDir * m_attackData->GetMoveSpeed());
 				owner->SetAttack(bullet);
 				break;
 			}

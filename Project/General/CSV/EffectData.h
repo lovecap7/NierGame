@@ -12,13 +12,19 @@ public:
 	~EffectData();
 	
 	//名前
-	std::wstring m_name;
+	std::wstring GetName()const { return m_name; };
 
 	//パス
-	std::wstring m_path;
+	std::wstring GetPath()const { return m_path; };
 
 private:
 	//変換
 	void Conversion() override;
+
+	//名前
+	std::wstring m_name;
+
+	//パス
+	std::wstring m_path;
 };
 

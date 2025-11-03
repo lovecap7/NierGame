@@ -45,7 +45,7 @@ void Pod::Init()
 	//’e‚Ìì¬
 	//UŒ‚ƒf[ƒ^
 	auto attackData =GetAttackData(L"NormalShot");
-	for (int i = 0; i < attackData->m_param1; i++)
+	for (int i = 0; i < attackData->GetParam1(); i++)
 	{
 		auto bullet = std::make_shared<BulletAttack>(attackData, thisPointer);
 		bullet->SetActive(false);		//XV‚Æ•`‰æ‚ğ~‚ß‚é

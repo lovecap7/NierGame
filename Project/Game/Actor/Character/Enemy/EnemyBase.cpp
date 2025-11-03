@@ -299,14 +299,14 @@ void EnemyBase::InitAttackKey(CSVDataLoader& csvLoader, std::wstring path)
 	{
 		std::shared_ptr<EnemyAttackKeyData> attackKeyData = std::make_shared<EnemyAttackKeyData>(data);
 		//‹ßÚUŒ‚
-		if (attackKeyData->m_attackRangeType == EnemyAttackKeyData::AttackRangeType::Melee)
+		if (attackKeyData->GetAttackRangeType() == EnemyAttackKeyData::AttackRangeType::Melee)
 		{
-			m_meleeAttackKeys.emplace_back(attackKeyData->m_attackKeyName);
+			m_meleeAttackKeys.emplace_back(attackKeyData->GetAttackKeyName());
 		}
 		//‰“‹——£UŒ‚
-		else if (attackKeyData->m_attackRangeType == EnemyAttackKeyData::AttackRangeType::LongRange)
+		else if (attackKeyData->GetAttackRangeType() == EnemyAttackKeyData::AttackRangeType::LongRange)
 		{
-			m_longRangeAttackKeys.emplace_back(attackKeyData->m_attackKeyName);
+			m_longRangeAttackKeys.emplace_back(attackKeyData->GetAttackKeyName());
 		}
 	}
 }

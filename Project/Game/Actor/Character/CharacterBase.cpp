@@ -81,7 +81,7 @@ std::shared_ptr<AttackData> CharacterBase::GetAttackData(std::wstring attackName
 	for (auto& data : m_attackDatas)
 	{
 		//ðŒ‚É‡‚¤‚à‚Ì‚ª‚ ‚Á‚½‚ç
-		if (data->m_name == attackName)
+		if (data->GetName() == attackName)
 		{
 			attackData = data;
 			break;
@@ -99,9 +99,9 @@ std::string CharacterBase::GetAnim(std::wstring state, std::string path,AnimData
 	for (auto& data : m_animDatas)
 	{
 		//ðŒ‚É‡‚¤‚à‚Ì‚ª‚ ‚Á‚½‚ç
-		if (data->m_stateName == state && data->m_weaponType == type)
+		if (data->GetStateName() == state && data->GetWeaponType() == type)
 		{
-			path += data->m_animName;
+			path += data->GetAnimName();
 			break;
 		}
 	}
@@ -117,9 +117,9 @@ std::wstring CharacterBase::GetEffectPath(std::wstring effectName) const
 	for (auto& data : m_effectDatas)
 	{
 		//ðŒ‚É‡‚¤‚à‚Ì‚ª‚ ‚Á‚½‚ç
-		if (data->m_name == effectName)
+		if (data->GetName() == effectName)
 		{
-			path = data->m_path;
+			path = data->GetPath();
 			break;
 		}
 	}
@@ -168,6 +168,6 @@ void CharacterBase::InitEffectData(CSVDataLoader& csvLoader, std::wstring effect
 	{
 		auto effectData = std::make_shared<EffectData>(data);
 		m_effectDatas.emplace_back(effectData);
-		AssetManager::GetInstance().GetEffectHandle(effectData->m_path);
+		AssetManager::GetInstance().GetEffectHandle(effectData->GetPath());
 	}
 }

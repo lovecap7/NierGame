@@ -43,16 +43,16 @@ void CharaStatus::Init()
 	//’l‚Ì‰Šú‰»
 	if (m_charaStatusData)
 	{
-		m_maxHp = m_charaStatusData->m_hp;
-		m_nowHp = m_charaStatusData->m_hp;
-		m_at = m_charaStatusData->m_at;
-		m_df = m_charaStatusData->m_df;
-		m_ms = m_charaStatusData->m_ms;
-		m_jp = m_charaStatusData->m_jp;
-		m_ar = m_charaStatusData->m_ar;
-		m_searchAngle = m_charaStatusData->m_searchAngle;
-		m_searchRange = m_charaStatusData->m_searchRange;
-		m_meleeAttackRange = m_charaStatusData->m_meleeAttackRange;
+		m_maxHp = m_charaStatusData->GetHP();
+		m_nowHp = m_charaStatusData->GetHP();
+		m_at = m_charaStatusData->GetAT();
+		m_df = m_charaStatusData->GetDF();
+		m_ms = m_charaStatusData->GetMS();
+		m_jp = m_charaStatusData->GetJP();
+		m_ar = m_charaStatusData->GetAR();
+		m_searchAngle = m_charaStatusData->GetSearchAngle();
+		m_searchRange = m_charaStatusData->GetSearchRange();
+		m_meleeAttackRange = m_charaStatusData->GetMeleeAttackRange();
 		m_isNoDamage = false;
 		InitHitState();
 	}
@@ -165,7 +165,7 @@ bool CharaStatus::CheckHitReaction(AttackWeight aw, Armor am)
 
 void CharaStatus::InitArmor()
 {
-	m_ar = m_charaStatusData->m_ar;
+	m_ar = m_charaStatusData->GetAR();
 }
 
 float CharaStatus::GetHPRate() const

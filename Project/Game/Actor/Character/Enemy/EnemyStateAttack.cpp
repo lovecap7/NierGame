@@ -27,10 +27,10 @@ EnemyStateAttack::EnemyStateAttack(std::weak_ptr<Actor> enemy, std::shared_ptr<A
 	m_attackData = attackData;
 
 	//アニメーションセット
-	owner->GetModel()->SetAnim(owner->GetAnim(m_attackData->m_animName).c_str(), true);
+	owner->GetModel()->SetAnim(owner->GetAnim(m_attackData->GetAnimName()).c_str(), true);
 
 	//アーマー
-	owner->ChangeArmor(m_attackData->m_armor);
+	owner->ChangeArmor(m_attackData->GetArmor());
 
 	//目を光らせる
 	owner->InitLightUpEyesEff();
@@ -47,7 +47,7 @@ EnemyStateAttack::~EnemyStateAttack()
 	//攻撃クールタイム設定
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());
-	owner->SetAttackCoolTime(m_attackData->m_cancelFrame);
+	owner->SetAttackCoolTime(m_attackData->GetCancelFrame());
 }
 
 void EnemyStateAttack::Init()
@@ -101,13 +101,13 @@ void EnemyStateAttack::Update()
 
 void EnemyStateAttack::UpdateAttackFrame(std::shared_ptr<EnemyBase> owner)
 {
-	if (m_frame >= m_attackData->m_startFrame)
+	if (m_frame >= m_attackData->GetStartFrame())
 	{
 		//持続が切れたら
-		if (m_isAppearedAttack && (m_pAttack.expired() || m_attackData->m_attackType == AttackData::AttackType::Bullet))
+		if (m_isAppearedAttack && (m_pAttack.expired() || m_attackData->GetAttackType() == AttackData::AttackType::Bullet))
 		{
 			//多段ヒット攻撃の処理
-			if (m_attackData->m_isMultipleHit && m_attackData->m_nextAttackName != L"None")
+			if (m_attackData->IsMultipleHit() && m_attackData->GetNextAttackName() != L"None")
 			{
 				//多段ヒット攻撃
 				ComboAttack(owner);
@@ -139,15 +139,15 @@ void EnemyStateAttack::CreateAttack(std::shared_ptr<EnemyBase> owner)
 	if (!m_attackData)return;
 	std::shared_ptr<AttackBase> attack;
 	//攻撃作成
-	if (m_attackData->m_attackType == AttackData::AttackType::Sword)
+	if (m_attackData->GetAttackType() == AttackData::AttackType::Sword)
 	{
 		attack = std::make_shared<SwordAttack>(m_attackData, owner);
 	}
-	else if (m_attackData->m_attackType == AttackData::AttackType::AOE)
+	else if (m_attackData->GetAttackType() == AttackData::AttackType::AOE)
 	{
 		attack = std::make_shared<AOEAttack>(m_attackData, owner);
 	}
-	else if(m_attackData->m_attackType == AttackData::AttackType::Bullet)
+	else if(m_attackData->GetAttackType() == AttackData::AttackType::Bullet)
 	{
 		attack = std::make_shared<EnemyBulletAttack>(m_attackData, owner);
 		//弾の初期位置と方向を設定
@@ -155,7 +155,7 @@ void EnemyStateAttack::CreateAttack(std::shared_ptr<EnemyBase> owner)
 		auto model = owner->GetModel();
 
 		//発射座標
-		Vector3 bulletPos = MV1GetFramePosition(model->GetModelHandle(), static_cast<int>(m_attackData->m_param1));
+		Vector3 bulletPos = MV1GetFramePosition(model->GetModelHandle(), static_cast<int>(m_attackData->GetParam1()));
 		bulletAttack->SetPos(bulletPos);
 
 		//XZ方向はモデルの向き
@@ -180,10 +180,10 @@ void EnemyStateAttack::CreateAttack(std::shared_ptr<EnemyBase> owner)
 			bulletDir = bulletDir.Normalize();
 		}
 		//移動
-		bulletAttack->SetMoveVec(bulletDir * m_attackData->m_param2);
+		bulletAttack->SetMoveVec(bulletDir * m_attackData->GetParam2());
 
 		//壊れるか
-		bulletAttack->SetIsDestructible(m_attackData->m_param3 != 0.0f);
+		bulletAttack->SetIsDestructible(m_attackData->GetParam3() != 0.0f);
 
 		//弾を打った
 		m_isShotBullet = true;
@@ -197,10 +197,10 @@ void EnemyStateAttack::ComboAttack(std::shared_ptr<EnemyBase> owner)
 {
 	if (!m_attackData)return;
 	// 多段ヒット処理
-	m_attackData = owner->GetAttackData(m_attackData->m_nextAttackName);
+	m_attackData = owner->GetAttackData(m_attackData->GetNextAttackName());
 	m_isAppearedAttack = false;
 	//攻撃作成
-	if (m_frame >= m_attackData->m_startFrame)
+	if (m_frame >= m_attackData->GetStartFrame())
 	{
 		CreateAttack(owner);
 	}
@@ -210,13 +210,13 @@ void EnemyStateAttack::UpdateMove(std::shared_ptr<EnemyBase> owner, std::shared_
 {
 	if (!m_attackData)return;
 	Vector3 moveVec = Vector3::Zero();
-	if (m_frame < m_attackData->m_moveFrame)
+	if (m_frame < m_attackData->GetMoveFrame())
 	{
 		//向き
 		Vector3 dir = owner->GetToTargetVec();
 		//モデルの向き
 		model->SetDir(dir.XZ());
-		moveVec = model->GetDir() * m_attackData->m_moveSpeed;
+		moveVec = model->GetDir() * m_attackData->GetMoveSpeed();
 	}
 	//移動
 	owner->GetRb()->SetMoveVec(moveVec);
@@ -229,23 +229,23 @@ void EnemyStateAttack::UpdateAttackPos(std::shared_ptr<EnemyBase> owner)
 
 	//フレームインデックス取得
 	int handle = owner->GetModel()->GetModelHandle();
-	Vector3 pos1 = MV1GetFramePosition(handle,static_cast<int>(m_attackData->m_param1));
+	Vector3 pos1 = MV1GetFramePosition(handle,static_cast<int>(m_attackData->GetParam1()));
 
 	//攻撃の位置更新
-	if (m_attackData->m_attackType == AttackData::AttackType::Sword ||
-		m_attackData->m_attackType == AttackData::AttackType::Throw)
+	if (m_attackData->GetAttackType() == AttackData::AttackType::Sword ||
+		m_attackData->GetAttackType() == AttackData::AttackType::Throw)
 	{
 		auto attack = std::dynamic_pointer_cast<SwordAttack>(m_pAttack.lock());
 		attack->SetStartPos(pos1);
-		Vector3 pos2 = MV1GetFramePosition(handle, static_cast<int>(m_attackData->m_param1));
+		Vector3 pos2 = MV1GetFramePosition(handle, static_cast<int>(m_attackData->GetParam1()));
 		Vector3 dir = (pos2 - pos1);
 		if (dir.SqMagnitude() > 0.0f)
 		{
 			dir = dir.Normalize();
 		}
-		attack->SetEndPos(pos1 + (dir * m_attackData->m_length));
+		attack->SetEndPos(pos1 + (dir * m_attackData->GetLength()));
 	}
-	else if (m_attackData->m_attackType == AttackData::AttackType::AOE)
+	else if (m_attackData->GetAttackType() == AttackData::AttackType::AOE)
 	{
 		auto attack = std::dynamic_pointer_cast<AOEAttack>(m_pAttack.lock());
 		attack->SetPos(pos1);

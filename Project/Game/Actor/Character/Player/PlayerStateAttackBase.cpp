@@ -44,12 +44,12 @@ void PlayerStateAttackBase::CreateAttack(std::shared_ptr<Player> owner, std::sha
 	if (!m_attackData)return;
 	std::shared_ptr<AttackBase> attack;
 	//UŒ‚ì¬
-	if (m_attackData->m_attackType == AttackData::AttackType::Sword ||
-		m_attackData->m_attackType == AttackData::AttackType::Throw)
+	if (m_attackData->GetAttackType() == AttackData::AttackType::Sword ||
+		m_attackData->GetAttackType() == AttackData::AttackType::Throw)
 	{
 		attack = std::make_shared<SwordAttack>(m_attackData, owner);
 	}
-	else if (m_attackData->m_attackType == AttackData::AttackType::AOE)
+	else if (m_attackData->GetAttackType() == AttackData::AttackType::AOE)
 	{
 		attack = std::make_shared<AOEAttack>(m_attackData, owner);
 	}
@@ -59,12 +59,12 @@ void PlayerStateAttackBase::CreateAttack(std::shared_ptr<Player> owner, std::sha
 
 	auto model = owner->GetModel();
 	//“Š‚°‚à‚ÌUŒ‚‚Ìˆ—
-	if (m_attackData->m_attackType == AttackData::AttackType::Throw)
+	if (m_attackData->GetAttackType() == AttackData::AttackType::Throw)
 	{
 		//“Š‚°‚Â‚Â‰ñ“]
 		weapon->ThrowAndRoll(
-			m_attackData->m_param1, model->GetDir(),
-			owner->GetPos(), m_attackData->m_keepFrame, m_attackData->m_param2);
+			m_attackData->GetParam1(), model->GetDir(),
+			owner->GetPos(), m_attackData->GetKeepFrame(), m_attackData->GetParam2());
 	}
 	else
 	{
@@ -73,7 +73,7 @@ void PlayerStateAttackBase::CreateAttack(std::shared_ptr<Player> owner, std::sha
 	}
 
 	//ƒA[ƒ}[
-	owner->ChangeArmor(m_attackData->m_armor);
+	owner->ChangeArmor(m_attackData->GetArmor());
 }
 
 void PlayerStateAttackBase::UpdateAttackPosition(std::shared_ptr<Player> owner, std::shared_ptr<Weapon> weapon)
@@ -82,14 +82,14 @@ void PlayerStateAttackBase::UpdateAttackPosition(std::shared_ptr<Player> owner, 
 	if (!weapon)return;
 	if (m_pAttack.expired())return;
 	//UŒ‚‚ÌˆÊ’uXV
-	if (m_attackData->m_attackType == AttackData::AttackType::Sword ||
-		m_attackData->m_attackType == AttackData::AttackType::Throw)
+	if (m_attackData->GetAttackType() == AttackData::AttackType::Sword ||
+		m_attackData->GetAttackType() == AttackData::AttackType::Throw)
 	{
 		auto attack = std::dynamic_pointer_cast<SwordAttack>(m_pAttack.lock());
 		attack->SetStartPos(weapon->GetStartPos());
-		attack->SetEndPos(weapon->GetEndPos(m_attackData->m_length));
+		attack->SetEndPos(weapon->GetEndPos(m_attackData->GetLength()));
 	}
-	else if (m_attackData->m_attackType == AttackData::AttackType::AOE)
+	else if (m_attackData->GetAttackType() == AttackData::AttackType::AOE)
 	{
 		auto attack = std::dynamic_pointer_cast<AOEAttack>(m_pAttack.lock());
 		attack->SetPos(weapon->GetStartPos());
@@ -100,10 +100,10 @@ void PlayerStateAttackBase::LoadNextMultipleHitAttack(std::shared_ptr<Player> ow
 {
 	if (!m_attackData)return;
 	// ‘½’iƒqƒbƒgˆ—
-	m_attackData = owner->GetAttackData(m_attackData->m_nextAttackName);
+	m_attackData = owner->GetAttackData(m_attackData->GetNextAttackName());
 	m_isAppearedAttack = false;
 	//UŒ‚ì¬
-	if (m_frame >= m_attackData->m_startFrame)
+	if (m_frame >= m_attackData->GetStartFrame())
 	{
 		CreateAttack(owner, weapon);
 	}
@@ -113,10 +113,10 @@ void PlayerStateAttackBase::UpdateMove(std::shared_ptr<Player> owner, Input& inp
 {
 	if (!m_attackData)return;
 	Vector3 moveVec = Vector3::Zero();
-	if (m_frame < m_attackData->m_moveFrame)
+	if (m_frame < m_attackData->GetMoveFrame())
 	{
 		//‘¬“x
-		float speed = m_attackData->m_moveSpeed;
+		float speed = m_attackData->GetMoveSpeed();
 
 		//Œü‚«
 		Vector3 dir = InputMoveVec(owner, input);

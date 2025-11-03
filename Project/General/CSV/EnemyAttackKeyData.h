@@ -16,11 +16,16 @@ public:
 		Melee,		//‹ßÚUŒ‚
 		LongRange,	//‰“‹——£UŒ‚
 	};
-	AttackRangeType	m_attackRangeType;	//UŒ‚‚Ì‹——£
+	//UŒ‚‚Ì‹——£
+	AttackRangeType	GetAttackRangeType()const { return m_attackRangeType; };
 	//UŒ‚‚ÌƒL[–¼
-	std::wstring	m_attackKeyName;	//UŒ‚‚ÌƒL[–¼
+	std::wstring	GetAttackKeyName()const { return m_attackKeyName; };
 private:
 	//•ÏŠ·
 	void Conversion() override;
+
+	AttackRangeType	m_attackRangeType;	//UŒ‚‚Ì‹——£
+	//UŒ‚‚ÌƒL[–¼
+	std::wstring	m_attackKeyName;	//UŒ‚‚ÌƒL[–¼
 };
 

@@ -14,12 +14,12 @@ AttackBase::AttackBase(Shape shape, std::shared_ptr<AttackData> attackData, std:
 	m_oriPos(Vector3::Zero())
 {
 	if (!attackData)return;
-	m_attackPower = attackData->m_attackPower;
-	m_attackWeight = attackData->m_attackWeight;
-	m_knockBackPower = attackData->m_knockBackPower; 
-	m_knockBackV = attackData->m_verticalPower;
-	m_keepFrame = attackData->m_keepFrame;
-	m_originPosData = attackData->m_attackOriginPos;
+	m_attackPower = attackData->GetAttackPower();
+	m_attackWeight = attackData->GetAttackWeight();
+	m_knockBackPower = attackData->GetKnockBackPower(); 
+	m_knockBackV = attackData->GetVerticalPower();
+	m_keepFrame = attackData->GetKeepFrame();
+	m_originPosData = attackData->GetAttackOriginPos();
 	m_isHit = false;
 
 	//コライダーの設定
@@ -28,20 +28,20 @@ AttackBase::AttackBase(Shape shape, std::shared_ptr<AttackData> attackData, std:
 	case Shape::Sphere:
 	{
 		auto coll = std::dynamic_pointer_cast<SphereCollider>(m_collisionData);
-		coll->SetRadius(attackData->m_radius);
+		coll->SetRadius(attackData->GetRadius());
 		break;
 	}
 	case Shape::Capsule:
 	{
 		auto coll = std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData);
-		coll->SetRadius(attackData->m_radius);
+		coll->SetRadius(attackData->GetRadius());
 		break;
 	}
 	case Shape::Torus:
 	{
 		auto coll = std::dynamic_pointer_cast<TorusCollider>(m_collisionData);
-		coll->SetRadius(attackData->m_radius);
-		coll->SetRange(attackData->m_length);
+		coll->SetRadius(attackData->GetRadius());
+		coll->SetRange(attackData->GetLength());
 		break;
 	}
 	default:

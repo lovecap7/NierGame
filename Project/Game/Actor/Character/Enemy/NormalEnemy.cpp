@@ -35,7 +35,7 @@ void NormalEnemy::Init()
 {
 	//必要なパスを取得
 	auto& csvLoader = CSVDataLoader::GetInstance();
-	auto pathData = csvLoader.LoadCSV(m_actorData->m_csvPathData.c_str()).front()->GetData();
+	auto pathData = csvLoader.LoadCSV(m_actorData->GetCSVPathData().c_str()).front()->GetData();
 
 	assert(pathData.size() >= kPathNum);
 	//共通初期化
@@ -53,7 +53,7 @@ void NormalEnemy::Init()
 	//状態を変化する
 	m_state->ChangeState(m_state);
 	//モデルの高さ調整
-	m_model->SetModelHeightAdjust(-m_actorData->m_collRadius);
+	m_model->SetModelHeightAdjust(-m_actorData->GetCollRadius());
 
 	//体力UI
 	auto enemyHPUI = std::make_shared<NormalEnemyHPUI>(m_charaStatus, thisPointer);
@@ -65,7 +65,7 @@ void NormalEnemy::Complete()
 {
 	m_rb->SetPos(m_rb->GetNextPos());
 	Vector3 endPos = m_rb->m_pos;
-	endPos.y += m_actorData->m_collHeight;
+	endPos.y += m_actorData->GetCollHeight();
 	std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->SetEndPos(endPos);//カプセルの移動
 	//モデルの座標更新
 	m_model->SetPos(m_rb->m_pos.ToDxLibVector());

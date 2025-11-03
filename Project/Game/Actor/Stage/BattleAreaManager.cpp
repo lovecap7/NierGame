@@ -35,7 +35,7 @@ void BattleAreaManager::Init(std::wstring stageName, std::shared_ptr<ActorManage
 		if (!data)continue;
 		//データを変換
 		auto actorData = std::make_shared<ActorData>(data);
-		if (actorData->m_actorType == ActorData::ActorType::Stage)
+		if (actorData->GetActorType() == ActorData::ActorType::Stage)
 		{
 			//エリアを構成する一部
 			auto areaPoint = std::make_shared<StageObject>(actorData, actorManager);

@@ -80,7 +80,7 @@ void Weapon::Complete()
     Matrix4x4 mat = Matrix4x4::ToMatrix4x4(MV1GetFrameLocalWorldMatrix(m_ownerHandle, slotIndex));
 
     //スケールを適用
-    mat = mat * Matrix4x4::ScaleMatrix4x4(m_actorData->m_scale);
+    mat = mat * Matrix4x4::ScaleMatrix4x4(m_actorData->GetScale());
 
     //武器の位置を取得
     Vector3 weaponPos = MV1GetFramePosition(m_ownerHandle, slotIndex);
@@ -204,6 +204,6 @@ void Weapon::UpdateThrowRota(Vector3& weaponPos, Matrix4x4& mat)
         mat = mat * Matrix4x4::RotateYPositionMatrix4x4(nextPos, m_rotaAngle * MyMath::DEG_2_RAD);
 
         //スケールを適用
-        mat = mat * Matrix4x4::ScaleMatrix4x4(m_actorData->m_scale * kRotaModelScaleOffset);
+        mat = mat * Matrix4x4::ScaleMatrix4x4(m_actorData->GetScale() * kRotaModelScaleOffset);
     }
 }
