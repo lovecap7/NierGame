@@ -15,6 +15,30 @@ namespace
     //画像
     const std::wstring kImagePath = L"Data/UI/";
     const std::wstring kPng = L".png";
+
+    //フォントパス
+    const std::string kCinzelPath = "Data/Font/Cinzel-Medium.ttf";
+    const std::string kNotoPath = "Data/Font/NotoSansJP-Light.ttf";
+    const std::string kRobotoPath = "Data/Font/Roboto-Light.ttf";
+    //フォントの名前
+    const std::wstring kCinzelName = L"Cinzel Medium";
+    const std::wstring kNotoName = L"Noto Sans JP Light";
+    const std::wstring kRobotoName = L"Roboto Light";
+
+}
+
+void AssetManager::Init()
+{
+    //フォントの準備
+    assert(AddFontResourceExA(kCinzelPath.c_str(), FR_PRIVATE, NULL) > 0);
+    assert(AddFontResourceExA(kNotoPath.c_str(), FR_PRIVATE, NULL) > 0);
+    assert(AddFontResourceExA(kRobotoPath.c_str(), FR_PRIVATE, NULL) > 0);
+}
+
+void AssetManager::End()
+{
+    //ウィンドウズに一時的に保持していたフォントデータを削除
+    RemoveFontResourceExA("", FR_PRIVATE, NULL);
 }
 
 int AssetManager::GetModelHandle(std::wstring path)
@@ -87,7 +111,7 @@ void AssetManager::DeleteEffectHandle()
 int AssetManager::GetImageHandle(std::wstring path)
 {
     int handle = -1;
-    //モデルがあったら
+    //画像があったら
     if (m_imageHandles.find(path) != m_imageHandles.end())
     {
         handle = m_imageHandles.at(path);
@@ -115,9 +139,57 @@ void AssetManager::DeleteImageHandle()
     m_imageHandles.clear();
 }
 
+int AssetManager::GetFontHandle(Font font)
+{
+    int handle = -1;
+    //フォントがあったら
+    if (m_fontHandles.find(font) != m_fontHandles.end())
+    {
+        handle = m_fontHandles.at(font);
+    }
+    else
+    {
+        auto type = font.type;
+        std::wstring name;
+        switch (type)
+        {
+        case AssetManager::FontType::Cinzel:
+            name = kCinzelName;
+            break;
+        case AssetManager::FontType::NotoSansJP:
+            name = kNotoName;
+            break;
+        case AssetManager::FontType::Roboto:
+            name = kRobotoName;
+            break;
+        default:
+            name = kCinzelName;
+            break;
+        }
+
+        //ハンドルをロードする
+        handle = CreateFontToHandle(name.c_str(), static_cast<int>(font.size), 5, DX_FONTTYPE_ANTIALIASING);
+        m_fontHandles[font] = handle;
+    }
+
+    //ハンドルチェック
+    assert(handle >= 0);
+
+    return handle;
+}
+
+void AssetManager::DeleteFontHandle()
+{
+    for (auto& [key, value] : m_fontHandles) {
+        DeleteFontToHandle(value);
+    }
+    m_fontHandles.clear();
+}
+
 void AssetManager::AllDelete()
 {
     DeleteImageHandle();
     DeleteEffectHandle();
     DeleteModelHandle();
+    DeleteFontHandle();
 }

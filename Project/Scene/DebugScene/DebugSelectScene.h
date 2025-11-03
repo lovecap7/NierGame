@@ -27,7 +27,8 @@ private:
 		Stage1		= 2,
 		Stage2		= 3,
 		Stage3		= 4,
-		PlayerTest	= 5,
+		Result		= 5,
+		PlayerTest	= 6,
 	};
 	Menu m_currentMenu = Menu::Title;
 };

@@ -7,6 +7,7 @@
 #include "../Scene/SceneController.h"
 #include "../General/Fader.h"
 #include "../General/Effect/EffekseerManager.h"
+#include "../General/AssetManager.h"
 #include "../Game/UI/UIManager.h"
 #include  <cassert>
 #include <chrono>
@@ -82,17 +83,24 @@ bool Application::Init()
 
 void Application::Run()
 {
+	//アセットマネージャー
+	AssetManager::GetInstance().Init();
+
 	//コントローラー
 	auto& input = Input::GetInstance();
 	input.Init();
+
 	//シーン
 	std::unique_ptr<SceneController> sceneController = std::make_unique<SceneController>();
+
 	//Physics(衝突処理)
 	auto& physics = Physics::GetInstance();
 	physics.Init();
+
 	//ポストエフェクトの準備
 	m_postProcess = std::make_unique<ShaderPostProcess>();
 	m_postProcess->Init();
+
 	//レンダーターゲット(Drawの書き込み先)
 	auto RT = MakeScreen(Game::kScreenWidth, Game::kScreenHeight);
 
@@ -236,8 +244,16 @@ void Application::Terminate()
 {
 	//ポストエフェクトの終了
 	m_postProcess->End();
+
 	//エフェクト関連
 	EffekseerManager::GetInstance().EndEffekseer();
+	
+	//当たり判定の終了
+	Physics::GetInstance().Reset();
+
+	//アセットの削除
+	AssetManager::GetInstance().End();
+
 	//ＤＸライブラリ使用の終了処理
 	DxLib_End();				
 }

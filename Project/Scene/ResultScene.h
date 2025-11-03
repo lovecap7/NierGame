@@ -1,14 +1,17 @@
 #pragma once
 #include "SceneBase.h"
 #include "../General/StageIndex.h"
+#include <memory>
 class Input;
 class SceneController;
+class ResultUI;
+class Timer;
 
 class ResultScene :
     public SceneBase
 {
 public:
-    ResultScene(SceneController& controller);
+    ResultScene(std::wstring stageName,SceneController& controller, std::shared_ptr<Timer> timer);
     ~ResultScene();
     /// <summary>
     /// 派生クラスで実装を実装
@@ -23,6 +26,11 @@ public:
     //デバッグ用
     virtual void DebugDraw() const override;
 private:
-
+    //リザルトのUI
+    std::weak_ptr<ResultUI> m_resultUI;
+    //タイマー
+    std::shared_ptr<Timer> m_timer;
+    //ステージ名
+    std::wstring m_stageName;
 };
 

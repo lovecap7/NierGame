@@ -3,10 +3,12 @@
 #include "../SceneController.h"
 #include "../TitleScene.h"
 #include "../GameScene.h"
+#include "../ResultScene.h"
 #include "../../General/Input.h"
 #include <DxLib.h>
 #include "../../General/StringUtil.h"
 #include "../../General/Math/MyMath.h"
+#include "../../General/Timer.h"
 
 
 DebugSelectScene::DebugSelectScene(SceneController& controller) :
@@ -45,6 +47,9 @@ void DebugSelectScene::Update()
 			break;
 		case Menu::Stage3:
 			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, GetStageNameByIndex(StageIndex::Tutorial)));
+			break;
+		case Menu::Result:
+			m_controller.ChangeScene(std::make_shared<ResultScene>(GetStageNameByIndex(StageIndex::Tutorial),m_controller,std::make_shared<Timer>()));
 			break;
 		case Menu::PlayerTest:
 			m_controller.ChangeScene(std::make_shared<PlayerTestScene>(m_controller));
@@ -86,6 +91,9 @@ void DebugSelectScene::Draw()
 			break;
 		case Menu::Stage3:
 			DrawString(100, 100 + i * 30, L"Stage3", color);
+			break;
+		case Menu::Result:
+			DrawString(100, 100 + i * 30, L"Result", color);
 			break;
 		case Menu::PlayerTest:
 			DrawString(100, 100 + i * 30, L"PlayerTestScene", color);

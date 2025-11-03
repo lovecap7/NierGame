@@ -1,0 +1,4 @@
+フォント
+メイン英語 	Cinzel
+サブ英語　 	Roboto Light
+日本語メニュー　Noto Sans JP Light

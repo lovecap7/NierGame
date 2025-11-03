@@ -199,6 +199,7 @@
     <ClCompile Include="Game\UI\Enemy\NormalEnemyHPUI.cpp" />
     <ClCompile Include="Game\UI\HPUIBase.cpp" />
     <ClCompile Include="Game\UI\Player\PlayerHPUI.cpp" />
+    <ClCompile Include="Game\UI\Result\ResultUI.cpp" />
     <ClCompile Include="Game\UI\Title\TitleUI.cpp" />
     <ClCompile Include="Game\UI\UIBase.cpp" />
     <ClCompile Include="Game\UI\UIManager.cpp" />
@@ -224,6 +225,7 @@
     <ClCompile Include="General\CSV\EffectData.cpp" />
     <ClCompile Include="General\CSV\EnemyAttackKeyData.cpp" />
     <ClCompile Include="General\CSV\PodData.cpp" />
+    <ClCompile Include="General\CSV\ResultRankData.cpp" />
     <ClCompile Include="General\Effect\EffekseerManager.cpp" />
     <ClCompile Include="General\Effect\NormalEffect.cpp" />
     <ClCompile Include="General\Effect\TrackActorEffect.cpp" />
@@ -239,6 +241,7 @@
     <ClCompile Include="General\Model.cpp" />
     <ClCompile Include="General\ShaderPostProcess.cpp" />
     <ClCompile Include="General\StringUtil.cpp" />
+    <ClCompile Include="General\Timer.cpp" />
     <ClCompile Include="Main\Application.cpp" />
     <ClCompile Include="Main\main.cpp" />
     <ClCompile Include="Scene\DebugScene\DebugSelectScene.cpp" />
@@ -305,6 +308,7 @@
     <ClInclude Include="Game\UI\Enemy\NormalEnemyHPUI.h" />
     <ClInclude Include="Game\UI\HPUIBase.h" />
     <ClInclude Include="Game\UI\Player\PlayerHPUI.h" />
+    <ClInclude Include="Game\UI\Result\ResultUI.h" />
     <ClInclude Include="Game\UI\Title\TitleUI.h" />
     <ClInclude Include="Game\UI\UIBase.h" />
     <ClInclude Include="Game\UI\UIManager.h" />
@@ -330,6 +334,7 @@
     <ClInclude Include="General\CSV\EffectData.h" />
     <ClInclude Include="General\CSV\EnemyAttackKeyData.h" />
     <ClInclude Include="General\CSV\PodData.h" />
+    <ClInclude Include="General\CSV\ResultRankData.h" />
     <ClInclude Include="General\Effect\EffekseerManager.h" />
     <ClInclude Include="General\Effect\NormalEffect.h" />
     <ClInclude Include="General\Effect\TrackActorEffect.h" />
@@ -349,6 +354,7 @@
     <ClInclude Include="General\StageIndex.h" />
     <ClInclude Include="General\StringUtil.h" />
     <ClInclude Include="General\TargetInfo.h" />
+    <ClInclude Include="General\Timer.h" />
     <ClInclude Include="Main\Application.h" />
     <ClInclude Include="Scene\DebugScene\DebugSelectScene.h" />
     <ClInclude Include="Scene\DebugScene\PlayerTestScene.h" />

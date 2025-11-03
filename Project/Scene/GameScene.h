@@ -9,6 +9,7 @@ class ActorManager;
 class BattleAreaManager;
 class AttackManager;
 class EffekseerManager;
+class Timer;
 
 class GameScene :
     public SceneBase
@@ -47,5 +48,8 @@ private:
 
     //エフェクト
     EffekseerManager& m_effectManager;
+
+    //タイマー
+    std::shared_ptr<Timer> m_timer;
 };
 

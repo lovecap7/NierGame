@@ -2,13 +2,19 @@
 #include "TitleScene.h"
 #include <Dxlib.h>
 #include  "../General/Input.h"
+#include  "../General/Timer.h"
 #include  "../General/Fader.h"
 #include  "../General/Game.h"
 #include "SceneController.h"
 #include "GameScene.h"
+#include "../Game/UI/Result/ResultUI.h"
+#include "../Game/UI/UIManager.h"
 
-ResultScene::ResultScene(SceneController& controller) :
-	SceneBase(controller)
+ResultScene::ResultScene(std::wstring stageName, SceneController& controller, std::shared_ptr<Timer> timer) :
+	SceneBase(controller),
+	m_resultUI(),
+	m_timer(timer),
+	m_stageName(stageName)
 {
 }
 
@@ -18,7 +24,16 @@ ResultScene::~ResultScene()
 
 void ResultScene::Init()
 {
+	//フェードイン
 	Fader::GetInstance().FadeIn();
+	
+	//UIの削除
+	UIManager::GetInstance().AllDeleteUI();
+
+	//リザルトUI
+	auto resultUI = std::make_shared<ResultUI>(m_stageName,m_timer);
+	resultUI->Init();
+	m_resultUI = resultUI;
 }
 
 void ResultScene::Update()
@@ -40,12 +55,10 @@ void ResultScene::Update()
 
 void ResultScene::Draw()
 {
-	DrawCircle(Game::kScreenCenterX, Game::kScreenCenterY, 100, 0x00ff00, true);
 }
 
 void ResultScene::End()
 {
-
 }
 
 void ResultScene::DebugDraw() const

@@ -29,9 +29,9 @@ public:
 	//描画
 	void Draw()const;
 	//フェードイン
-	void FadeIn(float speed = 5.0f);
+	void FadeIn(float speed = 10.0f);
 	//フェードアウト
-	void FadeOut(float speed = 5.0f);
+	void FadeOut(float speed = 10.0f);
 	//フェードインが終了したか
 	bool IsFinishFadeIn()const;
 	//フェードアウトが終了したか

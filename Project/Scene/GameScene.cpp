@@ -14,6 +14,7 @@
 #include "../General/AssetManager.h"
 #include "../General/Fader.h"
 #include "../General/ShaderPostProcess.h"
+#include "../General/Timer.h"
 #include "../Main/Application.h"
 #include "../General/Effect/EffekseerManager.h"
 #include "../Game/UI/UIManager.h"
@@ -33,6 +34,14 @@ GameScene::~GameScene()
 
 void GameScene::Init()
 {
+	//アセットを削除
+	AssetManager::GetInstance().DeleteModelHandle();
+	//ポストエフェクトを解除
+	Application::GetInstance().GetPostProcess()->ResetPostEffectState();
+	//UI削除
+	UIManager::GetInstance().AllDeleteUI();
+
+	//ステージインデックス
 	auto stageName = m_stageName.c_str();
 
 	//カメラ
@@ -63,6 +72,10 @@ void GameScene::Init()
 
 	//フェードイン
 	Fader::GetInstance().FadeIn();
+
+	//タイマー
+	m_timer = std::make_shared<Timer>();
+	m_timer->Init();
 }
 
 void GameScene::Update()
@@ -73,6 +86,7 @@ void GameScene::Update()
 	m_cameraController->Update();
 	m_battleAreaManager->Update(m_actorManager);
 	m_effectManager.Update();
+	m_timer->Update();
 	
 	auto& input = Input::GetInstance();
 
@@ -80,7 +94,7 @@ void GameScene::Update()
 	//フェードアウトしたら
 	if (fader.IsFinishFadeOut())
 	{
-		m_controller.ChangeScene(std::make_unique<ResultScene>(m_controller));
+		m_controller.ChangeScene(std::make_unique<ResultScene>(m_stageName, m_controller, m_timer));
 		return;
 	}
 	//もしもすべてのエリアを突破したら
@@ -104,12 +118,6 @@ void GameScene::End()
 	m_attackManager->End();
 	m_battleAreaManager->End();
 	m_effectManager.End();
-	//アセットも削除
-	AssetManager::GetInstance().DeleteModelHandle();
-	//ポストエフェクトを解除
-	Application::GetInstance().GetPostProcess()->ResetPostEffectState();
-	//UI削除
-	UIManager::GetInstance().AllDeleteUI();
 }
 
 void GameScene::DebugDraw() const

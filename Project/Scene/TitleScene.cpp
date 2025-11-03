@@ -42,6 +42,20 @@ TitleScene::TitleScene(SceneController& controller):
 	m_noiseSpeed(kNoiseSpeed),
 	m_shakeStrength(kShakeStrength)
 {
+}
+
+TitleScene::~TitleScene()
+{
+}
+
+void TitleScene::Init()
+{
+	//アセットの削除
+	AssetManager::GetInstance().AllDelete();
+	//UI削除
+	UIManager::GetInstance().AllDeleteUI();
+	//フェードイン
+	Fader::GetInstance().FadeIn();
 	//カメラ
 	auto camera = std::make_shared<TitleCamera>();
 	m_cameraController = std::make_shared<CameraController>();
@@ -58,15 +72,6 @@ TitleScene::TitleScene(SceneController& controller):
 	postPrecess->SetBlockScele(m_blockScele);
 	postPrecess->SetNoiseSpeed(m_noiseSpeed);
 	postPrecess->SetShakeStrength(m_shakeStrength);
-}
-
-TitleScene::~TitleScene()
-{
-}
-
-void TitleScene::Init()
-{
-	Fader::GetInstance().FadeIn();
 }
 
 void TitleScene::Update()
@@ -99,10 +104,6 @@ void TitleScene::Draw()
 
 void TitleScene::End()
 {
-	//UI削除
-	UIManager::GetInstance().AllDeleteUI();
-	//削除
-	AssetManager::GetInstance().AllDelete();
 	//グリッジ削除
 	auto& postPrecess = Application::GetInstance().GetPostProcess();
 	postPrecess->SubPostEffectState(ShaderPostProcess::PostEffectState::NoColorGlitch);
