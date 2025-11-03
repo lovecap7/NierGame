@@ -125,6 +125,13 @@ void PlayerStateLightAttack::Update()
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 
 	auto& input = Input::GetInstance();
+	//回避
+	if (input.IsBuffered("B") && owner->IsAvoidable() && !m_isJust)
+	{
+		//回避
+		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
+		return;
+	}
 	//死亡
 	if (owner->GetCharaStatus()->IsDead())
 	{
@@ -135,13 +142,6 @@ void PlayerStateLightAttack::Update()
 	if (owner->GetCharaStatus()->IsHitReaction())
 	{
 		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner));
-		return;
-	}
-	//回避
-	if (input.IsBuffered("B") && owner->IsAvoidable() && !m_isJust)
-	{
-		//回避
-		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
 		return;
 	}
 	//フレームをカウント

@@ -62,20 +62,24 @@ void CharaStatus::InitHitState()
 {
 	m_isHit			= false;
 	m_isHitReaction = false;
+	//体力を保持
+	m_beforeHp = m_nowHp;
 }
 
 void CharaStatus::OnDamage(int power, int at, CharaStatus::AttackWeight aw)
 {
+
 	//攻撃は当たっているので
 	m_isHit = true;
 
 	//無敵中はダメージを食らわない
 	if (m_isNoDamage)return;
-	
+
 	//ダメージ計算
 	int damage = GetDamage(power, at);
 	m_nowHp -= damage;
 	m_nowHp = MathSub::ClampInt(m_nowHp, 0, m_maxHp);
+
 #if _DEBUG
 	printf("ダメージを受けた！！ %d\n", damage);
 #endif
@@ -117,6 +121,11 @@ void CharaStatus::Heal(int value)
 void CharaStatus::FullRecovery()
 {
 	Heal(m_maxHp);
+}
+
+void CharaStatus::ResetDamage()
+{
+	m_nowHp = m_beforeHp;
 }
 
 bool CharaStatus::IsPinchHP() const

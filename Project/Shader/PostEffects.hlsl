@@ -28,6 +28,7 @@ cbuffer ConstantBuffer2 : register(b5)
 #define STATE_GLITCH 1 << 0         //グリッチ効果
 #define STATE_MONOCHROME 1 << 1     //モノクロ
 #define STATE_JUSTAVOID 1 << 2      //ジャスト回避
+#define STATE_GLITCHNOCOLOR 1 << 3  //色ずれなしグリッジ
 
 // 疑似乱数を生成する関数
 float random(float2 seeds)
@@ -68,18 +69,19 @@ PS_OUTPUT main(PS_INPUT input)
     bool isUseGlitch = (state & STATE_GLITCH) && !(blockScale <= 0.0 && noiseSpeed <= 0.0 && shakeStrength <= 0.0);
     bool isUseGray = (state & STATE_MONOCHROME);
     bool isUseJust = (state & STATE_JUSTAVOID);
+    bool isUseGlitchNoColor = (state & STATE_GLITCHNOCOLOR);
     
     // 元のテクスチャ色を取得
     float4 color = tex.Sample(smp, input.uv);
 
-    //状態が「グリッチ」または「グリッチ+モノクロ」の場合
-    if (isUseGlitch)
+    //状態がグリッチ
+    if (isUseGlitch || isUseGlitchNoColor)
     {
         
-        ///グリッチ効果///
+        //グリッチ効果
         float2 gv = input.uv; //グリッチ用のUV座標
 
-        //ノイズを計算（縦方向にスキャンライン状の揺れを加える）
+        //ノイズを計算
         float noise = blockNoise(input.uv.y * blockScale);
 
         //横方向に少しランダム成分を追加
@@ -91,45 +93,27 @@ PS_OUTPUT main(PS_INPUT input)
         //X方向のUVを揺らしてグリッチ効果を作成
         gv.x += randomvalue * sin(sin(1) * 0.5) * sin(-sin(noise) * 0.2) * frac(shakeStrength);
 
-        //RGBチャンネルをわずかにずらしてサンプリング → 色ズレが発生しグリッチ感が出る
-        color.r = tex.Sample(smp, gv + float2(0.006, 0)).r; //赤を右にずらす
-        color.g = tex.Sample(smp, gv).g;                    //緑はそのまま
-        color.b = tex.Sample(smp, gv - float2(0.008, 0)).b; //青を左にずらす
-        color.a = 1.0;
+        if (isUseGlitchNoColor)
+        {
+            //全ての色を同じだけ動かす
+            color.r = tex.Sample(smp, gv + float2(0.006, 0)).r;
+            color.g = tex.Sample(smp, gv + float2(0.006, 0)).g;
+            color.b = tex.Sample(smp, gv + float2(0.006, 0)).b;
+            color.a = 1.0;
+        }
+        else
+        {
+           //色ズレ
+            color.r = tex.Sample(smp, gv + float2(0.006, 0)).r; //赤を右にずらす
+            color.g = tex.Sample(smp, gv).g; //緑はそのまま
+            color.b = tex.Sample(smp, gv - float2(0.008, 0)).b; //青を左にずらす
+            color.a = 1.0;
+        }
     }
-
-    //状態が「モノクロ」または「グリッチ+モノクロ」の場合
-    if (isUseGray)
-    {
-        float4 beforeColor = color; // グリッチ処理後の色を保持
-
-        ///モノクロ化///
-        //輝度を計算してRGBを均一化
-        float luminance = dot(color.rgb, float3(R_LUMINANCE, G_LUMINANCE, B_LUMINANCE));
-        color = float4(luminance, luminance, luminance, 1.0);
-
-        //元の色とモノクロ色をブレンド（完全なモノクロではなく9割モノクロ）
-        color = lerp(beforeColor, color, 0.9);
-
-        //色味を微妙に調整（青み・緑みを少し強調）
-        color.g *= 1.07;
-        color.b *= 1.04;
-        
-         //UV
-        float2 uv = input.uv;
- 
-        float d = length(uv - 0.5);
-
-        float lerpRate = saturate(1.0f);
-        float4 vignetteColor = lerp(color, float4(0.0, 0.0, 0.0, 1.0), lerpRate);
-
-        float vignetteDistance = pow(saturate(d * 1.5), 2);
-
-        color = lerp(color, vignetteColor, vignetteDistance);
-    }
-    
-    //ジャスト回避
-    if (isUseJust)
+  
+    //状態がモノクロまたはジャスト回避
+    //画面の端を暗く
+    if (isUseJust || isUseGray)
     {
         float2 uv = input.uv;
  
@@ -142,6 +126,26 @@ PS_OUTPUT main(PS_INPUT input)
         float vignetteDistance = pow(saturate(d * 1.5), 2);
         
         color = lerp(color, vignetteColor, vignetteDistance);
+    }
+    
+    if (isUseGray)
+    {
+        float4 beforeColor = color; //グリッチ処理後の色を保持
+
+        //モノクロ化
+        //輝度を計算してRGBを均一化
+        float luminance = dot(color.rgb, float3(R_LUMINANCE, G_LUMINANCE, B_LUMINANCE));
+        color = float4(luminance, luminance, luminance, 1.0);
+
+        //元の色とモノクロ色をブレンド（完全なモノクロではなく9割モノクロ）
+        color = lerp(beforeColor, color, 0.9);
+
+        //色味を微妙に調整（青み・緑みを少し強調）
+        color.g *= 1.07;
+        color.b *= 1.04;
+        
+        //UV
+        float2 uv = input.uv;
     }
 
     //最終的なカラーを出力

@@ -101,6 +101,17 @@ void PlayerStateHeavyAttack::Update()
 	if (m_pOwner.expired()) return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	auto& input = Input::GetInstance();
+	//無敵
+	if (m_isJust)
+	{
+		owner->GetCharaStatus()->SetIsNoDamage(true);
+	}
+	// 回避
+	if (input.IsBuffered("B") && owner->IsAvoidable() && 
+		m_update == &PlayerStateHeavyAttack::GroundUpdate)
+	{
+		return ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
+	}
 	//死亡
 	if (owner->GetCharaStatus()->IsDead())
 	{
@@ -112,11 +123,6 @@ void PlayerStateHeavyAttack::Update()
 	{
 		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner));
 		return;
-	}
-	//無敵
-	if( m_isJust)
-	{
-		owner->GetCharaStatus()->SetIsNoDamage(true);
 	}
 
 	//状態ごとの更新処理
@@ -229,11 +235,6 @@ void PlayerStateHeavyAttack::ChangeToMoveOrIdle(std::shared_ptr<Player> owner, I
 
 void PlayerStateHeavyAttack::GroundUpdate(std::shared_ptr<Player> owner, Input& input)
 {
-	// 回避
-	if (input.IsBuffered("B") && owner->IsAvoidable())
-	{
-		return ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
-	}
 	//フレームのカウント
 	CountFrame();
 	auto model = owner->GetModel();

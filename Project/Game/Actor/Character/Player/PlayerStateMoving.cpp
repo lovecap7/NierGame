@@ -70,24 +70,24 @@ void PlayerStateMoving::Update()
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	auto status = owner->GetCharaStatus();
+	auto& input = Input::GetInstance();
+	//‰ñ”ð
+	if (input.IsBuffered("B") && owner->IsAvoidable())
+	{
+		//‰ñ”ð
+		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
+		return;
+	}
 	//Ž€–S
 	if (status->IsDead())
 	{
 		ChangeState(std::make_shared<PlayerStateDeath>(m_pOwner));
 		return;
 	}
-	auto& input = Input::GetInstance();
 	//‚â‚ç‚ê
 	if (status->IsHitReaction())
 	{
 		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner));
-		return;
-	}
-	//‰ñ”ð
-	if (input.IsBuffered("B") && owner->IsAvoidable())
-	{
-		//‰ñ”ð
-		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
 		return;
 	}
 	//—Ž‰º

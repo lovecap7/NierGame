@@ -27,7 +27,17 @@ public:
 private:
     //カメラ
     std::shared_ptr<CameraController> m_cameraController;
-    //フレームカウント
+    //最初の激しいグリッジを行うフレームをカウント
     int m_hardShakingCountFrame;
+    //不定期でグリッジを行う
+    int m_IrregularCountFrame;
+    int m_IrregularFrame;
+    //各項目の値
+    float m_blockScele;
+    float m_noiseSpeed;
+    float m_shakeStrength;
+private:
+    //グリッジの更新
+    void UpdateGlitch();
 };
 

@@ -12,16 +12,35 @@
 #include "../Game/Camera/TitleCamera.h"
 #include "../Main/Application.h"
 #include "../General/ShaderPostProcess.h"
+#include "../General/Math/MyMath.h"
 
 namespace
 {
-	//激しくグリッジ
-	constexpr int kHardShakingFrame = 100;
+	//最初のグリッジフレーム
+	constexpr int kStartHardShakingFrame = 100;
+	//強いグリッジ
+	constexpr float kBlockScele = 10.0f;
+	constexpr float kNoiseSpeed = 10.0f;
+	constexpr float kShakeStrength = 10.0f;
+	//揺れるフレーム
+	constexpr int kIrregularFrameMin = 80;
+	constexpr int kIrregularFrameMax = 150;
+	//カウントリセット
+	constexpr int kResetIrregularFrame = 10;
+	//lerp率
+	constexpr float kLerpRate = 0.1f;
+	//0とみなす値
+	constexpr float kEpsilon = 0.1f;
 }
 
 TitleScene::TitleScene(SceneController& controller):
 	SceneBase(controller),
-	m_hardShakingCountFrame(kHardShakingFrame)
+	m_hardShakingCountFrame(kStartHardShakingFrame),
+	m_IrregularCountFrame(0),
+	m_IrregularFrame(kStartHardShakingFrame),
+	m_blockScele(kBlockScele),
+	m_noiseSpeed(kNoiseSpeed),
+	m_shakeStrength(kShakeStrength)
 {
 	//カメラ
 	auto camera = std::make_shared<TitleCamera>();
@@ -35,10 +54,10 @@ TitleScene::TitleScene(SceneController& controller):
 
 	//グリッジ
 	auto& postPrecess = Application::GetInstance().GetPostProcess();
-	postPrecess->AddPostEffectState(ShaderPostProcess::PostEffectState::Glitch);
-	postPrecess->SetBlockScele(10.0f);
-	postPrecess->SetNoiseSpeed(10.0f);
-	postPrecess->SetShakeStrength(10.0f);
+	postPrecess->AddPostEffectState(ShaderPostProcess::PostEffectState::NoColorGlitch);
+	postPrecess->SetBlockScele(m_blockScele);
+	postPrecess->SetNoiseSpeed(m_noiseSpeed);
+	postPrecess->SetShakeStrength(m_shakeStrength);
 }
 
 TitleScene::~TitleScene()
@@ -62,17 +81,8 @@ void TitleScene::Update()
 		return;
 	}
 
-	//最初の数フレームは激しくグリッジ
-	if (m_hardShakingCountFrame > 0)
-	{
-		auto& postPrecess = Application::GetInstance().GetPostProcess();
-		postPrecess->AddPostEffectState(ShaderPostProcess::PostEffectState::Glitch);
-		postPrecess->SetBlockScele(0.1f);
-		postPrecess->SetNoiseSpeed(0.1f);
-		postPrecess->SetShakeStrength(0.1f);
-		//激しく
-		--m_hardShakingCountFrame;
-	}
+	//グリッジの更新
+	UpdateGlitch();
 
 	//カメラ
 	m_cameraController->Update();
@@ -93,6 +103,9 @@ void TitleScene::End()
 	UIManager::GetInstance().AllDeleteUI();
 	//削除
 	AssetManager::GetInstance().AllDelete();
+	//グリッジ削除
+	auto& postPrecess = Application::GetInstance().GetPostProcess();
+	postPrecess->SubPostEffectState(ShaderPostProcess::PostEffectState::NoColorGlitch);
 }
 
 void TitleScene::DebugDraw() const
@@ -101,4 +114,49 @@ void TitleScene::DebugDraw() const
 	DrawString(0, 0, L"Title Scene", 0xffffff);
 	DrawString(0, 16, L"[D]キーで Debug Scene", 0xffffff);
 #endif
+}
+
+
+void TitleScene::UpdateGlitch()
+{
+	auto& postPrecess = Application::GetInstance().GetPostProcess();
+
+	//最初の数フレームは激しくグリッジ
+	if (m_hardShakingCountFrame > 0)
+	{
+		//激しく
+		--m_hardShakingCountFrame;
+	}
+	else
+	{
+		// 各値
+		float scale, speed, strength;
+		scale = speed = strength = 0.0f;
+
+		//不定期に揺れる
+		++m_IrregularCountFrame;
+		if (m_IrregularCountFrame >= m_IrregularFrame + kResetIrregularFrame)
+		{
+			m_IrregularCountFrame = 0;
+			m_IrregularFrame = MyMath::GetRand(kIrregularFrameMin, kIrregularFrameMax);
+		}
+		else if (m_IrregularCountFrame >= m_IrregularFrame)
+		{
+			scale = kBlockScele;
+			speed = kNoiseSpeed;
+			strength = kShakeStrength;
+		}
+		m_blockScele = MathSub::Lerp(m_blockScele, scale, kLerpRate);
+		m_noiseSpeed = MathSub::Lerp(m_noiseSpeed, speed, kLerpRate);
+		m_shakeStrength = MathSub::Lerp(m_shakeStrength, strength, kLerpRate);
+
+		//小さい値の場合0にする
+		if (m_blockScele < kEpsilon)m_blockScele = 0.0f;
+		if (m_noiseSpeed < kEpsilon)m_noiseSpeed = 0.0f;
+		if (m_shakeStrength < kEpsilon)m_shakeStrength = 0.0f;
+	}
+	//グリッジの各値の設定
+	postPrecess->SetBlockScele(m_blockScele);
+	postPrecess->SetNoiseSpeed(m_noiseSpeed);
+	postPrecess->SetShakeStrength(m_shakeStrength);
 }

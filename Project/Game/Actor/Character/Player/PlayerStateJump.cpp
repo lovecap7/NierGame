@@ -71,6 +71,12 @@ void PlayerStateJump::Update()
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	//ステータス
 	auto status = owner->GetCharaStatus();
+	//回避
+	if (input.IsBuffered("B") && owner->IsAvoidable())
+	{
+		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
+		return;
+	}
 	//死亡
 	if (status->IsDead())
 	{
@@ -81,12 +87,6 @@ void PlayerStateJump::Update()
 	if (status->IsHitReaction())
 	{
 		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner));
-		return;
-	}
-	//回避
-	if (input.IsBuffered("B") && owner->IsAvoidable())
-	{
-		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
 		return;
 	}
 	//落下

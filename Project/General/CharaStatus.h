@@ -73,6 +73,8 @@ public:
 	void FullRecovery();
 	//Ž€–S
 	bool IsDead()const { return m_nowHp <= 0; };
+	//UŒ‚‚ð‹ò‚ç‚Á‚½‚±‚Æ‚ð‚È‚©‚Á‚½‚±‚Æ‚É
+	void ResetDamage();
 
 	//–³“G
 	void SetIsNoDamage(bool isNoDamage) { m_isNoDamage = isNoDamage; };
@@ -116,6 +118,9 @@ private:
 
 	//Ž‚¿Žå
 	Vector3 m_ownerPos;
+
+	//1ƒtƒŒ[ƒ€‘O‚Ì‘Ì—Í
+	int m_beforeHp;
 private:
 	//ƒ_ƒ[ƒWŒvŽZ
 	int GetDamage(int power, int at);

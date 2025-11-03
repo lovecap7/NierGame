@@ -26,7 +26,7 @@ namespace
 	const std::wstring kJustAvoid = L"JustAvoid";
 
 	//ジャスト回避フレーム
-	constexpr float kJustFrame = 15.0f;
+	constexpr float kJustFrame = 20.0f;
 	//スロー速度
 	constexpr float kSlowSpeed = 0.05f;
 	//無敵フレーム
@@ -34,7 +34,7 @@ namespace
 	//ジャスト回避終了前
 	constexpr float kFisishJustAvoidFrame = 5.0f;
 	//終了可能フレーム
-	constexpr float kEnableFinishAvoidFrame = 20.0f;
+	constexpr float kEnableFinishAvoidFrame = kJustFrame + 5;
 }
 
 PlayerStateAvoid::PlayerStateAvoid(std::weak_ptr<Actor> player) :
@@ -145,6 +145,12 @@ void PlayerStateAvoid::Update()
 	//入力
 	auto& input = Input::GetInstance();
 
+	//フレームカウント
+	CountFrame();
+
+	//ジャスト回避
+	UpdateJustAvoid(owner, model, app);
+
 	//死亡
 	if (owner->GetCharaStatus()->IsDead())
 	{
@@ -152,17 +158,12 @@ void PlayerStateAvoid::Update()
 		return;
 	}
 	//やられ
-	if (owner->GetCharaStatus()->IsHitReaction())
+	if (owner->GetCharaStatus()->IsHitReaction() && !m_isJustAvoid)
 	{
 		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner));
 		return;
 	}
 
-	//フレームカウント
-	CountFrame();
-
-	//ジャスト回避
-	UpdateJustAvoid(owner, model, app);
 
 	//ジャスト回避成功後
 	if (m_isJustAvoid)
@@ -261,8 +262,13 @@ void PlayerStateAvoid::InitJustAvoid(std::shared_ptr<Model> model, std::shared_p
 	//フレームリセット
 	m_frame = 0.0f;
 
+
+	auto status = owner->GetCharaStatus();
 	//無敵
-	owner->GetCharaStatus()->SetIsNoDamage(true);
+	status->SetIsNoDamage(true);
+
+	//攻撃をなかったことに
+	status->ResetDamage();
 
 	//エフェクト
 	EffekseerManager::GetInstance().CreateTrackActorEffect(owner->GetEffectPath(kJustAvoid), owner);

@@ -15,6 +15,7 @@ public:
 		Glitch = 1 << 0, //0001
 		Gray = 1 << 1,   //0010
 		JustAvoid = 1 << 2, //0100
+		NoColorGlitch = 1 << 3, //1000
 	};
 	//ポストエフェクトの状態を設定
 	void SetPostEffectState(const PostEffectState state){ m_cbuff1->state = static_cast<int>(state); }

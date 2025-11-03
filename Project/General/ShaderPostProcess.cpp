@@ -43,7 +43,8 @@ void ShaderPostProcess::Init()
 void ShaderPostProcess::Update()
 {
 	if (m_cbuff1 == nullptr)return;
-	if (m_cbuff1->state & static_cast<int>(PostEffectState::Glitch))
+	if (m_cbuff1->state & static_cast<int>(PostEffectState::Glitch) || 
+		m_cbuff1->state & static_cast<int>(PostEffectState::NoColorGlitch))
 	{
 		//XV
 		m_cbuff1->shakeStrength = MyMath::GetRandF(0.0f, m_optionCbuff.shakeStrength);

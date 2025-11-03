@@ -49,7 +49,12 @@ void PlayerStateIdle::Update()
 	auto& input = Input::GetInstance();
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	auto status = owner->GetCharaStatus();
-
+	//‰ñ”ğ
+	if (input.IsBuffered("B") && owner->IsAvoidable())
+	{
+		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
+		return;
+	}
 	//€–S
 	if (status->IsDead())
 	{
@@ -66,12 +71,6 @@ void PlayerStateIdle::Update()
 	if (owner->GetCharaStatus()->IsHitReaction())
 	{
 		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner));
-		return;
-	}
-	//‰ñ”ğ
-	if (input.IsBuffered("B") && owner->IsAvoidable())
-	{
-		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
 		return;
 	}
 	//UŒ‚
