@@ -6,6 +6,11 @@
 #include "../../Main/Application.h"
 #include "AttackBase.h"
 
+namespace
+{
+	constexpr float kHitStopTimeScale = 0.05f;
+}
+
 AttackManager::AttackManager():
 	m_hitStopFrame(0),
 	m_isHitStop(false)
@@ -45,7 +50,6 @@ void AttackManager::Init()
 
 void AttackManager::Update()
 {
-
 	//攻撃の更新とヒットストップを行うか
 	for (auto& attack : m_attacks)
 	{
@@ -93,7 +97,7 @@ void AttackManager::End()
 void AttackManager::HitStop(std::shared_ptr<AttackBase> attack)
 {
 	auto& app = Application::GetInstance();
-	app.SetTimeScale(0.05f);
+	app.SetTimeScale(kHitStopTimeScale);
 	//ヒットストップ
 	m_isHitStop = true;
 	//フレーム数は大きいほうを優先
