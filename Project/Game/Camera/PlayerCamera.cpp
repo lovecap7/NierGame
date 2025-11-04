@@ -66,6 +66,8 @@ void PlayerCamera::Init()
 	m_playerPos = Vector3::Zero();
     m_lockOnSide = kRightOffset;
     m_nextlockOnSide = kRightOffset;
+    m_shakePower = 0;
+    m_shakeFrame = 0;
 
     //UI
     auto lockOnUI = std::make_shared<PlayerCameraUI>(std::dynamic_pointer_cast<PlayerCamera>(shared_from_this()));
@@ -94,6 +96,27 @@ void PlayerCamera::Update()
 		//通常更新
         NormalUpdate(input, targetPos);
     }
+
+    //カメラの揺れ
+    if (m_shakeFrame > 0)
+    {
+        //フレームを減らしてく
+        --m_shakeFrame;
+
+        //カメラの位置を揺らす
+        int power = m_shakePower;
+        if (m_shakeFrame % 2 == 0)
+        {
+            power *= -1;
+        }
+        Vector3 shakePos = (m_cameraPos + m_right * power);
+
+        //反映
+        DxLib::SetCameraPositionAndTarget_UpVecY(
+            shakePos.ToDxLibVector(),
+            m_viewPos.ToDxLibVector()
+        );
+    }
 }
 
 void PlayerCamera::StartLockOn(std::weak_ptr<Actor> lockOnTarget)
@@ -107,6 +130,11 @@ void PlayerCamera::EndLockOn()
 {
 	m_isLockOn = false;
 	m_lockOnTarget.reset();
+}
+void PlayerCamera::CameraShake(int frame, int shakePower)
+{
+    m_shakeFrame = MathSub::Max(m_shakeFrame, frame);
+    m_shakePower = MathSub::Max(m_shakePower, shakePower);
 }
 void PlayerCamera::NormalUpdate(Input& input, Vector3& targetPos)
 {

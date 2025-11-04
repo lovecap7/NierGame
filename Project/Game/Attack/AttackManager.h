@@ -6,6 +6,7 @@
 
 class Actor;
 class AttackBase;
+class PlayerCamera;
 class AttackManager : public std::enable_shared_from_this<AttackManager>
 {
 public:
@@ -26,6 +27,9 @@ public:
 
 	//ヒットストップ
 	void HitStop(std::shared_ptr<AttackBase> attack);
+
+	//カメラ
+	void SetPlayerCamera(std::weak_ptr<PlayerCamera> pPlayerCamera);
 private:
 	//攻撃のリスト
 	std::list<std::shared_ptr<AttackBase>> m_attacks;
@@ -35,6 +39,9 @@ private:
 
 	//ヒットストップ中
 	bool m_isHitStop;
+
+	//カメラの参照
+	std::weak_ptr<PlayerCamera> m_pPlayerCamera;
 private:
 	//削除チェック
 	void CheckDelete();

@@ -27,6 +27,9 @@ public:
 	//プレイヤーの向き
 	void SetPlayerDir(const Vector3& dir) { m_playerDir = dir; };
 
+	//カメラの揺れ
+	void CameraShake(int frame, int shakePower);
+
 private:
 	//ロックオン対象
 	std::weak_ptr<Actor> m_lockOnTarget;
@@ -49,6 +52,9 @@ private:
 	//ロックオンUI
 	std::weak_ptr<PlayerCameraUI> m_lockOnUI;
 
+	//カメラを揺らす
+	int m_shakeFrame;
+	int m_shakePower;
 private:
 	//通常時の更新
 	void NormalUpdate(Input& input, Vector3& targetPos);

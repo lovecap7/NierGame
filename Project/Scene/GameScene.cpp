@@ -52,6 +52,7 @@ void GameScene::Init()
 
 	m_attackManager = std::make_shared<AttackManager>();
 	m_attackManager->Init();
+	m_attackManager->SetPlayerCamera(camera);
 
 	//アクター
 	m_actorManager = std::make_shared<ActorManager>();

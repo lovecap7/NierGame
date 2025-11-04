@@ -3,6 +3,7 @@
 #include <cassert>
 #include "../../General/CSV/CSVDataLoader.h"
 #include "../../General/CSV/ActorData.h"
+#include "../Camera/PlayerCamera.h"
 #include "../../Main/Application.h"
 #include "AttackBase.h"
 
@@ -102,8 +103,14 @@ void AttackManager::HitStop(std::shared_ptr<AttackBase> attack)
 	m_isHitStop = true;
 	//フレーム数は大きいほうを優先
 	m_hitStopFrame = MathSub::Max(m_hitStopFrame, attack->GetHitStopFrame());
-	////カメラの揺れも大きいほうを優先
-	//float cameraShakePower = MathSub::Max(m_hitStopFrame, attack->GetHitStopShakePower());
+	//カメラの揺れも大きいほうを優先
+	if (m_pPlayerCamera.expired())return;
+	m_pPlayerCamera.lock()->CameraShake(m_hitStopFrame, attack->GetHitStopShakePower());
+}
+
+void AttackManager::SetPlayerCamera(std::weak_ptr<PlayerCamera> pPlayerCamera)
+{
+	m_pPlayerCamera = pPlayerCamera;
 }
 
 //消滅フラグをチェックして削除
