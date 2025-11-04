@@ -1,5 +1,7 @@
 ﻿名前,ID,アクタータイプ,座標X,座標Y,座標Z,回転X,回転Y,回転Z,大きさX,大きさY,大きさZ,モデルのパス,優先度,ゲームタグ,当たり判定無視,トリガー,重力を受ける,コリジョンの半径,コリジョンの高さ,パスをまとめたパス
-Area1S,37,Stage,18.16091,9.041168,43.01241,0,0,0,100,50,5,Collision/Cube,Static,Object,0,0,0,0,0,None
-Area1E,47,Stage,-25.53909,4.150002,94.76241,0,180,0,100,50,5,Collision/Cube,Static,Object,0,0,0,0,0,None
-Area2S,39,Stage,36.87091,9.041168,127.4624,0,0,0,120,50,5,Collision/Cube,Static,Object,0,0,0,0,0,None
-Area2E,32,Stage,-42.13909,4.150002,187.4624,0,180,0,100,50,5,Collision/Cube,Static,Object,0,0,0,0,0,None
+Area1S,25,Stage,18.16091,9.041168,43.01241,0,0,0,100,50,5,Collision/Cube,Static,Object,0,0,0,0,0,None
+Area1E,26,Stage,-25.53909,4.150002,72.97241,0,180,0,100,50,5,Collision/Cube,Static,Object,0,0,0,0,0,None
+Area2S,5,Stage,18.16091,9.041168,76.02241,0,0,0,100,50,5,Collision/Cube,Static,Object,0,0,0,0,0,None
+Area2E,4,Stage,-25.53909,4.150002,123.7624,0,180,0,100,50,5,Collision/Cube,Static,Object,0,0,0,0,0,None
+Area3S,22,Stage,36.87091,9.041168,127.4624,0,0,0,120,50,5,Collision/Cube,Static,Object,0,0,0,0,0,None
+Area3E,21,Stage,-42.13909,4.150002,187.4624,0,180,0,100,50,5,Collision/Cube,Static,Object,0,0,0,0,0,None

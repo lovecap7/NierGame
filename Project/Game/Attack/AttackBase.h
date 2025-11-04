@@ -35,6 +35,16 @@ public:
 
     //IDリセット
     void ResetHitID();
+
+    //当たったことがある
+    bool IsHit()const { return m_isHit; };
+
+    //ヒットストップをするか
+    bool IsRequestHitStop()const { return m_isRequestHitStop; };
+    //ヒットストップ
+    int GetHitStopFrame()const { return m_hitStopFrame; };
+    //揺れの強さ
+    int GetHitStopShakePower()const { return m_hitStopShakePower; };
 protected:
     //威力
     int m_attackPower;
@@ -47,6 +57,11 @@ protected:
     //ノックバック大きさ
     float m_knockBackPower;
 
+    //ヒットストップフレーム
+    int m_hitStopFrame;
+    //揺れの強さ
+    int m_hitStopShakePower;
+
     //当てたことのあるActorのIDを覚えておく
     //unordered_setのリンク
     //https://jp-seemore.com/iot/24421/#google_vignette
@@ -54,13 +69,19 @@ protected:
 
     //持ち主
     std::weak_ptr<CharacterBase> m_pOwner;
+
+
     //当たったことがある
     bool m_isHit;
 
+    //ヒットストップをする
+    bool m_isRequestHitStop;
+
     //基準位置情報
-	AttackData::AttackOriginPos m_originPosData;
+    AttackData::AttackOriginPos m_originPosData;
 
     //中心座標
-	Vector3 m_oriPos;
+    Vector3 m_oriPos;
+
 };
 

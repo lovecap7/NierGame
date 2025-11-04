@@ -15,6 +15,8 @@ AttackData::AttackData():
 	m_nextAttackName(),
 	m_radius(0.0f),
 	m_length(0.0f),
+	m_hitStopFrame(0),
+	m_hitStopShakePower(0),
 	m_param1(0.0f),
 	m_param2(0.0f),
 	m_param3(0.0f),
@@ -39,6 +41,8 @@ AttackData::AttackData(std::shared_ptr<CSVData> data):
 	m_nextAttackName(),
 	m_radius(0.0f),
 	m_length(0.0f),
+	m_hitStopFrame(0),
+	m_hitStopShakePower(0),
 	m_param1(0.0f),
 	m_param2(0.0f),
 	m_param3(0.0f),
@@ -114,8 +118,14 @@ void AttackData::Conversion()
 	//キャンセルフレーム
 	m_cancelFrame = stoi(m_data[17]);
 
+	//ヒットストップのフレーム
+	m_hitStopFrame = stoi(m_data[18]);
+
+	//ヒットストップの揺れ
+	m_hitStopShakePower = stoi(m_data[19]);
+
 	//パラメータ
-	m_param1 = stof(m_data[18]);
-	m_param2 = stof(m_data[19]);
-	m_param3 = stof(m_data[20]);
+	m_param1 = stof(m_data[20]);
+	m_param2 = stof(m_data[21]);
+	m_param3 = stof(m_data[22]);
 }

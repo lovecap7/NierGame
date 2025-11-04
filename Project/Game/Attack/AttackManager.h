@@ -23,8 +23,18 @@ public:
 	void Draw()const;
 	//終了処理
 	void End();
+
+	//ヒットストップ
+	void HitStop(std::shared_ptr<AttackBase> attack);
 private:
+	//攻撃のリスト
 	std::list<std::shared_ptr<AttackBase>> m_attacks;
+
+	//ヒットストップフレーム
+	int m_hitStopFrame;
+
+	//ヒットストップ中
+	bool m_isHitStop;
 private:
 	//削除チェック
 	void CheckDelete();

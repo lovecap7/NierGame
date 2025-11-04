@@ -20,7 +20,10 @@ AttackBase::AttackBase(Shape shape, std::shared_ptr<AttackData> attackData, std:
 	m_knockBackV = attackData->GetVerticalPower();
 	m_keepFrame = attackData->GetKeepFrame();
 	m_originPosData = attackData->GetAttackOriginPos();
+	m_hitStopFrame = attackData->GetHitStopFrame();
+	m_hitStopShakePower = attackData->GetHitStopShakePower();
 	m_isHit = false;
+	m_isRequestHitStop = false;
 
 	//コライダーの設定
 	switch (shape)
@@ -70,6 +73,7 @@ void AttackBase::Update()
 	}
 	//ヒットリセット
 	m_isHit = false;
+	m_isRequestHitStop = false;
 }
 
 void AttackBase::OnCollide(const std::shared_ptr<Collidable> other)
@@ -121,13 +125,15 @@ void AttackBase::OnCollide(const std::shared_ptr<Collidable> other)
 			//ダメージを与える
 			otherStatus->OnDamage(m_attackPower, at, m_attackWeight);
 
-
+			//のけぞるか
 			if (m_rb && otherStatus->IsHitReaction())
 			{
 				Vector3 attackPos = m_oriPos;
 				//ノックバックを与える
 				Vector3 knockBack = otherStatus->GetKnockBack(otherColl->GetPos(), attackPos, m_knockBackPower, m_knockBackV);
 				otherColl->GetRb()->SetVec(knockBack);
+				//ヒットストップを行う
+				m_isRequestHitStop = true;
 			}
 
 			//当たった

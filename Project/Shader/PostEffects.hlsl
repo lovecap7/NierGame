@@ -30,7 +30,7 @@ cbuffer ConstantBuffer2 : register(b5)
 #define STATE_JUSTAVOID 1 << 2      //ジャスト回避
 #define STATE_GLITCHNOCOLOR 1 << 3  //色ずれなしグリッジ
 
-// 疑似乱数を生成する関数
+//疑似乱数を生成する関数
 float random(float2 seeds)
 {
     return frac(sin(dot(seeds, float2(12.9898, 78.233))) * 43758.5453);
@@ -111,23 +111,7 @@ PS_OUTPUT main(PS_INPUT input)
         }
     }
   
-    //状態がモノクロまたはジャスト回避
-    //画面の端を暗く
-    if (isUseJust || isUseGray)
-    {
-        float2 uv = input.uv;
- 
-        float d = length(uv - 0.5);
-        
-        float lerpRate = saturate(justRate);
-        
-        float4 vignetteColor = lerp(color, float4(0.0, 0.0, 0.0, 1.0), lerpRate);
-
-        float vignetteDistance = pow(saturate(d * 1.5), 2);
-        
-        color = lerp(color, vignetteColor, vignetteDistance);
-    }
-    
+    //モノクロ化
     if (isUseGray)
     {
         float4 beforeColor = color; //グリッチ処理後の色を保持
@@ -147,6 +131,30 @@ PS_OUTPUT main(PS_INPUT input)
         //UV
         float2 uv = input.uv;
     }
+    
+    //状態がモノクロまたはジャスト回避
+    //画面の端を暗く
+    if (isUseJust || isUseGray)
+    {
+        float2 uv = input.uv;
+ 
+        float d = length(uv - 0.5);
+        
+        //明るさ
+        float rate = justRate;
+        if (isUseGray)
+        {
+            rate = 1.0;
+        }
+        float lerpRate = saturate(rate);
+        
+        float4 vignetteColor = lerp(color, float4(0.0, 0.0, 0.0, 1.0), lerpRate);
+
+        float vignetteDistance = pow(saturate(d * 1.5), 2);
+        
+        color = lerp(color, vignetteColor, vignetteDistance);
+    }
+   
 
     //最終的なカラーを出力
     output.color = color;

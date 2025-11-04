@@ -80,6 +80,12 @@ public:
 	//キャンセル
 	int GetCancelFrame()const { return m_cancelFrame; };
 
+	//ヒットストップのフレーム
+	int GetHitStopFrame()const { return m_hitStopFrame; };
+
+	//ヒットストップの揺れ
+	int GetHitStopShakePower()const { return m_hitStopShakePower; };
+
 	//パラメータ
 	float GetParam1()const { return m_param1; };
 	float GetParam2()const { return m_param2; };
@@ -142,6 +148,12 @@ private:
 
 	//キャンセル
 	int m_cancelFrame;
+
+	//ヒットストップフレーム
+	int m_hitStopFrame;
+
+	//ヒットストップによるカメラの揺れ
+	int m_hitStopShakePower;
 
 	//パラメータ
 	float m_param1;

@@ -254,6 +254,7 @@ void PlayerStateAvoid::InitJustAvoid(std::shared_ptr<Model> model, std::shared_p
 	app.SetTimeScale(kSlowSpeed);
 	//自分のタイムスケールを使う
 	owner->EnableIsMyScale();
+	owner->SetTimeScale(1.0f);
 
 	//シェーダー
 	app.GetPostProcess()->SetJustAvoidEffectTime(model->GetTotalAnimFrame());
@@ -296,8 +297,6 @@ void PlayerStateAvoid::UpdateJustAvoid(std::shared_ptr<Player> owner, std::share
 			//元に戻す
 			app.SetTimeScale(1.0f);
 			//自分のタイムスケールを使わない
-			owner->DisableIsMyScale();
-			//無効
 			owner->DisableIsMyScale();
 			//描画する
 			owner->SetIsDraw(true);
