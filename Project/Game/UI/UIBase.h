@@ -16,8 +16,12 @@ public:
 	virtual void Draw()const abstract;
 	//•`‰æ‡
 	bool IsFrontDraw()const { return m_isFrontDraw; };
+	//íœ
+	bool IsDelete()const { return m_isDelete; };
 protected:
 	//•`‰æ‡
 	bool m_isFrontDraw;
+	//íœ
+	bool m_isDelete;
 };
 

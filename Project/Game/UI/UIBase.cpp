@@ -2,7 +2,8 @@
 #include "UIManager.h"
 
 UIBase::UIBase():
-	m_isFrontDraw(false)
+	m_isFrontDraw(false),
+	m_isDelete(false)
 {
 }
 

@@ -37,6 +37,8 @@ public:
 private:
 	std::list<std::shared_ptr<UIBase>> m_uis;
 private:
+	//削除チェック
+	void CheckDelete();
 	
 };
 

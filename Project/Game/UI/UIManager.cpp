@@ -30,6 +30,9 @@ void UIManager::Update()
 	{
 		ui->Update();
 	}
+	
+	//削除
+	CheckDelete();
 }
 
 void UIManager::FrontDraw() const
@@ -56,4 +59,15 @@ void UIManager::AllDeleteUI()
 {
 	//一気に登録解除
 	m_uis.clear();
+}
+//消滅フラグをチェックして削除
+void UIManager::CheckDelete()
+{
+	//消滅フラグが立っているものを削除
+	m_uis.remove_if([](const std::shared_ptr<UIBase> ui) {
+		if (ui->IsDelete()) {
+			return true;
+		}
+		return false;
+		});
 }

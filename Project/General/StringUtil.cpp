@@ -26,8 +26,17 @@ std::wstring StringUtil::InsertNewLines(const std::wstring& str, int maxLength)
 			count = 0;
 			continue;
 		}
-		//カウント
-		++count;
+		//半角
+		if (c < 0x80)
+		{
+			//カウント
+			++count;
+		}
+		else
+		{
+			//カウント
+			count += 2;
+		}
 		//一行の最大文字数を超えたら
 		if (count > maxLength)
 		{

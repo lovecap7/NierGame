@@ -90,9 +90,6 @@ void Application::Run()
 	auto& input = Input::GetInstance();
 	input.Init();
 
-	//シーン
-	std::unique_ptr<SceneController> sceneController = std::make_unique<SceneController>();
-
 	//Physics(衝突処理)
 	auto& physics = Physics::GetInstance();
 	physics.Init();
@@ -110,6 +107,9 @@ void Application::Run()
 
 	//UI
 	auto& uiManager = UIManager::GetInstance();
+
+	//シーン
+	std::unique_ptr<SceneController> sceneController = std::make_unique<SceneController>();
 
 	//ゲームループ
 	while (ProcessMessage() != -1) // Windowsが行う処理を待つ

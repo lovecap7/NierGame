@@ -8,7 +8,14 @@
 #include <DxLib.h>
 #include "../../General/StringUtil.h"
 #include "../../General/Math/MyMath.h"
+#include "../../General/AssetManager.h"
+#include "../../General/ShaderPostProcess.h"
 #include "../../General/Timer.h"
+#include "../../Game/UI/UIManager.h"
+#include "../../Game/UI/TalkUI.h"
+#include "../../Main/Application.h"
+#include "../../General/CSV/CSVDataLoader.h"
+#include "../../General/CSV/TextData.h"
 
 
 DebugSelectScene::DebugSelectScene(SceneController& controller) :
@@ -23,6 +30,25 @@ DebugSelectScene::~DebugSelectScene()
 
 void DebugSelectScene::Init()
 {
+	//アセットを削除
+	AssetManager::GetInstance().DeleteModelHandle();
+	//ポストエフェクトを解除
+	Application::GetInstance().GetPostProcess()->ResetPostEffectState();
+	//UI削除
+	UIManager::GetInstance().AllDeleteUI();
+
+	auto& csvLoader = CSVDataLoader::GetInstance();
+	auto datas = csvLoader.LoadCSV(L"Tutorial/TextData");
+	std::list<std::shared_ptr<TextData>> textDatas;
+	for (auto& data : datas)
+	{
+		auto textData = std::make_shared<TextData>(data);
+		textDatas.push_back(textData);
+	}
+
+	UIManager::GetInstance().Entry(std::make_shared<TalkUI>(textDatas));
+
+
 	m_currentMenu = Menu::Title;
 }
 
