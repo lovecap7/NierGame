@@ -327,6 +327,7 @@ void FixNextPosition::FixNextPosCP(const std::shared_ptr<Collidable> collA, cons
 		else
 		{
 			//°
+
 			if (lineHit.Normal.y > 0.0f)
 			{
 				//ŽŸ‚ÌˆÊ’u
