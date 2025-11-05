@@ -295,69 +295,125 @@ void FixNextPosition::FixNextPosCP(const std::shared_ptr<Collidable> collA, cons
 	auto rbA = collA->m_rb;
 	auto rbB = collB->m_rb;
 
-	//当たったポリゴンの情報
-	auto& hitDim = collDataB->GetHitDim();
-	//お互い動かないオブジェクトなら衝突しない(ポリゴンはスタティックなので片方がスタティックなら)
-	if (collA->m_priority == Priority::Static)
+	//CCDで判定をしているなら
+	if (collDataB->IsCCD())
 	{
-		// 検出したプレイヤーの周囲のポリゴン情報を開放する
-		DxLib::MV1CollResultPolyDimTerminate(hitDim);
-		return;
-	}
+		//当たったポリゴンの情報
+		auto lineHit = collDataB->GetLineHit();
 
-	//カプセルの頭座標と足座標
-	Position3 headPos = collDataA->GetNextEndPos(rbA->GetVecWithTS());//移動後
-	Position3 legPos = rbA->GetNextPos();//移動後
-	//頭より足のほうが低い位置にあるなら入れ替える
-	if (headPos.y < legPos.y)
-	{
-		Position3 temp = legPos;
-		legPos = headPos;
-		headPos = temp;
-	}
-	float radius = collDataA->GetRadius();
-
-	//床ポリゴンと壁ポリゴンに分ける
-	AnalyzeWallAndFloor(hitDim, legPos);
-
-	//床か天井に当たったか
-	bool isFloorAndRoof = m_floorAndRoofNum > 0;
-	//壁に当たったか
-	bool isWall = m_wallNum > 0;
-
-	//床と当たったなら
-	if (isFloorAndRoof)
-	{
-		//ジャンプしているなら
-		if (collA->m_collState == CollisionState::Jump)
+		//壁なのか床なのかを見る
+		//法線のY成分が大きければ床、小さければ壁
+		if (abs(lineHit.Normal.y) < kWallThreshold)
 		{
-			//天井に当たった処理
-			HitRoofCP(collA, headPos, m_floorAndRoofNum, *m_floorAndRoof, radius);
+			//壁
+			
+			//高さ
+			float nextY = rbA->GetNextPos().y;
+			
+			//次の位置
+			Vector3 nextPos = lineHit.HitPosition;
+			nextPos += Vector3(lineHit.Normal) * (collDataA->GetRadius() + kOverlapGap);
+
+			//始点から終点へのベクトル
+			Vector3 sToE = collDataA->GetEndPos() - rbA->GetPos();
+
+			//座標確定
+			rbA->SetPos(nextPos);
+			rbA->SetPosY(nextY);
+			collDataA->SetEndPos(rbA->GetPos() + sToE);
+			//移動量リセット
+			rbA->SetMoveVec(Vector3::Zero());
 		}
 		else
 		{
-			//床の高さに合わせる
-			HitFloorCP(collA, legPos,headPos, m_floorAndRoofNum, *m_floorAndRoof, radius);
+			//床
+			if (lineHit.Normal.y > 0.0f)
+			{
+				//次の位置
+				Vector3 nextPos = lineHit.HitPosition;
+				nextPos.x = 0.0f;
+				nextPos.z = 0.0f;
+				nextPos.y += collDataA->GetRadius() + kOverlapGap;
+
+				//始点から終点へのベクトル
+				Vector3 sToE = collDataA->GetEndPos() - rbA->GetPos();
+
+				//座標確定
+				rbA->SetPosY(nextPos.y);
+				collDataA->SetEndPos(rbA->GetPos() + sToE);
+				//移動量リセット
+				rbA->SetVecY(0.0f);
+			}
 		}
+
+		//CCDリセット
+		collDataB->SetIsCCD(false);
 	}
-	//壁と当たっているなら
-	if (isWall)
+	else
 	{
-		
-		//壁に当たっているので
-		collA->SetIsWall(true);
+		//当たったポリゴンの情報
+		auto& hitDim = collDataB->GetHitDim();
+		//お互い動かないオブジェクトなら衝突しない(ポリゴンはスタティックなので片方がスタティックなら)
+		if (collA->m_priority == Priority::Static)
+		{
+			// 検出したプレイヤーの周囲のポリゴン情報を開放する
+			DxLib::MV1CollResultPolyDimTerminate(hitDim);
+			return;
+		}
 
-		//補正するベクトルを返す
-		Vector3 overlapVec = HitWallCP(headPos, legPos, m_wallNum, *m_wall, radius);
+		//カプセルの頭座標と足座標
+		Position3 headPos = collDataA->GetNextEndPos(rbA->GetVecWithTS());//移動後
+		Position3 legPos = rbA->GetNextPos();//移動後
+		//頭より足のほうが低い位置にあるなら入れ替える
+		if (headPos.y < legPos.y)
+		{
+			Position3 temp = legPos;
+			legPos = headPos;
+			headPos = temp;
+		}
+		float radius = collDataA->GetRadius();
 
-		//ベクトルを補正
-		rbA->AddVec(overlapVec);
+		//床ポリゴンと壁ポリゴンに分ける
+		AnalyzeWallAndFloor(hitDim, legPos);
+
+		//床か天井に当たったか
+		bool isFloorAndRoof = m_floorAndRoofNum > 0;
+		//壁に当たったか
+		bool isWall = m_wallNum > 0;
+
+		//床と当たったなら
+		if (isFloorAndRoof)
+		{
+			//ジャンプしているなら
+			if (collA->m_collState == CollisionState::Jump)
+			{
+				//天井に当たった処理
+				HitRoofCP(collA, headPos, m_floorAndRoofNum, *m_floorAndRoof, radius);
+			}
+			else
+			{
+				//床の高さに合わせる
+				HitFloorCP(collA, legPos, headPos, m_floorAndRoofNum, *m_floorAndRoof, radius);
+			}
+		}
+		//壁と当たっているなら
+		if (isWall)
+		{
+
+			//壁に当たっているので
+			collA->SetIsWall(true);
+
+			//補正するベクトルを返す
+			Vector3 overlapVec = HitWallCP(headPos, legPos, m_wallNum, *m_wall, radius);
+
+			//ベクトルを補正
+			rbA->AddVec(overlapVec);
+		}
+
+
+		// 検出したプレイヤーの周囲のポリゴン情報を開放する
+		DxLib::MV1CollResultPolyDimTerminate(hitDim);
 	}
-
-
-	// 検出したプレイヤーの周囲のポリゴン情報を開放する
-	DxLib::MV1CollResultPolyDimTerminate(hitDim);
-
 }
 
 void FixNextPosition::AnalyzeWallAndFloor(MV1_COLL_RESULT_POLY_DIM hitDim, const Vector3& nextPos)

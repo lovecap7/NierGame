@@ -129,7 +129,7 @@ bool CollisionChecker::CheckCollCS(const std::shared_ptr<Collidable> collA, cons
 
 	//カプセルのそれぞれの座標
 	Vector3 cPosA = rbA->GetNextPos();
-	Vector3 cPosB = collDataA->GetNextEndPos(rbA->GetVec());
+	Vector3 cPosB = collDataA->GetNextEndPos(rbA->GetVecWithTS());
 	//球の座標
 	Vector3 sPos = rbB->GetNextPos();
 	//最短距離
@@ -178,11 +178,11 @@ bool CollisionChecker::CheckCollCC(const std::shared_ptr<Collidable> collA, cons
 	//カプセルのそれぞれの座標
 	//カプセルA
 	Vector3 capAStartPos = rbA->GetNextPos();
-	Vector3 capAEndPos = collDataA->GetNextEndPos(rbA->GetVec());
+	Vector3 capAEndPos = collDataA->GetNextEndPos(rbA->GetVecWithTS());
 	float capARadius = collDataA->GetRadius();
 	//カプセルB
 	Vector3 capBStartPos = rbB->GetNextPos();
-	Vector3 capBEndPos = collDataB->GetNextEndPos(rbB->GetVec());
+	Vector3 capBEndPos = collDataB->GetNextEndPos(rbB->GetVecWithTS());
 	float capBRadius = collDataB->GetRadius();
 	
 	//平行かどうか確認する
@@ -296,11 +296,11 @@ bool CollisionChecker::CheckCollCCVerDxLib(const std::shared_ptr<Collidable> col
 	//カプセルのそれぞれの座標
 	//カプセルA
 	Vector3 capAStartPos = rbA->GetNextPos();
-	Vector3 capAEndPos = collDataA->GetNextEndPos(rbA->GetVec());
+	Vector3 capAEndPos = collDataA->GetNextEndPos(rbA->GetVecWithTS());
 	float capARadius = collDataA->GetRadius();
 	//カプセルB
 	Vector3 capBStartPos = rbB->GetNextPos();
-	Vector3 capBEndPos = collDataB->GetNextEndPos(rbB->GetVec());
+	Vector3 capBEndPos = collDataB->GetNextEndPos(rbB->GetVecWithTS());
 	float capBRadius = collDataB->GetRadius();
 
 	return HitCheck_Capsule_Capsule(capAStartPos.ToDxLibVector(), capAEndPos.ToDxLibVector(), capARadius,
@@ -348,17 +348,66 @@ bool CollisionChecker::CheckCollCP(const std::shared_ptr<Collidable> collA, cons
 		collDataB->GetModelHandle(),
 		-1,
 		rbA->GetNextPos().ToDxLibVector(),
-		collDataA->GetNextEndPos(rbA->GetVec()).ToDxLibVector(),
+		collDataA->GetNextEndPos(rbA->GetVecWithTS()).ToDxLibVector(),
 		collDataA->GetRadius(),
 		-1);
 
-	//当たっていないならfalse
-	if (hitDim.HitNum <= 0 || collA->m_isTrigger)
+	if (collA->m_isTrigger)
 	{
 		// 検出したプレイヤーの周囲のポリゴン情報を開放する
 		MV1CollResultPolyDimTerminate(hitDim);
-		return false;
 	}
+	//当たっていないならfalse
+	else if (hitDim.HitNum <= 0)
+	{
+		//検出したプレイヤーの周囲のポリゴン情報を開放する
+		MV1CollResultPolyDimTerminate(hitDim);
+
+		//連続的衝突判定（Continuous Collision Detection）
+		auto startLineHitDim = MV1CollCheck_Line(
+			collDataB->GetModelHandle(),
+			-1,
+			rbA->GetPos().ToDxLibVector(),
+			rbA->GetNextPos().ToDxLibVector()
+		);
+		//当たったのであれば
+		if (startLineHitDim.HitFlag)
+		{
+			//CCD判定をした
+			collDataB->SetIsCCD(true);
+
+			//当たり判定に使うので保存
+			collDataB->SetLineHit(startLineHitDim);
+
+			return true;
+		}
+		else
+		{
+			auto endLineHitDim = MV1CollCheck_Line(
+				collDataB->GetModelHandle(),
+				-1,
+				collDataA->GetEndPos().ToDxLibVector(),
+				collDataA->GetNextEndPos(rbA->GetVecWithTS()).ToDxLibVector()
+			);
+
+			if (endLineHitDim.HitFlag)
+			{
+				//CCD判定をした
+				collDataB->SetIsCCD(true);
+
+				//当たり判定に使うので保存
+				collDataB->SetLineHit(endLineHitDim);
+
+				return true;
+			}
+			else
+			{
+				//当たってない
+				return false;
+			}
+		}
+	}
+
 	//当たり判定に使うので保存
 	collDataB->SetHitDim(hitDim);
 
@@ -406,7 +455,7 @@ bool CollisionChecker::CheckCollCD(const std::shared_ptr<Collidable> collA, cons
 	auto rbB = collB->m_rb;
 	//Aのコライダーの情報
 	Vector3 cPosA = rbA->GetNextPos();
-	Vector3 cPosB = collDataA->GetNextEndPos(rbA->GetVec());
+	Vector3 cPosB = collDataA->GetNextEndPos(rbA->GetVecWithTS());
 	float radiusA = collDataA->GetRadius();
 	//Bのコライダーの情報
 	Vector3 posB = rbB->GetNextPos();
@@ -454,10 +503,10 @@ bool CollisionChecker::ParallelCC(const std::shared_ptr<Collidable> collA, const
 
 	//カプセルA
 	Vector3 cPosA = rbA->GetNextPos();
-	Vector3 cPosB = collDataA->GetNextEndPos(rbA->GetVec());
+	Vector3 cPosB = collDataA->GetNextEndPos(rbA->GetVecWithTS());
 	//カプセルB
 	Vector3 cPosC = rbB->GetNextPos();
-	Vector3 cPosD = collDataB->GetNextEndPos(rbB->GetVec());
+	Vector3 cPosD = collDataB->GetNextEndPos(rbB->GetVecWithTS());
 	//最短距離
 	float shortDis = collDataA->GetRadius() + collDataB->GetRadius();
 	
