@@ -35,4 +35,8 @@ void TextData::Conversion()
 	m_speaker = m_data[2];
 	//次のID
 	m_nextID = m_data[3];
+	//グループ
+	m_group = m_data[4];
+	//画像パス
+	m_imagePath = m_data[5];
 }

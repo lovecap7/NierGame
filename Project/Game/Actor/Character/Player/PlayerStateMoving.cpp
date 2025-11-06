@@ -69,6 +69,16 @@ void PlayerStateMoving::Update()
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
+
+	//‹­§‘Ò‹@
+	if (m_isWait)
+	{
+		//‘Ò‹@
+		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
+		return;
+	}
+
+
 	auto status = owner->GetCharaStatus();
 	auto& input = Input::GetInstance();
 	//‰ñ”ğ

@@ -10,6 +10,7 @@ class BattleAreaManager;
 class AttackManager;
 class EffekseerManager;
 class Timer;
+class TutorialManager;
 
 class GameScene :
     public SceneBase
@@ -51,5 +52,8 @@ private:
 
     //タイマー
     std::shared_ptr<Timer> m_timer;
+
+    //チュートリアルマネージャー
+    std::shared_ptr<TutorialManager> m_tutorialManager;
 };
 

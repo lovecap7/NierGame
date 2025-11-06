@@ -3,7 +3,8 @@
 
 UIBase::UIBase():
 	m_isFrontDraw(false),
-	m_isDelete(false)
+	m_isDelete(false),
+	m_isDraw(true)
 {
 }
 

@@ -1,5 +1,6 @@
 #include <Dxlib.h>
 #include "Input.h"
+#include "../Main/Application.h"
 
 namespace
 {
@@ -20,7 +21,7 @@ namespace
 
 	//先行入力
 	//有効フレーム数
-	constexpr int kBufferFrame = 16;
+	constexpr float kBufferFrame = 15.0f;
 }
 
 void Input::Init()
@@ -363,7 +364,7 @@ bool Input::IsBuffered(const std::string& action)
 	if (it == m_inputBufferFrame.end()) return false;
 
 	//まだ有効時間内ならtrue
-	return  it->second > 0;
+	return  it->second > 0.0f;
 }
 
 void Input::UpdateBuffer()
@@ -371,9 +372,9 @@ void Input::UpdateBuffer()
 	for (auto& [key, frame] : m_inputBufferFrame)
 	{
 		//フレームを減らしていく
-		if (frame > 0)
+		if (frame > 0.0f)
 		{
-			--frame;
+			frame -= Application::GetInstance().GetTimeScale();
 		}
 	}
 }

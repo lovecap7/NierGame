@@ -151,6 +151,14 @@ void PlayerStateAvoid::Update()
 	//ジャスト回避
 	UpdateJustAvoid(owner, model, app);
 
+	//強制待機
+	if (m_isWait)
+	{
+		//待機
+		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
+		return;
+	}
+
 	//死亡
 	if (owner->GetCharaStatus()->IsDead())
 	{
@@ -300,6 +308,11 @@ void PlayerStateAvoid::UpdateJustAvoid(std::shared_ptr<Player> owner, std::share
 			owner->DisableIsMyScale();
 			//描画する
 			owner->SetIsDraw(true);
+		}
+		else
+		{
+			//スローモーション
+			app.SetTimeScale(kSlowSpeed);
 		}
 	}
 }

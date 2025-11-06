@@ -31,3 +31,30 @@ inline std::wstring GetStageNameByIndex(StageIndex index)
 	}
 	return name;
 }
+
+inline StageIndex GetStageIndexByName(const std::wstring stageName)
+{
+	StageIndex index;
+	if (stageName == L"Stage1")
+	{
+		index = StageIndex::Stage1;
+	}
+	else if (stageName == L"Stage2")
+	{
+		index = StageIndex::Stage2;
+	}
+	else if (stageName == L"Stage3")
+	{
+		index = StageIndex::Stage3;
+	}
+	else if (stageName == L"Tutorial")
+	{
+		index = StageIndex::Tutorial;
+	}
+	else
+	{
+		index = StageIndex::Stage1;
+	}
+
+	return index;
+}

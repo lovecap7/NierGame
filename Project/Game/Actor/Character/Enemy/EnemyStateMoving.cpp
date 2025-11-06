@@ -44,6 +44,13 @@ void EnemyStateMoving::Update()
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());
 
+	//強制待機状態へ
+	if (m_isWait)
+	{
+		ChangeState(std::make_shared<EnemyStateIdle>(m_pOwner));
+		return;
+	}
+
 	//フレームカウント
 	CountFrame();
 	//ステータス

@@ -18,10 +18,18 @@ public:
 	bool IsFrontDraw()const { return m_isFrontDraw; };
 	//íœ
 	bool IsDelete()const { return m_isDelete; };
+	//•`‰æ‚µ‚Ä‚¢‚é‚©
+	bool IsDraw()const { return m_isDraw; };
+	// •`‰æ‚ğ—LŒø‚É‚·‚é
+	void EnableDraw() { m_isDraw = true; };
+	// •`‰æ‚ğ–³Œø‚É‚·‚é
+	void DisableDraw() { m_isDraw = false; };
 protected:
 	//•`‰æ‡
 	bool m_isFrontDraw;
 	//íœ
 	bool m_isDelete;
+	//•`‰æ‚·‚é‚©
+	bool m_isDraw;
 };
 

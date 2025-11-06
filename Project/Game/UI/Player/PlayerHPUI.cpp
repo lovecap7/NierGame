@@ -72,6 +72,7 @@ void PlayerHPUI::Update()
 
 void PlayerHPUI::Draw() const
 {
+	if (!m_isDraw)return;
 	//周りのフレーム
 	DrawRotaGraphF((kBasePosX + kBasePosX + kBarSizeX) * 0.5f, (kBasePosY + kBasePosY + kBarSizeY) * 0.5f, 1.0, 0.0, m_barFrameHandle, true);
 	//バーの描画

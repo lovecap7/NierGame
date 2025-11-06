@@ -124,6 +124,14 @@ void PlayerStateLightAttack::Update()
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 
+	//ã≠êßë“ã@
+	if (m_isWait)
+	{
+		//ë“ã@
+		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
+		return;
+	}
+
 	auto& input = Input::GetInstance();
 	//âÒî
 	if (input.IsBuffered("B") && owner->IsAvoidable() && !m_isJust)

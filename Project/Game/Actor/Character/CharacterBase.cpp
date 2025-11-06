@@ -138,6 +138,18 @@ void CharacterBase::InitArmor()
 }
 
 
+void CharacterBase::Wait()
+{
+	if (!m_state)return;
+	m_state->Wait();
+}
+
+void CharacterBase::Operate()
+{
+	if (!m_state)return;
+	m_state->Operate();
+}
+
 void CharacterBase::InitAttackData(CSVDataLoader& csvLoader, std::wstring path)
 {
 	auto datas = csvLoader.LoadCSV(path.c_str());

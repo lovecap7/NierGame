@@ -25,8 +25,7 @@ namespace
 
 NormalEnemyHPUI::NormalEnemyHPUI(std::shared_ptr<CharaStatus> charaStatus, std::weak_ptr<EnemyBase> pEnemy) :
 	HPUIBase(charaStatus),
-	m_pEnemy(pEnemy),
-	m_isInCameraView(false)
+	m_pEnemy(pEnemy)
 
 {
 	auto& assetManager = AssetManager::GetInstance();
@@ -80,7 +79,7 @@ void NormalEnemyHPUI::Update()
 	m_enemyViewPos = ConvWorldPosToScreenPos(enemyPos);
 
 	//ƒJƒƒ‰‚É“ü‚Á‚Ä‚é‚©
-	m_isInCameraView = !CheckCameraViewClip(enemyPos);
+	m_isDraw = !CheckCameraViewClip(enemyPos);
 }
 
 void NormalEnemyHPUI::Draw() const
@@ -89,7 +88,7 @@ void NormalEnemyHPUI::Draw() const
 	auto enemy = m_pEnemy.lock();
 	if (!enemy->IsActive())return;
 	//ƒJƒƒ‰‚Ì”ÍˆÍŠO‚Ì‚Í•`‰æ‚µ‚È‚¢
-	if (!m_isInCameraView)return;
+	if (!m_isDraw)return;
 
 	auto uiPos = m_enemyViewPos;
 	uiPos.x -= (kBarSizeX * 0.5f);

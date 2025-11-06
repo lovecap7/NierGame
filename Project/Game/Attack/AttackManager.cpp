@@ -97,6 +97,7 @@ void AttackManager::End()
 
 void AttackManager::HitStop(std::shared_ptr<AttackBase> attack)
 {
+	if (attack->GetHitStopFrame() <= 0)return;
 	auto& app = Application::GetInstance();
 	app.SetTimeScale(kHitStopTimeScale);
 	//ヒットストップ

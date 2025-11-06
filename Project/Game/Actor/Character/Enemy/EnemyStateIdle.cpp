@@ -40,44 +40,49 @@ void EnemyStateIdle::Update()
 
 	//ステータス
 	auto status = owner->GetCharaStatus();
-	//死亡
-	if (status->IsDead())
+
+	//強制待機状態ではないなら
+	if (!m_isWait)
 	{
-		ChangeState(std::make_shared<EnemyStateDeath>(m_pOwner));
-		return;
-	}
-	//ヒット状態
-	if (owner->GetCharaStatus()->IsHitReaction())
-	{
-		//ヒット状態ならヒットステートへ
-		ChangeState(std::make_shared<EnemyStateHit>(m_pOwner));
-		return;
-	}
-	//落下
-	if(!owner->IsFloor())
-	{
-		ChangeState(std::make_shared<EnemyStateFall>(m_pOwner, false));
-		return;
-	}
-	//攻撃可能なら
-	if (owner->IsEnableAttack())
-	{
-		//攻撃データ取得(距離から)
-		auto attackData = owner->GetAttackByDistance();
-		if (attackData)
+		//死亡
+		if (status->IsDead())
 		{
-			//攻撃状態へ
-			ChangeState(std::make_shared<EnemyStateAttack>(m_pOwner, attackData));
+			ChangeState(std::make_shared<EnemyStateDeath>(m_pOwner));
 			return;
 		}
-	}
-	//移動状態へ
-	if(owner->GetTargetInfo().m_isFound)
-	{
-		if (!owner->IsInMeleeRange())
+		//ヒット状態
+		if (owner->GetCharaStatus()->IsHitReaction())
 		{
-			ChangeState(std::make_shared<EnemyStateMoving>(m_pOwner));
+			//ヒット状態ならヒットステートへ
+			ChangeState(std::make_shared<EnemyStateHit>(m_pOwner));
 			return;
+		}
+		//落下
+		if (!owner->IsFloor())
+		{
+			ChangeState(std::make_shared<EnemyStateFall>(m_pOwner, false));
+			return;
+		}
+		//攻撃可能なら
+		if (owner->IsEnableAttack())
+		{
+			//攻撃データ取得(距離から)
+			auto attackData = owner->GetAttackByDistance();
+			if (attackData)
+			{
+				//攻撃状態へ
+				ChangeState(std::make_shared<EnemyStateAttack>(m_pOwner, attackData));
+				return;
+			}
+		}
+		//移動状態へ
+		if (owner->GetTargetInfo().m_isFound)
+		{
+			if (!owner->IsInMeleeRange())
+			{
+				ChangeState(std::make_shared<EnemyStateMoving>(m_pOwner));
+				return;
+			}
 		}
 	}
 

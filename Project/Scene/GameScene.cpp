@@ -18,12 +18,14 @@
 #include "../Main/Application.h"
 #include "../General/Effect/EffekseerManager.h"
 #include "../Game/UI/UIManager.h"
+#include "../Game/Tutorial/TutorialManager.h"
 
 
 GameScene::GameScene(SceneController& controller, std::wstring stageName) :
 	SceneBase(controller),
 	m_stageName(stageName),
-	m_effectManager(EffekseerManager::GetInstance())
+	m_effectManager(EffekseerManager::GetInstance()),
+	m_tutorialManager(nullptr)
 {
 
 }
@@ -77,6 +79,12 @@ void GameScene::Init()
 	//タイマー
 	m_timer = std::make_shared<Timer>();
 	m_timer->Init();
+
+	//チュートリアルシーンなら
+	if (GetStageIndexByName(stageName) == StageIndex::Tutorial)
+	{
+		m_tutorialManager = std::make_shared<TutorialManager>(m_actorManager->GetPlayer());
+	}
 }
 
 void GameScene::Update()
@@ -88,6 +96,12 @@ void GameScene::Update()
 	m_battleAreaManager->Update(m_actorManager);
 	m_effectManager.Update();
 	m_timer->Update();
+
+	//チュートリアル
+	if (m_tutorialManager)
+	{
+		m_tutorialManager->Update();
+	}
 	
 	auto& input = Input::GetInstance();
 

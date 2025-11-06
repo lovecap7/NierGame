@@ -5,7 +5,8 @@
 
 CharacterStateBase::CharacterStateBase(std::weak_ptr<Actor> owner):
 	m_pOwner(owner),
-	m_frame(0.0f)
+	m_frame(0.0f),
+	m_isWait(false)
 {
 }
 

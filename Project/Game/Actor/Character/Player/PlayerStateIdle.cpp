@@ -49,53 +49,58 @@ void PlayerStateIdle::Update()
 	auto& input = Input::GetInstance();
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	auto status = owner->GetCharaStatus();
-	//回避
-	if (input.IsBuffered("B") && owner->IsAvoidable())
+
+	//強制待機状態ではないなら
+	if (!m_isWait)
 	{
-		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
-		return;
-	}
-	//死亡
-	if (status->IsDead())
-	{
-		ChangeState(std::make_shared<PlayerStateDeath>(m_pOwner));
-		return;
-	}
-	//落下
-	if (owner->IsFall())
-	{
-		ChangeState(std::make_shared<PlayerStateFall>(m_pOwner));
-		return;
-	}
-	//やられ
-	if (owner->GetCharaStatus()->IsHitReaction())
-	{
-		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner));
-		return;
-	}
-	//攻撃
-	if (input.IsBuffered("X"))
-	{
-		ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner,false, status->IsNoDamage()));
-		return;
-	}
-	if (input.IsBuffered("Y"))
-	{
-		ChangeState(std::make_shared<PlayerStateHeavyAttack>(m_pOwner, false, status->IsNoDamage()));
-		return;
-	}
-	//ジャンプ
-	if (owner->IsJumpable() && input.IsBuffered("A"))
-	{
-		ChangeState(std::make_shared<PlayerStateJump>(m_pOwner));
-		return;
-	}
-	//入力があるなら移動
-	if (input.GetStickInfo().IsLeftStickInput())
-	{
-		//歩き
-		ChangeState(std::make_shared<PlayerStateMoving>(m_pOwner,false));
-		return;
+		//回避
+		if (input.IsBuffered("B") && owner->IsAvoidable())
+		{
+			ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
+			return;
+		}
+		//死亡
+		if (status->IsDead())
+		{
+			ChangeState(std::make_shared<PlayerStateDeath>(m_pOwner));
+			return;
+		}
+		//落下
+		if (owner->IsFall())
+		{
+			ChangeState(std::make_shared<PlayerStateFall>(m_pOwner));
+			return;
+		}
+		//やられ
+		if (owner->GetCharaStatus()->IsHitReaction())
+		{
+			ChangeState(std::make_shared<PlayerStateHit>(m_pOwner));
+			return;
+		}
+		//攻撃
+		if (input.IsBuffered("X"))
+		{
+			ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner, false, status->IsNoDamage()));
+			return;
+		}
+		if (input.IsBuffered("Y"))
+		{
+			ChangeState(std::make_shared<PlayerStateHeavyAttack>(m_pOwner, false, status->IsNoDamage()));
+			return;
+		}
+		//ジャンプ
+		if (owner->IsJumpable() && input.IsBuffered("A"))
+		{
+			ChangeState(std::make_shared<PlayerStateJump>(m_pOwner));
+			return;
+		}
+		//入力があるなら移動
+		if (input.GetStickInfo().IsLeftStickInput())
+		{
+			//歩き
+			ChangeState(std::make_shared<PlayerStateMoving>(m_pOwner, false));
+			return;
+		}
 	}
 
 	//アニメーション切り替え

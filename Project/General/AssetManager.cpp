@@ -125,7 +125,7 @@ int AssetManager::GetImageHandle(std::wstring path)
     }
 
     //ハンドルチェック
-    assert(handle >= 0);
+    //assert(handle >= 0);
 
     return handle;
 }

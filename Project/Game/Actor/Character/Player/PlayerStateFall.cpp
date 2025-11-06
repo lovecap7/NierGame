@@ -49,6 +49,13 @@ void PlayerStateFall::Update()
 	auto& input = Input::GetInstance();
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 
+	//強制待機
+	if (m_isWait)
+	{
+		//待機
+		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
+		return;
+	}
 	//ステータス
 	auto status = owner->GetCharaStatus();
 	//回避

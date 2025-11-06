@@ -113,6 +113,7 @@ void ResultUI::Update()
 
 void ResultUI::Draw() const
 {
+    if (!m_isDraw)return;
     //îwåi
     DrawRotaGraph(Game::kScreenCenterX, Game::kScreenCenterY, 1.0, 0.0, m_backHandle, true);
 

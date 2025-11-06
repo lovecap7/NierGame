@@ -141,6 +141,7 @@ void PlayerCameraUI::Update()
 
 void PlayerCameraUI::Draw() const
 {
+	if (!m_isDraw)return;
 	//両サイドのバー
 	DrawRotaGraphF(m_leftVar.pos.x, m_leftVar.pos.y, 1.0, m_leftVar.angle, m_leftVar.handle, true);
 	DrawRotaGraphF(m_rightVar.pos.x, m_rightVar.pos.y, 1.0, m_rightVar.angle, m_rightVar.handle, true);

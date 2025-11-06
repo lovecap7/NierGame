@@ -56,6 +56,12 @@ public:
 
     //半径
     virtual float GetRadius()const abstract;
+
+    //イベントとかで使う
+    //待機状態にする
+    void Wait();
+    //自由に動く
+    void Operate();
 protected:
     //攻撃データを読み込む
     void InitAttackData(CSVDataLoader& csvLoader, std::wstring path);

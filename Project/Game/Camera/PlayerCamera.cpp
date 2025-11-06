@@ -98,25 +98,7 @@ void PlayerCamera::Update()
     }
 
     //カメラの揺れ
-    if (m_shakeFrame > 0)
-    {
-        //フレームを減らしてく
-        --m_shakeFrame;
-
-        //カメラの位置を揺らす
-        int power = m_shakePower;
-        if (m_shakeFrame % 2 == 0)
-        {
-            power *= -1;
-        }
-        Vector3 shakePos = (m_cameraPos + m_right * power);
-
-        //反映
-        DxLib::SetCameraPositionAndTarget_UpVecY(
-            shakePos.ToDxLibVector(),
-            m_viewPos.ToDxLibVector()
-        );
-    }
+    UpdateCameraShake();
 }
 
 void PlayerCamera::StartLockOn(std::weak_ptr<Actor> lockOnTarget)
@@ -350,4 +332,23 @@ void PlayerCamera::UpdateStickAngle(Input& input)
 
     //回転量の保存
     m_rotH = qH * m_rotH;
+}
+
+void PlayerCamera::UpdateCameraShake()
+{
+    if (m_shakeFrame > 0)
+    {
+        //フレームを減らしてく
+        --m_shakeFrame;
+
+        //カメラの位置を揺らす
+        float power = static_cast<float>(m_shakePower) * std::sinf(static_cast<float>(m_shakeFrame));
+        Vector3 shakePos = (m_cameraPos + (m_right * power));
+
+        //反映
+        DxLib::SetCameraPositionAndTarget_UpVecY(
+            shakePos.ToDxLibVector(),
+            m_viewPos.ToDxLibVector()
+        );
+    }
 }

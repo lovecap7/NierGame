@@ -32,5 +32,7 @@ private:
     int m_talkSpeed;
     //テキストデータ
     std::list<std::shared_ptr<TextData>> m_textDatas;
+    //画像ハンドル
+    int m_imageHandle;
 };
 

@@ -14,6 +14,7 @@ public:
 	~PlayerCamera();
 	virtual void Init() override;
 	virtual void Update() override;
+	
 	//ロックオン開始
 	void StartLockOn(std::weak_ptr<Actor> lockOnTarget);
 	//ロックオン終了
@@ -65,6 +66,9 @@ private:
 	void UpdateDirection(Vector3 newFront);
 	//スティックの角度更新
 	void UpdateStickAngle(Input& input);
+
+	//カメラを揺らす
+	void UpdateCameraShake();
 
 };
 

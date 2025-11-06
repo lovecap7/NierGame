@@ -132,6 +132,10 @@ void AttackBase::OnCollide(const std::shared_ptr<Collidable> other)
 				//ノックバックを与える
 				Vector3 knockBack = otherStatus->GetKnockBack(otherColl->GetPos(), attackPos, m_knockBackPower, m_knockBackV);
 				otherColl->GetRb()->SetVec(knockBack);
+			}
+			//無敵じゃないなら
+			if (!otherStatus->IsNoDamage())
+			{
 				//ヒットストップを行う
 				m_isRequestHitStop = true;
 			}

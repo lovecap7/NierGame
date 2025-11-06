@@ -31,6 +31,9 @@ public:
 	//フレームのカウント
 	void CountFrame();
 
+	//待機するか動くか
+	void Wait() { m_isWait = true; };
+	void Operate() { m_isWait = false; };
 private:
 	//次の状態
 	std::shared_ptr<CharacterStateBase> m_nextState;
@@ -39,5 +42,8 @@ protected:
 	std::weak_ptr<Actor> m_pOwner;
 	//フレームカウント
 	float m_frame;
+	//強制待機状態
+	bool m_isWait;
+
 };
 

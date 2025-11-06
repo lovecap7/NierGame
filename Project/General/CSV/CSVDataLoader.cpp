@@ -85,6 +85,12 @@ std::vector<std::vector<std::wstring>> CSVDataLoader::GetWStringList(const wchar
         //カンマ区切りで分解してリストに追加
         while (std::getline(ss, part, L','))
         {
+            //改行処理(findで探してnposが返ってこなければ改行を挟む
+            for (size_t i = 0; (i = part.find(L"\\n", i)) != std::wstring::npos; ++i)
+            {
+                part.replace(i, 2, L"\n");
+            }
+
             values.emplace_back(part);
         }
 

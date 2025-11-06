@@ -236,7 +236,7 @@ private:
 	bool m_isUpdate;
 
 	//æs“ü—Í
-	std::map<std::string, int> m_inputBufferFrame;
+	std::map<std::string, float> m_inputBufferFrame;
 
 private:
 	/// <summary>

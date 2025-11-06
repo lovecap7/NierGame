@@ -100,6 +100,15 @@ void PlayerStateHeavyAttack::Update()
 {
 	if (m_pOwner.expired()) return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
+
+	//ã≠êßë“ã@
+	if (m_isWait)
+	{
+		//ë“ã@
+		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
+		return;
+	}
+
 	auto& input = Input::GetInstance();
 	//ñ≥ìG
 	if (m_isJust)
@@ -292,6 +301,7 @@ void PlayerStateHeavyAttack::AirUpdate(std::shared_ptr<Player> owner, Input& inp
 			model->SetAnim(owner->GetAnim(m_attackData->GetAnimName()).c_str(), false);
 			m_frame = 0.0f;
 			DeleteAttack();
+
 			return;
 		}
 
