@@ -7,6 +7,7 @@
 #include "../../General/CSV/CharaStatusData.h"
 #include "../../General/CSV/PodData.h"
 #include "Stage/StageObject.h"
+#include "Stage/Goal.h"
 #include "Character/CharacterBase.h"
 #include "Character/Player/Player.h"
 #include "Character/Enemy/NormalEnemy.h"
@@ -143,8 +144,16 @@ void ActorManager::CreateActorCSV(const wchar_t* folderName, const wchar_t* file
 		}
 		else if (actorData->GetActorType() == ActorData::ActorType::Stage)
 		{
-			//ステージ
-			actor = std::make_shared<StageObject>(actorData, shared_from_this());
+			if (actorData->GetName() == L"Goal")
+			{
+				//ゴール
+				actor = std::make_shared<Goal>(actorData, shared_from_this());
+			}
+			else
+			{
+				//ステージ
+				actor = std::make_shared<StageObject>(actorData, shared_from_this());
+			}
 		}
 		Entry(actor);
 

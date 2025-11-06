@@ -1,4 +1,4 @@
-#include "GameScene.h"
+#include "TutorialScene.h"
 #include "ResultScene.h"
 #include <Dxlib.h>
 #include  "../General/Input.h"
@@ -21,7 +21,7 @@
 #include "../Game/Tutorial/TutorialManager.h"
 
 
-GameScene::GameScene(SceneController& controller, std::wstring stageName) :
+TutorialScene::TutorialScene(SceneController& controller, std::wstring stageName) :
 	SceneBase(controller),
 	m_stageName(stageName),
 	m_effectManager(EffekseerManager::GetInstance())
@@ -29,11 +29,11 @@ GameScene::GameScene(SceneController& controller, std::wstring stageName) :
 
 }
 
-GameScene::~GameScene()
+TutorialScene::~TutorialScene()
 {
 }
 
-void GameScene::Init()
+void TutorialScene::Init()
 {
 	//アセットを削除
 	AssetManager::GetInstance().DeleteModelHandle();
@@ -78,9 +78,12 @@ void GameScene::Init()
 	//タイマー
 	m_timer = std::make_shared<Timer>();
 	m_timer->Init();
+
+	//チュートリアル
+	m_tutorialManager = std::make_shared<TutorialManager>(m_actorManager->GetPlayer(), stageName);
 }
 
-void GameScene::Update()
+void TutorialScene::Update()
 {
 	//更新
 	m_actorManager->Update();
@@ -89,6 +92,7 @@ void GameScene::Update()
 	m_battleAreaManager->Update(m_actorManager);
 	m_effectManager.Update();
 	m_timer->Update();
+	m_tutorialManager->Update();
 
 	auto& input = Input::GetInstance();
 
@@ -100,21 +104,21 @@ void GameScene::Update()
 		return;
 	}
 	//もしもすべてのエリアを突破したら
-	if ((m_battleAreaManager->IsEndAllArea() || input.IsTrigger("GameClear")) && !fader.IsFadeNow())
+	if ((m_tutorialManager->IsClear() || input.IsTrigger("GameClear")) && !fader.IsFadeNow())
 	{
 		//フェードアウト
 		fader.FadeOut();
 	}
 }
 
-void GameScene::Draw()
+void TutorialScene::Draw()
 {
 	m_actorManager->Draw();
 	m_attackManager->Draw();
 	m_effectManager.Draw();
 }
 
-void GameScene::End()
+void TutorialScene::End()
 {
 	m_actorManager->End();
 	m_attackManager->End();
@@ -122,7 +126,7 @@ void GameScene::End()
 	m_effectManager.End();
 }
 
-void GameScene::DebugDraw() const
+void TutorialScene::DebugDraw() const
 {
 #if _DEBUG
 	DrawString(0, 0, L"Game Scene", 0xffffff);

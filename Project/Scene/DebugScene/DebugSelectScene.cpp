@@ -4,6 +4,7 @@
 #include "../TitleScene.h"
 #include "../GameScene.h"
 #include "../ResultScene.h"
+#include "../TutorialScene.h"
 #include "../../General/Input.h"
 #include <DxLib.h>
 #include "../../General/StringUtil.h"
@@ -77,6 +78,18 @@ void DebugSelectScene::Update()
 		case Menu::Result:
 			m_controller.ChangeScene(std::make_shared<ResultScene>(GetStageNameByIndex(StageIndex::Tutorial),m_controller,std::make_shared<Timer>()));
 			break;
+		case Menu::Tutorial1:
+			m_controller.ChangeScene(std::make_shared<TutorialScene>(m_controller, GetStageNameByIndex(StageIndex::Tutorial1)));
+			break;
+		case Menu::Tutorial2:
+			m_controller.ChangeScene(std::make_shared<TutorialScene>(m_controller, GetStageNameByIndex(StageIndex::Tutorial2)));
+			break;
+		case Menu::Tutorial3:
+			m_controller.ChangeScene(std::make_shared<TutorialScene>(m_controller, GetStageNameByIndex(StageIndex::Tutorial3)));
+			break;
+		case Menu::Tutorial4:
+			m_controller.ChangeScene(std::make_shared<TutorialScene>(m_controller, GetStageNameByIndex(StageIndex::Tutorial4)));
+			break;
 		case Menu::PlayerTest:
 			m_controller.ChangeScene(std::make_shared<PlayerTestScene>(m_controller));
 			break;
@@ -101,34 +114,45 @@ void DebugSelectScene::Draw()
 		{
 			color = 0xffff00;
 		}
+		std::wstring text = L"Title";
 		switch (static_cast<Menu>(i))
 		{
 		case Menu::Title:
-			DrawString(100, 100 + i * 30, L"Title", color);
+			text = L"Title";
 			break;
 		case Menu::Tutorial:
-			DrawString(100, 100 + i * 30, L"Tutorial", color);
+			text = L"Tutorial";
 			break;
 		case Menu::Stage1:
-			DrawString(100, 100 + i * 30, L"Stage1", color);
+			text = L"Stage1";
 			break;
 		case Menu::Stage2:
-			DrawString(100, 100 + i * 30, L"Stage2", color);
+			text = L"Stage2";
 			break;
 		case Menu::Stage3:
-			DrawString(100, 100 + i * 30, L"Stage3", color);
+			text = L"Stage3";
 			break;
 		case Menu::Result:
-			DrawString(100, 100 + i * 30, L"Result", color);
+			text = L"Result";
+			break;
+		case Menu::Tutorial1:
+			text = L"Tutorial1";
+			break;
+		case Menu::Tutorial2:
+			text = L"Tutorial2";
+			break;
+		case Menu::Tutorial3:
+			text = L"Tutorial3";
 			break;
 		case Menu::PlayerTest:
-			DrawString(100, 100 + i * 30, L"PlayerTestScene", color);
+			text = L"PlayerTest";
 			break;
 		default:
 			break;
 		}
+		DxLib::DrawString(100, 100 + i * 24, text.c_str(), color);
 	}
-	DrawString(100, 50, L"[A]キーで決定", 0xffffff);
+	DxLib::DrawString(100, 50, L"[A]キーで決定", 0xffffff);
 }
 
 void DebugSelectScene::End()

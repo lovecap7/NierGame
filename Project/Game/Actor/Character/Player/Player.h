@@ -94,6 +94,10 @@ public:
 
 	//半径
 	float GetRadius()const override;
+
+	//ゴールしたか
+	bool IsGoal()const { return m_isGoal; };
+	void SetIsGoal(bool isGoal) { m_isGoal = isGoal; };
 private:
 	//カメラ
 	std::weak_ptr<PlayerCamera> GetPlayerCamera()const;
@@ -112,6 +116,8 @@ private:
 	bool m_isAvoidable;
 	//空中攻撃を行ったか
 	bool m_isAirAttacked;
+
+	
 
 	//無敵時間(ジャスト回避成功時数フレーム無敵)
 	bool m_isJustAvoided;
@@ -139,5 +145,8 @@ private:
 	float m_glitchSpeed;
 	float m_glitchkStrengt;
 	bool m_isHitGlitch;
+
+	//ゴールしたか
+	bool m_isGoal;
 };
 

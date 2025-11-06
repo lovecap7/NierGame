@@ -1,5 +1,6 @@
 #pragma once
 #include "SceneBase.h"
+#include "../General/CSV/TutorialData.h"
 #include <memory>
 #include <string>
 class Input;
@@ -12,12 +13,12 @@ class EffekseerManager;
 class Timer;
 class TutorialManager;
 
-class GameScene :
+class TutorialScene :
     public SceneBase
 {
 public:
-    GameScene(SceneController& controller,std::wstring stageName);
-    ~GameScene();
+    TutorialScene(SceneController& controller, std::wstring stageName);
+    ~TutorialScene();
     /// <summary>
     /// 派生クラスで実装を実装
     /// virtual はこれを継承するかもしれないから
@@ -30,7 +31,7 @@ public:
     virtual void Restart() override {};
     //デバッグ用
     virtual void DebugDraw() const override;
-   
+
 private:
     //アクターマネージャー
     std::shared_ptr<ActorManager> m_actorManager;
@@ -52,5 +53,8 @@ private:
 
     //タイマー
     std::shared_ptr<Timer> m_timer;
+
+    //チュートリアルマネージャー
+    std::shared_ptr<TutorialManager> m_tutorialManager;
 };
 
