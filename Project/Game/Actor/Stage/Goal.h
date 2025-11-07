@@ -4,6 +4,7 @@
 #include <DxLib.h>
 #include <memory>
 class Collidable;
+class NormalEffect;
 class ActorManager;
 class Goal :
     public Actor
@@ -17,6 +18,9 @@ public:
     void Draw()const override;
     void Complete() override;
     void End()override;
+    
+private:
+    std::weak_ptr<NormalEffect> m_effect;
  
 };
 
