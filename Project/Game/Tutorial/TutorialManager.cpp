@@ -20,12 +20,10 @@ namespace
 	constexpr int kJustAvoidNum = 3;
 }
 
-TutorialManager::TutorialManager(std::weak_ptr<Player> pPlayer, std::shared_ptr<ActorManager> pActorManager, 
-	std::wstring stageName, std::shared_ptr<CameraController> pCameraController):
+TutorialManager::TutorialManager(std::weak_ptr<Player> pPlayer, std::shared_ptr<ActorManager> pActorManager,std::wstring stageName):
 	m_pPlayer(pPlayer),
 	m_pActorManager(pActorManager),
-	m_isClear(false),
-	m_pCameraController(pCameraController)
+	m_isClear(false)
 {
 	auto& csvLoader = CSVDataLoader::GetInstance();
 

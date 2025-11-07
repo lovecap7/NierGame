@@ -111,6 +111,8 @@ void Application::Run()
 	//シーン
 	std::unique_ptr<SceneController> sceneController = std::make_unique<SceneController>();
 
+
+	
 	//ゲームループ
 	while (ProcessMessage() != -1) // Windowsが行う処理を待つ
 	{
@@ -174,7 +176,7 @@ void Application::Run()
 
 		//裏画面にレンダーターゲットを描画
 		m_postProcess->Draw(RT);
-
+		
 		//後描画
 		uiManager.BackDraw();
 

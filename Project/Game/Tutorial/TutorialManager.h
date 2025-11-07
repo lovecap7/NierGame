@@ -6,12 +6,10 @@ class Player;
 class TalkUI;
 class TutorialClearData;
 class ActorManager;
-class CameraController;
 class TutorialManager
 {
 public:
-	TutorialManager(std::weak_ptr<Player> pPlayer,std::shared_ptr<ActorManager> pActorManager,
-		std::wstring stageName, std::shared_ptr<CameraController> pCameraController);
+	TutorialManager(std::weak_ptr<Player> pPlayer,std::shared_ptr<ActorManager> pActorManager,std::wstring stageName);
 	~TutorialManager();
 	//更新
 	void Update();
@@ -29,8 +27,7 @@ private:
 	std::shared_ptr<TutorialClearData> m_clearData;
 	//クリアしたか
 	bool m_isClear;
-	//カメラ
-	std::shared_ptr<CameraController> m_pCameraController;
+
 private:
 	
 };
