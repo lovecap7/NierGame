@@ -35,6 +35,7 @@ void Goal::OnCollide(const std::shared_ptr<Collidable> other)
 
 void Goal::Draw() const
 {
+	DrawSphere3D(m_rb->GetPos().ToDxLibVector(), m_actorData->GetCollRadius(), 32, 0x00ffff, 0x00ffff, false);
 }
 
 void Goal::Complete()

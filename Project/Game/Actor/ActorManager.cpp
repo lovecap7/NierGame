@@ -166,6 +166,7 @@ void ActorManager::CreateActorCSV(const wchar_t* folderName, const wchar_t* file
 	}
 }
 
+
 std::shared_ptr<CharacterBase> ActorManager::CreateChara(GameTag tag, std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData)
 {
 	std::shared_ptr<CharacterBase> chara;

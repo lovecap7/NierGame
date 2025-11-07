@@ -348,7 +348,7 @@
     <ClCompile Include="Scene\TutorialScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="General\CSV\TutorialData.cpp">
+    <ClCompile Include="General\CSV\TutorialClearData.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Game\Actor\Stage\Goal.cpp">
@@ -725,7 +725,7 @@
     <ClInclude Include="Scene\TutorialScene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="General\CSV\TutorialData.h">
+    <ClInclude Include="General\CSV\TutorialClearData.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Game\Actor\Stage\Goal.h">

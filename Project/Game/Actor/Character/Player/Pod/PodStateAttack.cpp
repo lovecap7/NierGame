@@ -49,6 +49,14 @@ void PodStateAttack::Update()
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Pod>(m_pOwner.lock());
 
+	//ã≠êßë“ã@èÛë‘
+	if (m_isWait)
+	{
+		//ë“ã@
+		ChangeState(std::make_shared<PodStateIdle>(m_pOwner));
+		return;
+	}
+
 	//ääãÛèÛë‘
 	if (owner->IsGliding())
 	{

@@ -54,7 +54,7 @@ void PodStateIdle::Update()
 
 	auto& input = Input::GetInstance();
 	
-	if (input.IsBuffered("RB"))
+	if (input.IsBuffered("RB") && !m_isWait)
 	{
 		//ŽËŒ‚
 		ChangeState(std::make_shared<PodStateAttack>(m_pOwner));

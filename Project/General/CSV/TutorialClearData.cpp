@@ -1,11 +1,11 @@
-#include "TutorialData.h"
+#include "TutorialClearData.h"
 
-TutorialData::TutorialData():
+TutorialClearData::TutorialClearData():
 	m_clearRequirement(ClearRequirement::AllDeadEnemy)
 {
 }
 
-TutorialData::TutorialData(std::shared_ptr<CSVData> data):
+TutorialClearData::TutorialClearData(std::shared_ptr<CSVData> data):
 	m_clearRequirement(ClearRequirement::AllDeadEnemy)
 {
 	//データを取得
@@ -13,14 +13,15 @@ TutorialData::TutorialData(std::shared_ptr<CSVData> data):
 	Conversion();
 }
 
-TutorialData::~TutorialData()
+TutorialClearData::~TutorialClearData()
 {
 }
 
-void TutorialData::Conversion()
+void TutorialClearData::Conversion()
 {
 	if (m_data.size() <= 0)return;
-
+	//チュートリアル名
+	m_tutorialName = m_data[0];
 	//クリア条件
 	m_clearRequirement = static_cast<ClearRequirement>(stoi(m_data[1]));
 	//クリア条件テキスト

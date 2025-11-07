@@ -146,3 +146,8 @@ void EnemyManager::FinishInAreaBattle()
 {
 	m_isInAreaBattle = false;
 }
+
+bool EnemyManager::IsAllDeadEnemys() const
+{
+	return m_enemys.empty();
+}

@@ -34,6 +34,8 @@ public:
 	//‘Ò‹@‚·‚é‚©“®‚­‚©
 	void Wait() { m_isWait = true; };
 	void Operate() { m_isWait = false; };
+	//‘Ò‹@‚µ‚Ä‚¢‚é‚©
+	bool IsWait()const { return m_isWait; };
 private:
 	//Ÿ‚Ìó‘Ô
 	std::shared_ptr<CharacterStateBase> m_nextState;

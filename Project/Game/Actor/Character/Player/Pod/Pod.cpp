@@ -17,6 +17,7 @@ namespace
 	const std::wstring kAnimPath = L"Player/PodAnimData";
 	const std::wstring kAttackPath = L"Player/PodAttackData";
 	const std::wstring kEffectPath = L"";
+	const std::wstring kNormalShot = L"NormalShot";
 }
 
 Pod::Pod(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager, std::weak_ptr<Player> pPlayer) :
@@ -44,7 +45,7 @@ void Pod::Init()
 
 	//弾の作成
 	//攻撃データ
-	auto attackData =GetAttackData(L"NormalShot");
+	auto attackData =GetAttackData(kNormalShot);
 	for (int i = 0; i < attackData->GetParam1(); i++)
 	{
 		auto bullet = std::make_shared<BulletAttack>(attackData, thisPointer);
@@ -58,10 +59,20 @@ void Pod::Update()
 	//入力の取得
 	auto& input = Input::GetInstance();
 
-	//滑空状態かチェック
 	if (!m_pPlayer.expired())
 	{
-		m_isGliding = m_pPlayer.lock()->IsGliding();
+		auto player = m_pPlayer.lock();
+		//滑空状態かチェック
+		m_isGliding = player->IsGliding();
+		//強制待機状態かチェック
+		if (player->IsWait())
+		{
+			m_state->Wait();
+		}
+		else
+		{
+			m_state->Operate();
+		}
 	}
 
 	//共通処理

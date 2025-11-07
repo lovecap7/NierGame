@@ -70,7 +70,6 @@ Player::Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatus
 	m_noDamageFrame(0.0f),
 	m_putAwayCountFrame(0.0f),
 	m_haveWeaponType(AnimData::WeaponType::None),
-	m_lastGroundPos(),
 	m_isAirAttacked(false),
 	m_isDraw(true),
 	m_glitchFrame(0.0f),
@@ -78,6 +77,7 @@ Player::Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatus
 	m_glitchScale(0.0f),
 	m_glitchSpeed(0.0f),
 	m_glitchkStrengt(0.0f),
+	m_totalJustAvoidNum(0),
 	m_isHitGlitch(false),
 	m_isGoal(false)
 {
@@ -625,4 +625,9 @@ void Player::UpdatePutAwayWeapon()
 		//ƒJƒEƒ“ƒg
 		m_putAwayCountFrame -= GetTimeScale();
 	}
+}
+
+bool Player::IsWait()const
+{
+	return m_state->IsWait();
 }

@@ -48,6 +48,8 @@ public:
 
 	//敵マネージャー
 	std::shared_ptr<EnemyManager> GetEnemyManager()const { return m_pEnemyManager; };
+
+	
 private:
 	//アクター
 	std::list<std::shared_ptr<Actor>> m_actors;

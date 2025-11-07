@@ -1,33 +1,42 @@
 #include "TutorialManager.h"
 #include "../Actor/Character/Player/Player.h"
+#include "../Actor/Character/Enemy/EnemyManager.h"
+#include "../Actor/ActorManager.h"
 #include "../../General/CSV/CSVDataLoader.h"
 #include "../../General/CSV/TextData.h"
 #include "../UI/TalkUI.h"
 #include "../UI/UIManager.h"
 #include "../../General/Input.h"
-#include "../../General/CSV/TutorialData.h"
+#include "../../General/CSV/TutorialClearData.h"
 #include <map>
 
 namespace
 {
 	//パス
 	const std::wstring kTextDataPath = L"Tutorial/TextData";
-	const std::wstring kTutorialDataPath = L"/ TutorialData";
+	const std::wstring kClearDataPath = L"Tutorial/TutorialClearData";
+	//ジャスト回避数
+	constexpr int kJustAvoidNum = 3;
 }
 
-TutorialManager::TutorialManager(std::weak_ptr<Player> pPlayer, std::wstring stageName):
+TutorialManager::TutorialManager(std::weak_ptr<Player> pPlayer, std::shared_ptr<ActorManager> pActorManager, std::wstring stageName):
 	m_pPlayer(pPlayer),
+	m_pActorManager(pActorManager),
 	m_isClear(false)
 {
 	auto& csvLoader = CSVDataLoader::GetInstance();
 
-	//チュートリアル情報
-	/*auto path = stageName + kTutorialDataPath;
-	auto tutorialDatas = csvLoader.LoadCSV(path.c_str());
-	auto tutorialData = std::make_shared<TutorialData>(tutorialDatas.front());*/
-
-
-	
+	//チュートリアルクリア情報
+	auto clearDatas = csvLoader.LoadCSV(kClearDataPath.c_str());
+	for (auto& clearData : clearDatas)
+	{
+		auto tempData = std::make_shared<TutorialClearData>(clearData);
+		if (tempData->GetTutorialName() == stageName)
+		{
+			m_clearData = tempData;
+			break;
+		}
+	}
 
 	//テキストデータ
 	auto datas = csvLoader.LoadCSV(kTextDataPath.c_str());
@@ -59,6 +68,7 @@ TutorialManager::TutorialManager(std::weak_ptr<Player> pPlayer, std::wstring sta
 	//UI作成
 	auto talkUI = std::make_shared<TalkUI>(uiTextDatas);
 	talkUI->Init();
+	m_pTextUI = talkUI;
 }
 
 TutorialManager::~TutorialManager()
@@ -66,5 +76,35 @@ TutorialManager::~TutorialManager()
 }
 void TutorialManager::Update()
 {
-	
+	if (m_pPlayer.expired())return;
+	if (!m_clearData)return;
+	auto plyer = m_pPlayer.lock();
+
+	//会話UIが消えたら
+	if (m_pTextUI.expired())
+	{
+		//行動可能
+		plyer->Operate();
+
+		//クリア条件がゴールなら
+		switch (m_clearData->GetClearRequirement())
+		{
+		case TutorialClearData::ClearRequirement::AllDeadEnemy:
+			m_isClear = m_pActorManager->GetEnemyManager()->IsAllDeadEnemys();
+			break;
+		case TutorialClearData::ClearRequirement::Goal:
+			m_isClear = plyer->IsGoal();
+			break;
+		case TutorialClearData::ClearRequirement::JustAvoid:
+			m_isClear = plyer->GetTotalJustAvoidNum() >= kJustAvoidNum;
+			break;
+		default:
+			break;
+		}
+	}
+	else
+	{
+		//待機
+		plyer->Wait();
+	}
 }

@@ -230,7 +230,7 @@
     <ClCompile Include="General\CSV\PodData.cpp" />
     <ClCompile Include="General\CSV\ResultRankData.cpp" />
     <ClCompile Include="General\CSV\TextData.cpp" />
-    <ClCompile Include="General\CSV\TutorialData.cpp" />
+    <ClCompile Include="General\CSV\TutorialClearData.cpp" />
     <ClCompile Include="General\Effect\EffekseerManager.cpp" />
     <ClCompile Include="General\Effect\NormalEffect.cpp" />
     <ClCompile Include="General\Effect\TrackActorEffect.cpp" />
@@ -345,7 +345,7 @@
     <ClInclude Include="General\CSV\PodData.h" />
     <ClInclude Include="General\CSV\ResultRankData.h" />
     <ClInclude Include="General\CSV\TextData.h" />
-    <ClInclude Include="General\CSV\TutorialData.h" />
+    <ClInclude Include="General\CSV\TutorialClearData.h" />
     <ClInclude Include="General\Effect\EffekseerManager.h" />
     <ClInclude Include="General\Effect\NormalEffect.h" />
     <ClInclude Include="General\Effect\TrackActorEffect.h" />

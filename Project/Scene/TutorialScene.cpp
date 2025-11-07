@@ -41,6 +41,8 @@ void TutorialScene::Init()
 	Application::GetInstance().GetPostProcess()->ResetPostEffectState();
 	//UI削除
 	UIManager::GetInstance().AllDeleteUI();
+	//Inputの入力情報リセット
+	Input::GetInstance().StopUpdate();
 
 	//ステージインデックス
 	auto stageName = m_stageName.c_str();
@@ -80,7 +82,7 @@ void TutorialScene::Init()
 	m_timer->Init();
 
 	//チュートリアル
-	m_tutorialManager = std::make_shared<TutorialManager>(m_actorManager->GetPlayer(), stageName);
+	m_tutorialManager = std::make_shared<TutorialManager>(m_actorManager->GetPlayer(), m_actorManager, stageName);
 }
 
 void TutorialScene::Update()

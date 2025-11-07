@@ -98,6 +98,14 @@ public:
 	//ゴールしたか
 	bool IsGoal()const { return m_isGoal; };
 	void SetIsGoal(bool isGoal) { m_isGoal = isGoal; };
+
+	//ジャスト回避数
+	int GetTotalJustAvoidNum()const { return m_totalJustAvoidNum; };
+	void AddJustAvoidNum() { ++m_totalJustAvoidNum; };
+	void ResetJustAvoidNum() { m_totalJustAvoidNum = 0; };
+
+	//強制待機状態か
+	bool IsWait()const;
 private:
 	//カメラ
 	std::weak_ptr<PlayerCamera> GetPlayerCamera()const;
@@ -117,6 +125,8 @@ private:
 	//空中攻撃を行ったか
 	bool m_isAirAttacked;
 
+	//ジャスト回避数
+	int m_totalJustAvoidNum;
 	
 
 	//無敵時間(ジャスト回避成功時数フレーム無敵)

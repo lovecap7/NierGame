@@ -284,6 +284,9 @@ void PlayerStateAvoid::InitJustAvoid(std::shared_ptr<Model> model, std::shared_p
 
 	//プレイヤーを非表示に
 	owner->SetIsDraw(false);
+
+	//ジャスト回避数カウント
+	owner->AddJustAvoidNum();
 }
 
 void PlayerStateAvoid::UpdateJustAvoid(std::shared_ptr<Player> owner, std::shared_ptr<Model> model, Application& app)

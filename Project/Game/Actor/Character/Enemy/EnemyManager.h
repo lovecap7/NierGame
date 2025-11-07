@@ -27,6 +27,9 @@ public:
 	void InAreaBattle(std::list<std::shared_ptr<EnemyBase>> activeEnemy);
 	//ƒGƒŠƒA“à‚Å‚Ìí“¬I—¹
 	void FinishInAreaBattle();
+
+	//‚·‚×‚Ä‚Ì“G‚ª“|‚³‚ê‚½
+	bool IsAllDeadEnemys()const;
 private:
 	//“G
 	std::list<std::shared_ptr<EnemyBase>> m_enemys;

@@ -3,13 +3,14 @@
 #include <memory>
 #include <string>
 #include "../Math/MyMath.h"
-class TutorialData :
+#include "../StageIndex.h"
+class TutorialClearData :
 	public CSVData
 {
 public:
-	TutorialData();
-	TutorialData(std::shared_ptr<CSVData> data);
-	~TutorialData();
+	TutorialClearData();
+	TutorialClearData(std::shared_ptr<CSVData> data);
+	~TutorialClearData();
 	
 	//クリア条件
 	enum class ClearRequirement : int
@@ -19,6 +20,8 @@ public:
 		JustAvoid = 2
 	};
 
+	//チュートリアル名
+	std::wstring GetTutorialName()const { return m_tutorialName; };
 	//クリア条件
 	ClearRequirement GetClearRequirement()const { return m_clearRequirement; };
 	//クリア条件テキスト
@@ -27,6 +30,8 @@ private:
 	//変換
 	void Conversion() override;
 private:
+	//チュートリアル名
+	std::wstring m_tutorialName;
 	//クリア条件
 	ClearRequirement m_clearRequirement;
 	//クリア条件テキスト
