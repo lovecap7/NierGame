@@ -23,9 +23,9 @@ void PlayerTestScene::Init()
 {
 	//ÉJÉÅÉâ
 	auto camera = std::make_shared<PlayerCamera>();
-	m_cameraController = std::make_shared<CameraController>();
-	m_cameraController->Init();
-	m_cameraController->ChangeCamera(camera);
+	auto& cameraController = CameraController::GetInstance();
+	cameraController.Init();
+	cameraController.ChangeCamera(camera);
 
 	m_attackManager = std::make_shared<AttackManager>();
 	m_attackManager->Init();
@@ -46,7 +46,7 @@ void PlayerTestScene::Update()
 	//çXêV
 	m_actorManager->Update();
 	m_attackManager->Update();
-	m_cameraController->Update();
+	CameraController::GetInstance().Update();
 }
 
 void PlayerTestScene::Draw()

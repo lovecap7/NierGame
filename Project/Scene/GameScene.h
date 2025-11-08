@@ -41,9 +41,6 @@ private:
     //エリアマネージャー
     std::shared_ptr<BattleAreaManager> m_battleAreaManager;
 
-    //カメラ
-    std::shared_ptr<CameraController> m_cameraController;
-
     //ステージ名
     std::wstring m_stageName;
 

@@ -16,6 +16,7 @@ public:
 		None,
 		Character,
 		Stage,
+		CheckPoint,
 		Attack,
 		Weapon,
 	};

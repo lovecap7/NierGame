@@ -6,6 +6,7 @@
 #include "../../General/CSV/ActorData.h"
 #include "../../General/CSV/CharaStatusData.h"
 #include "../../General/CSV/PodData.h"
+#include "../../General/Fader.h"
 #include "Stage/StageObject.h"
 #include "Stage/Goal.h"
 #include "Character/CharacterBase.h"
@@ -15,6 +16,7 @@
 #include "Character/Player/Pod/Pod.h"
 #include "Character/Enemy/EnemyManager.h"
 #include "Character/Enemy/Boss/Boss1.h"
+#include "Stage/CheckPoint.h"
 
 
 namespace
@@ -24,7 +26,8 @@ namespace
 	const std::wstring kPodDataName = L"Player/PodData";
 }
 
-ActorManager::ActorManager()
+ActorManager::ActorManager():
+	m_stageFallHeight(0.0f)
 {
 	
 }
@@ -80,6 +83,9 @@ void ActorManager::Update()
 	//アクターの更新
 	for (auto& actor : m_actors)
 	{
+		//高さをチェック
+		CheckStageFall(actor);
+		//更新
 		actor->Update();
 	}
 	//削除
@@ -154,6 +160,13 @@ void ActorManager::CreateActorCSV(const wchar_t* folderName, const wchar_t* file
 				//ステージ
 				actor = std::make_shared<StageObject>(actorData, shared_from_this());
 			}
+			//低い高さを保持
+			m_stageFallHeight = MathSub::Min(m_stageFallHeight, actor->GetPos().y);
+		}
+		else if (actorData->GetActorType() == ActorData::ActorType::CheckPoint)
+		{
+			//チェックポイント
+			actor = std::make_shared<CheckPoint>(actorData, shared_from_this());
 		}
 		Entry(actor);
 
@@ -262,4 +275,35 @@ void ActorManager::CheckDelete()
 		}
 		return false;
 		});
+}
+
+void ActorManager::CheckStageFall(std::shared_ptr<Actor> actor)
+{
+	if (actor->GetPos().y < m_stageFallHeight)
+	{
+		//ステージ外に落下しているなら
+		if (actor->GetGameTag() == GameTag::Player)
+		{
+			auto& fader = Fader::GetInstance();
+
+			//完全に暗くなったら
+			if (fader.IsFinishFadeOut())
+			{
+				//リスポーン
+				std::dynamic_pointer_cast<Player>(actor)->Respawn();
+				//だんだん明るく
+				fader.FadeIn();
+			}
+			if (!fader.IsFadeOutNow() && !fader.IsFadeInNow())
+			{
+				//だんだん暗くなる
+				fader.FadeOut();
+			}
+		}
+		else if (actor->GetGameTag() == GameTag::Enemy)
+		{
+			//削除
+			actor->Delete();
+		}
+	}
 }

@@ -1,18 +1,19 @@
 #pragma once
-#include "../SceneBase.h" 
+#include "SceneBase.h"
+#include "../General/StageIndex.h"
 #include <memory>
 class Input;
-class CameraController;
 class SceneController;
-class ActorManager;
-class AttackManager;
+class ResultUI;
+class Timer;
+class TutorialResultUI;
 
-class PlayerTestScene :
+class TutorialResultScene :
     public SceneBase
 {
 public:
-    PlayerTestScene(SceneController& controller);
-    ~PlayerTestScene();
+    TutorialResultScene(SceneController& controller, StageIndex index);
+    ~TutorialResultScene();
     /// <summary>
     /// 派生クラスで実装を実装
     /// virtual はこれを継承するかもしれないから
@@ -26,11 +27,16 @@ public:
     //デバッグ用
     virtual void DebugDraw() const override;
 private:
-    //アクターマネージャー
-    std::shared_ptr<ActorManager> m_actorManager;
-
-    //攻撃
-    std::shared_ptr<AttackManager> m_attackManager;
-
+    //リザルトのUI
+    std::weak_ptr<TutorialResultUI> m_mcUI;
+    //チュートリアル名
+    StageIndex m_tutorialIndex;
+    //メニューインデックス
+    enum class Menu : int
+    {
+        Next = 0,
+        Select = 1
+    };
+    Menu m_menuIndex;
 };
 

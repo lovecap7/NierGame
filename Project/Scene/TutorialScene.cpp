@@ -1,5 +1,6 @@
 #include "TutorialScene.h"
 #include "ResultScene.h"
+#include "TutorialResultScene.h"
 #include <Dxlib.h>
 #include  "../General/Input.h"
 #include "SceneController.h"
@@ -49,9 +50,9 @@ void TutorialScene::Init()
 
 	//カメラ
 	auto camera = std::make_shared<PlayerCamera>();
-	m_cameraController = std::make_shared<CameraController>();
-	m_cameraController->Init();
-	m_cameraController->ChangeCamera(camera);
+	auto& cameraController = CameraController::GetInstance();
+	cameraController.Init();
+	cameraController.ChangeCamera(camera);
 
 	m_attackManager = std::make_shared<AttackManager>();
 	m_attackManager->Init();
@@ -62,6 +63,7 @@ void TutorialScene::Init()
 	m_actorManager->Init();
 	m_actorManager->CreateActorCSV(stageName, L"CharacterData");
 	m_actorManager->CreateActorCSV(stageName, L"StageData");
+	m_actorManager->CreateActorCSV(stageName, L"CheckPointData");
 	//カメラセット
 	m_actorManager->SetCamera(camera);
 	//攻撃マネージャーセット
@@ -90,7 +92,7 @@ void TutorialScene::Update()
 	//更新
 	m_actorManager->Update();
 	m_attackManager->Update();
-	m_cameraController->Update();
+	CameraController::GetInstance().Update();
 	m_battleAreaManager->Update(m_actorManager);
 	m_effectManager.Update();
 	m_timer->Update();
@@ -99,17 +101,11 @@ void TutorialScene::Update()
 	auto& input = Input::GetInstance();
 
 	auto& fader = Fader::GetInstance();
-	//フェードアウトしたら
-	if (fader.IsFinishFadeOut())
-	{
-		m_controller.ChangeScene(std::make_unique<ResultScene>(m_stageName, m_controller, m_timer));
-		return;
-	}
 	//もしもすべてのエリアを突破したら
-	if ((m_tutorialManager->IsClear() || input.IsTrigger("GameClear")) && !fader.IsFadeNow())
+	if ((m_tutorialManager->IsClear() || input.IsTrigger("GameClear")))
 	{
-		//フェードアウト
-		fader.FadeOut();
+		m_controller.PushScene(std::make_unique<TutorialResultScene>(m_controller, GetStageIndexByName(m_stageName)));
+		return;
 	}
 }
 

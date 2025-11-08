@@ -28,9 +28,9 @@ public:
 	void Update();
 	//描画
 	void Draw()const;
-	//フェードイン
+	//だんだん明るくなる
 	void FadeIn(float speed = 10.0f);
-	//フェードアウト
+	//だんだん暗くなる
 	void FadeOut(float speed = 10.0f);
 	//フェードインが終了したか
 	bool IsFinishFadeIn()const;
@@ -38,6 +38,8 @@ public:
 	bool IsFinishFadeOut()const;
 	//フェード中か
 	bool IsFadeNow()const { return m_isFadeNow; };
+	bool IsFadeInNow()const { return m_isFadeIn; };
+	bool IsFadeOutNow()const { return m_isFadeOut; };
 private:
 	//だんだん明るくなる
 	bool m_isFadeIn;

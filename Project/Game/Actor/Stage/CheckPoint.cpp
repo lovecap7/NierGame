@@ -1,4 +1,4 @@
-#include "Goal.h"
+#include "CheckPoint.h"
 #include "../ActorManager.h"
 #include "../../../General/Collision/ColliderBase.h"
 #include "../../../General/Collision/Rigidbody.h"
@@ -9,60 +9,37 @@
 #include "../../../General/AssetManager.h"
 #include "../Character/Player/Player.h"
 
-namespace
-{
-	const std::wstring kEffectPath = L"Destination";
-}
-
-Goal::Goal(std::shared_ptr<ActorData> actorData, std::weak_ptr<ActorManager> pActorManager) :
+CheckPoint::CheckPoint(std::shared_ptr<ActorData> actorData, std::weak_ptr<ActorManager> pActorManager) :
 	Actor(actorData, Shape::Sphere, pActorManager)
 {
-	
 }
 
-Goal::~Goal()
+CheckPoint::~CheckPoint()
 {
 }
 
-void Goal::Init()
+void CheckPoint::Init()
 {
-	//エフェクト
-	m_effect = EffekseerManager::GetInstance().CreateEffect(kEffectPath, m_actorData->GetPos());
-	if (m_isThrough)return;
 	Collidable::Init();
 }
 
-void Goal::Update()
-{
-	
-}
-
-void Goal::OnCollide(const std::shared_ptr<Collidable> other)
+void CheckPoint::OnCollide(const std::shared_ptr<Collidable> other)
 {
 	if (other->GetGameTag() == GameTag::Player)
 	{
-		std::dynamic_pointer_cast<Player>(other)->SetIsGoal(true);
+		std::dynamic_pointer_cast<Player>(other)->SetRespawnPos(m_rb->GetPos());
+		m_isDelete = true;
 	}
 }
 
-void Goal::Draw() const
+void CheckPoint::Draw() const
 {
 #if _DEBUG
 	DrawSphere3D(m_rb->GetPos().ToDxLibVector(), m_actorData->GetCollRadius(), 32, 0x00ffff, 0x00ffff, false);
 #endif
 }
 
-void Goal::Complete()
+void CheckPoint::End()
 {
-}
-
-void Goal::End()
-{
-	//削除
-	if (!m_effect.expired())
-	{
-		m_effect.lock()->Delete();
-	}
-	if (m_isThrough)return;
 	Collidable::End();
 }

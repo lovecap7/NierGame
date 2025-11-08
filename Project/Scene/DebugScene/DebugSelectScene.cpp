@@ -17,6 +17,7 @@
 #include "../../Main/Application.h"
 #include "../../General/CSV/CSVDataLoader.h"
 #include "../../General/CSV/TextData.h"
+#include "../../General/Fader.h"
 
 
 DebugSelectScene::DebugSelectScene(SceneController& controller) :
@@ -37,6 +38,8 @@ void DebugSelectScene::Init()
 	Application::GetInstance().GetPostProcess()->ResetPostEffectState();
 	//UI削除
 	UIManager::GetInstance().AllDeleteUI();
+	//フェードイン
+	Fader::GetInstance().FadeIn();
 
 	auto& csvLoader = CSVDataLoader::GetInstance();
 	auto datas = csvLoader.LoadCSV(L"Tutorial/TextData");
@@ -67,7 +70,7 @@ void DebugSelectScene::Update()
 			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, GetStageNameByIndex(StageIndex::Tutorial)));
 			break;
 		case Menu::Stage1:
-			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, GetStageNameByIndex(StageIndex::Stage1)));
+			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, GetStageNameByIndex(StageIndex::Tutorial)));
 			break;
 		case Menu::Stage2:
 			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, GetStageNameByIndex(StageIndex::Tutorial)));

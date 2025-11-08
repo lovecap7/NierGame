@@ -61,6 +61,7 @@ void ActorData::Conversion()
 	ActorType actorType = ActorType::None;
 	if (tempStr == L"Character")actorType = ActorType::Character;
 	else if (tempStr == L"Stage")actorType = ActorType::Stage;
+	else if (tempStr == L"CheckPoint")actorType = ActorType::CheckPoint;
 	else if (tempStr == L"Attack")actorType = ActorType::Attack;
 	m_actorType = actorType;
 

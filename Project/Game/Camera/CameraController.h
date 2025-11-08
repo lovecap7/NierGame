@@ -5,9 +5,23 @@
 #include "../../General/Math/MyMath.h"
 class CameraController
 {
+private:
+	//シングルトンの準備
+	CameraController() = default;
+	~CameraController() = default;
+	//コピー禁止
+	CameraController(const CameraController&) = delete;
+	CameraController& operator = (const CameraController&) = delete;
+	//ムーブ禁止
+	CameraController(CameraController&&) = delete;
+	CameraController& operator = (CameraController&&) = delete;
 public:
-	CameraController();
-	~CameraController();
+	//インスタンスを取得
+	static CameraController& GetInstance()
+	{
+		static CameraController instance;
+		return instance;
+	}
 	void Init();
 	void Update();
 	/// <summary>

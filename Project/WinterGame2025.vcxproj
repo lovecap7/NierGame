@@ -182,6 +182,7 @@
     <ClCompile Include="Game\Actor\DebugActor\DebugEnemy.cpp" />
     <ClCompile Include="Game\Actor\Stage\BattleArea.cpp" />
     <ClCompile Include="Game\Actor\Stage\BattleAreaManager.cpp" />
+    <ClCompile Include="Game\Actor\Stage\CheckPoint.cpp" />
     <ClCompile Include="Game\Actor\Stage\Goal.cpp" />
     <ClCompile Include="Game\Actor\Stage\StageObject.cpp" />
     <ClCompile Include="Game\Attack\AOEAttack.cpp" />
@@ -201,6 +202,7 @@
     <ClCompile Include="Game\UI\Enemy\NormalEnemyHPUI.cpp" />
     <ClCompile Include="Game\UI\HPUIBase.cpp" />
     <ClCompile Include="Game\UI\Player\PlayerHPUI.cpp" />
+    <ClCompile Include="Game\UI\Result\TutorialResultUI.cpp" />
     <ClCompile Include="Game\UI\Result\ResultUI.cpp" />
     <ClCompile Include="Game\UI\TalkUI.cpp" />
     <ClCompile Include="Game\UI\Title\TitleUI.cpp" />
@@ -256,6 +258,7 @@
     <ClCompile Include="Scene\SceneBase.cpp" />
     <ClCompile Include="Scene\SceneController.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
+    <ClCompile Include="Scene\TutorialResultScene.cpp" />
     <ClCompile Include="Scene\TutorialScene.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -297,6 +300,7 @@
     <ClInclude Include="Game\Actor\DebugActor\DebugEnemy.h" />
     <ClInclude Include="Game\Actor\Stage\BattleArea.h" />
     <ClInclude Include="Game\Actor\Stage\BattleAreaManager.h" />
+    <ClInclude Include="Game\Actor\Stage\CheckPoint.h" />
     <ClInclude Include="Game\Actor\Stage\Goal.h" />
     <ClInclude Include="Game\Actor\Stage\StageObject.h" />
     <ClInclude Include="Game\Attack\AOEAttack.h" />
@@ -316,6 +320,7 @@
     <ClInclude Include="Game\UI\Enemy\NormalEnemyHPUI.h" />
     <ClInclude Include="Game\UI\HPUIBase.h" />
     <ClInclude Include="Game\UI\Player\PlayerHPUI.h" />
+    <ClInclude Include="Game\UI\Result\TutorialResultUI.h" />
     <ClInclude Include="Game\UI\Result\ResultUI.h" />
     <ClInclude Include="Game\UI\TalkUI.h" />
     <ClInclude Include="Game\UI\Title\TitleUI.h" />
@@ -376,6 +381,7 @@
     <ClInclude Include="Scene\SceneBase.h" />
     <ClInclude Include="Scene\SceneController.h" />
     <ClInclude Include="Scene\TitleScene.h" />
+    <ClInclude Include="Scene\TutorialResultScene.h" />
     <ClInclude Include="Scene\TutorialScene.h" />
     <ClInclude Include="Shader\DataType.h" />
     <ClInclude Include="Shader\DxShader_Common_D3D11.h" />

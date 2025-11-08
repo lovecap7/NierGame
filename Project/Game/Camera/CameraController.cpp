@@ -1,15 +1,5 @@
 #include "CameraController.h"
 
-CameraController::CameraController():
-	m_isUpdate(true),
-	m_cameras()
-{
-}
-
-CameraController::~CameraController()
-{
-}
-
 void CameraController::Init()
 {
 	m_isUpdate = true;

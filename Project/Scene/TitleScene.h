@@ -25,8 +25,6 @@ public:
     //デバッグ用
     virtual void DebugDraw() const override;
 private:
-    //カメラ
-    std::shared_ptr<CameraController> m_cameraController;
     //最初の激しいグリッジを行うフレームをカウント
     int m_hardShakingCountFrame;
     //不定期でグリッジを行う

@@ -59,9 +59,9 @@ void TitleScene::Init()
 	Fader::GetInstance().FadeIn();
 	//カメラ
 	auto camera = std::make_shared<TitleCamera>();
-	m_cameraController = std::make_shared<CameraController>();
-	m_cameraController->Init();
-	m_cameraController->ChangeCamera(camera);
+	auto& cameraController = CameraController::GetInstance();
+	cameraController.Init();
+	cameraController.ChangeCamera(camera);
 
 	//タイトルロゴ
 	auto titleLogo = std::make_shared<TitleUI>();
@@ -91,7 +91,8 @@ void TitleScene::Update()
 	UpdateGlitch();
 
 	//カメラ
-	m_cameraController->Update();
+	auto& cameraController = CameraController::GetInstance();
+	cameraController.Update();
 
 	if (input.IsTrigger("A") && !fader.IsFadeNow())
 	{

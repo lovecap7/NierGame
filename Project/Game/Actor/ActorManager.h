@@ -61,6 +61,8 @@ private:
 	std::weak_ptr<Player> m_pPlayer;
 	//敵マネージャー
 	std::shared_ptr<EnemyManager> m_pEnemyManager;
+	//ステージを落下したとみなす高さ
+	float m_stageFallHeight;
 private:
 	//キャラクターの作成
 	std::shared_ptr<CharacterBase> CreateChara(GameTag tag, std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> data);
@@ -70,5 +72,9 @@ private:
 
 	//削除予定のアクターの削除
 	void CheckDelete();
+
+	//ステージを落ちたか
+	void CheckStageFall(std::shared_ptr<Actor> actor);
+
 };
 

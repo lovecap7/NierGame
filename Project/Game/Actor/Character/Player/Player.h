@@ -106,6 +106,10 @@ public:
 
 	//強制待機状態か
 	bool IsWait()const;
+
+	//リスポーン地点
+	void SetRespawnPos(Vector3 pos);
+	void Respawn();
 private:
 	//カメラ
 	std::weak_ptr<PlayerCamera> GetPlayerCamera()const;
@@ -127,6 +131,9 @@ private:
 
 	//ジャスト回避数
 	int m_totalJustAvoidNum;
+
+	//リスポーン地点
+	Vector3 m_respawnPos;
 	
 
 	//無敵時間(ジャスト回避成功時数フレーム無敵)

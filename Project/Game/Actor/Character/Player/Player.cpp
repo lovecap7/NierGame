@@ -79,7 +79,8 @@ Player::Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatus
 	m_glitchkStrengt(0.0f),
 	m_totalJustAvoidNum(0),
 	m_isHitGlitch(false),
-	m_isGoal(false)
+	m_isGoal(false),
+	m_respawnPos()
 {
 }
 
@@ -108,6 +109,9 @@ void Player::Init()
 	//体力
 	auto playerHPUI = std::make_shared<PlayerHPUI>(m_charaStatus);
 	playerHPUI->Init();
+
+	//初期リスポーン地点
+	SetRespawnPos(GetPos());
 }
 
 
@@ -202,6 +206,15 @@ void Player::Draw() const
 		m_rb->m_pos.ToDxLibVector(),
 		std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetEndPos().ToDxLibVector(),
 		std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetRadius(),
+		16,
+		0x00ff00,
+		0x00ff00,
+		false
+	);
+	//衝突判定
+	DrawSphere3D(
+		m_respawnPos.ToDxLibVector(),
+		m_actorData->GetCollRadius(),
 		16,
 		0x00ff00,
 		0x00ff00,
@@ -426,6 +439,22 @@ bool Player::IsGliding() const
 float Player::GetRadius() const
 {
 	return std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetRadius();
+}
+
+void Player::SetRespawnPos(Vector3 pos)
+{
+	Vector3 respownPos = pos;
+	respownPos.y += m_actorData->GetCollRadius();
+	m_respawnPos = respownPos;
+}
+
+void Player::Respawn()
+{
+	m_rb->SetPos(m_respawnPos);
+	Vector3 endPos = m_rb->m_pos;
+	endPos.y += m_actorData->GetCollHeight();
+	std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->SetEndPos(endPos);
+	m_rb->SetVec(Vector3::Zero());
 }
 
 std::weak_ptr<PlayerCamera> Player::GetPlayerCamera() const
