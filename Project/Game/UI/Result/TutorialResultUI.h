@@ -17,17 +17,33 @@ public:
     void Draw()const override;
     //動きが終了したか
     bool IsFinish()const { return m_isFinish; };
+
+    //メニューセレクト
+    void SetMenuIndex(int index);
 private:
     //ハンドル
     int m_mcHandle;
     //背景
     int m_backHandle;
+    //セレクト
+    int m_nextTutorialHandle;
+    int m_selectStageHandle;
 private:
     //フレーム
     int m_countFrame;
     //動きが終了したか
     bool m_isFinish;
     //座標
-    Vector2 m_pos;
+    Vector2 m_mcPos;
+    Vector2 m_menuPos;
+
+
+    //メニュー
+    enum class Menu : int
+    {
+        Next = 0,
+        Select = 1,
+    };
+    Menu m_menuIndex;
 };
 

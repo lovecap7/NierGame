@@ -30,8 +30,7 @@ void TutorialResultScene::Init()
 	UIManager::GetInstance().AllDeleteUI();
 	//Phisics‚ð’âŽ~
 	Physics::GetInstance().StopUpdate();
-
-	auto ui = std::make_shared<TutorialResultUI>();
+	auto ui = std::make_shared<TutorialResultUI>(m_tutorialIndex);
 	ui->Init();
 	m_mcUI = ui;
 }
@@ -71,7 +70,8 @@ void TutorialResultScene::Update()
 	}
 	//ƒ{ƒ^ƒ“‚ð‰Ÿ‚µ‚½‚çŽŸ
 	if (m_mcUI.expired())return;
-	if (!fader.IsFadeNow() && m_mcUI.lock()->IsFinish())
+	auto ui = m_mcUI.lock();
+	if (!fader.IsFadeNow() && ui->IsFinish())
 	{
 		if (input.IsTrigger("A"))
 		{
@@ -81,27 +81,15 @@ void TutorialResultScene::Update()
 		int index = static_cast<int>(m_menuIndex);
 		if (input.IsTrigger("Up"))--index;
 		if (input.IsTrigger("Down"))++index;
-		m_menuIndex = static_cast<Menu>(MathSub::ClampInt(index, static_cast<int>(Menu::Next), static_cast<int>(Menu::Select)));
+		index = MathSub::ClampInt(index, static_cast<int>(Menu::Next), static_cast<int>(Menu::Select));
+		m_menuIndex = static_cast<Menu>(index);
+		ui->SetMenuIndex(index);
 	}
+
 }
 
 void TutorialResultScene::Draw()
 {
-	DrawString(600, Game::kScreenCenterY + 100, L"Next", 0xffffff);
-	DrawString(600, Game::kScreenCenterY + 160, L"Select", 0xffffff);
-	float yPos = Game::kScreenCenterY + 100;
-	switch (m_menuIndex)
-	{
-	case TutorialResultScene::Menu::Next:
-		yPos = Game::kScreenCenterY + 100;
-		break;
-	case TutorialResultScene::Menu::Select:
-		yPos = Game::kScreenCenterY + 160;
-		break;
-	default:
-		break;
-	}
-	DrawCircle(600, yPos,10, 0xff0000, true);
 }
 
 void TutorialResultScene::End()
