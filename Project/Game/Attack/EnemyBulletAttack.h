@@ -3,6 +3,7 @@
 #include <memory>
 class AttackData;
 class Collidable;
+class NormalEffect;
 class CharacterBase;
 class EnemyBulletAttack :
     public BulletAttack
@@ -10,6 +11,9 @@ class EnemyBulletAttack :
 public:
     EnemyBulletAttack(std::shared_ptr<AttackData> attackData, std::weak_ptr<CharacterBase> pOwner);
     ~EnemyBulletAttack();
+
+    //‰Šú‰»ˆ—
+    void Init()override;
     //•`‰æ
     void Draw()const override;
     //“–‚½‚Á‚½
@@ -21,5 +25,7 @@ public:
 private:
     //UŒ‚‚É“–‚½‚Á‚½‚É‰ó‚ê‚é‚©
     bool m_isDestructible;
+private:
+ 
 };
 

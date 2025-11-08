@@ -62,6 +62,8 @@ void NormalEffect::Update()
 			return;
 		}
 	}
+
+
 }
 
 void NormalEffect::End()

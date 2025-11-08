@@ -374,7 +374,7 @@ void Input::UpdateBuffer()
 		//ƒtƒŒ[ƒ€‚ðŒ¸‚ç‚µ‚Ä‚¢‚­
 		if (frame > 0.0f)
 		{
-			frame -= Application::GetInstance().GetTimeScale();
+			--frame;
 		}
 	}
 }

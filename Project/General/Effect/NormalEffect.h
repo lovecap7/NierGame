@@ -52,5 +52,8 @@ protected:
 	//タイムスケール
 	float m_myTimeScale;
 	bool m_isMyTimeScale;
+
+	//描画
+	bool m_isDraw;
 };
 

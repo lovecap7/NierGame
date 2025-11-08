@@ -3,6 +3,13 @@
 #include "../../General/Collision/Rigidbody.h"
 #include "../../General/CSV/AttackData.h"
 #include "../Actor/Character/CharacterBase.h"
+#include "../../General/Effect/EffekseerManager.h"
+#include "../../General/Effect/NormalEffect.h"
+
+namespace
+{
+	const std::wstring kNormalBullet = L"NormalBullet";
+}
 
 BulletAttack::BulletAttack(std::shared_ptr<AttackData> attackData, std::weak_ptr<CharacterBase> pOwner):
 	SphereAttackBase(attackData,pOwner),
@@ -15,13 +22,31 @@ BulletAttack::~BulletAttack()
 {
 }
 
+void BulletAttack::Init()
+{
+	auto normalEffect = EffekseerManager::GetInstance().CreateEffect(kNormalBullet, m_rb->GetPos());
+	m_effect = normalEffect;
+
+	Collidable::Init();
+}
+
 void BulletAttack::Update()
 {
 	//活動中かどうかで当たり判定を行うかを決める
 	m_isThrough = !m_isActive;
 
+	if (m_effect.expired())return;
+	auto eff = m_effect.lock();
+
 	//アクティブでないなら処理しない
-	if (!m_isActive) return;
+	if (!m_isActive)
+	{
+		eff->GetScale();
+	}
+	else
+	{
+		eff->EnableIsMyScale();
+	}
 
 	//AttackBase::Update()でfalseになってしまうのでここで結果を保持
 	bool isHit = m_isHit;
@@ -44,6 +69,9 @@ void BulletAttack::Update()
 	m_rb->SetVec(m_moveVec);
 	m_rb->SetPos(m_rb->GetNextPos());
 	m_rb->SetVec(Vector3::Zero());
+
+	//エフェクトの更新
+	eff->SetPos(m_rb->GetPos());
 }
 
 void BulletAttack::Draw() const

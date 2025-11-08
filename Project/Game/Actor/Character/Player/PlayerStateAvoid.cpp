@@ -181,7 +181,7 @@ void PlayerStateAvoid::Update()
 			m_isLightAttack = true;
 			m_isHeavyAttack = false;
 		}
-		else if (input.IsBuffered("Y"))
+		if (input.IsBuffered("Y"))
 		{
 			m_isLightAttack = false;
 			m_isHeavyAttack = true;
@@ -190,7 +190,7 @@ void PlayerStateAvoid::Update()
 	else
 	{
 		//入力がないかつジャスト回避成功していない場合即終了
-		if (!input.IsPress("B") && m_frame > kEnableFinishAvoidFrame)
+		if (!input.IsPress("B") && (m_frame > kEnableFinishAvoidFrame))
 		{
 			//無敵解除
 			owner->GetCharaStatus()->SetIsNoDamage(false);

@@ -41,6 +41,9 @@ void GameScene::Init()
 	Application::GetInstance().GetPostProcess()->ResetPostEffectState();
 	//UI削除
 	UIManager::GetInstance().AllDeleteUI();
+	//Inputの入力情報リセット
+	Input::GetInstance().StopUpdate();
+
 
 	//ステージインデックス
 	auto stageName = m_stageName.c_str();
