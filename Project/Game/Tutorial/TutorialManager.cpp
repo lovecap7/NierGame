@@ -5,6 +5,7 @@
 #include "../../General/CSV/CSVDataLoader.h"
 #include "../../General/CSV/TextData.h"
 #include "../UI/TalkUI.h"
+#include "../UI/Tutorial/TutorialManualUI.h"
 #include "../UI/UIManager.h"
 #include "../Camera/CameraController.h"
 #include "../../General/Input.h"
@@ -18,12 +19,15 @@ namespace
 	const std::wstring kClearDataPath = L"Tutorial/TutorialClearData";
 	//ジャスト回避数
 	constexpr int kJustAvoidNum = 3;
+	//クリア表示を遅らせる
+	constexpr int kClearDelayFrame = 23;
 }
 
 TutorialManager::TutorialManager(std::weak_ptr<Player> pPlayer, std::shared_ptr<ActorManager> pActorManager,std::wstring stageName):
 	m_pPlayer(pPlayer),
 	m_pActorManager(pActorManager),
-	m_isClear(false)
+	m_isClear(false),
+	m_clearDelayFrame(kClearDelayFrame)
 {
 	auto& csvLoader = CSVDataLoader::GetInstance();
 
@@ -70,6 +74,12 @@ TutorialManager::TutorialManager(std::weak_ptr<Player> pPlayer, std::shared_ptr<
 	auto talkUI = std::make_shared<TalkUI>(uiTextDatas);
 	talkUI->Init();
 	m_pTextUI = talkUI;
+
+	//説明UI
+	auto tutorialManualUI = std::make_shared<TutorialManualUI>(GetStageIndexByName(stageName));
+	tutorialManualUI->Init();
+	tutorialManualUI->DisableDraw();//非表示
+	m_pTutorialManualUI = tutorialManualUI;
 }
 
 TutorialManager::~TutorialManager()
@@ -84,6 +94,12 @@ void TutorialManager::Update()
 	//会話UIが消えたら
 	if (m_pTextUI.expired())
 	{
+		//説明UIの描画
+		if (!m_pTutorialManualUI.expired())
+		{
+			m_pTutorialManualUI.lock()->EnableDraw();
+		}
+
 		//行動可能
 		plyer->Operate();
 
@@ -108,4 +124,16 @@ void TutorialManager::Update()
 		//待機
 		plyer->Wait();
 	}
+
+	//クリアしたら
+	if (m_isClear)
+	{
+		//カウントを減らす
+		--m_clearDelayFrame;
+	}
+}
+
+bool TutorialManager::IsClear() const
+{
+	return m_isClear && (m_clearDelayFrame <= 0);
 }

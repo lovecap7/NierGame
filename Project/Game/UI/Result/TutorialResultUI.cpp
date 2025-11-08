@@ -10,6 +10,7 @@ namespace
 	const std::wstring kBackPath = L"Back/BeigeBack";
 	const std::wstring kNextTutorialPath = L"Result/NextTutorial";
 	const std::wstring kSelectStagePath = L"Result/SelectStage";
+	const std::wstring kCursorPath = L"Mark/Cursor";
 	//終了フレーム
 	constexpr int kFinishFrame = 45;
 	//位置
@@ -17,8 +18,12 @@ namespace
 	const Vector2 kMCSecondPos = Vector2(Game::kScreenCenterX, Game::kScreenCenterY - 200);
 	const Vector2 kMenuSecondPos = Vector2(Game::kScreenCenterX, Game::kScreenCenterY);
 	constexpr int kMenuOffsetY = 150;
+	constexpr int kCousorPosX = 300;
 	//Lerp
-	constexpr float kLerpRate = 0.1f;
+	constexpr float kMCLerpRate = 0.1f;
+	constexpr float kMenuLerpRate = 0.1f;
+	constexpr float kCousorLerpXRate = 0.1f;
+	constexpr float kCousorLerpYRate = 0.5f;
 }
 
 TutorialResultUI::TutorialResultUI(StageIndex tutorialIndex) :
@@ -31,6 +36,7 @@ TutorialResultUI::TutorialResultUI(StageIndex tutorialIndex) :
 	m_countFrame(0),
 	m_mcPos{ -Game::kScreenWidth,Game::kScreenCenterY },
 	m_menuPos{ -Game::kScreenWidth, Game::kScreenCenterY },
+	m_cousorPos{ -Game::kScreenWidth, Game::kScreenCenterY },
 	m_menuIndex(Menu::Next)
 {
 	auto& assetManager = AssetManager::GetInstance();
@@ -41,6 +47,8 @@ TutorialResultUI::TutorialResultUI(StageIndex tutorialIndex) :
 	//セレクト
 	m_nextTutorialHandle = assetManager.GetImageHandle(kNextTutorialPath);
 	m_selectStageHandle = assetManager.GetImageHandle(kSelectStagePath);
+	//カーソル
+	m_cursorHandle = assetManager.GetImageHandle(kCursorPath);
 }
 
 TutorialResultUI::~TutorialResultUI()
@@ -52,12 +60,31 @@ void TutorialResultUI::Update()
 	++m_countFrame;
 	if (m_countFrame <= kFinishFrame)
 	{
-		m_mcPos = Vector2::Lerp(m_mcPos, kMCFirstPos, kLerpRate);
+		m_mcPos = Vector2::Lerp(m_mcPos, kMCFirstPos, kMCLerpRate);
 	}
 	else
 	{
-		m_mcPos = Vector2::Lerp(m_mcPos, kMCSecondPos, kLerpRate);
-		m_menuPos = Vector2::Lerp(m_menuPos, kMenuSecondPos, kLerpRate);
+		m_mcPos = Vector2::Lerp(m_mcPos, kMCSecondPos, kMCLerpRate);
+		m_menuPos = Vector2::Lerp(m_menuPos, kMenuSecondPos, kMenuLerpRate);
+
+		Vector2 nextCousorPos = m_menuPos;
+		Vector2 nextTutorialPos = m_menuPos;
+		Vector2 selectStagePos = m_menuPos;
+		selectStagePos.y += kMenuOffsetY;
+		switch (m_menuIndex)
+		{
+		case TutorialResultUI::Menu::Next:
+			nextCousorPos = nextTutorialPos;
+			break;
+		case TutorialResultUI::Menu::Select:
+			nextCousorPos = selectStagePos;
+			break;
+		default:
+			break;
+		}
+		nextCousorPos.x = kCousorPosX;
+		m_cousorPos.x = MathSub::Lerp(m_cousorPos.x, nextCousorPos.x, kCousorLerpXRate);
+		m_cousorPos.y = MathSub::Lerp(m_cousorPos.y, nextCousorPos.y, kCousorLerpYRate);
 		m_isFinish = true;
 	}
 }
@@ -73,21 +100,30 @@ void TutorialResultUI::Draw() const
 	DrawRotaGraph(m_mcPos.x, m_mcPos.y, 1.0, 0.0, m_mcHandle, true);
 
 	//セレクト
-	DrawRotaGraph(m_menuPos.x, m_menuPos.y, 1.0, 0.0, m_nextTutorialHandle, true);
-	DrawRotaGraph(m_menuPos.x, m_menuPos.y + kMenuOffsetY, 1.0, 0.0, m_selectStageHandle, true);
+	Vector2 nextTutorialPos = m_menuPos;
+	Vector2 selectStagePos = m_menuPos;
+	selectStagePos.y += kMenuOffsetY;
+
+	DrawRotaGraph(nextTutorialPos.x, nextTutorialPos.y, 1.0, 0.0, m_nextTutorialHandle, true);
+	DrawRotaGraph(selectStagePos.x, selectStagePos.y , 1.0, 0.0, m_selectStageHandle, true);
 	SetDrawBlendMode(DX_BLENDMODE_INVSRC, 255);
 	switch (m_menuIndex)
 	{
 	case TutorialResultUI::Menu::Next:
-		DrawRotaGraph(m_menuPos.x, m_menuPos.y, 1.0, 0.0, m_nextTutorialHandle, true);
+		DrawRotaGraph(nextTutorialPos.x, nextTutorialPos.y, 1.0, 0.0, m_nextTutorialHandle, true);
 		break;
 	case TutorialResultUI::Menu::Select:
-		DrawRotaGraph(m_menuPos.x, m_menuPos.y + kMenuOffsetY, 1.0, 0.0, m_selectStageHandle, true);
+		DrawRotaGraph(selectStagePos.x, selectStagePos.y, 1.0, 0.0, m_selectStageHandle, true);
 		break;
 	default:
 		break;
 	}
+	//カーソル
+	DrawRotaGraph(m_cousorPos.x, m_cousorPos.y, 1.0, 0.0, m_cursorHandle, true);
+
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	
 }
 
 void TutorialResultUI::SetMenuIndex(int index)

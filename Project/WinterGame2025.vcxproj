@@ -206,6 +206,7 @@
     <ClCompile Include="Game\UI\Result\ResultUI.cpp" />
     <ClCompile Include="Game\UI\TalkUI.cpp" />
     <ClCompile Include="Game\UI\Title\TitleUI.cpp" />
+    <ClCompile Include="Game\UI\Tutorial\TutorialManualUI.cpp" />
     <ClCompile Include="Game\UI\UIBase.cpp" />
     <ClCompile Include="Game\UI\UIManager.cpp" />
     <ClCompile Include="General\Animator.cpp" />
@@ -324,6 +325,7 @@
     <ClInclude Include="Game\UI\Result\ResultUI.h" />
     <ClInclude Include="Game\UI\TalkUI.h" />
     <ClInclude Include="Game\UI\Title\TitleUI.h" />
+    <ClInclude Include="Game\UI\Tutorial\TutorialManualUI.h" />
     <ClInclude Include="Game\UI\UIBase.h" />
     <ClInclude Include="Game\UI\UIManager.h" />
     <ClInclude Include="General\Animator.h" />

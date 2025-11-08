@@ -6,6 +6,7 @@ class Player;
 class TalkUI;
 class TutorialClearData;
 class ActorManager;
+class TutorialManualUI;
 class TutorialManager
 {
 public:
@@ -15,12 +16,14 @@ public:
 	void Update();
 
 	//チュートリアルをクリアしたら
-	bool IsClear()const { return m_isClear; };
+	bool IsClear()const;
 private:
 	//プレイヤー
 	std::weak_ptr<Player> m_pPlayer;
 	//テキストUI
 	std::weak_ptr<TalkUI> m_pTextUI;
+	//操作説明UI
+	std::weak_ptr<TutorialManualUI> m_pTutorialManualUI;
 	//アクターマネージャー
 	std::shared_ptr<ActorManager> m_pActorManager;
 	//クリア情報
@@ -28,6 +31,8 @@ private:
 	//クリアしたか
 	bool m_isClear;
 
+	//クリアしたと表示するのを少し遅らせる
+	int m_clearDelayFrame;
 private:
 	
 };

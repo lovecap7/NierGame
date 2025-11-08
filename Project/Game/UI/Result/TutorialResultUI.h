@@ -28,6 +28,8 @@ private:
     //セレクト
     int m_nextTutorialHandle;
     int m_selectStageHandle;
+    //カーソル
+    int m_cursorHandle;
 private:
     //フレーム
     int m_countFrame;
@@ -36,6 +38,7 @@ private:
     //座標
     Vector2 m_mcPos;
     Vector2 m_menuPos;
+    Vector2 m_cousorPos;
 
 
     //メニュー
