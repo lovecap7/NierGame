@@ -47,6 +47,9 @@ void AttackManager::Exit(std::shared_ptr<AttackBase> attack)
 
 void AttackManager::Init()
 {
+	m_hitStopFrame = 0;
+	m_isHitStop = false;
+	m_attacks.clear();
 }
 
 void AttackManager::Update()
@@ -118,7 +121,7 @@ void AttackManager::SetPlayerCamera(std::weak_ptr<PlayerCamera> pPlayerCamera)
 void AttackManager::CheckDelete()
 {
 	//Á–Åƒtƒ‰ƒO‚ª—§‚Á‚Ä‚¢‚é‚à‚Ì‚ğíœ
-	m_attacks.remove_if([](const std::shared_ptr<AttackBase>& attack) {
+	m_attacks.remove_if([](const std::shared_ptr<AttackBase> attack) {
 		if (attack->IsDelete()) {
 			attack->End();
 			return true;

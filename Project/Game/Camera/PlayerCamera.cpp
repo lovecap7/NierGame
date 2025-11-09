@@ -343,7 +343,7 @@ void PlayerCamera::UpdateCameraShake()
 
         //ƒJƒƒ‰‚ÌˆÊ’u‚ğ—h‚ç‚·
         float power = static_cast<float>(m_shakePower) * std::sinf(static_cast<float>(m_shakeFrame));
-        Vector3 shakePos = (m_cameraPos + (m_right * power));
+        Vector3 shakePos = (m_cameraPos + (Vector3::Up() * power));
 
         //”½‰f
         DxLib::SetCameraPositionAndTarget_UpVecY(

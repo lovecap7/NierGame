@@ -27,6 +27,8 @@ void BattleArea::Init(const std::weak_ptr<EnemyManager> enemyManager)
 	InitInEnemys(enemyManager.lock());
 	//壁をオフ
 	OffWall();
+	//サーチ状態
+	m_update = &BattleArea::UpdatePlayerSearvh;
 }
 
 void BattleArea::Update(const std::shared_ptr<ActorManager> actorManager)

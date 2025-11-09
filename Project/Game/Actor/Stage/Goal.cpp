@@ -29,7 +29,10 @@ Goal::~Goal()
 void Goal::Init()
 {
 	//エフェクト
-	m_effect = EffekseerManager::GetInstance().CreateEffect(kEffectPath, m_actorData->GetPos());
+	if (m_effect.expired())
+	{
+		m_effect = EffekseerManager::GetInstance().CreateEffect(kEffectPath, m_actorData->GetPos());
+	}
 	if (m_isThrough)return;
 	Collidable::Init();
 }

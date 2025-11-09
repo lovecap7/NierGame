@@ -5,6 +5,7 @@
 #include "../../../../General/Input.h"
 #include "../../../../General/Collision/Rigidbody.h"
 #include "../../../../General/CharaStatus.h"
+#include "../../../UI/UIManager.h"
 
 namespace
 {
@@ -24,6 +25,8 @@ PlayerStateDeath::PlayerStateDeath(std::weak_ptr<Actor> player) :
 	auto status = owner->GetCharaStatus();
 	//無敵
 	status->SetIsNoDamage(true);
+	//UI削除
+	UIManager::GetInstance().AllDeleteUI();
 }
 
 PlayerStateDeath::~PlayerStateDeath()
@@ -39,12 +42,19 @@ void PlayerStateDeath::Update()
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	auto status = owner->GetCharaStatus();
-	//復活したら
+#if _DEBUG
+	//復活したら(デバッグ用)
 	if (!status->IsDead())
 	{
 		//待機
 		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
 		return;
+	}
+#endif
+	//アニメーション終了
+	if (owner->GetModel()->IsFinishAnim())
+	{
+		owner->Delete();
 	}
 
 	//移動量リセット

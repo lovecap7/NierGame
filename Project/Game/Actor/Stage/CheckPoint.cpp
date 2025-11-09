@@ -30,17 +30,21 @@ CheckPoint::~CheckPoint()
 void CheckPoint::Init()
 {
 	//エフェクト
-	m_effect = EffekseerManager::GetInstance().CreateEffect(kCheckPointBeforePath, m_actorData->GetPos());
+	if (m_effect.expired())
+	{
+		m_effect = EffekseerManager::GetInstance().CreateEffect(kCheckPointBeforePath, m_actorData->GetPos());
+	}
 	if (m_isThrough)return;
 	Collidable::Init();
 }
 
 void CheckPoint::OnCollide(const std::shared_ptr<Collidable> other)
 {
-	if (other->GetGameTag() == GameTag::Player)
+	if ((other->GetGameTag() == GameTag::Player) && !m_isPass)
 	{
-		std::dynamic_pointer_cast<Player>(other)->SetRespawnPos(m_rb->GetPos());
-		m_isDelete = true;
+		auto player = std::dynamic_pointer_cast<Player>(other);
+		player->SetRespawnPos(m_rb->GetPos());		//リスポーン位置
+		player->GetCharaStatus()->FullRecovery();	//回復
 		m_isPass = true;
 	}
 }
@@ -55,10 +59,9 @@ void CheckPoint::Draw() const
 void CheckPoint::Complete()
 {
 	//通過したのなら
-	if (m_isPass)
+	if (m_isPass && !m_effect.expired())
 	{
 		//エフェクトを削除して通過したことがわかるエフェクトを出す
-		if (m_effect.expired())return;
 		m_effect.lock()->Delete();
 		EffekseerManager::GetInstance().CreateEffect(kCheckPointAfterPath, m_actorData->GetPos());
 	}

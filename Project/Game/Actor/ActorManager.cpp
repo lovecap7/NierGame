@@ -27,7 +27,8 @@ namespace
 }
 
 ActorManager::ActorManager():
-	m_stageFallHeight(0.0f)
+	m_stageFallHeight(0.0f),
+	m_isGameover(false)
 {
 	
 }
@@ -74,6 +75,8 @@ void ActorManager::Init()
 {
 	//敵マネージャーの作成
 	m_pEnemyManager = std::make_shared<EnemyManager>(shared_from_this());
+	//フラグリセット
+	m_isGameover = false;
 }
 
 void ActorManager::Update()
@@ -114,6 +117,20 @@ void ActorManager::End()
 		Exit(actor);
 	}
 	deleteActer.clear();
+}
+void ActorManager::Restart()
+{
+	//アクターの初期化
+	for (auto& actor : m_actors)
+	{
+		actor->Init();
+	}
+
+	//エネミーマネージャーの初期化
+	m_pEnemyManager->Init();
+
+	//フラグリセット
+	m_isGameover = false;
 }
 
 void ActorManager::CreateActorCSV(const wchar_t* folderName, const wchar_t* fileName)
@@ -265,6 +282,13 @@ void ActorManager::CheckDelete()
 	//消滅フラグが立っているものを削除
 	m_actors.remove_if([=](const std::shared_ptr<Actor>& actor) {
 		if (actor->IsDelete()) {
+			//プレイヤーは無視
+			if (actor->GetGameTag() == GameTag::Player)
+			{
+				//ゲームオーバー
+				m_isGameover = true;
+				return false;
+			}
 			actor->End();
 			//敵ならエネミーマネージャーからも削除
 			if (actor->GetGameTag() == GameTag::Enemy)

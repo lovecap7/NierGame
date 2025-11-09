@@ -67,7 +67,7 @@ void TutorialScene::Init()
 	m_actorManager->CreateActorCSV(stageName, L"StageData");
 	m_actorManager->CreateActorCSV(stageName, L"CheckPointData");
 	//カメラセット
-	m_actorManager->SetCamera(camera);
+	m_actorManager->SetPlayerCamera(camera);
 	//攻撃マネージャーセット
 	m_actorManager->SetAttackManager(m_attackManager);
 

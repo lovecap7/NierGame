@@ -30,11 +30,13 @@ public:
 	void Draw() const;
 	//終了処理
 	void End();
+	//再スタート(コンテニューが押されたとき)
+	void Restart();
 	//CSVからアクターを作成
 	void CreateActorCSV(const wchar_t* folderName,const wchar_t* fileName);
 
 	//カメラのセット
-	void SetCamera(std::weak_ptr<PlayerCamera> pCamera) { m_pCamera = pCamera; };
+	void SetPlayerCamera(std::weak_ptr<PlayerCamera> pCamera) { m_pCamera = pCamera; };
 	//カメラの参照
 	std::weak_ptr<PlayerCamera> GetPlayerCamera()const { return m_pCamera; };
 
@@ -49,7 +51,8 @@ public:
 	//敵マネージャー
 	std::shared_ptr<EnemyManager> GetEnemyManager()const { return m_pEnemyManager; };
 
-	
+	//ゲームオーバー
+	bool IsGameover()const { return m_isGameover; };
 private:
 	//アクター
 	std::list<std::shared_ptr<Actor>> m_actors;
@@ -63,6 +66,8 @@ private:
 	std::shared_ptr<EnemyManager> m_pEnemyManager;
 	//ステージを落下したとみなす高さ
 	float m_stageFallHeight;
+	//ゲームオーバー
+	bool m_isGameover;
 private:
 	//キャラクターの作成
 	std::shared_ptr<CharacterBase> CreateChara(GameTag tag, std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> data);

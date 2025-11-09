@@ -92,6 +92,14 @@ void BattleAreaManager::End()
 		area->End();
 	}
 }
+void BattleAreaManager::Restart()
+{
+	//I—¹ˆ—
+	for (auto area : m_areas)
+	{
+		area->Init(m_pEnemyManager);
+	}
+}
 
 bool BattleAreaManager::IsEndAllArea() const
 {

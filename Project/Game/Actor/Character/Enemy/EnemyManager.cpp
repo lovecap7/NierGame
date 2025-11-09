@@ -43,6 +43,7 @@ void EnemyManager::Exit(std::shared_ptr<EnemyBase> enemy)
 
 void EnemyManager::Init()
 {
+	m_isInAreaBattle = false;
 }
 
 void EnemyManager::Update()

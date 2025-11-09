@@ -68,7 +68,7 @@ void GameScene::Init()
 	m_actorManager->CreateActorCSV(stageName, L"CheckPointData");
 
 	//カメラセット
-	m_actorManager->SetCamera(camera);
+	m_actorManager->SetPlayerCamera(camera);
 	//攻撃マネージャーセット
 	m_actorManager->SetAttackManager(m_attackManager);
 
@@ -85,6 +85,11 @@ void GameScene::Init()
 	//タイマー
 	m_timer = std::make_shared<Timer>();
 	m_timer->Init();
+
+	//ゲームオーバー
+	m_isGameover = false;
+	//ゲームクリア
+	m_isGameClear = false;
 }
 
 void GameScene::Update()
@@ -103,14 +108,37 @@ void GameScene::Update()
 	//フェードアウトしたら
 	if (fader.IsFinishFadeOut())
 	{
-		m_controller.ChangeScene(std::make_unique<ResultScene>(m_stageName, m_controller, m_timer));
-		return;
+		if (m_isGameClear)
+		{
+			m_controller.ChangeScene(std::make_unique<ResultScene>(m_stageName, m_controller, m_timer));
+			return;
+		}
+		else if (m_isGameover)
+		{
+			//再スタート
+			Restart();
+		}
 	}
-	//もしもすべてのエリアを突破したら
-	if ((m_battleAreaManager->IsEndAllArea() || input.IsTrigger("GameClear")) && !fader.IsFadeNow())
+
+	
+	if (!fader.IsFadeNow())
 	{
-		//フェードアウト
-		fader.FadeOut();
+		//もしもすべてのエリアを突破したら
+		if ((m_battleAreaManager->IsEndAllArea() || input.IsTrigger("GameClear")))
+		{
+			//ゲームクリア
+			m_isGameClear = true;
+			//フェードアウト
+			fader.FadeOut();
+		}
+		//プレイヤーが死亡したら
+		else if ((m_actorManager->IsGameover() || input.IsTrigger("Gameover")))
+		{
+			//ゲームオーバー
+			m_isGameover = true;
+			//フェードアウト
+			fader.FadeOut();
+		}
 	}
 }
 
@@ -127,6 +155,51 @@ void GameScene::End()
 	m_attackManager->End();
 	m_battleAreaManager->End();
 	m_effectManager.End();
+}
+
+void GameScene::Restart()
+{
+	//ゲームオーバー
+	m_isGameover = false;
+
+	//ゲームクリア
+	m_isGameClear = false;
+
+	//カメラ
+	auto camera = std::make_shared<PlayerCamera>();
+	auto& cameraController = CameraController::GetInstance();
+	cameraController.Init();
+	cameraController.ChangeCamera(camera);
+
+	//エフェクト
+	m_effectManager.End();
+	m_effectManager.Init();
+
+	//ポストエフェクトを解除
+	Application::GetInstance().GetPostProcess()->ResetPostEffectState();
+
+	//タイムスケール
+	Application::GetInstance().SetTimeScale(1.0f);
+
+	//UI削除
+	UIManager::GetInstance().AllDeleteUI();
+
+	//Inputの入力情報リセット
+	Input::GetInstance().StopUpdate();
+
+	//アクターの再スタート
+	m_actorManager->Restart();
+	m_actorManager->SetPlayerCamera(camera);
+
+	//攻撃マネージャー
+	m_attackManager->Init();
+	m_attackManager->SetPlayerCamera(camera);
+
+	//エリアの再スタート
+	m_battleAreaManager->Restart();
+
+	//フェードイン
+	Fader::GetInstance().FadeIn();
 }
 
 void GameScene::DebugDraw() const

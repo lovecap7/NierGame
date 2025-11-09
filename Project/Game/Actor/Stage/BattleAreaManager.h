@@ -17,6 +17,8 @@ public:
 	void Update(std::shared_ptr<ActorManager> actorManager);
 	//終了処理
 	void End();
+	//再スタート
+	void Restart();
 
 	//すべてのエリアを突破した
 	bool IsEndAllArea()const;

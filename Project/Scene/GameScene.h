@@ -27,7 +27,7 @@ public:
     virtual void Update() override;
     virtual void Draw() override;
     virtual void End() override;
-    virtual void Restart() override {};
+    virtual void Restart() override;
     //デバッグ用
     virtual void DebugDraw() const override;
    
@@ -49,5 +49,10 @@ private:
 
     //タイマー
     std::shared_ptr<Timer> m_timer;
+
+    //ゲームオーバー
+    bool m_isGameover;
+    //ゲームクリア
+    bool m_isGameClear;
 };
 

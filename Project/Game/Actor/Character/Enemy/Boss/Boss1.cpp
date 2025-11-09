@@ -59,6 +59,20 @@ void Boss1::Init()
 	//体力UI
 	auto enemyHPUI = std::make_shared<NormalEnemyHPUI>(m_charaStatus, thisPointer);
 	enemyHPUI->Init();
+	//体力回復
+	m_charaStatus->FullRecovery();
+
+	//位置
+	m_rb->SetPos(m_actorData->GetPos());
+	Vector3 endPos = m_rb->m_pos;
+	endPos.y += m_actorData->GetCollHeight();
+	std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->SetEndPos(endPos);//カプセルの移動
+	//移動量リセット
+	m_rb->SetVec(Vector3::Zero());
+
+	//モデルの座標更新
+	m_model->SetPos(m_rb->m_pos.ToDxLibVector());
+	m_model->ApplyMat();
 }
 
 

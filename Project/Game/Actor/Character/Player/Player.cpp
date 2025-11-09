@@ -45,19 +45,18 @@ namespace
 	//武器を収めるまでのフレーム
 	constexpr float kPutAwayFrame = 60.0f * 5.0f;
 
-	//ヒットグリッジ(通常)
-	constexpr float kGlitchFrame = 20.0f;
-	constexpr float kGlitchScale = 100.0f;
-	constexpr float kGlitchSpeed = 10.0f;
-	constexpr float kGlitchStrengt = 100.0f;
-	//ヒットグリッジ(ピンチ)
-	constexpr float kPinchGlitchScale = 100.0f;
-	constexpr float kPinchGlitchSpeed = 10.0f;
-	constexpr float kPinchGlitchStrengt = 300.0f;
+	//ヒットグリッジ
+	constexpr float kHitGlitchFrame = 20.0f;
+	constexpr float kHitGlitchStrengt = 0.5f;
+	constexpr float kHitGlitchScale = 100.0f;
+	constexpr float kHitGlitchSpeed = 10.0f;
+	//ピンチの時は2倍
+	constexpr float kPinchRate = 2.0f;
+	//グリッチフレーム
 	constexpr float kGlitchPinchFrame = 10.0f;
 	constexpr float kGlitchStartFrame = 230.0f;
-	constexpr float kGlitchEndFrame = kGlitchStartFrame + kGlitchFrame;
-
+	constexpr float kGlitchEndFrame = kGlitchStartFrame + kHitGlitchFrame;
+	
 	//落下した際のリスポーン地点の位置調整
 	constexpr float kReturnPushBackDistance = 500.0f;
 }
@@ -82,6 +81,8 @@ Player::Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatus
 	m_isGoal(false),
 	m_respawnPos()
 {
+	//初期リスポーン地点
+	SetRespawnPos(GetPos());
 }
 
 Player::~Player()
@@ -90,6 +91,25 @@ Player::~Player()
 
 void Player::Init()
 {
+	//初期化
+	m_jumpNum = 0;
+	m_isAvoidable = true;
+	m_isJustAvoided = false;
+	m_noDamageFrame = 0.0f;
+	m_putAwayCountFrame = 0.0f;
+	m_haveWeaponType = AnimData::WeaponType::None;
+	m_isAirAttacked = false;
+	m_isDraw = true;
+	m_glitchFrame = 0.0f;
+	m_glitchCountFrame = 0.0f;
+	m_glitchScale = 0.0f;
+	m_glitchSpeed = 0.0f;
+	m_glitchkStrengt = 0.0f;
+	m_totalJustAvoidNum = 0;
+	m_isHitGlitch = false;
+	m_isGoal = false;
+	m_isDelete = false;
+
 	//必要なパスを取得
 	auto& csvLoader = CSVDataLoader::GetInstance();
 	auto pathData = csvLoader.LoadCSV(m_actorData->GetCSVPathData().c_str()).front()->GetData();
@@ -106,12 +126,16 @@ void Player::Init()
 	//モデルの高さ調整
 	m_model->SetModelHeightAdjust(-m_actorData->GetCollRadius());
 
-	//体力
+	//体力UI
 	auto playerHPUI = std::make_shared<PlayerHPUI>(m_charaStatus);
 	playerHPUI->Init();
 
-	//初期リスポーン地点
-	SetRespawnPos(GetPos());
+	//体力回復
+	m_charaStatus->FullRecovery();
+
+	//リスポーン位置に移動
+	Respawn();
+
 }
 
 
@@ -571,10 +595,17 @@ void Player::UpdateHit()
 		postEff->AddPostEffectState(ShaderPostProcess::PostEffectState::Glitch);
 
 		//初期化
-		m_glitchFrame = kGlitchFrame;
-		m_glitchScale = kGlitchScale;
-		m_glitchSpeed = kGlitchSpeed;
-		m_glitchkStrengt = kGlitchStrengt;
+		m_glitchFrame = kHitGlitchFrame;
+		m_glitchScale = kHitGlitchScale;
+		m_glitchSpeed = kHitGlitchSpeed;
+		m_glitchkStrengt = kHitGlitchStrengt;
+		if(m_charaStatus->IsPinchHP())
+		{
+			m_glitchFrame *= kPinchRate;
+			m_glitchScale *= kPinchRate;
+			m_glitchSpeed *= kPinchRate;
+			m_glitchkStrengt *= kPinchRate;
+		}
 
 		//攻撃を喰らった
 		m_isHitGlitch = true;
@@ -609,8 +640,24 @@ void Player::UpdateHit()
 	}
 	else
 	{
-		//ピンチ
-		if (m_charaStatus->IsPinchHP())
+		//死亡
+		if (m_isDelete)
+		{
+			//グレーに
+			postEff->AddPostEffectState(ShaderPostProcess::PostEffectState::Gray);
+			//グリッジ
+			postEff->AddPostEffectState(ShaderPostProcess::PostEffectState::Glitch);
+			//揺れる
+			postEff->SetShakeStrength(m_glitchScale);
+			postEff->SetBlockScele(m_glitchSpeed);
+			postEff->SetNoiseSpeed(m_glitchkStrengt);
+
+			++m_glitchScale;
+			++m_glitchSpeed;
+			++m_glitchkStrengt;
+		}
+		//ピンチ(定期的に画面が揺れる)
+		else if (m_charaStatus->IsPinchHP())
 		{
 			//グレーに
 			postEff->AddPostEffectState(ShaderPostProcess::PostEffectState::Gray);
@@ -622,9 +669,10 @@ void Player::UpdateHit()
 			}
 			else if (m_glitchCountFrame >= kGlitchStartFrame)
 			{
-				postEff->SetShakeStrength(kPinchGlitchStrengt);
-				postEff->SetBlockScele(kPinchGlitchScale);
-				postEff->SetNoiseSpeed(kPinchGlitchSpeed);
+				//揺れる
+				postEff->SetShakeStrength(kHitGlitchStrengt);
+				postEff->SetBlockScele(kHitGlitchScale);
+				postEff->SetNoiseSpeed(kHitGlitchSpeed);
 			}
 			else
 			{
