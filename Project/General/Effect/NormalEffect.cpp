@@ -17,7 +17,8 @@ NormalEffect::NormalEffect(int playHandle, Vector3 pos):
 	m_isSpecificFrame(false),
 	m_dir(Vector3::Back()),
 	m_myTimeScale(0.0f),
-	m_isMyTimeScale(false)
+	m_isMyTimeScale(false),
+	m_isDraw(true)
 {
 	SetPos(m_pos);
 	SetRot(m_rot);
@@ -31,6 +32,8 @@ NormalEffect::~NormalEffect()
 
 void NormalEffect::Update()
 {
+	if (!m_isDraw)return;
+
 	//自分のタイムスケールを使うか
 	if (!m_isMyTimeScale)
 	{
@@ -62,8 +65,6 @@ void NormalEffect::Update()
 			return;
 		}
 	}
-
-
 }
 
 void NormalEffect::End()

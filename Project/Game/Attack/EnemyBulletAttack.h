@@ -26,6 +26,5 @@ private:
     //UŒ‚‚É“–‚½‚Á‚½‚É‰ó‚ê‚é‚©
     bool m_isDestructible;
 private:
- 
 };
 

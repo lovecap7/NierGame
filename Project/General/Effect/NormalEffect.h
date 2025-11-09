@@ -9,9 +9,13 @@ public:
 	virtual void End();				//終了処理
 	void Play();					//再生
 	void Stop();					//停止
+	void EnableDraw() { m_isDraw = true; };	//描画する
+	void DisableDraw() { m_isDraw = false; };//描画しない
 	void SetPlaySpeed(float speed);	//再生速度
 	void Delete();					//削除
 	bool IsDelete() const { return m_isDelete; };
+	bool IsDraw() const { return m_isDraw; };
+	int GetPlayHandle() const { return m_playHandle; };
 	//セッター
 	void SetPos(Vector3 pos);		//座標
 	void SetRot(Vector3 rot);		//回転

@@ -82,7 +82,13 @@ void EffekseerManager::Draw() const
 	//Effekseerに3D表示の設定をDXライブラリの3D表示の設定に同期させる
 	Effekseer_Sync3DSetting();
 	//全てのエフェクトの描画
-	DrawEffekseer3D();
+	DrawEffekseer3D_Begin();
+	for (auto& eff : m_effects)
+	{
+		if (!eff->IsDraw())continue;
+		DrawEffekseer3D_Draw(eff->GetPlayHandle());
+	}
+	DrawEffekseer3D_End();
 }
 
 void EffekseerManager::End()
