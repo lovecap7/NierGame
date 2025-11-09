@@ -39,6 +39,8 @@ void GameScene::Init()
 	AssetManager::GetInstance().DeleteModelHandle();
 	//ポストエフェクトを解除
 	Application::GetInstance().GetPostProcess()->ResetPostEffectState();
+	//タイムスケール
+	Application::GetInstance().SetTimeScale(1.0f);
 	//UI削除
 	UIManager::GetInstance().AllDeleteUI();
 	//Inputの入力情報リセット
@@ -63,6 +65,8 @@ void GameScene::Init()
 	m_actorManager->Init();
 	m_actorManager->CreateActorCSV(stageName, L"CharacterData");
 	m_actorManager->CreateActorCSV(stageName, L"StageData");
+	m_actorManager->CreateActorCSV(stageName, L"CheckPointData");
+
 	//カメラセット
 	m_actorManager->SetCamera(camera);
 	//攻撃マネージャーセット

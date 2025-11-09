@@ -53,6 +53,8 @@ void TitleScene::Init()
 {
 	//アセットの削除
 	AssetManager::GetInstance().AllDelete();
+	//タイムスケール
+	Application::GetInstance().SetTimeScale(1.0f);
 	//UI削除
 	UIManager::GetInstance().AllDeleteUI();
 	//フェードイン

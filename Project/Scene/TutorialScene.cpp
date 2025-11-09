@@ -40,6 +40,8 @@ void TutorialScene::Init()
 	AssetManager::GetInstance().DeleteModelHandle();
 	//ポストエフェクトを解除
 	Application::GetInstance().GetPostProcess()->ResetPostEffectState();
+	//タイムスケール
+	Application::GetInstance().SetTimeScale(1.0f);
 	//UI削除
 	UIManager::GetInstance().AllDeleteUI();
 	//Inputの入力情報リセット

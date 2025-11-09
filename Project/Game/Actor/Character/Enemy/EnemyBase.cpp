@@ -131,6 +131,15 @@ void EnemyBase::SearchTarget(std::shared_ptr<Player> player)
 {
 	if (!player)return;
 
+	//エリア内ならどこにいてもプレイヤーを発見する
+	if (m_isInArea)
+	{
+		m_targetInfo.m_pTarget = player;
+		m_targetInfo.m_isFound = true;
+		m_isAlerted = true;
+		return;
+	}
+
 	//前回の発見状態を保存
 	m_isAlerted = m_targetInfo.m_isFound;
 	//視野角内にいるかどうか
