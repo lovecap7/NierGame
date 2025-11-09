@@ -55,6 +55,7 @@ private:
 
 	//ƒJƒƒ‰‚ğ—h‚ç‚·
 	int m_shakeFrame;
+	int m_shakeCountFrame;
 	int m_shakePower;
 private:
 	//’Êí‚ÌXV

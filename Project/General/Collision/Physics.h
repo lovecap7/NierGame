@@ -39,8 +39,6 @@ public:
 	void Update();
 	//登録しているCollidableを全て削除
 	void Reset();
-
-
 	//更新を止める
 	void StopUpdate() { m_isUpdate = false; }
 	//更新を始める
@@ -51,6 +49,7 @@ public:
 	std::list<std::weak_ptr<Collidable>> RayCast(const Vector3& startPos, const Vector3& endPos);
 	//カメラからレイを飛ばして終点に一番近い座標を返す
 	Vector3 GetCameraRatCastNearEndPos(const Vector3& targetPos, const Vector3& cameraPos);
+
 private:
 	//当たり判定のチェックをするクラス
 	std::shared_ptr<CollisionChecker> m_collChecker;
@@ -68,6 +67,8 @@ private:
 		void OnCollide() { owner->OnCollide(colider); }
 	};
 
+	//衝突処理
+	void CheckCollidable(std::list<Physics::OnCollideInfo>& onCollideInfo);
 	//時間のスケールを初期化
 	void InitTimeScale();
 	//重力

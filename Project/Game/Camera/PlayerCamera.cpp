@@ -68,6 +68,7 @@ void PlayerCamera::Init()
     m_nextlockOnSide = kRightOffset;
     m_shakePower = 0;
     m_shakeFrame = 0;
+    m_shakeCountFrame = 0;
 
     //UI
     auto lockOnUI = std::make_shared<PlayerCameraUI>(std::dynamic_pointer_cast<PlayerCamera>(shared_from_this()));
@@ -115,8 +116,12 @@ void PlayerCamera::EndLockOn()
 }
 void PlayerCamera::CameraShake(int frame, int shakePower)
 {
-    m_shakeFrame = MathSub::Max(m_shakeFrame, frame);
-    m_shakePower = MathSub::Max(m_shakePower, shakePower);
+    if (m_shakeCountFrame < frame)
+    {
+        m_shakeFrame = frame;
+        m_shakeCountFrame = frame;
+        m_shakePower = shakePower;
+    }
 }
 void PlayerCamera::NormalUpdate(Input& input, Vector3& targetPos)
 {
@@ -336,16 +341,26 @@ void PlayerCamera::UpdateStickAngle(Input& input)
 
 void PlayerCamera::UpdateCameraShake()
 {
-    if (m_shakeFrame > 0)
+    if (m_shakeCountFrame > 0)
     {
-        //フレームを減らしてく
-        --m_shakeFrame;
+        --m_shakeCountFrame;
 
-        //カメラの位置を揺らす
-        float power = static_cast<float>(m_shakePower) * std::sinf(static_cast<float>(m_shakeFrame));
-        Vector3 shakePos = (m_cameraPos + (Vector3::Up() * power));
+        //進行率 0~1
+        float t = 1.0f - static_cast<float>(m_shakeCountFrame) / m_shakeFrame;
 
-        //反映
+        //最初強く、徐々に収まる
+        float attenuation = 1.0f - t;
+        attenuation *= attenuation; 
+
+        //縦揺れ
+        float wave = std::cos(static_cast<float>(attenuation));
+
+        //強さ
+        float power = m_shakePower * attenuation * wave;
+
+        //縦方向のみ
+        Vector3 shakePos = m_cameraPos + Vector3::Up() * power;
+
         DxLib::SetCameraPositionAndTarget_UpVecY(
             shakePos.ToDxLibVector(),
             m_viewPos.ToDxLibVector()

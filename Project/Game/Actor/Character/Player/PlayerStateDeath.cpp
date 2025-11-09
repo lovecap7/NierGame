@@ -27,6 +27,8 @@ PlayerStateDeath::PlayerStateDeath(std::weak_ptr<Actor> player) :
 	status->SetIsNoDamage(true);
 	//UI削除
 	UIManager::GetInstance().AllDeleteUI();
+	//強制待機状態にする(ポッドの射撃を不可能に)
+	Wait();
 }
 
 PlayerStateDeath::~PlayerStateDeath()
