@@ -22,6 +22,8 @@ Goal::Goal(std::shared_ptr<ActorData> actorData, std::weak_ptr<ActorManager> pAc
 
 Goal::~Goal()
 {
+	if (m_effect.expired())return;
+	m_effect.lock()->Delete();
 }
 
 void Goal::Init()

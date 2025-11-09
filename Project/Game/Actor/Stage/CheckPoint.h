@@ -16,11 +16,14 @@ public:
     void Update() override {};
     void OnCollide(const std::shared_ptr<Collidable> other)override;
     void Draw()const override;
-    void Complete() override {};
+    void Complete() override;
     void End()override;
 
 private:
-  
+    //エフェクト
+    std::weak_ptr<NormalEffect> m_effect;
+    //通過したか
+    bool m_isPass;
 };
 
 
