@@ -358,12 +358,14 @@ void PlayerCamera::UpdateCameraShake()
         //ã≠Ç≥
         float power = m_shakePower * attenuation * wave;
 
-        //ècï˚å¸ÇÃÇ›
-        Vector3 shakePos = m_cameraPos + Vector3::Up() * power;
+        //óhÇÁÇ∑
+        Vector3 shakeVec = Vector3::Up() * power;
+        Vector3 shakePos = m_cameraPos + shakeVec;
+        Vector3 shakeViewPos = m_viewPos + shakeVec;
 
         DxLib::SetCameraPositionAndTarget_UpVecY(
             shakePos.ToDxLibVector(),
-            m_viewPos.ToDxLibVector()
+            shakeViewPos.ToDxLibVector()
         );
     }
 }
