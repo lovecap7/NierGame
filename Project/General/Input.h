@@ -67,11 +67,11 @@ public:
 		//入力の大きさ
 		float LeftStickMagnitude() const
 		{
-			return Vector2(leftStickX, leftStickY).Magnitude();
+			return Vector2(static_cast<float>(leftStickX), static_cast<float>(leftStickY)).Magnitude();
 		}
 		float RightStickMagnitude() const
 		{
-			return Vector2(rightStickX, rightStickY).Magnitude();
+			return Vector2(static_cast<float>(rightStickX), static_cast<float>(rightStickY)).Magnitude();
 		}
 
 		//割合
@@ -233,7 +233,7 @@ private:
 	//トリガーの状態
 	TriggerInfo m_triggerInfo = TriggerInfo();
 	//更新するか
-	bool m_isUpdate;
+	bool m_isUpdate = true;
 
 	//先行入力
 	std::map<std::string, int> m_inputBufferFrame;

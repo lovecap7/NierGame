@@ -17,8 +17,8 @@ Vector3 PlayerStateBase::InputMoveVec(std::shared_ptr<Player> owner, Input& inpu
 	auto rb = owner->GetRb();
 	//ˆÚ“®
 	Vector3 vec = Vector3::Zero();
-	vec.x = input.GetStickInfo().leftStickX;
-	vec.z = -input.GetStickInfo().leftStickY;
+	vec.x = static_cast<float>(input.GetStickInfo().leftStickX);
+	vec.z = -static_cast<float>(input.GetStickInfo().leftStickY);
 	if (vec.SqMagnitude() > 0.0f)
 	{
 		vec = vec.Normalize();

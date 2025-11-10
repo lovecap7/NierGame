@@ -64,7 +64,7 @@ void PlayerStateAttackBase::CreateAttack(std::shared_ptr<Player> owner, std::sha
 		//“Š‚°‚Â‚Â‰ñ“]
 		weapon->ThrowAndRoll(
 			m_attackData->GetParam1(), model->GetDir(),
-			owner->GetPos(), m_attackData->GetKeepFrame(), m_attackData->GetParam2());
+			owner->GetPos(), static_cast<float>(m_attackData->GetKeepFrame()), m_attackData->GetParam2());
 	}
 	else
 	{

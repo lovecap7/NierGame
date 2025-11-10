@@ -58,8 +58,8 @@ PlayerStateAvoid::PlayerStateAvoid(std::weak_ptr<Actor> player) :
 	auto& input = Input::GetInstance();
 	//ˆÚ“®
 	Vector3 vec = Vector3::Zero();
-	vec.x = input.GetStickInfo().leftStickX;
-	vec.z = -input.GetStickInfo().leftStickY;
+	vec.x = static_cast<float>(input.GetStickInfo().leftStickX);
+	vec.z = -static_cast<float>(input.GetStickInfo().leftStickY);
 	//‰º‚ª‚é
 	bool isBack = false;
 	//ˆÚ“®•ûŒü‚ª‚ ‚é‚È‚ç

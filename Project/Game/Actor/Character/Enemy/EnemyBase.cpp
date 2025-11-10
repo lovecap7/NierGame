@@ -254,7 +254,7 @@ std::shared_ptr<AttackData> EnemyBase::GetAttackByDistance() const
 }
 std::shared_ptr<AttackData> EnemyBase::GetRandomAttack(std::vector<std::wstring> keys) const
 {
-	int index = MyMath::GetRand(0, keys.size() - 1);
+	int index = MyMath::GetRand(0, static_cast<int>(keys.size()) - 1);
 	return GetAttackData(keys[index]);
 }
 

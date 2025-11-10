@@ -52,7 +52,7 @@ public:
 
 	//–hŒä—Í
 	int GetDF()const { return m_df; };
-	void SetDF(float df) { m_df = df; };
+	void SetDF(int df) { m_df = df; };
 
 	//ˆÚ“®‘¬“x
 	float GetMS()const { return m_ms; };

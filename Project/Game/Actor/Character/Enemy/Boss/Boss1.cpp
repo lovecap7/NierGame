@@ -120,10 +120,10 @@ std::shared_ptr<AttackData> Boss1::GetRandomAttack(std::vector<std::wstring> key
 			else
 			{
 				//ƒpƒ“ƒ`UŒ‚ˆÈŠO
-				return GetAttackData(keys[MyMath::GetRand(1, keys.size() - 1)]);
+				return GetAttackData(keys[MyMath::GetRand(1, static_cast<int>(keys.size()) - 1)]);
 			}
 		}
 	}
-	int index = MyMath::GetRand(0, keys.size() - 1);
+	int index = MyMath::GetRand(0, static_cast<int>(keys.size()) - 1);
 	return GetAttackData(keys[index]);
 }

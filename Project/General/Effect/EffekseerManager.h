@@ -41,8 +41,6 @@ public:
 	void Exit(std::shared_ptr<NormalEffect> eff);
 	//初期化
 	void Init();
-	//必要なエフェクトを準備
-	void LoadEffect(std::wstring csvPath);
 	//更新処理
 	void Update();
 	//描画
@@ -64,9 +62,9 @@ private:
 	//エフェクトの配列
 	std::list<std::shared_ptr<NormalEffect>> m_effects;
 	//更新するか
-	bool m_isUpdate;
+	bool m_isUpdate = true;
 	//更新を遅らせる
-	int m_delayFrame;
+	int m_delayFrame = 0;
 private:
 	//削除候補のエフェクトを削除
 	void CheckDeleteEffect();

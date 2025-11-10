@@ -20,26 +20,26 @@ namespace MyDraw {
 
 		//並べ方はZの字になるように
 		//頂点情報(左上)
-		vertices[0].pos.x = x - w * 0.5 * scale;
-		vertices[0].pos.y = y - h * 0.5 * scale;
+		vertices[0].pos.x = x - w * 0.5f * scale;
+		vertices[0].pos.y = y - h * 0.5f * scale;
 		vertices[0].u = 0.0f;
 		vertices[0].v = 0.0f;
 
 		//頂点情報(右上)
-		vertices[1].pos.x = x + w * 0.5 * scale;
-		vertices[1].pos.y = y - h * 0.5 * scale;
+		vertices[1].pos.x = x + w * 0.5f * scale;
+		vertices[1].pos.y = y - h * 0.5f * scale;
 		vertices[1].u = 1.0f;
 		vertices[1].v = 0.0f;
 
 		//頂点情報(左下)
-		vertices[2].pos.x = x - w * 0.5 * scale;
-		vertices[2].pos.y = y + h * 0.5 * scale;
+		vertices[2].pos.x = x - w * 0.5f * scale;
+		vertices[2].pos.y = y + h * 0.5f * scale;
 		vertices[2].u = 0.0f;
 		vertices[2].v = 1.0f;
 
 		//頂点情報(右下)
-		vertices[3].pos.x = x + w * 0.5 * scale;
-		vertices[3].pos.y = y + h * 0.5 * scale;
+		vertices[3].pos.x = x + w * 0.5f * scale;
+		vertices[3].pos.y = y + h * 0.5f * scale;
 		vertices[3].u = 1.0f;
 		vertices[3].v = 1.0f;
 
@@ -54,7 +54,7 @@ namespace MyDraw {
 		//シェーダを指定
 		DxLib::SetUsePixelShader(psH);
 
-		DxLib::DrawPrimitive2DToShader(vertices.data(), vertices.size(),
+		DxLib::DrawPrimitive2DToShader(vertices.data(), static_cast<int>(vertices.size()),
 			DX_PRIMTYPE_TRIANGLESTRIP);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
@@ -74,26 +74,26 @@ namespace MyDraw {
 
 		//並べ方はZの字になるように
 		//頂点情報(左上)
-		vertices[0].pos.x = x;
-		vertices[0].pos.y = y;
+		vertices[0].pos.x = static_cast<float>(x);
+		vertices[0].pos.y = static_cast<float>(y);
 		vertices[0].u = 0.0f;
 		vertices[0].v = 0.0f;
 
 		//頂点情報(右上)
-		vertices[1].pos.x = x + w;
-		vertices[1].pos.y = y;
+		vertices[1].pos.x = static_cast<float>(x + w);
+		vertices[1].pos.y = static_cast<float>(y);
 		vertices[1].u = 1.0f;
 		vertices[1].v = 0.0f;
 
 		//頂点情報(左下)
-		vertices[2].pos.x = x;
-		vertices[2].pos.y = y + h;
+		vertices[2].pos.x = static_cast<float>(x);
+		vertices[2].pos.y = static_cast<float>(y + h);
 		vertices[2].u = 0.0f;
 		vertices[2].v = 1.0f;
 
 		//頂点情報(右下)
-		vertices[3].pos.x = x + w;
-		vertices[3].pos.y = y + h;
+		vertices[3].pos.x = static_cast<float>(x + w);
+		vertices[3].pos.y = static_cast<float>(y + h);
 		vertices[3].u = 1.0f;
 		vertices[3].v = 1.0f;
 
@@ -108,7 +108,7 @@ namespace MyDraw {
 		//シェーダを指定
 		DxLib::SetUsePixelShader(psH);
 
-		DxLib::DrawPrimitive2DToShader(vertices.data(), vertices.size(),
+		DxLib::DrawPrimitive2DToShader(vertices.data(), static_cast<int>(vertices.size()),
 			DX_PRIMTYPE_TRIANGLESTRIP);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
