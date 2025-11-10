@@ -1,14 +1,19 @@
 #include "ResultRankData.h"
 
+namespace 
+{
+	constexpr int kDataNum = 3;
+}
+
 ResultRankData::ResultRankData() :
-	m_rank(),
+	m_rank(L""),
 	m_min(0),
 	m_sec(0)
 {
 }
 
 ResultRankData::ResultRankData(std::shared_ptr<CSVData> data) :
-	m_rank(),
+	m_rank(L""),
 	m_min(0),
 	m_sec(0)
 {
@@ -23,7 +28,8 @@ ResultRankData::~ResultRankData()
 
 void ResultRankData::Conversion()
 {
-	if (m_data.size() <= 0)return;
+	//要素が足りないなら早期リターン
+	if (m_data.size() != kDataNum)return;
 
 	//ランク
 	m_rank = m_data[0];

@@ -1,6 +1,7 @@
 #include "CSVData.h"
 
-CSVData::CSVData()
+CSVData::CSVData():
+	m_data()
 {
 }
 

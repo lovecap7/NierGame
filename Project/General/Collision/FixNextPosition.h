@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <DxLib.h>
+#include <vector>
 #include "../Math/MyMath.h"
 namespace
 {
@@ -60,23 +61,21 @@ private:
 	/// <summary>
 	/// 球とポリゴンの押し戻しベクトルを返す
 	/// </summary>
-	Vector3 OverlapVecSphereAndPoly(int hitNum, const Vector3& nextPos, MV1_COLL_RESULT_POLY* dim, float shortDis);
+	Vector3 OverlapVecSphereAndPoly(const Vector3& nextPos, std::vector<MV1_COLL_RESULT_POLY>&  dim, float shortDis);
 	/// <summary>
 	/// 壁と当たった時の処理 カプセル
 	/// </summary>
-	Vector3 HitWallCP(const Vector3& headPos, const Vector3& legPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis);
+	Vector3 HitWallCP(const Vector3& headPos, const Vector3& legPos, float shortDis);
 	/// <summary>
 	/// 床の高さに合わせる カプセル
 	/// </summary>
-	bool HitFloorCP(const std::shared_ptr<Collidable> other, const Vector3& legPos, const Vector3& headPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis);
+	bool HitFloorCP(const std::shared_ptr<Collidable> other, const Vector3& legPos, const Vector3& headPos, float shortDis);
 	/// <summary>
 	/// 天井に当たった時の処理 カプセル
 	/// </summary>
-	void HitRoofCP(const std::shared_ptr<Collidable> other, const Vector3& headPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis);
+	void HitRoofCP(const std::shared_ptr<Collidable> other, const Vector3& headPos, float shortDis);
 private:
-	int	m_wallNum;			// 壁ポリゴンと判断されたポリゴンの数
-	int	m_floorAndRoofNum;	// 床ポリゴンと判断されたポリゴンの数
-	MV1_COLL_RESULT_POLY* m_wall[kMaxHitPolygon];
-	MV1_COLL_RESULT_POLY* m_floorAndRoof[kMaxHitPolygon];
+	std::vector<MV1_COLL_RESULT_POLY> m_wall;
+	std::vector<MV1_COLL_RESULT_POLY> m_floorAndRoof;
 };
 

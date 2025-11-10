@@ -1,5 +1,10 @@
 #include "TutorialClearData.h"
 
+namespace
+{
+	constexpr int kDataNum = 3;
+}
+
 TutorialClearData::TutorialClearData():
 	m_clearRequirement(ClearRequirement::AllDeadEnemy)
 {
@@ -19,7 +24,9 @@ TutorialClearData::~TutorialClearData()
 
 void TutorialClearData::Conversion()
 {
-	if (m_data.size() <= 0)return;
+	//要素が足りないなら早期リターン
+	if (m_data.size() != kDataNum)return;
+
 	//チュートリアル名
 	m_tutorialName = m_data[0];
 	//クリア条件

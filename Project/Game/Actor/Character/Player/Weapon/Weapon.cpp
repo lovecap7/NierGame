@@ -17,8 +17,8 @@ namespace
     constexpr int kWeaponTop = 6;
 }
 
-Weapon::Weapon(std::shared_ptr<ActorData> actorData, std::weak_ptr<ActorManager> pActorManager)
-    : Actor(actorData, Shape::Sphere, pActorManager),
+Weapon::Weapon(std::shared_ptr<ActorData> actorData, std::weak_ptr<ActorManager> pActorManager) :
+    Actor(actorData, Shape::Sphere, pActorManager),
     m_ownerHandle(-1),
     m_battleSlotIndex(0),
     m_idleSlotIndex(0),

@@ -1,6 +1,13 @@
 #include "CharaStatusData.h"
 
+namespace
+{
+	constexpr int kDataNum = 11;
+}
+
 CharaStatusData::CharaStatusData() :
+	m_id(0),
+	m_jp(0.0f),
 	m_hp(0),
 	m_at(0),
 	m_df(0),
@@ -13,11 +20,16 @@ CharaStatusData::CharaStatusData() :
 }
 
 CharaStatusData::CharaStatusData(std::shared_ptr<CSVData> data) :
+	m_id(0),
+	m_jp(0.0f),
 	m_hp(0),
 	m_at(0),
 	m_df(0),
 	m_ms(0.0f),
-	m_ar(CharaStatus::Armor::Light)
+	m_ar(CharaStatus::Armor::Light),
+	m_searchAngle(0.0f),
+	m_searchRange(0.0f),
+	m_meleeAttackRange(0.0f)
 {
 	//データを取得
 	this->m_data = data->GetData();
@@ -31,7 +43,8 @@ CharaStatusData::~CharaStatusData()
 
 void CharaStatusData::Conversion()
 {
-	if (m_data.size() <= 0)return;
+	//要素が足りないなら早期リターン
+	if (m_data.size() != kDataNum)return;
 	//名前はスキップ
 	//1スタート
 	//ID

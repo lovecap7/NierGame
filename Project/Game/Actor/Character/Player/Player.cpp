@@ -79,7 +79,7 @@ Player::Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatus
 	m_totalJustAvoidNum(0),
 	m_isHitGlitch(false),
 	m_isGoal(false),
-	m_respawnPos()
+	m_respawnPos(Vector3::Zero())
 {
 	//初期リスポーン地点
 	SetRespawnPos(GetPos());

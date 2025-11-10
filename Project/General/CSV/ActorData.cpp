@@ -2,17 +2,21 @@
 
 namespace
 {
+	//Unity座標をDXライブラリに合わせる
 	constexpr float kUnityToDXPosition = 100.0f;
+	//要素数
+	constexpr int kDataNum = 21;
 }
 
 ActorData::ActorData():
-	m_actorID(),
+	m_actorID(0),
 	m_actorType(ActorType::None),
-	m_pos(),
-	m_rot(),
-	m_scale(),
+	m_pos(Vector3::Zero()),
+	m_rot(Vector3::Zero()),
+	m_scale(Vector3::Zero()),
 	m_modelPath(L"None"),
 	m_priority(Priority::None),
+	m_gameTag(GameTag::None),
 	m_isTrough(true),
 	m_isTrigger(false),
 	m_isGravity(false),
@@ -23,13 +27,14 @@ ActorData::ActorData():
 }
 
 ActorData::ActorData(std::shared_ptr<CSVData> data):
-	m_actorID(),
+	m_actorID(0),
 	m_actorType(ActorType::None),
-	m_pos(),
-	m_rot(),
-	m_scale(),
+	m_pos(Vector3::Zero()),
+	m_rot(Vector3::Zero()),
+	m_scale(Vector3::Zero()),
 	m_modelPath(L"None"),
 	m_priority(Priority::None),
+	m_gameTag(GameTag::None),
 	m_isTrough(true),
 	m_isTrigger(false),
 	m_isGravity(false),
@@ -49,7 +54,8 @@ ActorData::~ActorData()
 
 void ActorData::Conversion()
 {
-	if (m_data.size() <= 0)return;
+	//要素が足りないなら早期リターン
+	if (m_data.size() != kDataNum)return;
 	//名前
 	m_name = m_data[0];
 

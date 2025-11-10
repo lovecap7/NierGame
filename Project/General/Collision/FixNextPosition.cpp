@@ -16,10 +16,8 @@ namespace
 }
 
 FixNextPosition::FixNextPosition() :
-	m_wallNum(0),
-	m_floorAndRoofNum(0),
-	m_wall{ nullptr },
-	m_floorAndRoof{ nullptr }
+	m_wall(),
+	m_floorAndRoof()
 {
 }
 
@@ -30,13 +28,8 @@ FixNextPosition::~FixNextPosition()
 void FixNextPosition::FixNextPos(const std::shared_ptr<Collidable> collA, const std::shared_ptr<Collidable> collB)
 {
 	//初期化
-	m_wallNum = 0;
-	m_floorAndRoofNum = 0;
-	for (int i = 0; i < kMaxHitPolygon; ++i)
-	{
-		m_wall[i] = nullptr;
-		m_floorAndRoof[i] = nullptr;
-	}
+	m_wall.clear();
+	m_floorAndRoof.clear();
 
 	//衝突しているオブジェクトの形状を取得
 	auto collAShape = collA->m_collisionData->m_shape;
@@ -169,15 +162,15 @@ void FixNextPosition::FixNextPosSP(const std::shared_ptr<Collidable> collA, cons
 	AnalyzeWallAndFloor(hitDim, nextPos);
 
 	//床か天井に当たったか
-	bool isFloorAndRoof = m_floorAndRoofNum > 0;
+	bool isFloorAndRoof = !m_floorAndRoof.empty();
 	//壁に当たったか
-	bool isWall = m_wallNum > 0;
+	bool isWall = !m_wall.empty();
 
 	//床と当たったなら
 	if (isFloorAndRoof)
 	{
 		//補正するベクトルを返す
-		Vector3 overlapVec = OverlapVecSphereAndPoly(m_floorAndRoofNum, nextPos, *m_floorAndRoof, collDataA->GetRadius());
+		Vector3 overlapVec = OverlapVecSphereAndPoly(nextPos, m_floorAndRoof, collDataA->GetRadius());
 	
 		//ポリゴンは固定(static)なので球のみ動かす
 		rbA->AddVec(overlapVec);
@@ -195,7 +188,7 @@ void FixNextPosition::FixNextPosSP(const std::shared_ptr<Collidable> collA, cons
 		collA->SetIsWall(true);
 
 		//補正するベクトルを返す
-		Vector3 overlapVec = OverlapVecSphereAndPoly(m_wallNum, nextPos, *m_wall, collDataA->GetRadius());
+		Vector3 overlapVec = OverlapVecSphereAndPoly(nextPos, m_wall, collDataA->GetRadius());
 		
 		//位置を補正
 		Vector3 newPos = rbA->GetNextPos() + overlapVec;
@@ -388,9 +381,9 @@ void FixNextPosition::FixNextPosCP(const std::shared_ptr<Collidable> collA, cons
 		AnalyzeWallAndFloor(hitDim, legPos);
 
 		//床か天井に当たったか
-		bool isFloorAndRoof = m_floorAndRoofNum > 0;
+		bool isFloorAndRoof = !m_floorAndRoof.empty();
 		//壁に当たったか
-		bool isWall = m_wallNum > 0;
+		bool isWall = !m_wall.empty();
 
 		//床と当たったなら
 		if (isFloorAndRoof)
@@ -399,12 +392,12 @@ void FixNextPosition::FixNextPosCP(const std::shared_ptr<Collidable> collA, cons
 			if (collA->m_collState == CollisionState::Jump)
 			{
 				//天井に当たった処理
-				HitRoofCP(collA, headPos, m_floorAndRoofNum, *m_floorAndRoof, radius);
+				HitRoofCP(collA, headPos, radius);
 			}
 			else
 			{
 				//床の高さに合わせる
-				HitFloorCP(collA, legPos, headPos, m_floorAndRoofNum, *m_floorAndRoof, radius);
+				HitFloorCP(collA, legPos, headPos, radius);
 			}
 		}
 		//壁と当たっているなら
@@ -415,7 +408,7 @@ void FixNextPosition::FixNextPosCP(const std::shared_ptr<Collidable> collA, cons
 			collA->SetIsWall(true);
 
 			//補正するベクトルを返す
-			Vector3 overlapVec = HitWallCP(headPos, legPos, m_wallNum, *m_wall, radius);
+			Vector3 overlapVec = HitWallCP(headPos, legPos, radius);
 
 			//ベクトルを補正
 			rbA->AddVec(overlapVec);
@@ -429,10 +422,6 @@ void FixNextPosition::FixNextPosCP(const std::shared_ptr<Collidable> collA, cons
 
 void FixNextPosition::AnalyzeWallAndFloor(MV1_COLL_RESULT_POLY_DIM hitDim, const Vector3& nextPos)
 {
-	//壁ポリゴンと床ポリゴンの数を初期化する
-	m_wallNum = 0;
-	m_floorAndRoofNum = 0;
-
 	//検出されたポリゴンの数だけ繰り返す
 	for (int i = 0; i < hitDim.HitNum;++i)
 	{
@@ -446,11 +435,10 @@ void FixNextPosition::AnalyzeWallAndFloor(MV1_COLL_RESULT_POLY_DIM hitDim, const
 				hitDim.Dim[i].Position[2].y > nextPos.y + 1.0f)
 			{
 				//ポリゴンの数が列挙できる限界数に達していなかったらポリゴンを配列に保存する
-				if (m_wallNum < kMaxHitPolygon)
+				if (m_wall.size() < kMaxHitPolygon)
 				{
 					//ポリゴンの構造体のアドレスを壁ポリゴン配列に保存
-					m_wall[m_wallNum] = &hitDim.Dim[i];
-					++m_wallNum;
+					m_wall.emplace_back(hitDim.Dim[i]);
 				}
 			}
 		}
@@ -458,44 +446,43 @@ void FixNextPosition::AnalyzeWallAndFloor(MV1_COLL_RESULT_POLY_DIM hitDim, const
 		else
 		{
 			//ポリゴンの数が列挙できる限界数に達していなかったらポリゴン配列に保存
-			if (m_floorAndRoofNum < kMaxHitPolygon)
+			if (m_floorAndRoof.size() < kMaxHitPolygon)
 			{
 				//ポリゴンの構造体のアドレスを床ポリゴン配列に保存
-				m_floorAndRoof[m_floorAndRoofNum] = &hitDim.Dim[i];
-				++m_floorAndRoofNum;
+				m_floorAndRoof.emplace_back(hitDim.Dim[i]);
 			}
 		}
 	}
 }
 
-Vector3 FixNextPosition::OverlapVecSphereAndPoly(int hitNum ,const Vector3& nextPos,MV1_COLL_RESULT_POLY* dim ,float shortDis)
+Vector3 FixNextPosition::OverlapVecSphereAndPoly(const Vector3& nextPos, std::vector<MV1_COLL_RESULT_POLY>& dim, float shortDis)
 {
 	//垂線を下して近い点を探して最短距離を求める
-	float hitShortDis = 0;//最短距離
+	float hitShortDis = FLT_MAX;//最短距離
 	//法線
 	Vector3 nom = {};
-	for (int i = 0; i < hitNum; ++i)
+	for (auto& poly : dim)
 	{
 		//内積と法線ベクトルから当たってる座標を求める
-		VECTOR bToA = VSub(nextPos.ToDxLibVector(), dim[i].Position[0]);
-		float dot = VDot(dim[i].Normal, bToA);
+		VECTOR bToA = VSub(nextPos.ToDxLibVector(), poly.Position[0]);
+		float dot = VDot(poly.Normal, bToA);
 
 		//ポリゴンと当たったオブジェクトが法線方向にいるなら向きを反転
-		if ((bToA.y > 0 && dim[i].Normal.y > 0) || (bToA.y < 0 && dim[i].Normal.y < 0))
+		if ((bToA.y > 0 && poly.Normal.y > 0) || (bToA.y < 0 && poly.Normal.y < 0))
 		{
 			dot *= -1;
 		}
 		//当たった座標
-		VECTOR hitPos = VAdd(VScale(dim[i].Normal, dot), nextPos.ToDxLibVector());
+		VECTOR hitPos = VAdd(VScale(poly.Normal, dot), nextPos.ToDxLibVector());
 		//距離
 		float dis = VSize(VSub(hitPos, nextPos.ToDxLibVector()));
 		//初回または前回より距離が短いなら
-		if (i <= 0 || hitShortDis > dis)
+		if (hitShortDis > dis)
 		{
 			//現状の最短
 			hitShortDis = dis;
 			//法線
-			nom = Vector3{ dim[i].Normal.x,dim[i].Normal.y ,dim[i].Normal.z };
+			nom = poly.Normal;
 		}
 	}
 	//押し戻し
@@ -507,7 +494,7 @@ Vector3 FixNextPosition::OverlapVecSphereAndPoly(int hitNum ,const Vector3& next
 	return nom.Normalize() * overlap;
 }
 
-Vector3 FixNextPosition::HitWallCP(const Vector3& headPos, const Vector3& legPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis)
+Vector3 FixNextPosition::HitWallCP(const Vector3& headPos, const Vector3& legPos,float shortDis)
 {
 	//垂線を下して近い点を探して最短距離を求める
 	float hitShortDis = shortDis;//最短距離
@@ -519,13 +506,13 @@ Vector3 FixNextPosition::HitWallCP(const Vector3& headPos, const Vector3& legPos
 
 	//法線
 	Vector3 nom = {};
-	for (int i = 0; i < hitNum; ++i)
+	for (auto& wall : m_wall)
 	{
 		//壁かチェック
-		if (abs(dim[i].Normal.y) >= kWallThreshold)continue;
-		VECTOR pos1 = dim[i].Position[0];
-		VECTOR pos2 = dim[i].Position[1];
-		VECTOR pos3 = dim[i].Position[2];
+		if (abs(wall.Normal.y) >= kWallThreshold)continue;
+		VECTOR pos1 = wall.Position[0];
+		VECTOR pos2 = wall.Position[1];
+		VECTOR pos3 = wall.Position[2];
 		//最短距離の2乗を返す
 		float dis = Segment_Triangle_MinLength_Square(top.ToDxLibVector(), bot.ToDxLibVector(), pos1, pos2, pos3);
 		//平方根を返す
@@ -536,7 +523,7 @@ Vector3 FixNextPosition::HitWallCP(const Vector3& headPos, const Vector3& legPos
 			//現状の最短
 			hitShortDis = dis;
 			//法線
-			nom = dim[i].Normal;
+			nom = wall.Normal;
 		}
 	}
 	//押し戻し
@@ -553,7 +540,7 @@ Vector3 FixNextPosition::HitWallCP(const Vector3& headPos, const Vector3& legPos
 }
 
 
-bool FixNextPosition::HitFloorCP(const std::shared_ptr<Collidable> coll, const Vector3& legPos, const Vector3& headPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis)
+bool FixNextPosition::HitFloorCP(const std::shared_ptr<Collidable> coll, const Vector3& legPos, const Vector3& headPos, float shortDis)
 {
 	//リジッドボディ
 	auto rb = coll->m_rb;
@@ -568,13 +555,13 @@ bool FixNextPosition::HitFloorCP(const std::shared_ptr<Collidable> coll, const V
 	//当たらなかった場合の高さ
 	float defaultLowHitPosY = 0.0f;
 
-	for (int i = 0; i < hitNum; ++i)
+	for (auto& floor : m_floorAndRoof)
 	{
 		//下向きの法線ベクトルなら飛ばす
-		if (dim[i].Normal.y < 0.0f)continue;
-		VECTOR pos1 = dim[i].Position[0];
-		VECTOR pos2 = dim[i].Position[1];
-		VECTOR pos3 = dim[i].Position[2];
+		if (floor.Normal.y < 0.0f)continue;
+		VECTOR pos1 = floor.Position[0];
+		VECTOR pos2 = floor.Position[1];
+		VECTOR pos3 = floor.Position[2];
 
 		//床の高さのデフォルト値を設定
 		defaultLowHitPosY = MathSub::Max(pos1.y, pos2.y, pos3.y);
@@ -613,13 +600,13 @@ bool FixNextPosition::HitFloorCP(const std::shared_ptr<Collidable> coll, const V
 		//頭と足の間にポリゴンがあるかも
 		float capsuleHeight = (headPos - legPos).Magnitude();
 		lowHitPosY = headPos.y;
-		for (int i = 0; i < hitNum; ++i)
+		for (auto& floor : m_floorAndRoof)
 		{
 			//下向きの法線ベクトルなら飛ばす
-			if (dim[i].Normal.y < 0.0f)continue;
-			VECTOR pos1 = dim[i].Position[0];
-			VECTOR pos2 = dim[i].Position[1];
-			VECTOR pos3 = dim[i].Position[2];
+			if (floor.Normal.y < 0.0f)continue;
+			VECTOR pos1 = floor.Position[0];
+			VECTOR pos2 = floor.Position[1];
+			VECTOR pos3 = floor.Position[2];
 
 			HITRESULT_LINE lineBetweenResult = HitCheck_Line_Triangle(headPos.ToDxLibVector(), legPos.ToDxLibVector(),
 				pos1, pos2, pos3);
@@ -647,7 +634,7 @@ bool FixNextPosition::HitFloorCP(const std::shared_ptr<Collidable> coll, const V
 	return isHitFloor;
 }
 
-void FixNextPosition::HitRoofCP(const std::shared_ptr<Collidable> coll, const Vector3& headPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis)
+void FixNextPosition::HitRoofCP(const std::shared_ptr<Collidable> coll, const Vector3& headPos, float shortDis)
 {
 	//リジッドボディ
 	auto rb = coll->m_rb;
@@ -657,12 +644,13 @@ void FixNextPosition::HitRoofCP(const std::shared_ptr<Collidable> coll, const Ve
 	float lowHitPosY = rb->GetPos().y;
 	//天井と当たったか
 	bool isHitRoof = false;
-	for (int i = 0; i < hitNum; ++i)
+	for (auto& roof : m_floorAndRoof)
 	{
 		//上向きの法線ベクトルなら飛ばす
-		if (dim[i].Normal.y > 0.0f)continue;
+		if (roof.Normal.y > 0.0f)continue;
 		// 頭の上にポリゴンがあるかをチェック
-		HITRESULT_LINE lineResult = HitCheck_Line_Triangle(headPos.ToDxLibVector(), VAdd(headPos.ToDxLibVector(), VGet(0.0f, kCheckTop, 0.0f)), dim[i].Position[0], dim[i].Position[1], dim[i].Position[2]);
+		HITRESULT_LINE lineResult = HitCheck_Line_Triangle(headPos.ToDxLibVector(), VAdd(headPos.ToDxLibVector(), VGet(0.0f, kCheckTop, 0.0f)),
+			roof.Position[0], roof.Position[1], roof.Position[2]);
 
 		if (lineResult.HitFlag)
 		{

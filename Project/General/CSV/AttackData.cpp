@@ -1,11 +1,17 @@
 #include "AttackData.h"
 #include "../StringUtil.h"
 
+namespace
+{
+	constexpr int kDataNum = 23;
+}
+
 AttackData::AttackData():
 	m_name(),
 	m_isMultipleHit(false),
 	m_attackType(AttackData::AttackType::None),
 	m_attackWeight(CharaStatus::AttackWeight::Light),
+	m_armor(CharaStatus::Armor::Light),
 	m_cancelFrame(0),
 	m_attackPower(0),
 	m_knockBackPower(0.0f),
@@ -32,6 +38,7 @@ AttackData::AttackData(std::shared_ptr<CSVData> data):
 	m_isMultipleHit(false),
 	m_attackType(AttackData::AttackType::None),
 	m_attackWeight(CharaStatus::AttackWeight::Light),
+	m_armor(CharaStatus::Armor::Light),
 	m_cancelFrame(0),
 	m_attackPower(0),
 	m_knockBackPower(0.0f),
@@ -59,7 +66,9 @@ AttackData::~AttackData()
 
 void AttackData::Conversion()
 {
-	if (m_data.size() <= 0)return;
+	//—v‘f‚ª‘«‚è‚È‚¢‚È‚ç‘ŠúƒŠƒ^[ƒ“
+	if (m_data.size() != kDataNum)return;
+
 	//UŒ‚‚Ì–¼‘O
 	m_name = m_data[0];
 

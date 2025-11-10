@@ -1,6 +1,11 @@
 #include "AnimData.h"
 #include "../StringUtil.h"
 
+namespace
+{
+	constexpr int kDataNum = 3;
+}
+
 AnimData::AnimData():
 	m_stateName(),
 	m_weaponType(WeaponType::None),
@@ -25,7 +30,8 @@ AnimData::~AnimData()
 
 void AnimData::Conversion()
 {
-	if (m_data.size() <= 0)return;
+	//—v‘f‚ª‘«‚è‚È‚¢‚È‚ç‘ŠúƒŠƒ^[ƒ“
+	if (m_data.size() != kDataNum)return;
 	//ó‘Ô
 	m_stateName = m_data[0];
 

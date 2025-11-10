@@ -75,6 +75,6 @@ private:
 	void Gravity();
 
 	//XV‚ğ‚·‚é‚©
-	bool m_isUpdate;
+	bool m_isUpdate = true;
 };
 

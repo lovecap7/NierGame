@@ -1,18 +1,27 @@
 #include "TextData.h"
 
-TextData::TextData():
-	m_id(),
-	m_text(),
-	m_speaker(),
-	m_nextID()
+namespace
+{
+	constexpr int kDataNum = 6;
+}
+
+TextData::TextData() :
+	m_id(L""),
+	m_text(L""),
+	m_speaker(L""),
+	m_nextID(L""),
+	m_group(L""),
+	m_imagePath(L"")
 {
 }
 
 TextData::TextData(std::shared_ptr<CSVData> data):
-	m_id(),
-	m_text(),
-	m_speaker(),
-	m_nextID()
+	m_id(L""),
+	m_text(L""),
+	m_speaker(L""),
+	m_nextID(L""),
+	m_group(L""),
+	m_imagePath(L"")
 {
 	//データを取得
 	this->m_data = data->GetData();
@@ -25,7 +34,8 @@ TextData::~TextData()
 
 void TextData::Conversion()
 {
-	if (m_data.size() <= 0)return;
+	//要素が足りないなら早期リターン
+	if (m_data.size() != kDataNum)return;
 
 	//ID
 	m_id = m_data[0];

@@ -5,10 +5,13 @@ PolygonCollider::PolygonCollider():
 	m_modelHandle(-1),
 	m_nearWallHitPos(),
 	m_nearFloorHitPos(),
-	m_hitDim()
+	m_hitDim(),
+    m_lineHit(),
+    m_isCCD(false)
 {
 }
 
 PolygonCollider::~PolygonCollider()
 {
+  
 }

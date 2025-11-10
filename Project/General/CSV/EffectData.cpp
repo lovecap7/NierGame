@@ -1,5 +1,10 @@
 #include "EffectData.h"
 
+namespace
+{
+	constexpr int kDataNum = 2;
+}
+
 EffectData::EffectData():
 	m_name(),
 	m_path()
@@ -22,7 +27,8 @@ EffectData::~EffectData()
 
 void EffectData::Conversion()
 {
-	if (m_data.size() <= 0)return;
+	//要素が足りないなら早期リターン
+	if (m_data.size() != kDataNum)return;
 	//名前
 	m_name = m_data[0];
 	//攻撃のキー

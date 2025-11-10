@@ -1,5 +1,10 @@
 #include "EnemyAttackKeyData.h"
 
+namespace
+{
+	constexpr int kDataNum = 2;
+}
+
 EnemyAttackKeyData::EnemyAttackKeyData():
 	m_attackKeyName(L""),
 	m_attackRangeType(AttackRangeType::Melee)
@@ -22,7 +27,8 @@ EnemyAttackKeyData::~EnemyAttackKeyData()
 
 void EnemyAttackKeyData::Conversion()
 {
-	if (m_data.size() <= 0)return;
+	//要素が足りないなら早期リターン
+	if (m_data.size() != kDataNum)return;
 	//名前
 	if (m_data[0] == L"Melee")
 	{
