@@ -10,8 +10,11 @@
 
 namespace
 {
+	//確認回数
+	constexpr int kTryNum = 3;
+
 	//重力
-	const Vector3 kGroundGravity = { 0.0f, -10.0f, 0.0f };
+	const Vector3 kGroundGravity = { 0.0f, -5.0f, 0.0f };
 	const Vector3 kAirGravity = { 0.0f, -0.5f, 0.0f };
 }
 
@@ -63,16 +66,6 @@ void Physics::Update()
 	{
 		collInfo.OnCollide();
 	}
-	
-	//OnCollideで新たに移動量が加算されて衝突するオブジェクトがあるかもしれないので
-	//もう一度
-	CheckCollidable(onCollideInfo);
-
-	// 当たり通知
-	for (auto& collInfo : onCollideInfo)
-	{
-		collInfo.OnCollide();
-	}
 
 	//位置確定
 	for (auto& coll : m_collidables)
@@ -84,46 +77,56 @@ void Physics::Update()
 
 void Physics::CheckCollidable(std::list<Physics::OnCollideInfo>& onCollideInfo)
 {
-	//当たり判定をチェック
-	for (auto& collA : m_collidables)
+	bool m_isOneMore = false;
+	for (int i = 0; i < kTryNum; ++i)
 	{
-		//当たり判定を行わないなら飛ばす
-		if (collA->GetGameTag() == GameTag::None)continue;
-		if (collA->m_isThrough)continue;
-		for (auto& collB : m_collidables)
+		//当たり判定をチェック
+		for (auto& collA : m_collidables)
 		{
-			//自分とは当たり判定をしない
-			if (collA == collB)continue;
 			//当たり判定を行わないなら飛ばす
-			if (collB->GetGameTag() == GameTag::None)continue;
-			if (collB->m_isThrough)continue;
-			//当たってるなら
-			if (m_collChecker->IsCollide(collA, collB))
+			if (collA->GetGameTag() == GameTag::None)continue;
+			if (collA->m_isThrough)continue;
+			for (auto& collB : m_collidables)
 			{
-				//どちらもトリガーなではないなら
-				if (!collA->m_isTrigger && !collB->m_isTrigger)
+				//自分とは当たり判定をしない
+				if (collA == collB)continue;
+				//当たり判定を行わないなら飛ばす
+				if (collB->GetGameTag() == GameTag::None)continue;
+				if (collB->m_isThrough)continue;
+				//当たってるなら
+				if (m_collChecker->IsCollide(collA, collB))
 				{
-					//衝突処理
-					m_collProcessor->FixNextPos(collA, collB);
-				}
-				//これまでにこの組み合わせで当たった情報があるかをチェック
-				bool isCollInfo = false;
-				for (const auto& item : onCollideInfo)
-				{
-					// 既に通知リストに含まれていたら呼ばない
-					if (item.owner == collA && item.colider == collB ||
-						item.owner == collB && item.colider == collA)
+					//もう一度
+					m_isOneMore = true;
+					//どちらもトリガーなではないなら
+					if (!collA->m_isTrigger && !collB->m_isTrigger)
 					{
-						isCollInfo = true;
+						//衝突処理
+						m_collProcessor->FixNextPos(collA, collB);
+					}
+					//これまでにこの組み合わせで当たった情報があるかをチェック
+					bool isCollInfo = false;
+					for (const auto& item : onCollideInfo)
+					{
+						// 既に通知リストに含まれていたら呼ばない
+						if (item.owner == collA && item.colider == collB ||
+							item.owner == collB && item.colider == collA)
+						{
+							isCollInfo = true;
+						}
+					}
+					//ない場合
+					if (!isCollInfo)
+					{
+						onCollideInfo.emplace_back(OnCollideInfo{ collA, collB });
+						onCollideInfo.emplace_back(OnCollideInfo{ collB, collA });
 					}
 				}
-				//ない場合
-				if (!isCollInfo)
-				{
-					onCollideInfo.emplace_back(OnCollideInfo{ collA, collB });
-					onCollideInfo.emplace_back(OnCollideInfo{ collB, collA });
-				}
 			}
+		}
+		if (!m_isOneMore)
+		{
+			break;
 		}
 	}
 }

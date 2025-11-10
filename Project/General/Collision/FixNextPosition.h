@@ -75,7 +75,7 @@ private:
 	void HitRoofCP(const std::shared_ptr<Collidable> other, const Vector3& headPos, int hitNum, MV1_COLL_RESULT_POLY* dim, float shortDis);
 private:
 	int	m_wallNum;			// •Çƒ|ƒŠƒSƒ“‚Æ”»’f‚³‚ê‚½ƒ|ƒŠƒSƒ“‚Ì”
-	int	m_floorAndRoofNum;			// °ƒ|ƒŠƒSƒ“‚Æ”»’f‚³‚ê‚½ƒ|ƒŠƒSƒ“‚Ì”
+	int	m_floorAndRoofNum;	// °ƒ|ƒŠƒSƒ“‚Æ”»’f‚³‚ê‚½ƒ|ƒŠƒSƒ“‚Ì”
 	MV1_COLL_RESULT_POLY* m_wall[kMaxHitPolygon];
 	MV1_COLL_RESULT_POLY* m_floorAndRoof[kMaxHitPolygon];
 };

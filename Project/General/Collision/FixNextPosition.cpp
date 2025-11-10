@@ -29,6 +29,15 @@ FixNextPosition::~FixNextPosition()
 
 void FixNextPosition::FixNextPos(const std::shared_ptr<Collidable> collA, const std::shared_ptr<Collidable> collB)
 {
+	//初期化
+	m_wallNum = 0;
+	m_floorAndRoofNum = 0;
+	for (int i = 0; i < kMaxHitPolygon; ++i)
+	{
+		m_wall[i] = nullptr;
+		m_floorAndRoof[i] = nullptr;
+	}
+
 	//衝突しているオブジェクトの形状を取得
 	auto collAShape = collA->m_collisionData->m_shape;
 	auto collBShape = collB->m_collisionData->m_shape;
@@ -134,6 +143,7 @@ void FixNextPosition::FixNextPosSS(const std::shared_ptr<Collidable> collA, cons
 
 void FixNextPosition::FixNextPosSP(const std::shared_ptr<Collidable> collA, const std::shared_ptr<Collidable> collB)
 {
+	
 	//コリジョンデータ
 	auto collDataA = std::dynamic_pointer_cast<SphereCollider>(collA->m_collisionData);
 	auto collDataB = std::dynamic_pointer_cast<PolygonCollider>(collB->m_collisionData);
