@@ -46,8 +46,6 @@ public:
 	Vector3 GetLockOnViewPos() const { return m_lockOnViewPos; }
 	//“ª‚ÌˆÊ’u
 	Vector3 GetHeadPos()const;
-	//’†S
-	Vector3 GetCenterPos()const;
 
 	//Šˆ“®æ“¾
 	bool IsActive() const { return m_isActive; }

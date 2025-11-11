@@ -8,6 +8,8 @@
 #include "../../../General/CSV/AttackData.h"
 #include "../../../General/CSV/EffectData.h"
 #include "../../../General/AssetManager.h"
+#include "../../../General/Collision/CapsuleCollider.h"
+#include "../../../General/Collision/Rigidbody.h"
 #include "CharacterStateBase.h"
 #include <cassert>
 CharacterBase::CharacterBase(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, Shape shape, std::weak_ptr<ActorManager> pActorManager) :
@@ -137,6 +139,12 @@ void CharacterBase::InitArmor()
 	m_charaStatus->InitArmor();
 }
 
+Vector3 CharacterBase::GetCenterPos() const
+{
+	Vector3 start = m_rb->GetPos();
+	Vector3 end = std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetEndPos();
+	return (start + end) * 0.5f;
+}
 
 void CharacterBase::Wait()
 {

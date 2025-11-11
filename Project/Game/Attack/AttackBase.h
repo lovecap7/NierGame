@@ -77,8 +77,11 @@ protected:
     //ヒットストップをする
     bool m_isRequestHitStop;
 
+    //ヒットエフェクトパス
+    std::wstring m_hitEffectPath;
+
     //基準位置情報
-    AttackData::AttackOriginPos m_originPosData;
+    AttackData::AttackOriginPosType m_originPosType;
 
     //中心座標
     Vector3 m_oriPos;

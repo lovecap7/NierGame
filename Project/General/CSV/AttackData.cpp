@@ -3,7 +3,7 @@
 
 namespace
 {
-	constexpr int kDataNum = 23;
+	constexpr int kDataNum = 24;
 }
 
 AttackData::AttackData():
@@ -28,9 +28,9 @@ AttackData::AttackData():
 	m_param3(0.0f),
 	m_moveSpeed(0.0f),
 	m_moveFrame(0),
-	m_attackOriginPos(AttackOriginPos::Owner)
+	m_attackOriginPosType(AttackOriginPosType::Owner),
+	m_hitEffectPath(L"")
 {
-
 }
 
 AttackData::AttackData(std::shared_ptr<CSVData> data):
@@ -53,7 +53,8 @@ AttackData::AttackData(std::shared_ptr<CSVData> data):
 	m_param1(0.0f),
 	m_param2(0.0f),
 	m_param3(0.0f),
-	m_attackOriginPos(AttackOriginPos::Owner)
+	m_attackOriginPosType(AttackOriginPosType::Owner),
+	m_hitEffectPath(L"")
 {
 	//データを取得
 	this->m_data = data->GetData();
@@ -118,11 +119,11 @@ void AttackData::Conversion()
 	m_nextAttackName = m_data[15];
 
 	//攻撃の発生位置
-	AttackOriginPos oriPos = AttackOriginPos::Owner;
-	if (m_data[16] == L"Owner")oriPos = AttackOriginPos::Owner;
-	else if (m_data[16] == L"Center")oriPos = AttackOriginPos::Center;
+	AttackOriginPosType oriPos = AttackOriginPosType::Owner;
+	if (m_data[16] == L"Owner")oriPos = AttackOriginPosType::Owner;
+	else if (m_data[16] == L"Center")oriPos = AttackOriginPosType::Center;
 
-	m_attackOriginPos = oriPos;
+	m_attackOriginPosType = oriPos;
 
 	//キャンセルフレーム
 	m_cancelFrame = stoi(m_data[17]);
@@ -133,8 +134,11 @@ void AttackData::Conversion()
 	//ヒットストップの揺れ
 	m_hitStopShakePower = stoi(m_data[19]);
 
+	//ヒットエフェクト
+	m_hitEffectPath = m_data[20];
+
 	//パラメータ
-	m_param1 = stof(m_data[20]);
-	m_param2 = stof(m_data[21]);
-	m_param3 = stof(m_data[22]);
+	m_param1 = stof(m_data[21]);
+	m_param2 = stof(m_data[22]);
+	m_param3 = stof(m_data[23]);
 }

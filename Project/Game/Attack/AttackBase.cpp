@@ -6,24 +6,39 @@
 #include "../../General/Collision/TorusCollider.h"
 #include "../../General/CharaStatus.h"
 #include "../../General/Collision/Rigidbody.h"
+#include "../../General/Effect/EffekseerManager.h"
 #include "../../Main/Application.h"
 
 AttackBase::AttackBase(Shape shape, std::shared_ptr<AttackData> attackData, std::weak_ptr<CharacterBase> pOwner) :
 	Collidable(shape),
 	m_pOwner(pOwner),
-	m_oriPos(Vector3::Zero())
+	m_oriPos(Vector3::Zero()),
+	m_attackPower(0),
+	m_attackWeight(CharaStatus::AttackWeight::Light),
+	m_knockBackPower(0.0f),
+	m_knockBackV(0.0f),
+	m_keepFrame(0.0f),
+	m_originPosType(AttackData::AttackOriginPosType::Center),
+	m_hitStopFrame(0),
+	m_hitStopShakePower(0),
+	m_hitEffectPath(L""),
+	m_isHit(false),
+	m_isRequestHitStop(false)
 {
-	if (!attackData)return;
-	m_attackPower = attackData->GetAttackPower();
-	m_attackWeight = attackData->GetAttackWeight();
-	m_knockBackPower = attackData->GetKnockBackPower(); 
-	m_knockBackV = attackData->GetVerticalPower();
-	m_keepFrame = attackData->GetKeepFrame();
-	m_originPosData = attackData->GetAttackOriginPos();
-	m_hitStopFrame = attackData->GetHitStopFrame();
-	m_hitStopShakePower = attackData->GetHitStopShakePower();
-	m_isHit = false;
-	m_isRequestHitStop = false;
+	if (attackData)
+	{
+		m_attackPower = attackData->GetAttackPower();
+		m_attackWeight = attackData->GetAttackWeight();
+		m_knockBackPower = attackData->GetKnockBackPower();
+		m_knockBackV = attackData->GetVerticalPower();
+		m_keepFrame = attackData->GetKeepFrame();
+		m_originPosType = attackData->GetAttackOriginPosType();
+		m_hitStopFrame = attackData->GetHitStopFrame();
+		m_hitStopShakePower = attackData->GetHitStopShakePower();
+		m_hitEffectPath = attackData->GetHitEffectPath();
+		m_isHit = false;
+		m_isRequestHitStop = false;
+	}
 
 	//コライダーの設定
 	switch (shape)
@@ -125,12 +140,14 @@ void AttackBase::OnCollide(const std::shared_ptr<Collidable> other)
 			//ダメージを与える
 			otherStatus->OnDamage(m_attackPower, at, m_attackWeight);
 
+			//攻撃の座標
+			Vector3 attackPos = m_oriPos;
+
 			//のけぞるか
 			if (m_rb && otherStatus->IsHitReaction())
 			{
-				Vector3 attackPos = m_oriPos;
 				//ノックバックを与える
-				Vector3 knockBack = otherStatus->GetKnockBack(otherColl->GetPos(), attackPos, m_knockBackPower, m_knockBackV);
+				Vector3 knockBack = otherStatus->GetKnockBack(otherColl->GetNextPos(), attackPos, m_knockBackPower, m_knockBackV);
 				otherColl->GetRb()->SetVec(knockBack);
 			}
 			//無敵じゃないなら
@@ -138,6 +155,20 @@ void AttackBase::OnCollide(const std::shared_ptr<Collidable> other)
 			{
 				//ヒットストップを行う
 				m_isRequestHitStop = true;
+
+				//ヒットエフェクトを出す
+				if (m_hitEffectPath != L"" &&
+					m_hitEffectPath != L"None")
+				{
+					Vector3 hitPos = otherColl->GetCenterPos();
+					Vector3 toAttackDir = attackPos - hitPos;
+					if (toAttackDir.SqMagnitude() > 0.0f)
+					{
+						toAttackDir = toAttackDir.Normalize();
+					}
+					hitPos += (toAttackDir * otherColl->GetRadius());
+					EffekseerManager::GetInstance().CreateEffect(m_hitEffectPath, hitPos);
+				}
 			}
 
 			//当たった

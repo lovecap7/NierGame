@@ -42,6 +42,11 @@ bool Application::Init()
 	//ゲームアイコン
 	//SetWindowIconID(IDI_ICON1);
 
+#if _DEBUG
+	m_isWindow = true;
+#else
+	m_isWindow = false;
+#endif
 	 //フルスクリーンでなく、ウィンドウモードで開くようにする
 	//こういった関数はウィンドウが開く前に(Dxlib.Init()の前)に処理しておく必要がある
 	ChangeWindowMode(m_isWindow);

@@ -115,12 +115,7 @@ Vector3 EnemyBase::GetHeadPos() const
 	headPos.y += GetRadius();
 	return headPos;
 }
-Vector3 EnemyBase::GetCenterPos() const
-{
-	Vector3 start = m_rb->GetPos();
-	Vector3 end = std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetEndPos();
-	return (start + end) * 0.5f;
-}
+
 
 void EnemyBase::UpdateLockOnViewPos()
 {

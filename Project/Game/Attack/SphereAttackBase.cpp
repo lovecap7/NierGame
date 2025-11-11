@@ -12,7 +12,7 @@ SphereAttackBase::SphereAttackBase(std::shared_ptr<AttackData> attackData, std::
 void SphereAttackBase::Update()
 {
 	//Šî€À•W‚ÌXV
-	if (m_originPosData == AttackData::AttackOriginPos::Owner)
+	if (m_originPosType == AttackData::AttackOriginPosType::Owner)
 	{
 		if (m_pOwner.expired()) return;
 		auto ownerColl = m_pOwner.lock();

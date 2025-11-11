@@ -56,6 +56,8 @@ public:
 
     //半径
     virtual float GetRadius()const abstract;
+    //中心座標
+    Vector3 GetCenterPos()const;
 
     //イベントとかで使う
     //待機状態にする

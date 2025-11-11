@@ -292,12 +292,6 @@ void Player::End()
 	Collidable::End();
 }
 
-Vector3 Player::GetCenterPos() const
-{
-	Vector3 centerPos = (m_rb->GetPos() + std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetEndPos()) * 0.5f;
-	return centerPos;
-}
-
 Quaternion Player::GetCameraRot() const
 {
 	Quaternion q = Quaternion::IdentityQ();

@@ -70,12 +70,12 @@ public:
 	std::wstring GetNextAttackName()const { return m_nextAttackName; };
 
 	//攻撃の基準位置
-	enum class AttackOriginPos : int
+	enum class AttackOriginPosType : int
 	{
 		Owner = 0, //持ち主の位置
 		Center = 1,//攻撃の中心位置
 	};
-	AttackOriginPos GetAttackOriginPos()const { return m_attackOriginPos; };
+	AttackOriginPosType GetAttackOriginPosType()const { return m_attackOriginPosType; };
 
 	//キャンセル
 	int GetCancelFrame()const { return m_cancelFrame; };
@@ -85,6 +85,9 @@ public:
 
 	//ヒットストップの揺れ
 	int GetHitStopShakePower()const { return m_hitStopShakePower; };
+
+	//ヒットエフェクトパス
+	std::wstring GetHitEffectPath()const { return m_hitEffectPath; };
 
 	//パラメータ
 	float GetParam1()const { return m_param1; };
@@ -144,7 +147,7 @@ private:
 	std::wstring m_nextAttackName;
 
 	//攻撃の基準位置
-	AttackOriginPos m_attackOriginPos;
+	AttackOriginPosType m_attackOriginPosType;
 
 	//キャンセル
 	int m_cancelFrame;
@@ -154,6 +157,9 @@ private:
 
 	//ヒットストップによるカメラの揺れ
 	int m_hitStopShakePower;
+
+	//ヒットエフェクトパス
+	std::wstring m_hitEffectPath;
 
 	//パラメータ
 	float m_param1;
