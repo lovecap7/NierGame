@@ -2,7 +2,7 @@
 #include "SceneController.h"
 #include "TitleScene.h"
 #include "TutorialScene.h"
-#include "DebugScene/DebugSelectScene.h"
+#include "SelectScene.h"
 #include <DxLib.h>
 #include "../General/Fader.h"
 #include "../General/Input.h"
@@ -59,10 +59,10 @@ void TutorialResultScene::Update()
 			m_controller.ChangeBaseScene(std::make_unique<TutorialScene>(m_controller,GetStageNameByIndex(m_tutorialIndex)));
 			break;
 		case TutorialResultScene::Menu::Select:
-			m_controller.ChangeBaseScene(std::make_unique<DebugSelectScene>(m_controller));
+			m_controller.ChangeBaseScene(std::make_unique<SelectScene>(m_controller));
 			break;
 		default:
-			m_controller.ChangeBaseScene(std::make_unique<DebugSelectScene>(m_controller));
+			m_controller.ChangeBaseScene(std::make_unique<SelectScene>(m_controller));
 			break;
 		}
 		m_controller.PopScene();

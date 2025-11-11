@@ -15,7 +15,6 @@
 #include "../General/AssetManager.h"
 #include "../General/Fader.h"
 #include "../General/ShaderPostProcess.h"
-#include "../General/Timer.h"
 #include "../Main/Application.h"
 #include "../General/Effect/EffekseerManager.h"
 #include "../Game/UI/UIManager.h"
@@ -81,10 +80,6 @@ void TutorialScene::Init()
 	//フェードイン
 	Fader::GetInstance().FadeIn();
 
-	//タイマー
-	m_timer = std::make_shared<Timer>();
-	m_timer->Init();
-
 	//チュートリアル
 	m_tutorialManager = std::make_shared<TutorialManager>(m_actorManager->GetPlayer(), m_actorManager, stageName);
 }
@@ -92,13 +87,12 @@ void TutorialScene::Init()
 void TutorialScene::Update()
 {
 	//更新
+	m_tutorialManager->Update();
 	m_actorManager->Update();
 	m_attackManager->Update();
 	CameraController::GetInstance().Update();
 	m_battleAreaManager->Update(m_actorManager);
 	m_effectManager.Update();
-	m_timer->Update();
-	m_tutorialManager->Update();
 
 	auto& input = Input::GetInstance();
 

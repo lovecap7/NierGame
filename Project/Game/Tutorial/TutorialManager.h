@@ -34,6 +34,7 @@ private:
 	//クリアしたと表示するのを少し遅らせる
 	int m_clearDelayFrame;
 private:
-	
+	//説明が終わって数フレーム動けないようにする
+	int m_movingDelayFrame;
 };
 

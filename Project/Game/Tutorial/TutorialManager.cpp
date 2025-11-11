@@ -21,13 +21,16 @@ namespace
 	constexpr int kJustAvoidNum = 3;
 	//クリア表示を遅らせる
 	constexpr int kClearDelayFrame = 23;
+	//しばらく待機
+	constexpr int kMovingDelayFrame = 30;
 }
 
 TutorialManager::TutorialManager(std::weak_ptr<Player> pPlayer, std::shared_ptr<ActorManager> pActorManager,std::wstring stageName):
 	m_pPlayer(pPlayer),
 	m_pActorManager(pActorManager),
 	m_isClear(false),
-	m_clearDelayFrame(kClearDelayFrame)
+	m_clearDelayFrame(kClearDelayFrame),
+	m_movingDelayFrame(kMovingDelayFrame)
 {
 	auto& csvLoader = CSVDataLoader::GetInstance();
 
@@ -99,9 +102,17 @@ void TutorialManager::Update()
 		{
 			m_pTutorialManualUI.lock()->EnableDraw();
 		}
-
-		//行動可能
-		plyer->Operate();
+		
+		if (m_movingDelayFrame <= 0)
+		{
+			//行動可能
+			plyer->Operate();
+		}
+		else
+		{
+			//カウント
+			--m_movingDelayFrame;
+		}
 
 		//クリア条件がゴールなら
 		switch (m_clearData->GetClearRequirement())

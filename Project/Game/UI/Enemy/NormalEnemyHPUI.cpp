@@ -9,12 +9,16 @@ namespace
 {
 	//バーの変動フレーム
 	constexpr int kFluctuationValueFrame = 120;
-	//基準位置
-	constexpr float kBasePosX = 100.0f;
-	constexpr float kBasePosY = 70.0f;
+	//高さ調整
+	constexpr float kPosOffsetY = 50.0f;
 	//バーの画像サイズ
 	constexpr float kBarSizeX = 100.0f;
 	constexpr float kBarSizeY = 10.0f;
+
+	//背景
+	constexpr float kBackBarSizeX = 102.0f;
+	constexpr float kBackBarSizeY = 12.0f;
+	constexpr float kBackPosOffsetY = kPosOffsetY + 1.0f;
 
 	//ハンドル
 	const std::wstring kHPValue = L"Enemy/HPValue";
@@ -90,10 +94,16 @@ void NormalEnemyHPUI::Draw() const
 	//カメラの範囲外の時は描画しない
 	if (!m_isDraw)return;
 
+	auto backUIPos = m_enemyViewPos;
+	backUIPos.x -= (kBackBarSizeX * 0.5f);
+	backUIPos.y -= kBackPosOffsetY;
+	//バーの描画
+	DrawRectGraphF(backUIPos.x, backUIPos.y, 0, 0, kBackBarSizeX, kBackBarSizeY, m_backValueHandle, true);
+
 	auto uiPos = m_enemyViewPos;
 	uiPos.x -= (kBarSizeX * 0.5f);
-	//バーの描画
-	DrawRectGraphF(uiPos.x, uiPos.y, 0, 0, kBarSizeX, kBarSizeY, m_backValueHandle, true);
+	uiPos.y -= kPosOffsetY;
+
 	DrawRectGraphF(uiPos.x, uiPos.y, 0, 0, kBarSizeX * m_damageValueRate, kBarSizeY, m_damageValueHandle, true);
 	DrawRectGraphF(uiPos.x, uiPos.y, 0, 0, kBarSizeX * m_healValueRate, kBarSizeY, m_healValueHandle, true);
 	DrawRectGraphF(uiPos.x, uiPos.y, 0, 0, kBarSizeX * m_nowHpRate, kBarSizeY, kBarSizeY, m_nowValueHandle, true);

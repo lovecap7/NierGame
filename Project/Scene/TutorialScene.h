@@ -9,7 +9,6 @@ class ActorManager;
 class BattleAreaManager;
 class AttackManager;
 class EffekseerManager;
-class Timer;
 class TutorialManager;
 
 class TutorialScene :
@@ -49,9 +48,6 @@ private:
 
     //エフェクト
     EffekseerManager& m_effectManager;
-
-    //タイマー
-    std::shared_ptr<Timer> m_timer;
 
     //チュートリアルマネージャー
     std::shared_ptr<TutorialManager> m_tutorialManager;

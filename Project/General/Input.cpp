@@ -167,6 +167,11 @@ void Input::StopUpdate()
 	m_triggerInfo.left = 0;
 	m_triggerInfo.right = 0;
 
+	for (const auto& keyInfo : m_currentInput)
+	{
+		m_inputBufferFrame[keyInfo.first] = 0;
+	}
+
 	//XV‚ğ‚Æ‚ß‚é
 	m_isUpdate = false;
 }

@@ -3,6 +3,7 @@
 #include  "../General/Input.h"
 #include "SceneController.h"
 #include "GameScene.h"
+#include "SelectScene.h"
 #include "DebugScene/DebugSelectScene.h"
 #include "../General/Fader.h"
 #include "../General/Game.h"
@@ -85,7 +86,7 @@ void TitleScene::Update()
 	//フェードアウトしきったら
 	if (fader.IsFinishFadeOut())
 	{
-		m_controller.ChangeScene(std::make_unique<DebugSelectScene>(m_controller));
+		m_controller.ChangeScene(std::make_unique<SelectScene>(m_controller));
 		return;
 	}
 

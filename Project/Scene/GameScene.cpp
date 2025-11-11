@@ -43,9 +43,6 @@ void GameScene::Init()
 	Application::GetInstance().SetTimeScale(1.0f);
 	//UI削除
 	UIManager::GetInstance().AllDeleteUI();
-	//Inputの入力情報リセット
-	Input::GetInstance().StopUpdate();
-
 
 	//ステージインデックス
 	auto stageName = m_stageName.c_str();

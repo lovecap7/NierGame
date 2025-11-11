@@ -2,6 +2,7 @@
 #include "../../../General/Collision/Physics.h"
 #include "../../../General/Collision/Collidable.h"
 #include "../../Attack/AttackBase.h"
+#include "../../../General/Input.h"
 
 CharacterStateBase::CharacterStateBase(std::weak_ptr<Actor> owner):
 	m_pOwner(owner),
