@@ -30,8 +30,8 @@ namespace
     constexpr float kRightOffset = 150.0f;  //右オフセット距離
     constexpr float kBackOffset = 450.0f;   //後方距離
     constexpr float kUpOffset = 150.0f;     //上方向オフセット
-	constexpr float kLockOnFollowSpeed = 0.15f;   //ロックオン中の追従速度
-    constexpr float kRotFollowSpeed = 0.2f; //追従回転速度
+	constexpr float kLockOnFollowSpeed = 0.1f;   //ロックオン中の追従速度
+    constexpr float kRotFollowSpeed = 0.1f; //追従回転速度
 	//右向きを決める内積
 	constexpr float kRightDot = 0.7f;
     //ロックオン中のカメラ操作時の視点
@@ -187,10 +187,7 @@ void PlayerCamera::LockOnUpdate(Input& input, Vector3& targetPos)
     if (!m_lockOnUI.expired())
     {
         auto lockOnUI = m_lockOnUI.lock();
-        if (!lockOnUI->IsLockOn())
-        {
-            lockOnUI->EnableLockOn(std::dynamic_pointer_cast<EnemyBase>(lockOnTarget));
-        }
+        lockOnUI->EnableLockOn(std::dynamic_pointer_cast<EnemyBase>(lockOnTarget));
     }
 
     Vector3 lockPos = targetPos;
@@ -215,49 +212,48 @@ void PlayerCamera::LockOnUpdate(Input& input, Vector3& targetPos)
     Vector3 basePos = playerPos;
 
 
-    //入力が入っているとき
-	bool isStickInput = input.GetStickInfo().IsRightStickInput();
-    if (isStickInput)
+ //   //入力が入っているとき
+	//bool isStickInput = input.GetStickInfo().IsRightStickInput();
+ //   if (isStickInput)
+ //   {
+ //       //スティック入力でカメラ回転
+ //       UpdateStickAngle(input);
+	//	//理想位置計算
+	//	basePos.y += kCameraHeight; // 少し上を見る
+ //       basePos += m_look * -kBackOffset;
+	//	//視点はプレイヤーからターゲットへのベクトルの少し前方
+ //       lockPos = playerPos + toEnemy * kLockOnViewInput;
+ //       lockPos.y += kCameraHeight;
+ //   }
+    //水平方向リセット
+   
+    //縦のアングル
+    m_vertexAngle = 0.0f;
+
+    //プレイヤー右方向を求める
+    Vector3 playerRight = Vector3::Up().Cross(toEnemy);
+    if (playerRight.SqMagnitude() > 0.0f)
     {
-        //スティック入力でカメラ回転
-        UpdateStickAngle(input);
-
-		//理想位置計算
-		basePos.y += kCameraHeight; // 少し上を見る
-        basePos += m_look * -kBackOffset;
-
-		//視点はプレイヤーからターゲットへのベクトルの少し前方
-        lockPos = playerPos + toEnemy * kLockOnViewInput;
-        lockPos.y += kCameraHeight;
+        playerRight = playerRight.Normalize();
     }
-    else
+
+    //プレイヤーが右を向いているなら左に動く
+    if (m_playerDir.Dot(playerRight) > kRightDot)
     {
-        //水平方向リセット
-		m_vertexAngle = 0.0f;
-
-        //プレイヤー右方向を求める
-        Vector3 playerRight = Vector3::Up().Cross(toEnemy);
-        if (playerRight.SqMagnitude() > 0.0f)
-        {
-            playerRight = playerRight.Normalize();
-        }
-
-        //プレイヤーが右を向いているなら左に動く
-        if (m_playerDir.Dot(playerRight) > kRightDot)
-        {
-            m_nextlockOnSide = -kRightOffset;
-        }
-        //プレイヤーが左を向いているなら右に動く
-        else if (m_playerDir.Dot(playerRight) < -kRightDot)
-        {
-            m_nextlockOnSide = kRightOffset;
-        }
-        m_lockOnSide = MathSub::Lerp(m_lockOnSide, m_nextlockOnSide, 0.05f);
-
-        basePos -= (toEnemy * kBackOffset);
-        basePos += (playerRight * m_lockOnSide);                // 横にオフセット
-        basePos += Vector3::Up() * kUpOffset;                   //上にオフセット
+        m_nextlockOnSide = -kRightOffset;
     }
+    //プレイヤーが左を向いているなら右に動く
+    else if (m_playerDir.Dot(playerRight) < -kRightDot)
+    {
+        m_nextlockOnSide = kRightOffset;
+    }
+    m_lockOnSide = MathSub::Lerp(m_lockOnSide, m_nextlockOnSide, 0.05f);
+
+    basePos -= (toEnemy * kBackOffset);
+    basePos += (playerRight * m_lockOnSide);                //横にオフセット
+    basePos += Vector3::Up() * kUpOffset;                   //上にオフセット
+
+    //理想の位置
     Vector3 idealCamPos = basePos;
     //衝突補正（壁など）
     Vector3 nextPos = Physics::GetInstance().GetCameraRatCastNearEndPos(lockPos, idealCamPos);
@@ -268,18 +264,15 @@ void PlayerCamera::LockOnUpdate(Input& input, Vector3& targetPos)
     //視点を更新
     m_viewPos = Vector3::Lerp(m_viewPos, lockPos, kLockOnFollowSpeed);
 
-    if (!isStickInput)
+    //前方向の更新
+    Vector3 frontDir = (m_viewPos - m_cameraPos);
+    frontDir.y = 0.0f;  // 水平面に限定
+    if (frontDir.SqMagnitude() > 0.0f)
     {
-        //前方向の更新
-        Vector3 frontDir = (m_viewPos - m_cameraPos);
-        frontDir.y = 0.0f;  // 水平面に限定
-        if (frontDir.SqMagnitude() > 0.0f)
-        {
-            frontDir = frontDir.Normalize();
-        }
-        //前方向をもとに他の方向の更新
-        UpdateDirection(Vector3::Lerp(m_front, frontDir, kRotFollowSpeed));
+        frontDir = frontDir.Normalize();
     }
+    //前方向をもとに他の方向の更新
+    UpdateDirection(Vector3::Lerp(m_front, frontDir, kRotFollowSpeed));
 
     //反映 
     DxLib::SetCameraPositionAndTarget_UpVecY(

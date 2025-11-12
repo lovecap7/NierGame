@@ -53,12 +53,19 @@ public:
 		/// 下(Max  1000)
 		/// </summary>
 		int rightStickY;
+
+		// 前フレームの値を保存
+		int prevRightStickX;
+		int prevRightStickY;
+
 		StickInfo()
 		{
 			leftStickX = 0;
 			leftStickY = 0;
 			rightStickX = 0;
 			rightStickY = 0;
+			prevRightStickX;
+			prevRightStickY;
 		}
 		//入力が入ったかどうかを取得(移動状態に切り替えるときに使う)
 		bool IsLeftStickInput() { return leftStickX != 0 || leftStickY != 0; };
@@ -82,6 +89,23 @@ public:
 		float RightStickRate() const
 		{
 			return RightStickMagnitude() * 0.001f;
+		}
+
+		//最後の入力を保持
+		void UpdatePrev()
+		{
+			prevRightStickX = rightStickX;
+			prevRightStickY = rightStickY;
+		}
+
+		//右スティックが倒された瞬間
+		bool IsRightStickTrigger() const
+		{
+			float prevMag = Vector2((float)prevRightStickX, (float)prevRightStickY).Magnitude();
+			float currMag = RightStickMagnitude();
+
+			//前のフレームで入力がなく今あるなら
+			return (prevMag <= 0.0f) && (currMag > 0.0f);
 		}
 	};
 

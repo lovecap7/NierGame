@@ -110,12 +110,23 @@ public:
 private:
 	//カメラ
 	std::weak_ptr<PlayerCamera> GetPlayerCamera()const;
+
 	//ターゲットを探す
 	void SearchTarget(Input& input, std::shared_ptr<PlayerCamera> camera, const std::list<std::shared_ptr<EnemyBase>>& enemys);
+
+	//最も近い敵をロックオン
+	void LockOnNearestEnemy(std::shared_ptr<PlayerCamera> camera, const std::list<std::shared_ptr<EnemyBase>>& enemys);
+
+	//スティックを倒した方向にある敵を検索して切り替え
+	std::shared_ptr<EnemyBase> FindTargetInDirection(bool rightDir, std::shared_ptr<PlayerCamera> camera, 
+		std::shared_ptr<EnemyBase> currentTarget, const std::list<std::shared_ptr<EnemyBase>>& enemys);
+
 	//ターゲットリセット
 	void ResetTarget(std::shared_ptr<PlayerCamera> camera);
+
 	//攻撃を喰らった際のポストエフェクト
 	void UpdateHit();
+
 	//武器を収める
 	void UpdatePutAwayWeapon();
 private:

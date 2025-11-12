@@ -493,78 +493,149 @@ std::weak_ptr<PlayerCamera> Player::GetPlayerCamera() const
 void Player::SearchTarget(Input& input, std::shared_ptr<PlayerCamera> camera, const std::list<std::shared_ptr<EnemyBase>>& enemys)
 {
 	//ターゲットがいなくなったら発見フラグをfalseにする
-	if(m_targetInfo.m_pTarget.expired())
+	if (m_targetInfo.m_pTarget.expired())
 	{
-		ResetTarget(camera);
+		//前のフレームでは発見できていれば引き続き次の敵を探す
+		if (m_targetInfo.m_isFound)
+		{
+			//他の敵を探す
+			LockOnNearestEnemy(camera, enemys);
+		}
+		else
+		{
+			//解除
+			ResetTarget(camera);
+		}
 	}
 	else
 	{
+		//ターゲット
 		auto target = std::dynamic_pointer_cast<EnemyBase>(m_targetInfo.m_pTarget.lock());
 
 		//アクティブじゃないなら解除
-		if(!target->IsActive())
+		if (!target->IsActive())
 		{
-			ResetTarget(camera);
+			//他の敵を探す
+			LockOnNearestEnemy(camera, enemys);
 		}
 		else
 		{
 			//ターゲットがいるなら距離を確認
 			Vector3 toTarget = target->GetNextPos() - GetPos();
 			float distance = toTarget.Magnitude();
-			//範囲外になったラ解除
 			if (distance > m_charaStatus->GetSearchRange())
 			{
+				//解除
 				ResetTarget(camera);
 			}
 		}
 	}
 
-	//LBでロックオン開始
+	//LBでロックオン開始と解除
 	if (input.IsTrigger("LB"))
 	{
-		//ロックオン中なら解除
 		if (camera->IsLockOn())
 		{
+			//解除
 			ResetTarget(camera);
 		}
-		//ロックオンしていないなら開始
 		else
 		{
-			//プレイヤーの座標
-			Vector3 playerPos = GetPos();
-
-			//最も近い敵を探す
-			std::shared_ptr<EnemyBase> nearestEnemy = nullptr;
-			float minDis = m_charaStatus->GetSearchRange(); //索敵範囲
-			bool isFind = false;
-
-			for (auto enemy : enemys)
-			{
-				//活動していないなら無視
-				if (!enemy->IsActive())continue;
-
-				Vector3 enemyPos = enemy->GetNextPos();
-				Vector3 toEnemy = enemyPos - playerPos;
-				float distance = toEnemy.Magnitude();
-				if (distance < minDis)
-				{
-					//距離の更新
-					minDis = distance;
-					//敵を保持
-					nearestEnemy = enemy;
-					//発見
-					isFind = true;
-				}
-			}
-			//ロックオン開始
-			if (isFind)
-			{
-				camera->StartLockOn(nearestEnemy);
-				m_targetInfo.m_pTarget = nearestEnemy;
-			}
-			m_targetInfo.m_isFound = isFind;
+			//ロックオン
+			LockOnNearestEnemy(camera, enemys);
 		}
 	}
+
+	//ロックオン中のターゲット切り替え
+	if (camera->IsLockOn())
+	{
+		//右スティックが倒されたら
+		if (input.GetStickInfo().IsRightStickTrigger())
+		{
+			float rs = input.GetStickInfo().rightStickX;
+			//現在のターゲット
+			auto currentTarget = std::dynamic_pointer_cast<EnemyBase>(m_targetInfo.m_pTarget.lock());
+			if (!currentTarget) return;
+
+			std::shared_ptr<EnemyBase> newTarget = FindTargetInDirection(rs > 0.0f, camera, currentTarget, enemys);
+			if (newTarget)
+			{
+				camera->StartLockOn(newTarget);
+				m_targetInfo.m_pTarget = newTarget;
+			}
+		}
+	}
+}
+
+void Player::LockOnNearestEnemy(std::shared_ptr<PlayerCamera> camera, const std::list<std::shared_ptr<EnemyBase>>& enemys)
+{
+	Vector3 playerPos = GetPos();
+	std::shared_ptr<EnemyBase> nearestEnemy = nullptr;
+	float minDis = m_charaStatus->GetSearchRange();
+
+	for (auto enemy : enemys)
+	{
+		if (!enemy->IsActive()) continue;
+
+		float distance = (enemy->GetNextPos() - playerPos).Magnitude();
+		if (distance < minDis)
+		{
+			minDis = distance;
+			nearestEnemy = enemy;
+		}
+	}
+
+	if (nearestEnemy)
+	{
+		camera->StartLockOn(nearestEnemy);
+		m_targetInfo.m_pTarget = nearestEnemy;
+		m_targetInfo.m_isFound = true;
+	}
+	else
+	{
+		//解除
+		ResetTarget(camera);
+	}
+}
+
+
+std::shared_ptr<EnemyBase> Player::FindTargetInDirection(bool rightDir, std::shared_ptr<PlayerCamera> camera, 
+	std::shared_ptr<EnemyBase> currentTarget, const std::list<std::shared_ptr<EnemyBase>>& enemys)
+{
+	Vector3 playerPos = GetPos();
+	Vector3 forward = camera->GetLook();	//カメラ前方
+	Vector3 right = camera->GetRight();     //カメラ右方向
+
+	std::shared_ptr<EnemyBase> bestTarget;
+	float minAngle = FLT_MAX;
+
+	for (auto enemy : enemys)
+	{
+		//活動していないまたは現在のターゲットなら無視
+		if (!enemy->IsActive() || enemy == currentTarget) continue;
+
+		Vector3 toEnemy = enemy->GetNextPos() - playerPos;
+		if (toEnemy.SqMagnitude() > 0.0f)
+		{
+			toEnemy = toEnemy.Normalize();
+		}
+
+		//右方向ベクトルとの角度を計算
+		float dot = toEnemy.Dot(right);
+		bool isRight = dot > 0.0f;
+
+		//右スティックの方向と一致する側だけ見る
+		if (rightDir != isRight) continue;
+
+		//角度の絶対値が小さいほど前方向に近い
+		float angle = std::acos(toEnemy.Dot(forward));
+		if (angle < minAngle)
+		{
+			minAngle = angle;
+			bestTarget = enemy;
+		}
+	}
+	return bestTarget;
 }
 
 void Player::ResetTarget(std::shared_ptr<PlayerCamera> camera)

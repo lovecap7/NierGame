@@ -119,6 +119,9 @@ void Input::Update()
 		}
 	}
 
+	//スティックの入力を保持
+	m_stickInfo.UpdatePrev();
+
 	//スティックの入力を初期化する
 	m_stickInfo.leftStickX = 0;
 	m_stickInfo.leftStickY = 0;
