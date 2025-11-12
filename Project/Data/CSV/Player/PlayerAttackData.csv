@@ -18,11 +18,11 @@ SubAttack2,FALSE,1,250,2,1,20,0,40,15,40,200,20,10,SubAttack2,SubAttack1,Owner,7
 SubAttack3,TRUE,1,400,2,1,5,0,15,20,40,200,20,10,SubAttack3,SubAttack3_2,Owner,100,6,30,SparkHitEffect_Side,Slash/SlashEffect_Side,0,0,0
 SubAttack3_2,FALSE,1,400,2,1,30,0,0,20,40,200,20,10,SubAttack3,SubAttack1,Owner,100,6,30,SparkHitEffect_Vertical,Slash/SlashEffect_Vertical,0,0,0
 SubAttackCharge,FALSE,0,0,0,1,5,0,0,0,0,0,0,0,SubAttackCharge,SubAttack3_2,Owner,1000,6,30,None,None,30,0,0
-SubAttackAirStart,TRUE,1,100,2,1,2,0,10,20,60,200,30,10,SubAttackAir,SubAttackAirStart_2,Owner,0,6,30,SparkHitEffect_Vertical,None,0,0,0
-SubAttackAirStart_2,FALSE,1,100,2,1,10,0,30,600,60,200,15,40,SubAttackAir,SubAttackAirEnd,Owner,0,6,30,SparkHitEffect_Vertical,None,-25,0,0
+SubAttackAirStart,TRUE,1,100,2,1,2,0,20,20,60,200,30,10,SubAttackAir,SubAttackAirStart_2,Owner,0,6,30,SparkHitEffect_Vertical,Slash/SlashEffect_Vertical,0,0,0
+SubAttackAirStart_2,FALSE,1,100,2,1,10,0,30,600,60,200,15,40,SubAttackAir,SubAttackAirEnd,Owner,0,6,30,SparkHitEffect_Vertical,Slash/SlashEffect_Vertical,-25,0,0
 SubAttackAirEnd,FALSE,5,300,2,1,20,0,0,10,220,200,0,0,SubAttackAirEnd,SubAttackAirEnd,Owner,0,6,50,SparkHitEffect,None,0,0,0
-DashAttack,FALSE,1,400,2,1,5,0,0,20,40,200,50,10,DashAttack,SubAttack1,Owner,80,6,10,SparkHitEffect,None,0,0,0
-RisingAttack,FALSE,1,100,1,1,2,26,0,20,50,100,10,10,RisingAttack,MainAttack1,Owner,10,2,10,SparkHitEffect_Diagonal1,None,20,0,0
+DashAttack,FALSE,1,400,2,1,5,0,0,20,40,200,50,10,DashAttack,SubAttack1,Owner,80,6,10,SparkHitEffect,Slash/SlashEffect_Thrust,0,0,0
+RisingAttack,FALSE,1,100,1,1,2,26,0,20,50,100,10,10,RisingAttack,MainAttack1,Owner,10,2,10,SparkHitEffect_Diagonal1,Slash/SlashEffect_Diagonal1_Re,20,0,0
 JustAttackMain,TRUE,5,200,3,3,-1,20,0,10,230,100,0,10,JustAttackMain,JustAttackMain_2,Owner,10,2,10,SparkHitEffect_Rand,JustLightAttack,30,0,0
 JustAttackMain_2,TRUE,5,200,3,3,-1,5,0,10,230,100,0,0,JustAttackMain,JustAttackMain_3,Owner,10,2,10,SparkHitEffect_Rand,JustLightAttack,30,0,0
 JustAttackMain_3,TRUE,5,200,3,3,-1,5,0,10,230,100,0,0,JustAttackMain,JustAttackMain_4,Owner,10,2,10,SparkHitEffect_Rand,JustLightAttack,30,0,0
