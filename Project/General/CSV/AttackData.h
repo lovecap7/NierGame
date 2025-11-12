@@ -89,6 +89,9 @@ public:
 	//ヒットエフェクトパス
 	std::wstring GetHitEffectPath()const { return m_hitEffectPath; };
 
+	//攻撃エフェクト
+	std::wstring GetAttackEffectPath()const { return m_attackEffectPath; };
+
 	//パラメータ
 	float GetParam1()const { return m_param1; };
 	float GetParam2()const { return m_param2; };
@@ -160,6 +163,9 @@ private:
 
 	//ヒットエフェクトパス
 	std::wstring m_hitEffectPath;
+
+	//攻撃エフェクトパス
+	std::wstring m_attackEffectPath;
 
 	//パラメータ
 	float m_param1;

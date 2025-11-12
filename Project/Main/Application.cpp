@@ -155,11 +155,11 @@ void Application::Run()
 			//ターゲット
 			SetDrawScreen(RT);
 
-			//フェード
-			fader.Update();
-
 			//画面全体をクリア
 			ClearDrawScreen();
+
+			//フェード
+			fader.Update();
 
 			sceneController->Update();
 
@@ -168,10 +168,12 @@ void Application::Run()
 			m_postProcess->Update();
 
 			uiManager.Update();
+
 		}
+		
 		//描画
 		sceneController->Draw();
-	
+
 		//前描画
 		uiManager.FrontDraw();
 

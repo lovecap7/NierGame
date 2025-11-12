@@ -166,7 +166,8 @@ void Player::Update()
 	if (input.IsTrigger("Pinch"))
 	{
 		//ピンチに
-		m_charaStatus->SetNowHP(m_charaStatus->GetMaxHP() / 3);
+		//m_charaStatus->SetNowHP(m_charaStatus->GetMaxHP() / 3);
+		m_charaStatus->SetNowHP(0);
 	}
 
 	////タイムスケール

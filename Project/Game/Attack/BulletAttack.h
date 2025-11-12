@@ -11,8 +11,7 @@ class BulletAttack :
 public:
     BulletAttack(std::shared_ptr<AttackData> attackData, std::weak_ptr<CharacterBase> pOwner);
     ~BulletAttack();
-    //初期化
-    virtual void Init()override;
+ 
     //更新
     virtual void Update() override;
     //描画
@@ -35,8 +34,5 @@ protected:
 
     //アクティブ(弾の更新と描画を行うか)
     bool m_isActive;
-
-    //エフェクト
-    std::weak_ptr<NormalEffect> m_effect;
 };
 

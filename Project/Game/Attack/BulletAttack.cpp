@@ -6,11 +6,6 @@
 #include "../../General/Effect/EffekseerManager.h"
 #include "../../General/Effect/NormalEffect.h"
 
-namespace
-{
-	const std::wstring kNormalBullet = L"NormalBullet";
-}
-
 BulletAttack::BulletAttack(std::shared_ptr<AttackData> attackData, std::weak_ptr<CharacterBase> pOwner):
 	SphereAttackBase(attackData,pOwner),
 	m_isActive(true),
@@ -20,17 +15,6 @@ BulletAttack::BulletAttack(std::shared_ptr<AttackData> attackData, std::weak_ptr
 
 BulletAttack::~BulletAttack()
 {
-}
-
-void BulletAttack::Init()
-{
-	if (m_effect.expired())
-	{
-		auto normalEffect = EffekseerManager::GetInstance().CreateEffect(kNormalBullet, m_rb->GetPos());
-		m_effect = normalEffect;
-	}
-
-	Collidable::Init();
 }
 
 void BulletAttack::Update()
@@ -49,9 +33,9 @@ void BulletAttack::Update()
 	//非アクティブ化条件をまとめる
 	bool shouldDeactivate = isHit || (m_keepFrame <= 0.0f);
 
-	if (!m_effect.expired())
+	if (!m_attackEffect.expired())
 	{
-		auto eff = m_effect.lock();
+		auto eff = m_attackEffect.lock();
 		if (shouldDeactivate)
 		{
 			eff->DisableDraw();//描画しない

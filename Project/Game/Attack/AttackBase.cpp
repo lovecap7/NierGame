@@ -7,6 +7,8 @@
 #include "../../General/CharaStatus.h"
 #include "../../General/Collision/Rigidbody.h"
 #include "../../General/Effect/EffekseerManager.h"
+#include "../../General/Effect/NormalEffect.h"
+#include "../../General/Model.h"
 #include "../../Main/Application.h"
 
 AttackBase::AttackBase(Shape shape, std::shared_ptr<AttackData> attackData, std::weak_ptr<CharacterBase> pOwner) :
@@ -22,6 +24,8 @@ AttackBase::AttackBase(Shape shape, std::shared_ptr<AttackData> attackData, std:
 	m_hitStopFrame(0),
 	m_hitStopShakePower(0),
 	m_hitEffectPath(L""),
+	m_attackEffectPath(L""),
+	m_attackEffect(),
 	m_isHit(false),
 	m_isRequestHitStop(false)
 {
@@ -36,6 +40,7 @@ AttackBase::AttackBase(Shape shape, std::shared_ptr<AttackData> attackData, std:
 		m_hitStopFrame = attackData->GetHitStopFrame();
 		m_hitStopShakePower = attackData->GetHitStopShakePower();
 		m_hitEffectPath = attackData->GetHitEffectPath();
+		m_attackEffectPath = attackData->GetAttackEffectPath();
 		m_isHit = false;
 		m_isRequestHitStop = false;
 	}
@@ -70,11 +75,27 @@ AttackBase::AttackBase(Shape shape, std::shared_ptr<AttackData> attackData, std:
 
 AttackBase::~AttackBase()
 {
+	if (m_attackEffect.expired())return;
+	m_attackEffect.lock()->Delete();
 }
 
 void AttackBase::Init()
 {
+	//登録
 	Collidable::Init();
+
+	//攻撃エフェクトを出す
+	if (m_attackEffectPath != L"" &&
+		m_attackEffectPath != L"None")
+	{
+		if (m_pOwner.expired())return;
+		auto owner = m_pOwner.lock();
+
+		auto attackEffect = EffekseerManager::GetInstance().CreateEffect(m_attackEffectPath, m_oriPos);
+		if (attackEffect.expired())return;
+		attackEffect.lock()->LookAt(owner->GetModel()->GetDir());
+		m_attackEffect = attackEffect;
+	}
 }
 
 void AttackBase::Update()
@@ -89,6 +110,9 @@ void AttackBase::Update()
 	//ヒットリセット
 	m_isHit = false;
 	m_isRequestHitStop = false;
+	//エフェクト位置更新
+	if (m_attackEffect.expired())return;
+	m_attackEffect.lock()->SetPos(m_rb->GetPos());
 }
 
 void AttackBase::OnCollide(const std::shared_ptr<Collidable> other)

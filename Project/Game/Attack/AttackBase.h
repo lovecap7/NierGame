@@ -10,6 +10,7 @@
 class Actor;
 class AttackData;
 class CharacterBase;
+class NormalEffect;
 class AttackBase abstract :
     public Collidable
 {
@@ -80,11 +81,16 @@ protected:
     //ヒットエフェクトパス
     std::wstring m_hitEffectPath;
 
+    //攻撃エフェクトパス
+    std::wstring m_attackEffectPath;
+
+    //攻撃エフェクト
+    std::weak_ptr<NormalEffect> m_attackEffect;
+
     //基準位置情報
     AttackData::AttackOriginPosType m_originPosType;
 
     //中心座標
     Vector3 m_oriPos;
-
 };
 

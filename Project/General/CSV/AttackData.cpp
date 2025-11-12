@@ -3,7 +3,7 @@
 
 namespace
 {
-	constexpr int kDataNum = 24;
+	constexpr int kDataNum = 25;
 }
 
 AttackData::AttackData():
@@ -29,7 +29,8 @@ AttackData::AttackData():
 	m_moveSpeed(0.0f),
 	m_moveFrame(0),
 	m_attackOriginPosType(AttackOriginPosType::Owner),
-	m_hitEffectPath(L"")
+	m_hitEffectPath(L""),
+	m_attackEffectPath(L"")
 {
 }
 
@@ -54,7 +55,8 @@ AttackData::AttackData(std::shared_ptr<CSVData> data):
 	m_param2(0.0f),
 	m_param3(0.0f),
 	m_attackOriginPosType(AttackOriginPosType::Owner),
-	m_hitEffectPath(L"")
+	m_hitEffectPath(L""),
+	m_attackEffectPath(L"")
 {
 	//データを取得
 	this->m_data = data->GetData();
@@ -134,11 +136,14 @@ void AttackData::Conversion()
 	//ヒットストップの揺れ
 	m_hitStopShakePower = stoi(m_data[19]);
 
-	//ヒットエフェクト
+	//ヒットエフェクトパス
 	m_hitEffectPath = m_data[20];
 
+	//攻撃エフェクトパス
+	m_attackEffectPath = m_data[21];
+
 	//パラメータ
-	m_param1 = stof(m_data[21]);
-	m_param2 = stof(m_data[22]);
-	m_param3 = stof(m_data[23]);
+	m_param1 = stof(m_data[22]);
+	m_param2 = stof(m_data[23]);
+	m_param3 = stof(m_data[24]);
 }

@@ -12,8 +12,6 @@ public:
     EnemyBulletAttack(std::shared_ptr<AttackData> attackData, std::weak_ptr<CharacterBase> pOwner);
     ~EnemyBulletAttack();
 
-    //‰Šú‰»ˆ—
-    void Init()override;
     //•`‰æ
     void Draw()const override;
     //“–‚½‚Á‚½

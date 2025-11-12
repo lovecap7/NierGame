@@ -4,12 +4,6 @@
 #include "../../General/Effect/NormalEffect.h"
 #include "../../General/Effect/EffekseerManager.h"
 
-namespace
-{
-	const std::wstring kEnemyBulletRed	= L"EnemyBulletRed";
-	const std::wstring kEnemyBulletBlue = L"EnemyBulletBlue";
-}
-
 EnemyBulletAttack::EnemyBulletAttack(std::shared_ptr<AttackData> attackData, std::weak_ptr<CharacterBase> pOwner):
 	BulletAttack(attackData,pOwner),
 	m_isDestructible(true)
@@ -19,18 +13,6 @@ EnemyBulletAttack::EnemyBulletAttack(std::shared_ptr<AttackData> attackData, std
 
 EnemyBulletAttack::~EnemyBulletAttack()
 {
-	if (m_effect.expired())return;
-	m_effect.lock()->Delete();
-}
-
-void EnemyBulletAttack::Init()
-{
-	std::wstring path = kEnemyBulletBlue;
-	if (m_isDestructible) path = kEnemyBulletRed;
-	auto normalEffect = EffekseerManager::GetInstance().CreateEffect(path, m_rb->GetPos());
-	m_effect = normalEffect;
-
-	Collidable::Init();
 }
 
 void EnemyBulletAttack::Draw() const

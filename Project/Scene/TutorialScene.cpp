@@ -97,11 +97,16 @@ void TutorialScene::Update()
 	auto& input = Input::GetInstance();
 
 	auto& fader = Fader::GetInstance();
+
 	//もしもすべてのエリアを突破したら
 	if ((m_tutorialManager->IsClear() || input.IsTrigger("GameClear")))
 	{
 		m_controller.PushScene(std::make_unique<TutorialResultScene>(m_controller, GetStageIndexByName(m_stageName)));
 		return;
+	}
+	if (m_actorManager->IsGameover())
+	{
+		Restart();
 	}
 }
 
@@ -118,6 +123,45 @@ void TutorialScene::End()
 	m_attackManager->End();
 	m_battleAreaManager->End();
 	m_effectManager.End();
+}
+
+void TutorialScene::Restart()
+{
+	//カメラ
+	auto camera = std::make_shared<PlayerCamera>();
+	auto& cameraController = CameraController::GetInstance();
+	cameraController.Init();
+	cameraController.ChangeCamera(camera);
+
+	//エフェクト
+	m_effectManager.End();
+	m_effectManager.Init();
+
+	//ポストエフェクトを解除
+	Application::GetInstance().GetPostProcess()->ResetPostEffectState();
+
+	//タイムスケール
+	Application::GetInstance().SetTimeScale(1.0f);
+
+	//UI削除
+	UIManager::GetInstance().AllDeleteUI();
+
+	//Inputの入力情報リセット
+	Input::GetInstance().StopUpdate();
+
+	//アクターの再スタート
+	m_actorManager->Restart();
+	m_actorManager->SetPlayerCamera(camera);
+
+	//攻撃マネージャー
+	m_attackManager->Init();
+	m_attackManager->SetPlayerCamera(camera);
+
+	//エリアの再スタート
+	m_battleAreaManager->Restart();
+
+	//フェードイン
+	Fader::GetInstance().FadeIn();
 }
 
 void TutorialScene::DebugDraw() const
