@@ -150,7 +150,7 @@
     <ClCompile Include="Game\Actor\ActorManager.cpp" />
     <ClCompile Include="Game\Actor\Character\CharacterBase.cpp" />
     <ClCompile Include="Game\Actor\Character\CharacterStateBase.cpp" />
-    <ClCompile Include="Game\Actor\Character\Enemy\Boss\Boss1.cpp" />
+    <ClCompile Include="Game\Actor\Character\Enemy\Boss1\Boss1.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyBase.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateAttack.cpp" />
@@ -272,7 +272,7 @@
     <ClInclude Include="Game\Actor\ActorManager.h" />
     <ClInclude Include="Game\Actor\Character\CharacterBase.h" />
     <ClInclude Include="Game\Actor\Character\CharacterStateBase.h" />
-    <ClInclude Include="Game\Actor\Character\Enemy\Boss\Boss1.h" />
+    <ClInclude Include="Game\Actor\Character\Enemy\Boss1\Boss1.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyBase.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyManager.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateAttack.h" />

@@ -318,9 +318,6 @@
     <ClCompile Include="Game\UI\Camera\PlayerCameraUI.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Actor\Character\Enemy\Boss\Boss1.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Game\UI\Title\TitleUI.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -373,6 +370,9 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Game\Actor\Stage\Sky.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Actor\Character\Enemy\Boss1\Boss1.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -716,9 +716,6 @@
     <ClInclude Include="Game\UI\Camera\PlayerCameraUI.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Actor\Character\Enemy\Boss\Boss1.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Game\UI\Title\TitleUI.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -771,6 +768,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Game\Actor\Stage\Sky.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actor\Character\Enemy\Boss1\Boss1.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

@@ -46,7 +46,10 @@ PlayerCamera::PlayerCamera() :
     m_lockOnSide(kRightOffset),
     m_nextlockOnSide(kRightOffset),
     m_lastInputCountFrame(0.0f),
-    m_lockOnUI()
+    m_lockOnUI(),
+    m_shakeFrame(0),
+    m_shakeCountFrame(0),
+    m_shakePower(0)
 {
 }
 

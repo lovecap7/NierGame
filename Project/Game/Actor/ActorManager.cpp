@@ -16,7 +16,7 @@
 #include "Character/Player/Weapon/Weapon.h"
 #include "Character/Player/Pod/Pod.h"
 #include "Character/Enemy/EnemyManager.h"
-#include "Character/Enemy/Boss/Boss1.h"
+#include "Character/Enemy/Boss1/Boss1.h"
 #include "Stage/CheckPoint.h"
 
 
