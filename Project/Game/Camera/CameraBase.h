@@ -12,6 +12,7 @@ public:
 	virtual void Update() abstract;
 	const Vector3& GetPos() const { return m_cameraPos; };
 	const Vector3& GetLook() const { return m_look; };
+	const Vector3& GetForward() const { return m_front; };
 	const Quaternion& GetRotH() const { return m_rotH; };
 	float GetVAngle()const { return m_vertexAngle; };
 	//‰E

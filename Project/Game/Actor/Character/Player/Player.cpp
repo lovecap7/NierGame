@@ -3,6 +3,7 @@
 #include "PlayerStateIdle.h"
 #include "PlayerStateAvoid.h"
 #include "PlayerStateFall.h"
+#include "AvoidColl.h"
 #include "Weapon/Weapon.h"
 #include "../Enemy/EnemyManager.h"
 #include "../Enemy/EnemyBase.h"
@@ -32,6 +33,9 @@ namespace
 {
 	//プレイヤーのパスデータ数
 	constexpr int kPathNum = 3;
+
+	//回避判定倍率
+	constexpr float kAvoidCollRadiusRate = 5.0f;
 
 	//ジャンプの最大数
 	constexpr int kMaxJumpNum = 2;
@@ -83,6 +87,8 @@ Player::Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatus
 {
 	//初期リスポーン地点
 	SetRespawnPos(GetPos());
+	//回避判定作成
+	m_avoidColl = std::make_shared<AvoidColl>(m_actorData->GetCollRadius() * kAvoidCollRadiusRate);
 }
 
 Player::~Player()
@@ -136,6 +142,8 @@ void Player::Init()
 	//リスポーン位置に移動
 	Respawn();
 
+	//回避判定登録
+	m_avoidColl->Init();
 }
 
 
@@ -203,6 +211,11 @@ void Player::Update()
 	//武器を収める
 	UpdatePutAwayWeapon();
 
+	//回避中に回避判定に攻撃が当たったなら
+	if (m_avoidColl->IsHit())
+	{
+		m_charaStatus->SetIsHit(true);
+	}
 
 	//共通処理
 	CharacterBase::Update();
@@ -216,6 +229,9 @@ void Player::Update()
 		m_pBigSword.lock()->SetIsDraw(m_isDraw);
 		m_pLightSword.lock()->SetIsDraw(m_isDraw);
 	}
+
+	//回避判定
+	m_avoidColl->Update(GetNextPos(), std::dynamic_pointer_cast<PlayerStateAvoid>(m_state) != nullptr);
 }
 
 
@@ -245,6 +261,8 @@ void Player::Draw() const
 		0x00ff00,
 		false
 	);
+	//回避判定
+	m_avoidColl->Draw();
 #endif
 	if (m_isDraw)
 	{
@@ -291,6 +309,7 @@ void Player::End()
 	m_model->End();
 	//登録解除
 	Collidable::End();
+	m_avoidColl->End();
 }
 
 Quaternion Player::GetCameraRot() const
@@ -602,8 +621,8 @@ void Player::LockOnNearestEnemy(std::shared_ptr<PlayerCamera> camera, const std:
 std::shared_ptr<EnemyBase> Player::FindTargetInDirection(bool rightDir, std::shared_ptr<PlayerCamera> camera, 
 	std::shared_ptr<EnemyBase> currentTarget, const std::list<std::shared_ptr<EnemyBase>>& enemys)
 {
-	Vector3 playerPos = GetPos();
-	Vector3 forward = camera->GetLook();	//カメラ前方
+	Vector3 cameraPos = camera->GetPos();
+	Vector3 forward = camera->GetForward();	//カメラ前方
 	Vector3 right = camera->GetRight();     //カメラ右方向
 
 	std::shared_ptr<EnemyBase> bestTarget;
@@ -614,7 +633,7 @@ std::shared_ptr<EnemyBase> Player::FindTargetInDirection(bool rightDir, std::sha
 		//活動していないまたは現在のターゲットなら無視
 		if (!enemy->IsActive() || enemy == currentTarget) continue;
 
-		Vector3 toEnemy = enemy->GetNextPos() - playerPos;
+		Vector3 toEnemy = enemy->GetNextPos() - cameraPos;
 		if (toEnemy.SqMagnitude() > 0.0f)
 		{
 			toEnemy = toEnemy.Normalize();
@@ -622,6 +641,7 @@ std::shared_ptr<EnemyBase> Player::FindTargetInDirection(bool rightDir, std::sha
 
 		//右方向ベクトルとの角度を計算
 		float dot = toEnemy.Dot(right);
+		//右方向かチェック
 		bool isRight = dot > 0.0f;
 
 		//右スティックの方向と一致する側だけ見る

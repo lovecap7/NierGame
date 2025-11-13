@@ -46,6 +46,9 @@ public:
     int GetHitStopFrame()const { return m_hitStopFrame; };
     //—h‚ê‚Ì‹­‚³
     int GetHitStopShakePower()const { return m_hitStopShakePower; };
+
+    //UŒ‚‚Ìƒ^ƒO
+    GameTag GetOwnerTag()const;
 protected:
     //ˆĞ—Í
     int m_attackPower;

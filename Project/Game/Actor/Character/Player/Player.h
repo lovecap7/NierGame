@@ -19,6 +19,7 @@ class Weapon;
 class CSVDataLoader;
 class AttackBase;
 class EnemyBase;
+class AvoidColl;
 class Player :
 	public CharacterBase
 {
@@ -129,7 +130,11 @@ private:
 
 	//•Ší‚ğû‚ß‚é
 	void UpdatePutAwayWeapon();
+
 private:
+	//‰ñ”ğ”»’è
+	std::shared_ptr<AvoidColl> m_avoidColl;
+
 	//ƒWƒƒƒ“ƒv‰ñ”
 	int m_jumpNum;
 	//‰ñ”ğ‰Â”\

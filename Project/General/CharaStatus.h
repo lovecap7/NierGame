@@ -81,6 +81,7 @@ public:
 	bool IsNoDamage()const { return m_isNoDamage; };
 	//UŒ‚‚ğó‚¯‚½‚©
 	bool IsHit()const { return m_isHit; }
+	void SetIsHit(bool isHit) { m_isHit = isHit; }
 	//ƒŠƒAƒNƒVƒ‡ƒ“‚ğ‚·‚é‚©
 	bool IsHitReaction()const { return m_isHitReaction; };
 

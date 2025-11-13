@@ -221,3 +221,9 @@ void AttackBase::ResetHitID()
 	if (m_hitId.size() <= 0) return;
 	m_hitId.clear();
 }
+
+GameTag AttackBase::GetOwnerTag() const
+{
+	if (m_pOwner.expired())return GameTag::None;
+	return m_pOwner.lock()->GetGameTag();
+}

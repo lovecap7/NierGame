@@ -31,7 +31,7 @@ namespace
     constexpr float kBackOffset = 450.0f;   //後方距離
     constexpr float kUpOffset = 150.0f;     //上方向オフセット
 	constexpr float kLockOnFollowSpeed = 0.1f;   //ロックオン中の追従速度
-    constexpr float kRotFollowSpeed = 0.1f; //追従回転速度
+   
 	//右向きを決める内積
 	constexpr float kRightDot = 0.7f;
     //ロックオン中のカメラ操作時の視点
@@ -272,7 +272,7 @@ void PlayerCamera::LockOnUpdate(Input& input, Vector3& targetPos)
         frontDir = frontDir.Normalize();
     }
     //前方向をもとに他の方向の更新
-    UpdateDirection(Vector3::Lerp(m_front, frontDir, kRotFollowSpeed));
+    UpdateDirection(frontDir);
 
     //反映 
     DxLib::SetCameraPositionAndTarget_UpVecY(

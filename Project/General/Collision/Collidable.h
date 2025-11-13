@@ -35,6 +35,7 @@ enum class GameTag
 	Field,		//フィールド
 	Attack,		//攻撃
 	Area,		//エリア
+	Avoid		//回避判定
 };
 
 
@@ -85,6 +86,10 @@ public:
 	void ResetHitFlag() { m_isFloor = m_isWall = false; };
 	//タイムスケール
 	virtual void SetTimeScale(float scale);
+
+	//当たり判定をする/しない
+	void EnableColl() { m_isThrough = false; }
+	void DisableColl() { m_isThrough = true; }
 private:
 	void CreateCollider(Shape shape);
 	//PhysicsがCollidableを自由に管理できるように
