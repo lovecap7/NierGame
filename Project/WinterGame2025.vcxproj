@@ -187,6 +187,7 @@
     <ClCompile Include="Game\Actor\Stage\BattleAreaManager.cpp" />
     <ClCompile Include="Game\Actor\Stage\CheckPoint.cpp" />
     <ClCompile Include="Game\Actor\Stage\Goal.cpp" />
+    <ClCompile Include="Game\Actor\Stage\Sky.cpp" />
     <ClCompile Include="Game\Actor\Stage\StageObject.cpp" />
     <ClCompile Include="Game\Attack\AOEAttack.cpp" />
     <ClCompile Include="Game\Attack\AttackBase.cpp" />
@@ -308,6 +309,7 @@
     <ClInclude Include="Game\Actor\Stage\BattleAreaManager.h" />
     <ClInclude Include="Game\Actor\Stage\CheckPoint.h" />
     <ClInclude Include="Game\Actor\Stage\Goal.h" />
+    <ClInclude Include="Game\Actor\Stage\Sky.h" />
     <ClInclude Include="Game\Actor\Stage\StageObject.h" />
     <ClInclude Include="Game\Attack\AOEAttack.h" />
     <ClInclude Include="Game\Attack\AttackBase.h" />

@@ -9,6 +9,7 @@
 #include "../../General/Fader.h"
 #include "Stage/StageObject.h"
 #include "Stage/Goal.h"
+#include "Stage/Sky.h"
 #include "Character/CharacterBase.h"
 #include "Character/Player/Player.h"
 #include "Character/Enemy/NormalEnemy.h"
@@ -171,6 +172,11 @@ void ActorManager::CreateActorCSV(const wchar_t* folderName, const wchar_t* file
 			{
 				//ゴール
 				actor = std::make_shared<Goal>(actorData, shared_from_this());
+			}
+			else if (actorData->GetGameTag() == GameTag::Sky)
+			{
+				//ステージ
+				actor = std::make_shared<Sky>(actorData, shared_from_this());
 			}
 			else
 			{

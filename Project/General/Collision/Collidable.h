@@ -35,7 +35,8 @@ enum class GameTag
 	Field,		//フィールド
 	Attack,		//攻撃
 	Area,		//エリア
-	Avoid		//回避判定
+	Avoid,		//回避判定
+	Sky			//空
 };
 
 

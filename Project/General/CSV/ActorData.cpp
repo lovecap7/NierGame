@@ -108,6 +108,7 @@ void ActorData::Conversion()
 	else if (tempStr == L"Field")gameTag = GameTag::Field;
 	else if (tempStr == L"Attack")gameTag = GameTag::Attack;
 	else if (tempStr == L"Area")gameTag = GameTag::Area;
+	else if (tempStr == L"Sky")gameTag = GameTag::Sky;
 	m_gameTag = gameTag;
 
 	//“–‚½‚è”»’è‚ð–³Ž‹‚·‚é‚©
