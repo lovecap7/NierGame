@@ -1,5 +1,8 @@
 #include "Boss2.h"
-#include "../EnemyStateIdle.h"
+#include "../EnemyStateBase.h"
+#include "Boss2StateIdle.h"
+#include "Boss2Arm.h"
+#include "../../../ActorManager.h"
 #include "../../../../../General/game.h"
 #include "../../../../../General/Collision/CapsuleCollider.h"
 #include "../../../../../General/Collision/Rigidbody.h"
@@ -12,6 +15,8 @@
 #include "../../../../Camera/PlayerCamera.h"
 #include "../../../../../General/CSV/CSVDataLoader.h"
 #include "../../../../../General/CSV/EnemyAttackKeyData.h"
+#include "../../../../../General/CSV/ArmData.h"
+#include "../../../../../General/CSV/CharaStatusData.h"
 #include "../../../../UI/Enemy/NormalEnemyHPUI.h"
 #include <DxLib.h>
 #include <cmath>
@@ -20,12 +25,13 @@
 namespace
 {
 	//敵キャラのパスデータ数
-	constexpr int kPathNum = 5;
+	constexpr int kPathNum = 6;
 }
 
 Boss2::Boss2(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager) :
 	EnemyBase(actorData, charaStatusData, pActorManager)
 {
+	m_charaStatusData = charaStatusData;
 	//ボス
 	m_isBoss = true;
 }
@@ -48,9 +54,12 @@ void Boss2::Init()
 	//目の位置
 	InitEyeIndex(csvLoader, pathData[4]);
 
+	//腕の作成
+	InitArm(csvLoader, pathData);
+
 	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
-	auto thisPointer = std::dynamic_pointer_cast<Boss1>(shared_from_this());
-	m_state = std::make_shared<EnemyStateIdle>(thisPointer);
+	auto thisPointer = std::dynamic_pointer_cast<Boss2>(shared_from_this());
+	m_state = std::make_shared<Boss2StateIdle>(thisPointer);
 	//状態を変化する
 	m_state->ChangeState(m_state);
 	//モデルの高さ調整
@@ -75,6 +84,37 @@ void Boss2::Init()
 	m_model->ApplyMat();
 }
 
+void Boss2::Update()
+{
+	//非活動中は更新しない
+	if (!m_isActive)return;
+
+	//カメラの当たり判定を消す(ロックオンした際にボスとの間の壁に当たらないようにするため)
+	if (!m_pActorManager.expired())
+	{
+		auto actorManger = m_pActorManager.lock();
+		if (!actorManger->GetPlayerCamera().expired())
+		{
+			actorManger->GetPlayerCamera().lock()->DisableColl();
+		}
+	}
+
+	//攻撃を喰らった際
+	if (m_charaStatus->IsHit())
+	{
+		m_model->ModelHit();
+	}
+	//攻撃クールタイム更新
+	CountAttackCoolTime();
+	//共通処理
+	CharacterBase::Update();
+	//ロックオンの位置
+	UpdateLockOnViewPos();
+	//目の位置更新
+	UpdateEyeEffect();
+
+	
+}
 
 void Boss2::Complete()
 {
@@ -101,29 +141,55 @@ void Boss2::End()
 	m_model->End();
 	//登録解除
 	Collidable::End();
+	if (!m_rightArm.expired())
+	{
+		m_rightArm.lock()->End();
+	}
+	if (!m_leftArm.expired())
+	{
+		m_leftArm.lock()->End();
+	}
 }
 
-std::shared_ptr<AttackData> Boss2::GetRandomAttack(std::vector<std::wstring> keys) const
+void Boss2::InitArm(CSVDataLoader& csvLoader, std::vector<std::wstring>& pathData)
 {
-	//近接攻撃の場合
-	if (m_meleeAttackKeys == keys)
+	auto armStrDatas = csvLoader.LoadCSV(pathData[5].c_str());
+	if (m_pActorManager.expired())return;
+	auto actorManger = m_pActorManager.lock();
+
+	for (auto& data : armStrDatas)
 	{
-		//プレイヤーの高さから攻撃を選択
-		if (m_targetInfo.m_isFound)
+		auto armData = std::make_shared<ArmData>(data);
+		//データ
+		std::shared_ptr<ActorData> actorData = std::make_shared<ActorData>();
+		std::shared_ptr<CharaStatusData> charaStatus = std::make_shared<CharaStatusData>();
+		actorData->SetCollRadius(armData->GetRadius());
+		actorData->SetGameTag(GameTag::Enemy);
+		actorData->SetIsTrough(false);
+		actorData->SetPriority(Priority::Static);
+		charaStatus->SetID(m_actorData->GetActorID());
+		charaStatus->SetHP(armData->GetHP());
+		charaStatus->SetDF(armData->GetDF());
+		charaStatus->SetAR(armData->GetArmor());
+		if (armData->GetName() == L"Right")
 		{
-			//自分の中心より高い場合
-			if (GetCenterPos().y < m_targetInfo.m_pTarget.lock()->GetPos().y)
-			{
-				//パンチ
-				return GetAttackData(keys[0]);
-			}
-			else
-			{
-				//パンチ攻撃以外
-				return GetAttackData(keys[MyMath::GetRand(1, static_cast<int>(keys.size()) - 1)]);
-			}
+			actorData->SetActorID(-1);
+			auto rightArm = std::make_shared<Boss2Arm>(actorData, charaStatus, m_pActorManager);
+			rightArm->SetArmIndex(m_model->GetModelHandle(), armData->GetStartIndex(), armData->GetEndIndex());
+			m_rightArm = rightArm;
+			actorManger->Entry(rightArm);
+		}
+		else if (armData->GetName() == L"Left")
+		{
+			actorData->SetActorID(-2);
+			auto leftArm = std::make_shared<Boss2Arm>(actorData, charaStatus, m_pActorManager);
+			leftArm->SetArmIndex(m_model->GetModelHandle(), armData->GetStartIndex(), armData->GetEndIndex());
+			m_leftArm = leftArm;
+			actorManger->Entry(leftArm);
+		}
+		if (!m_rightArm.expired() && !m_leftArm.expired())
+		{
+			break;
 		}
 	}
-	int index = MyMath::GetRand(0, static_cast<int>(keys.size()) - 1);
-	return GetAttackData(keys[index]);
 }

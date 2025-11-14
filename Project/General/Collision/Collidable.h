@@ -89,8 +89,8 @@ public:
 	virtual void SetTimeScale(float scale);
 
 	//“–‚½‚è”»’è‚ğ‚·‚é/‚µ‚È‚¢
-	void EnableColl() { m_isThrough = false; }
-	void DisableColl() { m_isThrough = true; }
+	void EnableColl() { m_isThrough = false; };
+	void DisableColl() { m_isThrough = true; };
 private:
 	void CreateCollider(Shape shape);
 	//Physics‚ªCollidable‚ğ©—R‚ÉŠÇ—‚Å‚«‚é‚æ‚¤‚É

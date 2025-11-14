@@ -24,6 +24,7 @@ public:
 	std::wstring GetName() const{ return m_name; };
 	//ID
 	unsigned int GetActorID() const{ return m_actorID; };
+	void SetActorID(unsigned int id) { m_actorID = id; };
 	//アクタータイプ
 	ActorType GetActorType()const { return m_actorType; };
 	//座標
@@ -38,18 +39,23 @@ public:
 	void SetModelPath(std::wstring path) { m_modelPath = path; };
 	//優先度
 	Priority GetPriority()const { return m_priority; };
+	void SetPriority(Priority pri) { m_priority = pri; };
 	//ゲームタグ
 	GameTag GetGameTag()const { return m_gameTag; };
+	void SetGameTag(GameTag gameTag) { m_gameTag = gameTag; };
 	//当たり判定を無視するか
 	bool IsTrough()const { return m_isTrough; };
+	void SetIsTrough(bool isTrough) {  m_isTrough = isTrough; };
 	//トリガー
 	bool IsTrigger()const { return m_isTrigger; };
 	//重力
 	bool IsGravity()const { return m_isGravity; };
 	//半径
 	float GetCollRadius()const { return m_collRadius; };
+	void SetCollRadius(float radius) { m_collRadius = radius; };
 	//高さ
 	float GetCollHeight()const { return m_collHeight; };
+	void SetCollHeight(float height) { m_collHeight = height; };
 	//様々なのパスをまとめたパスデータ
 	std::wstring GetCSVPathData()const { return m_csvPathData; };
 private:

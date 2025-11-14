@@ -90,16 +90,20 @@ void EnemyBase::Draw() const
 	//õ“G”ÍˆÍ
 	MyDraw::Draw3DCircle(pos, searchDistance, 36, 0x0000ff);
 	//Œ©‚Ä‚é•ûŒü
-	auto forward = m_model->GetDir();
-	forward = forward * searchDistance;
-	//Ž‹–ìŠp
-	auto viewDir1 = Quaternion::AngleAxis(viewingAngle / 2.0f, Vector3::Up()) * forward;
-	auto viewDir2 = Quaternion::AngleAxis(-viewingAngle / 2.0f, Vector3::Up()) * forward;
-	//•`‰æ
-	DrawLine3D(pos.ToDxLibVector(), (pos + forward).ToDxLibVector(), 0xff0000);
-	DrawLine3D(pos.ToDxLibVector(), (pos + viewDir1).ToDxLibVector(), 0xff0000);
-	DrawLine3D(pos.ToDxLibVector(), (pos + viewDir2).ToDxLibVector(), 0xff0000);
+	if (m_model)
+	{
+		auto forward = m_model->GetDir();
+		forward = forward * searchDistance;
+		//Ž‹–ìŠp
+		auto viewDir1 = Quaternion::AngleAxis(viewingAngle / 2.0f, Vector3::Up()) * forward;
+		auto viewDir2 = Quaternion::AngleAxis(-viewingAngle / 2.0f, Vector3::Up()) * forward;
+		//•`‰æ
+		DrawLine3D(pos.ToDxLibVector(), (pos + forward).ToDxLibVector(), 0xff0000);
+		DrawLine3D(pos.ToDxLibVector(), (pos + viewDir1).ToDxLibVector(), 0xff0000);
+		DrawLine3D(pos.ToDxLibVector(), (pos + viewDir2).ToDxLibVector(), 0xff0000);
+	}
 #endif
+	if (!m_model)return;
 	m_model->Draw();
 }
 

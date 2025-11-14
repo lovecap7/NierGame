@@ -26,12 +26,21 @@ void CharacterBase::Init(std::wstring animPath, std::wstring attackPath, std::ws
 	Collidable::Init();
 	//CSVを読み込む
 	auto& csvLoader = CSVDataLoader::GetInstance();
-	//アニメーションデータ
-	InitAnimData(csvLoader, animPath);
-	//攻撃データ
-	InitAttackData(csvLoader, attackPath);
-	//エフェクトの準備
-	InitEffectData(csvLoader, effectPath);
+	if (animPath != L"" && animPath != L"None")
+	{
+		//アニメーションデータ
+		InitAnimData(csvLoader, animPath);
+	}
+	if (attackPath != L"" && attackPath != L"None")
+	{
+		//攻撃データ
+		InitAttackData(csvLoader, attackPath);
+	}
+	if (effectPath != L"" && effectPath != L"None")
+	{
+		//エフェクトの準備
+		InitEffectData(csvLoader, effectPath);
+	}
 }
 
 

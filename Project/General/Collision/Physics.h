@@ -49,7 +49,6 @@ public:
 	std::list<std::weak_ptr<Collidable>> RayCast(const Vector3& startPos, const Vector3& endPos);
 	//カメラからレイを飛ばして終点に一番近い座標を返す
 	Vector3 GetCameraRatCastNearEndPos(const Vector3& targetPos, const Vector3& cameraPos);
-
 private:
 	//当たり判定のチェックをするクラス
 	std::shared_ptr<CollisionChecker> m_collChecker;
@@ -58,7 +57,11 @@ private:
 private:
 	//登録されているコライダブルのリスト
 	std::list<std::shared_ptr<Collidable>> m_collidables;
+	//更新をするか
+	bool m_isUpdate = true;
 
+	
+	
 	// OnCollideの衝突通知のためのデータ
 	struct OnCollideInfo
 	{
@@ -74,7 +77,6 @@ private:
 	//重力
 	void Gravity();
 
-	//更新をするか
-	bool m_isUpdate = true;
+
 };
 

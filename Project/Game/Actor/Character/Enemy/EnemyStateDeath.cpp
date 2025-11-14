@@ -29,6 +29,10 @@ EnemyStateDeath::EnemyStateDeath(std::weak_ptr<Actor> enemy) :
 		owner->GetRb()->SetVecY(MyMath::GetRandF(kMinSmashPower, kMaxSmashPower));
 		owner->GetRb()->AddVec(owner->GetToTargetVec() * -MyMath::GetRandF(kMinSmashPower, kMaxSmashPower));
 	}
+	else
+	{
+		owner->GetRb()->ResetVec();
+	}
 
 	//–³“G‚É
 	owner->GetCharaStatus()->SetIsNoDamage(true);

@@ -11,12 +11,6 @@ namespace
 	constexpr float kAnimSpeed = 0.5f;//再生速度
 	//回転速度
 	constexpr int kModelRotateSpeed = 10;
-	//ヒット効果フレーム
-	constexpr int kHitFrame = 10.0f;
-	//ヒット効果でモデルが大きくなる倍率
-	constexpr float kHiScaleRate = 1.05f;
-	//ヒット時に少し暗くする
-	constexpr float kGray = 0.5f;
 }
 
 Model::Model(int modelHandle, VECTOR pos) :
@@ -29,10 +23,6 @@ Model::Model(int modelHandle, VECTOR pos) :
 	m_rotaSpeed(kModelRotateSpeed),
 	m_pos(pos),
 	m_scale{ 1.0f,1.0f,1.0f },
-	m_hitCountFrame(0),
-	m_color{ 1.0f,1.0f ,1.0f ,1.0f },
-	m_beforeScale(m_scale),
-	m_beforeScaleDif{},
 	m_modelHeightAdjust(0.0f),
 	m_timeScale(1.0f)
 {
@@ -51,10 +41,6 @@ Model::Model(int modelHandle, VECTOR pos, Vector3 forward) :
 	m_rotaFrame(0),
 	m_pos(),
 	m_scale{ 1.0f,1.0f,1.0f },
-	m_hitCountFrame(0),
-	m_color{ 1.0f,1.0f ,1.0f ,1.0f },
-	m_beforeScale(m_scale),
-	m_beforeScaleDif{},
 	m_beforeSetDir{ forward.XZ() },
 	m_modelHeightAdjust(0.0f),
 	m_timeScale(1.0f),
@@ -93,19 +79,6 @@ void Model::Update()
 		//正規化
 		if (m_forward.Magnitude() > 0.0f)m_forward = m_forward.Normalize();
 	}
-	//ヒット効果から元の状態に戻していく
-	if (m_hitCountFrame > 0 && m_timeScale > 0.0f)
-	{
-		--m_hitCountFrame;
-		//もとに戻してく(色)
-		float hitFrame = (1.0f / kHitFrame) * m_timeScale;
-		m_color.r += hitFrame;
-		m_color.g += hitFrame;
-		m_color.b += hitFrame;
-		SetColor(m_color);
-		//大きさ
-		m_scale -= (m_beforeScaleDif / kHitFrame) * m_timeScale;
-	}
 }
 
 void Model::Draw() const
@@ -117,7 +90,7 @@ void Model::Draw() const
 
 void Model::End()
 {
-	assert(DxLib::MV1DeleteModel(m_modelHandle) == 0);
+	DxLib::MV1DeleteModel(m_modelHandle);
 }
 
 void Model::SetPos(VECTOR pos)
@@ -128,7 +101,6 @@ void Model::SetPos(VECTOR pos)
 void Model::SetScale(VECTOR scale)
 {
 	m_scale = scale;
-	m_beforeScale = m_scale;
 }
 
 void Model::SetRot(VECTOR rot)
@@ -217,26 +189,43 @@ void Model::LookAt(Vector3 target)
 void Model::SetColor(float r, float g, float b, float a)
 {
 	COLOR_F color = { r, g, b, a };
-	m_color = color;
-	m_color.r = MathSub::ClampFloat(m_color.r, 0.0f, 1.0f);
-	m_color.g = MathSub::ClampFloat(m_color.g, 0.0f, 1.0f);
-	m_color.b = MathSub::ClampFloat(m_color.b, 0.0f, 1.0f);
-	m_color.a = MathSub::ClampFloat(m_color.a, 0.0f, 1.0f);
-	DxLib::MV1SetDifColorScale(m_modelHandle, m_color);
-	DxLib::MV1SetSpcColorScale(m_modelHandle, m_color);
-	DxLib::MV1SetAmbColorScale(m_modelHandle, m_color);
+	color.r = MathSub::ClampFloat(color.r, 0.0f, 1.0f);
+	color.g = MathSub::ClampFloat(color.g, 0.0f, 1.0f);
+	color.b = MathSub::ClampFloat(color.b, 0.0f, 1.0f);
+	color.a = MathSub::ClampFloat(color.a, 0.0f, 1.0f);
+	DxLib::MV1SetDifColorScale(m_modelHandle, color);
+	DxLib::MV1SetSpcColorScale(m_modelHandle, color);
+	DxLib::MV1SetAmbColorScale(m_modelHandle, color);
 }
 
 void Model::SetColor(COLOR_F color)
 {
-	m_color.r = MathSub::ClampFloat(m_color.r, 0.0f, 1.0f);
-	m_color.g = MathSub::ClampFloat(m_color.g, 0.0f, 1.0f);
-	m_color.b = MathSub::ClampFloat(m_color.b, 0.0f, 1.0f);
-	m_color.a = MathSub::ClampFloat(m_color.a, 0.0f, 1.0f);
-	m_color = color;
-	DxLib::MV1SetDifColorScale(m_modelHandle, m_color);
-	DxLib::MV1SetSpcColorScale(m_modelHandle, m_color);
-	DxLib::MV1SetAmbColorScale(m_modelHandle, m_color);
+	color.r = MathSub::ClampFloat(color.r, 0.0f, 1.0f);
+	color.g = MathSub::ClampFloat(color.g, 0.0f, 1.0f);
+	color.b = MathSub::ClampFloat(color.b, 0.0f, 1.0f);
+	color.a = MathSub::ClampFloat(color.a, 0.0f, 1.0f);
+	DxLib::MV1SetDifColorScale(m_modelHandle, color);
+	DxLib::MV1SetSpcColorScale(m_modelHandle, color);
+	DxLib::MV1SetAmbColorScale(m_modelHandle, color);
+}
+
+void Model::SetEmiColor(float r, float g, float b, float a)
+{
+	COLOR_F color = { r, g, b, a };
+	color.r = MathSub::ClampFloat(color.r, 0.0f, 1.0f);
+	color.g = MathSub::ClampFloat(color.g, 0.0f, 1.0f);
+	color.b = MathSub::ClampFloat(color.b, 0.0f, 1.0f);
+	color.a = MathSub::ClampFloat(color.a, 0.0f, 1.0f);
+	MV1SetEmiColorScale(m_modelHandle, color);
+}
+
+void Model::SetEmiColor(COLOR_F color)
+{
+	color.r = MathSub::ClampFloat(color.r, 0.0f, 1.0f);
+	color.g = MathSub::ClampFloat(color.g, 0.0f, 1.0f);
+	color.b = MathSub::ClampFloat(color.b, 0.0f, 1.0f);
+	color.a = MathSub::ClampFloat(color.a, 0.0f, 1.0f);
+	DxLib::MV1SetEmiColorScale(m_modelHandle, color);
 }
 
 void Model::SetMatrix(Matrix4x4 mat)
@@ -246,10 +235,10 @@ void Model::SetMatrix(Matrix4x4 mat)
 
 void Model::ResetColor()
 {
-	m_color = { 1,1,1,1 };
-	DxLib::MV1SetDifColorScale(m_modelHandle, m_color);
-	DxLib::MV1SetSpcColorScale(m_modelHandle, m_color);
-	DxLib::MV1SetAmbColorScale(m_modelHandle, m_color);
+	COLOR_F color = { 1,1,1,1 };
+	DxLib::MV1SetDifColorScale(m_modelHandle, color);
+	DxLib::MV1SetSpcColorScale(m_modelHandle, color);
+	DxLib::MV1SetAmbColorScale(m_modelHandle, color);
 }
 
 void Model::SetModel(int modelHandle)
@@ -269,16 +258,9 @@ Vector3 Model::GetDir()
 	}
 	return dir;
 }
+
 void Model::ModelHit()
 {
-	//グレーに
-	SetColor(kGray, kGray, kGray, 1.0f);
-	//フレームをセット
-	m_hitCountFrame = kHitFrame;
-	//少し大きくする
-	m_scale = m_beforeScale;						//一旦元の大きさ
-	m_scale *= kHiScaleRate;						//大きくする
-	m_beforeScaleDif = (m_scale - m_beforeScale);	//差を計算
 
 }
 

@@ -30,6 +30,9 @@ public:
 
 	//カメラの揺れ
 	void CameraShake(int frame, int shakePower);
+	//ポリゴンとの当たり判定をする
+	void EnableColl() { m_isThrough = false; };
+	void DisableColl() { m_isThrough = true; };
 
 private:
 	//ロックオン対象
@@ -57,6 +60,10 @@ private:
 	int m_shakeFrame;
 	int m_shakeCountFrame;
 	int m_shakePower;
+
+	//ポリゴンと当たり判定をするか
+	bool m_isThrough;
+
 private:
 	//通常時の更新
 	void NormalUpdate(Input& input, Vector3& targetPos);

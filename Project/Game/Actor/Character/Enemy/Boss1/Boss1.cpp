@@ -102,28 +102,3 @@ void Boss1::End()
 	//登録解除
 	Collidable::End();
 }
-
-std::shared_ptr<AttackData> Boss1::GetRandomAttack(std::vector<std::wstring> keys) const
-{
-	//近接攻撃の場合
-	if (m_meleeAttackKeys == keys)
-	{
-		//プレイヤーの高さから攻撃を選択
-		if (m_targetInfo.m_isFound)
-		{
-			//自分の中心より高い場合
-			if (GetCenterPos().y < m_targetInfo.m_pTarget.lock()->GetPos().y)
-			{
-				//パンチ
-				return GetAttackData(keys[0]);
-			}
-			else
-			{
-				//パンチ攻撃以外
-				return GetAttackData(keys[MyMath::GetRand(1, static_cast<int>(keys.size()) - 1)]);
-			}
-		}
-	}
-	int index = MyMath::GetRand(0, static_cast<int>(keys.size()) - 1);
-	return GetAttackData(keys[index]);
-}

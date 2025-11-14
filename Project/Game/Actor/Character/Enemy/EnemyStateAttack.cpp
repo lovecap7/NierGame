@@ -3,6 +3,8 @@
 #include "EnemyStateIdle.h"
 #include "EnemyStateHit.h"
 #include "EnemyStateDeath.h"
+#include "Boss2/Boss2.h"
+#include "Boss2/Boss2StateIdle.h"
 #include "../Player/Player.h"
 #include "../../../Attack/AttackBase.h"
 #include "../../../Attack/SwordAttack.h"
@@ -100,6 +102,13 @@ void EnemyStateAttack::Update()
 	//アニメーションが終了したら
 	if (model->IsFinishAnim())
 	{
+		//もしBoss2なら
+		if (std::dynamic_pointer_cast<Boss2>(owner))
+		{
+			//待機
+			ChangeState(std::make_shared<Boss2StateIdle>(m_pOwner));
+			return;
+		}
 		//待機
 		ChangeState(std::make_shared<EnemyStateIdle>(m_pOwner));
 		return;
@@ -244,7 +253,7 @@ void EnemyStateAttack::UpdateAttackPos(std::shared_ptr<EnemyBase> owner)
 	{
 		auto attack = std::dynamic_pointer_cast<SwordAttack>(m_pAttack.lock());
 		attack->SetStartPos(pos1);
-		Vector3 pos2 = MV1GetFramePosition(handle, static_cast<int>(m_attackData->GetParam1()));
+		Vector3 pos2 = MV1GetFramePosition(handle, static_cast<int>(m_attackData->GetParam2()));
 		Vector3 dir = (pos2 - pos1);
 		if (dir.SqMagnitude() > 0.0f)
 		{

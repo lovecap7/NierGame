@@ -29,8 +29,9 @@ namespace
     //カメラオフセット（右に寄せる）
     constexpr float kRightOffset = 150.0f;  //右オフセット距離
     constexpr float kBackOffset = 450.0f;   //後方距離
-    constexpr float kUpOffset = 150.0f;     //上方向オフセット
+    constexpr float kUpOffset = 120.0f;     //上方向オフセット
 	constexpr float kLockOnFollowSpeed = 0.1f;   //ロックオン中の追従速度
+	constexpr float kLockOnSideLerpRate = 0.05f;   //ロックオン中の追従速度
    
 	//右向きを決める内積
 	constexpr float kRightDot = 0.7f;
@@ -49,7 +50,8 @@ PlayerCamera::PlayerCamera() :
     m_lockOnUI(),
     m_shakeFrame(0),
     m_shakeCountFrame(0),
-    m_shakePower(0)
+    m_shakePower(0),
+    m_isThrough(false)
 {
 }
 
@@ -72,6 +74,7 @@ void PlayerCamera::Init()
     m_shakePower = 0;
     m_shakeFrame = 0;
     m_shakeCountFrame = 0;
+    m_isThrough = false;
 
     //UI
     auto lockOnUI = std::make_shared<PlayerCameraUI>(std::dynamic_pointer_cast<PlayerCamera>(shared_from_this()));
@@ -166,8 +169,12 @@ void PlayerCamera::NormalUpdate(Input& input, Vector3& targetPos)
     //理想カメラ位置
     Vector3 nextPos;
     nextPos = targetPos - m_look * m_distance;
-    //位置補正
-    nextPos = Physics::GetInstance().GetCameraRatCastNearEndPos(targetPos, nextPos);
+    //当たり判定をするか
+    if (!m_isThrough)
+    {
+        //位置補正
+        nextPos = Physics::GetInstance().GetCameraRatCastNearEndPos(targetPos, nextPos);
+    }
     //位置確定
     m_cameraPos = Vector3::Lerp(m_cameraPos, nextPos, 0.3f);
     //視点確定
@@ -201,9 +208,11 @@ void PlayerCamera::LockOnUpdate(Input& input, Vector3& targetPos)
 
     //プレイヤーから敵方向を求める
     Vector3 toEnemy = (enemyPos - playerPos);
-    if (toEnemy.SqMagnitude() > 0.0f)
+    Vector3 toEnemyXZ = toEnemy;
+    toEnemyXZ.y = 0.0f;
+    if (toEnemyXZ.SqMagnitude() > 0.0f)
     {
-        toEnemy = toEnemy.Normalize();
+        toEnemyXZ = toEnemyXZ.Normalize();
     }
 
     //中点（注視点）を計算
@@ -234,7 +243,7 @@ void PlayerCamera::LockOnUpdate(Input& input, Vector3& targetPos)
     m_vertexAngle = 0.0f;
 
     //プレイヤー右方向を求める
-    Vector3 playerRight = Vector3::Up().Cross(toEnemy);
+    Vector3 playerRight = Vector3::Up().Cross(toEnemyXZ);
     if (playerRight.SqMagnitude() > 0.0f)
     {
         playerRight = playerRight.Normalize();
@@ -250,16 +259,22 @@ void PlayerCamera::LockOnUpdate(Input& input, Vector3& targetPos)
     {
         m_nextlockOnSide = kRightOffset;
     }
-    m_lockOnSide = MathSub::Lerp(m_lockOnSide, m_nextlockOnSide, 0.05f);
+    m_lockOnSide = MathSub::Lerp(m_lockOnSide, m_nextlockOnSide, kLockOnSideLerpRate);
 
-    basePos -= (toEnemy * kBackOffset);
-    basePos += (playerRight * m_lockOnSide);                //横にオフセット
-    basePos += Vector3::Up() * kUpOffset;                   //上にオフセット
 
-    //理想の位置
-    Vector3 idealCamPos = basePos;
-    //衝突補正（壁など）
-    Vector3 nextPos = Physics::GetInstance().GetCameraRatCastNearEndPos(lockPos, idealCamPos);
+    //カメラの理想の位置を決めていく
+    basePos.y = MathSub::Max(playerPos.y,lockPos.y) + kUpOffset;            //高いほうに合わせる
+    basePos -= (toEnemyXZ * (kBackOffset + abs(basePos.y - playerPos.y)));  //高さの差で距離を離す(でかい奴ほど引いた視点で見たいので)
+    basePos += (playerRight * m_lockOnSide);                                //少し横から見たような視点にしたい
+
+    //次の座標を求める
+    Vector3 nextPos = basePos;
+    //当たり判定をするか
+    if (!m_isThrough)
+    {
+        //衝突補正
+        nextPos = Physics::GetInstance().GetCameraRatCastNearEndPos(lockPos, nextPos);
+    }
 
     //補間してなめらかに追従
     m_cameraPos = Vector3::Lerp(m_cameraPos, nextPos, kLockOnFollowSpeed);

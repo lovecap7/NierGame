@@ -152,6 +152,8 @@
     <ClCompile Include="Game\Actor\Character\CharacterStateBase.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\Boss1\Boss1.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\Boss2\Boss2.cpp" />
+    <ClCompile Include="Game\Actor\Character\Enemy\Boss2\Boss2Arm.cpp" />
+    <ClCompile Include="Game\Actor\Character\Enemy\Boss2\Boss2StateIdle.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyBase.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateAttack.cpp" />
@@ -228,6 +230,7 @@
     <ClCompile Include="General\Collision\SphereCollider.cpp" />
     <ClCompile Include="General\Collision\TorusCollider.cpp" />
     <ClCompile Include="General\CSV\ActorData.cpp" />
+    <ClCompile Include="General\CSV\ArmData.cpp" />
     <ClCompile Include="General\CSV\AttackData.cpp" />
     <ClCompile Include="General\CSV\CharaStatusData.cpp" />
     <ClCompile Include="General\CSV\CSVData.cpp" />
@@ -275,6 +278,8 @@
     <ClInclude Include="Game\Actor\Character\CharacterStateBase.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\Boss1\Boss1.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\Boss2\Boss2.h" />
+    <ClInclude Include="Game\Actor\Character\Enemy\Boss2\Boss2Arm.h" />
+    <ClInclude Include="Game\Actor\Character\Enemy\Boss2\Boss2StateIdle.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyBase.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyManager.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateAttack.h" />
@@ -351,6 +356,7 @@
     <ClInclude Include="General\Collision\SphereCollider.h" />
     <ClInclude Include="General\Collision\TorusCollider.h" />
     <ClInclude Include="General\CSV\ActorData.h" />
+    <ClInclude Include="General\CSV\ArmData.h" />
     <ClInclude Include="General\CSV\AttackData.h" />
     <ClInclude Include="General\CSV\CharaStatusData.h" />
     <ClInclude Include="General\CSV\CSVData.h" />

@@ -14,7 +14,5 @@ public:
 	//I—¹ˆ—
 	void End()override;
 private:
-	//ƒ‰ƒ“ƒ_ƒ€‚ÉUŒ‚‚ğæ“¾
-	std::shared_ptr<AttackData> GetRandomAttack(std::vector<std::wstring> keys) const override;
 };
 

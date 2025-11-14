@@ -13,7 +13,7 @@ public:
 	virtual ~EnemyStateAttack();
 	virtual void Init() override;
 	virtual void Update() override;
-private:
+protected:
 	//フレームによる攻撃の更新
 	void UpdateAttackFrame(std::shared_ptr<EnemyBase> owner);
 	//攻撃削除
@@ -26,7 +26,7 @@ private:
 	void UpdateMove(std::shared_ptr<EnemyBase> owner, std::shared_ptr<Model> model);
 	//攻撃位置の更新
 	void UpdateAttackPos(std::shared_ptr<EnemyBase> owner);
-private:
+protected:
 	//攻撃データ
 	std::shared_ptr<AttackData> m_attackData;
 	//攻撃発生
