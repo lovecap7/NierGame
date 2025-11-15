@@ -143,8 +143,13 @@ void PlayerStateAttackBase::UpdateMove(std::shared_ptr<Player> owner, Input& inp
 		//ƒ‚ƒfƒ‹‚ÌŒü‚«
 		model->SetDir(dir.XZ());
 
+		if (!owner->GetTargetInfo().m_isFound)
+		{
+			dir = model->GetDir();
+		}
+
 		//ˆÚ“®—Ê
-		moveVec = model->GetDir() * speed;
+		moveVec = dir * speed;
 	}
 	//ˆÚ“®
 	owner->GetRb()->SetMoveVec(moveVec);

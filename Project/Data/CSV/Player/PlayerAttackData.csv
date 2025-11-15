@@ -23,12 +23,12 @@ SubAttackAirStart_2,FALSE,1,100,2,1,10,0,30,600,60,200,15,40,SubAttackAir,SubAtt
 SubAttackAirEnd,FALSE,5,300,2,1,20,0,0,10,220,200,0,0,SubAttackAirEnd,SubAttackAirEnd,Owner,0,6,50,SparkHitEffect,None,0,0,0
 DashAttack,FALSE,1,400,2,1,5,0,0,20,40,200,50,10,DashAttack,SubAttack1,Owner,80,6,10,SparkHitEffect,Slash/SlashEffect_Thrust,0,0,0
 RisingAttack,FALSE,1,100,1,1,2,26,0,20,50,100,10,10,RisingAttack,MainAttack1,Owner,10,2,10,SparkHitEffect_Diagonal1,Slash/SlashEffect_Diagonal1_Re,20,0,0
-JustAttackMain,TRUE,5,200,3,3,-1,20,0,10,230,100,0,10,JustAttackMain,JustAttackMain_2,Owner,10,2,10,SparkHitEffect_Rand,JustLightAttack,30,0,0
+JustAttackMain,TRUE,5,200,3,3,-1,20,0,10,230,100,50,10,JustAttackMain,JustAttackMain_2,Owner,10,2,10,SparkHitEffect_Rand,JustLightAttack,30,0,0
 JustAttackMain_2,TRUE,5,200,3,3,-1,5,0,10,230,100,0,0,JustAttackMain,JustAttackMain_3,Owner,10,2,10,SparkHitEffect_Rand,JustLightAttack,30,0,0
 JustAttackMain_3,TRUE,5,200,3,3,-1,5,0,10,230,100,0,0,JustAttackMain,JustAttackMain_4,Owner,10,2,10,SparkHitEffect_Rand,JustLightAttack,30,0,0
 JustAttackMain_4,TRUE,5,200,3,3,-1,5,0,10,230,100,0,0,JustAttackMain,JustAttackMain_5,Owner,10,2,10,SparkHitEffect_Rand,JustLightAttack,30,0,0
 JustAttackMain_5,FALSE,5,200,3,3,15,10,0,10,250,100,0,0,JustAttackMain,MainAttack1,Owner,10,2,30,SparkHitEffect_Rand,JustLightAttackEnd,30,0,0
-JustAttackSub,TRUE,1,400,3,3,10,10,10,30,50,200,10,10,JustAttackSub,JustAttackSub_2,Owner,80,2,10,SparkHitEffect_Side,JustHeavyAttack,0,0,0
+JustAttackSub,TRUE,1,400,3,3,10,10,10,30,50,200,30,10,JustAttackSub,JustAttackSub_2,Owner,80,2,10,SparkHitEffect_Side,JustHeavyAttack,0,0,0
 JustAttackSub_2,TRUE,3,400,3,3,-5,2,40,10,200,250,0,10,JustAttackSub,JustAttackSub_3,Owner,10,2,10,SparkHitEffect_Rand,JustHeavyAttackEnd,1500,-50,0
 JustAttackSub_3,TRUE,3,400,3,3,-5,2,0,10,200,250,0,10,JustAttackSub,JustAttackSub_4,Owner,10,2,10,SparkHitEffect_Rand,JustHeavyAttackEnd,1500,-50,0
 JustAttackSub_4,TRUE,3,400,3,3,-5,2,0,10,200,250,0,10,JustAttackSub,JustAttackSub_5,Owner,10,2,10,SparkHitEffect_Rand,JustHeavyAttackEnd,1500,-50,0

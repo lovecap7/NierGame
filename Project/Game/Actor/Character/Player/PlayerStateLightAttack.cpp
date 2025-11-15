@@ -60,21 +60,6 @@ PlayerStateLightAttack::PlayerStateLightAttack(std::weak_ptr<Actor> player, bool
 		rb->SetIsGravity(true);
 		//透明
 		owner->SetIsDraw(false);
-
-		//もしもターゲットがいる場合近くまで移動
-		auto targetInfo = owner->GetTargetInfo();
-		if (targetInfo.m_isFound)
-		{
-			auto target = targetInfo.m_pTarget.lock();
-			//ターゲット座標
-			Vector3 targetPos = target->GetPos();
-			//ターゲットへのベクトル
-			Vector3 toTarget = targetPos - owner->GetPos();
-			//正規化
-			toTarget = toTarget.Normalize();
-			//近くまで移動
-			rb->SetPos(targetPos + (toTarget * -target->GetRadius()));
-		}
 	}
 	//ジャンプ中なら
 	else if (isJump)
