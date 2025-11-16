@@ -102,13 +102,6 @@ void EnemyStateAttack::Update()
 	//アニメーションが終了したら
 	if (model->IsFinishAnim())
 	{
-		//もしBoss2なら
-		if (std::dynamic_pointer_cast<Boss2>(owner))
-		{
-			//待機
-			ChangeState(std::make_shared<Boss2StateIdle>(m_pOwner));
-			return;
-		}
 		//待機
 		ChangeState(std::make_shared<EnemyStateIdle>(m_pOwner));
 		return;

@@ -1,4 +1,5 @@
 #include "Boss2StateIdle.h"
+#include "Boss2StateAttack.h"
 #include "../EnemyStateAttack.h"
 #include "../EnemyStateDeath.h"
 #include "../EnemyBase.h"
@@ -55,7 +56,7 @@ void Boss2StateIdle::Update()
 			if (attackData)
 			{
 				//UŒ‚ó‘Ô‚Ö
-				ChangeState(std::make_shared<EnemyStateAttack>(m_pOwner, attackData));
+				ChangeState(std::make_shared<Boss2StateAttack>(m_pOwner, attackData));
 				return;
 			}
 		}

@@ -153,6 +153,7 @@
     <ClCompile Include="Game\Actor\Character\Enemy\Boss1\Boss1.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\Boss2\Boss2.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\Boss2\Boss2Arm.cpp" />
+    <ClCompile Include="Game\Actor\Character\Enemy\Boss2\Boss2StateAttack.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\Boss2\Boss2StateIdle.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyBase.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyManager.cpp" />
@@ -279,6 +280,7 @@
     <ClInclude Include="Game\Actor\Character\Enemy\Boss1\Boss1.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\Boss2\Boss2.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\Boss2\Boss2Arm.h" />
+    <ClInclude Include="Game\Actor\Character\Enemy\Boss2\Boss2StateAttack.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\Boss2\Boss2StateIdle.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyBase.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyManager.h" />

@@ -17,18 +17,18 @@ EnemyBulletAttack::~EnemyBulletAttack()
 
 void EnemyBulletAttack::Draw() const
 {
-//#if _DEBUG
-//	if (!m_isActive)return;
-//	auto color = 0x888888;
-//	//‰ó‚¹‚é‚È‚ç
-//	if (m_isDestructible)
-//	{
-//		color = 0xff0000;
-//	}
-//	auto coll = std::dynamic_pointer_cast<SphereCollider>(m_collisionData);
-//	DrawSphere3D(m_rb->m_pos.ToDxLibVector(),
-//		coll->GetRadius(), 16, color, color, true);
-//#endif
+#if _DEBUG
+	if (!m_isActive)return;
+	auto color = 0x888888;
+	//‰ó‚¹‚é‚È‚ç
+	if (m_isDestructible)
+	{
+		color = 0xff0000;
+	}
+	auto coll = std::dynamic_pointer_cast<SphereCollider>(m_collisionData);
+	DrawSphere3D(m_rb->m_pos.ToDxLibVector(),
+		coll->GetRadius(), 16, color, color, true);
+#endif
 	
 }
 
