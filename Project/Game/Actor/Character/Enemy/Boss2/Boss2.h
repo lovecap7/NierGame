@@ -17,6 +17,17 @@ public:
 	void Complete() override;
 	//I—¹ˆ—
 	void End()override;
+
+	//˜r‚ª”j‰ó‚³‚ê‚½‚©
+	bool IsDestroyedRightArm() { return m_rightArm.expired(); };
+	bool IsDestroyedLeftArm() { return m_leftArm.expired(); };
+
+	enum class ArmIndex : int
+	{
+		RightArm = -1,
+		LeftArm = -2,
+	};
+
 private:
 	//ƒA[ƒ€‰Šú‰»
 	void InitArm(CSVDataLoader& csvLoader, std::vector<std::wstring>& pathData);

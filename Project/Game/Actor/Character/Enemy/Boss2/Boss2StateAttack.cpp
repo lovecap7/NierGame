@@ -80,59 +80,81 @@ void Boss2StateAttack::CreateAttack(std::shared_ptr<EnemyBase> owner)
 {
 	if (!m_attackData)return;
 	std::shared_ptr<AttackBase> attack;
-	//UŒ‚ì¬
-	if (m_attackData->GetAttackType() == AttackData::AttackType::Sword)
+
+	//˜r‚É‚æ‚éUŒ‚‚Ìê‡
+	int armIndex = m_attackData->GetParam4();
+	//UŒ‚‚ª”­“®‚·‚é‚©‚ğƒ`ƒFƒbƒN
+	bool isAttackable = true;
+	//¶˜r
+	if (armIndex == static_cast<int>(Boss2::ArmIndex::LeftArm))
 	{
-		attack = std::make_shared<SwordAttack>(m_attackData, owner);
+		//˜r‚ª‚ ‚é‚È‚çUŒ‚‰Â”\
+		isAttackable = !std::dynamic_pointer_cast<Boss2>(owner)->IsDestroyedLeftArm();
 	}
-	else if (m_attackData->GetAttackType() == AttackData::AttackType::AOE)
+	//‰E˜r
+	else if (armIndex == static_cast<int>(Boss2::ArmIndex::RightArm))
 	{
-		attack = std::make_shared<AOEAttack>(m_attackData, owner);
+		//˜r‚ª‚ ‚é‚È‚çUŒ‚‰Â”\
+		isAttackable = !std::dynamic_pointer_cast<Boss2>(owner)->IsDestroyedRightArm();
 	}
-	else if (m_attackData->GetAttackType() == AttackData::AttackType::Bullet)
+
+	//UŒ‚‚Å‚«‚é‚È‚ç
+	if (isAttackable)
 	{
-		attack = std::make_shared<EnemyBulletAttack>(m_attackData, owner);
-		//’e‚Ì‰ŠúˆÊ’u‚Æ•ûŒü‚ğİ’è
-		auto bulletAttack = std::dynamic_pointer_cast<EnemyBulletAttack>(attack);
-		auto model = owner->GetModel();
-
-		//”­ËÀ•W
-		Vector3 bulletPos = MV1GetFramePosition(model->GetModelHandle(), static_cast<int>(m_attackData->GetParam1()));
-		bulletAttack->SetPos(bulletPos);
-
-		//ƒ‚ƒfƒ‹‚ÌŒü‚«
-		Vector3 bulletDir = model->GetDir();
-
-		//ƒ^[ƒQƒbƒg‚ª‚¢‚é‚Æ‚«
-		if (owner->GetTargetInfo().m_isFound)
+		//UŒ‚ì¬
+		if (m_attackData->GetAttackType() == AttackData::AttackType::Sword)
 		{
-			auto player = std::dynamic_pointer_cast<Player>(owner->GetTargetInfo().m_pTarget.lock());
-			Vector3 targetDir = player->GetCenterPos() - bulletPos;
-			if (targetDir.SqMagnitude() > 0.0f)
+			attack = std::make_shared<SwordAttack>(m_attackData, owner);
+		}
+		else if (m_attackData->GetAttackType() == AttackData::AttackType::AOE)
+		{
+			attack = std::make_shared<AOEAttack>(m_attackData, owner);
+		}
+		else if (m_attackData->GetAttackType() == AttackData::AttackType::Bullet)
+		{
+			attack = std::make_shared<EnemyBulletAttack>(m_attackData, owner);
+			//’e‚Ì‰ŠúˆÊ’u‚Æ•ûŒü‚ğİ’è
+			auto bulletAttack = std::dynamic_pointer_cast<EnemyBulletAttack>(attack);
+			auto model = owner->GetModel();
+
+			//”­ËÀ•W
+			Vector3 bulletPos = MV1GetFramePosition(model->GetModelHandle(), static_cast<int>(m_attackData->GetParam1()));
+			bulletAttack->SetPos(bulletPos);
+
+			//ƒ‚ƒfƒ‹‚ÌŒü‚«
+			Vector3 bulletDir = model->GetDir();
+
+			//ƒ^[ƒQƒbƒg‚ª‚¢‚é‚Æ‚«
+			if (owner->GetTargetInfo().m_isFound)
 			{
-				targetDir = targetDir.Normalize();
+				auto player = std::dynamic_pointer_cast<Player>(owner->GetTargetInfo().m_pTarget.lock());
+				Vector3 targetDir = player->GetCenterPos() - bulletPos;
+				if (targetDir.SqMagnitude() > 0.0f)
+				{
+					targetDir = targetDir.Normalize();
+				}
+				bulletDir = targetDir;
 			}
-			bulletDir = targetDir;
+			//³‹K‰»
+			if (bulletDir.SqMagnitude() > 0.0f)
+			{
+				bulletDir = bulletDir.Normalize();
+			}
+			//Šp“x‚ğƒ‰ƒ“ƒ_ƒ€‚Å‰ñ“]
+			bulletDir = Quaternion::AngleAxis(static_cast<float>(MyMath::GetRand(-kBulletAngle, kBulletAngle)) * MyMath::DEG_2_RAD, Vector3::Up().Cross(bulletDir)) * bulletDir;
+			bulletDir = Quaternion::AngleAxis(static_cast<float>(MyMath::GetRand(-kBulletAngle, kBulletAngle)) * MyMath::DEG_2_RAD, Vector3::Up()) * bulletDir;
+
+			//ˆÚ“®
+			bulletAttack->SetMoveVec(bulletDir * m_attackData->GetParam2());
+
+			//‰ó‚ê‚é‚©
+			bulletAttack->SetIsDestructible(m_attackData->GetParam3() != 0.0f);
+
+			//’e‚ğ‘Å‚Á‚½
+			m_isShotBullet = true;
 		}
-		//³‹K‰»
-		if (bulletDir.SqMagnitude() > 0.0f)
-		{
-			bulletDir = bulletDir.Normalize();
-		}
-		//Šp“x‚ğƒ‰ƒ“ƒ_ƒ€‚Å‰ñ“]
-		bulletDir = Quaternion::AngleAxis(static_cast<float>(MyMath::GetRand(-kBulletAngle, kBulletAngle)) * MyMath::DEG_2_RAD, Vector3::Up().Cross(bulletDir)) * bulletDir;
-		bulletDir = Quaternion::AngleAxis(static_cast<float>(MyMath::GetRand(-kBulletAngle, kBulletAngle)) * MyMath::DEG_2_RAD, Vector3::Up()) * bulletDir;
-
-		//ˆÚ“®
-		bulletAttack->SetMoveVec(bulletDir * m_attackData->GetParam2());
-
-		//‰ó‚ê‚é‚©
-		bulletAttack->SetIsDestructible(m_attackData->GetParam3() != 0.0f);
-
-		//’e‚ğ‘Å‚Á‚½
-		m_isShotBullet = true;
+		owner->SetAttack(attack);
+		m_pAttack = attack;
 	}
-	owner->SetAttack(attack);
-	m_pAttack = attack;
 	m_isAppearedAttack = true;
 }

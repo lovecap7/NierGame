@@ -173,7 +173,7 @@ void Boss2::InitArm(CSVDataLoader& csvLoader, std::vector<std::wstring>& pathDat
 		charaStatus->SetAR(armData->GetArmor());
 		if (armData->GetName() == L"Right")
 		{
-			actorData->SetActorID(-1);
+			actorData->SetActorID(static_cast<int>(ArmIndex::RightArm));
 			auto rightArm = std::make_shared<Boss2Arm>(actorData, charaStatus, m_pActorManager);
 			rightArm->SetArmIndex(m_model->GetModelHandle(), armData->GetStartIndex(), armData->GetEndIndex());
 			m_rightArm = rightArm;
@@ -181,7 +181,7 @@ void Boss2::InitArm(CSVDataLoader& csvLoader, std::vector<std::wstring>& pathDat
 		}
 		else if (armData->GetName() == L"Left")
 		{
-			actorData->SetActorID(-2);
+			actorData->SetActorID(static_cast<int>(ArmIndex::LeftArm));
 			auto leftArm = std::make_shared<Boss2Arm>(actorData, charaStatus, m_pActorManager);
 			leftArm->SetArmIndex(m_model->GetModelHandle(), armData->GetStartIndex(), armData->GetEndIndex());
 			m_leftArm = leftArm;

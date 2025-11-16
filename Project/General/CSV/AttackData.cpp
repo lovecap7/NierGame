@@ -3,7 +3,7 @@
 
 namespace
 {
-	constexpr int kDataNum = 25;
+	constexpr int kDataNum = 26;
 }
 
 AttackData::AttackData():
@@ -26,6 +26,7 @@ AttackData::AttackData():
 	m_param1(0.0f),
 	m_param2(0.0f),
 	m_param3(0.0f),
+	m_param4(0.0f),
 	m_moveSpeed(0.0f),
 	m_moveFrame(0),
 	m_attackOriginPosType(AttackOriginPosType::Owner),
@@ -54,6 +55,7 @@ AttackData::AttackData(std::shared_ptr<CSVData> data):
 	m_param1(0.0f),
 	m_param2(0.0f),
 	m_param3(0.0f),
+	m_param4(0.0f),
 	m_attackOriginPosType(AttackOriginPosType::Owner),
 	m_hitEffectPath(L""),
 	m_attackEffectPath(L"")
@@ -146,4 +148,5 @@ void AttackData::Conversion()
 	m_param1 = stof(m_data[22]);
 	m_param2 = stof(m_data[23]);
 	m_param3 = stof(m_data[24]);
+	m_param4 = stof(m_data[25]);
 }

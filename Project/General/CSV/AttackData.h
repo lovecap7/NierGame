@@ -96,7 +96,8 @@ public:
 	float GetParam1()const { return m_param1; };
 	float GetParam2()const { return m_param2; };
 	float GetParam3()const { return m_param3; };
-	
+	float GetParam4()const { return m_param4; };
+
 private:
 	//•ÏŠ·
 	void Conversion() override;
@@ -171,6 +172,7 @@ private:
 	float m_param1;
 	float m_param2;
 	float m_param3;
+	float m_param4;
 
 };
 

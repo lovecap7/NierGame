@@ -27,7 +27,7 @@ void EnemyBulletAttack::Draw() const
 	}
 	auto coll = std::dynamic_pointer_cast<SphereCollider>(m_collisionData);
 	DrawSphere3D(m_rb->m_pos.ToDxLibVector(),
-		coll->GetRadius(), 16, color, color, true);
+		coll->GetRadius(), 16, color, color, false);
 #endif
 	
 }
