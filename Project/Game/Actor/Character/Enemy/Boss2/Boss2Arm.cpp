@@ -99,6 +99,8 @@ void Boss2Arm::End()
 {
 	//“o˜^‰ğœ
 	Collidable::End();
+	MV1SetFrameOpacityRate(m_modelHandle, m_startFrameIndex, 0.0f);
+	MV1SetFrameOpacityRate(m_modelHandle, m_endFrameIndex, 0.0f);
 }
 
 void Boss2Arm::SetArmIndex(int modelHandle, int startIndex, int endIndex)

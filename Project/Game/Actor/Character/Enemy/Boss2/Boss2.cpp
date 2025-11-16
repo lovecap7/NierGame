@@ -112,7 +112,6 @@ void Boss2::Update()
 	UpdateLockOnViewPos();
 	//–Ú‚ÌˆÊ’uXV
 	UpdateEyeEffect();
-
 	
 }
 
