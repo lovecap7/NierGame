@@ -78,6 +78,7 @@ void Boss2Arm::Update()
 	m_rb->SetVec(Vector3::Zero());
 	//ロックオンの位置
 	UpdateLockOnViewPos();
+	
 }
 
 void Boss2Arm::Complete()
@@ -99,8 +100,7 @@ void Boss2Arm::End()
 {
 	//登録解除
 	Collidable::End();
-	MV1SetFrameOpacityRate(m_modelHandle, m_startFrameIndex, 0.0f);
-	MV1SetFrameOpacityRate(m_modelHandle, m_endFrameIndex, 0.0f);
+	
 }
 
 void Boss2Arm::SetArmIndex(int modelHandle, int startIndex, int endIndex)

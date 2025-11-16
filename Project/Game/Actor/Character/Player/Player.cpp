@@ -146,7 +146,6 @@ void Player::Init()
 	m_avoidColl->Init();
 }
 
-
 void Player::Update()
 {
 	//“ü—Í‚ÌŽæ“¾
@@ -160,8 +159,6 @@ void Player::Update()
 		SearchTarget(input, camera,actorM->GetEnemyManager()->GetEnemys());
 	}
 	
-
-
 #if _DEBUG
 	if (input.IsTrigger("FullRecovery"))
 	{
