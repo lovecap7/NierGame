@@ -1,8 +1,39 @@
 ﻿名前,ID,アクタータイプ,座標X,座標Y,座標Z,回転X,回転Y,回転Z,大きさX,大きさY,大きさZ,モデルのパス,優先度,ゲームタグ,当たり判定無視,トリガー,重力を受ける,コリジョンの半径,コリジョンの高さ,パスをまとめたパス
-DBK_Concete_Floor_Full,4,Stage,15,-1,-5.5,2.504478E-06,0,0,10,5,3.5,Stage/DBK_Concete_Floor_Full,Static,Object,1,1,0,0,0,None
-Plane,9,Stage,0,0,0,0,0,0,3,1,1,Collision/Plane,Static,Object,0,0,0,0,0,None
-Plane,7,Stage,0,30,-5,0,90,90,10,1,3,Collision/Plane,Static,Object,0,0,0,0,0,None
-Plane,11,Stage,0,30,5,90,180,0,3,1,10,Collision/Plane,Static,Object,0,0,0,0,0,None
-Plane,5,Stage,-15,30,0,90,90,0,2,1,10,Collision/Plane,Static,Object,0,0,0,0,0,None
-Plane,10,Stage,15,30,0,90,270,0,2,1,10,Collision/Plane,Static,Object,0,0,0,0,0,None
-Plane,8,Stage,0,-11,2.5,0,0,0,0,0,0,Collision/Plane,Static,Object,1,1,0,0,0,None
+Plane,38,Stage,0,-11,2.5,0,0,0,3,1,1.5,Collision/Plane,Static,Object,1,1,0,0,0,None
+Plane,41,Stage,14.5,10.12,2.62,90,270,0,3,1,3,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane,40,Stage,-14.5,10.12,2.96,90,90,0,3,1,3,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane,36,Stage,0,10.12,9.5,90,180,0,5,1,3,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane,39,Stage,0,10,-5,0,90,90,3,1,5,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane,42,Stage,0,0,2.5,0,0,0,3,1,1.5,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane (1),12,Stage,0,9,-87.92,0,0,0,3,1,15,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane (2),11,Stage,45.58,9,-123,0,90,0,3,1,6.5,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane (3),8,Stage,25,18,-136.8,90,0,0,10,1,10,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane (4),7,Stage,3.6,55,-109.5,90,180,0,5,1,3,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane (5),6,Stage,-15,37,-131,90,90,0,5,1,6,Collision/Plane,Static,Object,0,0,0,0,0,None
+DBK_Concete_Floor_Full,32,Stage,15,-1,-5,2.504478E-06,0,0,10,5,5,Stage/DBK_Concete_Floor_Full,Static,Object,1,1,0,0,0,None
+DBK_Concete_Floor_Full (1),31,Stage,15,8,-78.51,2.504478E-06,0,0,10,5,20,Stage/DBK_Concete_Floor_Full,Static,Object,1,1,0,0,0,None
+DBK_Concete_Floor_Full (2),30,Stage,15,8,-136.8,2.504478E-06,0,0,10,5,20,Stage/DBK_Concete_Floor_Full,Static,Object,1,1,0,0,0,None
+DBK_Concete_Floor_Full (3),27,Stage,15,8,-136.8,0,90,0,10,5,20,Stage/DBK_Concete_Floor_Full,Static,Object,1,1,0,0,0,None
+DBK_Concete_Floor_Full (4),26,Stage,75,8,-136.8,270,0,0,30,5,20,Stage/DBK_Concete_Floor_Full,Static,Object,1,1,0,0,0,None
+DBK_Concete_Floor_Full (6),17,Stage,28.4,40,-136.8,0,0,0,15,10,10,Stage/DBK_Concete_Floor_Full,Static,Object,1,1,0,0,0,None
+DBK_Concete_Floor_Full (7),15,Stage,28.4,40,-107.5,270,0,0,15,10,10,Stage/DBK_Concete_Floor_Full,Static,Object,1,1,0,0,0,None
+DBK_Concete_Floor_Full (5),25,Stage,-15,5,-136.8,270,90,0,30,5,10,Stage/DBK_Concete_Floor_Full,Static,Object,1,1,0,0,0,None
+DBK_Concrete_Floor_Side_C,29,Stage,-15,8,-19.32,0,90,0,5,5,5,Stage/DBK_Concrete_Floor_Side_C,Static,Object,1,1,0,0,0,None
+DBK_Concrete_Floor_Side_C (1),28,Stage,0,8,-19.32,0,90,0,5,5,5,Stage/DBK_Concrete_Floor_Side_C,Static,Object,1,1,0,0,0,None
+DBK_Concrete_Wall_90_B,24,Stage,-15,5,-47,0,90,0,10,10,5,Stage/DBK_Concrete_Wall_90_B,Static,Object,1,1,0,0,0,None
+DBK_Concrete_Wall_Side_B,23,Stage,-15,34.32,-136.95,0,90,0,20,11,5,Stage/DBK_Concrete_Wall_Side_B,Static,Object,1,1,0,0,0,None
+DBK_Concrete_Wall_Tile_C,22,Stage,75,0,-105,0,0,0,20,20,20,Stage/DBK_Concrete_Wall_Tile_C,Static,Object,1,1,0,0,0,None
+DBK_Concrete_Wall_Tile_C (2),20,Stage,12.8,0,-45.3,0,270,0,20,20,20,Stage/DBK_Concrete_Wall_Tile_C,Static,Object,1,1,0,0,0,None
+DBK_Concrete_Wall_Tile_C (1),21,Stage,75,0,-105,0,270,0,20,20,20,Stage/DBK_Concrete_Wall_Tile_C,Static,Object,1,1,0,0,0,None
+DBK_Concrete_Pillar_B,19,Stage,15.46,8.86,-106.81,2.504478E-06,0,0,11,11,11,Stage/DBK_Concrete_Pillar_B,Static,Object,1,1,0,0,0,None
+DBK_Concrete_Floor_90_A,18,Stage,15,40,-121.5,2.504478E-06,0,0,10,10,10,Stage/DBK_Concrete_Floor_90_A,Static,Object,1,1,0,0,0,None
+DBK_Concrete_Floor_90_A (1),16,Stage,20.9,40,-136.9,0,90,0,10,10,10,Stage/DBK_Concrete_Floor_90_A,Static,Object,1,1,0,0,0,None
+DBK_Concrete_Pillar_B (1),14,Stage,-13,6,-110,2.504478E-06,0,0,11,11,11,Stage/DBK_Concrete_Pillar_B,Static,Object,1,1,0,0,0,None
+DBK_Concrete_Pillar_B (2),13,Stage,-13,35,-110,2.504478E-06,0,0,11,11,11,Stage/DBK_Concrete_Pillar_B,Static,Object,1,1,0,0,0,None
+Cube,10,Stage,45,14.25,-107,0,0,0,60,50,4,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube (4),3,Stage,15.2,14.25,-79.6,0,90,0,60,50,5,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube (5),2,Stage,-17.5,20,-71.58,0,90,0,80,30,5,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube (6),1,Stage,-17.5,11.56,-27.25,0,90,0,20,10,5,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube (2),5,Stage,5.5,40,-121.9,90,0,0,60,30,4,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube (3),4,Stage,40.84,40,-129.62,90,0,0,20,15,4,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube (1),9,Stage,77,14.25,-124.96,0,90,0,40,50,4,Collision/Cube,Static,Object,0,0,0,0,0,None
