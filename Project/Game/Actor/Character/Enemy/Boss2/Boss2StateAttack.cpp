@@ -14,7 +14,10 @@
 
 namespace
 {
+	//弾のばらつき
 	constexpr int kBulletAngle = 10;
+	//トリガー判定に変換
+	constexpr int kTriggerFrame = 280;
 }
 
 Boss2StateAttack::Boss2StateAttack(std::weak_ptr<Actor> enemy, std::shared_ptr<AttackData> attackData):
@@ -24,18 +27,27 @@ Boss2StateAttack::Boss2StateAttack(std::weak_ptr<Actor> enemy, std::shared_ptr<A
 
 Boss2StateAttack::~Boss2StateAttack()
 {
+	//判定無効
+	if (m_pOwner.expired())return;
+	auto owner = std::dynamic_pointer_cast<Boss2>(m_pOwner.lock());
+	owner->EnableTriggerArm();
 }
 
 void Boss2StateAttack::Init()
 {
 	//次の状態を自分の状態を入れる
 	ChangeState(shared_from_this());
+
+	//判定有効
+	if (m_pOwner.expired())return;
+	auto owner = std::dynamic_pointer_cast<Boss2>(m_pOwner.lock());
+	owner->DisableTriggerArm();
 }
 
 void Boss2StateAttack::Update()
 {
 	if (m_pOwner.expired())return;
-	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());
+	auto owner = std::dynamic_pointer_cast<Boss2>(m_pOwner.lock());
 
 	//強制待機状態へ
 	if (m_isWait)
@@ -65,6 +77,12 @@ void Boss2StateAttack::Update()
 	UpdateMove(owner, model);
 	//攻撃位置更新
 	UpdateAttackPos(owner);
+
+	//終了数フレーム前にトリガー判定
+	if (m_frame >= kTriggerFrame)
+	{
+		owner->EnableTriggerArm();
+	}
 
 	//アニメーションが終了したら
 	if (model->IsFinishAnim())

@@ -22,6 +22,10 @@ public:
 	bool IsDestroyedRightArm() { return m_rightArm.expired(); };
 	bool IsDestroyedLeftArm() { return m_leftArm.expired(); };
 
+	//˜r‚ÌƒgƒŠƒK[‰»
+	void EnableTriggerArm();
+	void DisableTriggerArm();
+
 	enum class ArmIndex : int
 	{
 		RightArm = -1,

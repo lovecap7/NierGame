@@ -172,6 +172,32 @@ void Boss2::End()
 	}
 }
 
+void Boss2::EnableTriggerArm()
+{
+	//トリガー判定有効
+	if (!m_rightArm.expired())
+	{
+		m_rightArm.lock()->EnableTrigger();
+	}
+	if (!m_leftArm.expired())
+	{
+		m_leftArm.lock()->EnableTrigger();
+	}
+}
+
+void Boss2::DisableTriggerArm()
+{
+	//トリガー判定無効
+	if (!m_rightArm.expired())
+	{
+		m_rightArm.lock()->DisableTrigger();
+	}
+	if (!m_leftArm.expired())
+	{
+		m_leftArm.lock()->DisableTrigger();
+	}
+}
+
 void Boss2::InitArm(CSVDataLoader& csvLoader, std::wstring pathData)
 {
 	auto armStrDatas = csvLoader.LoadCSV(pathData.c_str());

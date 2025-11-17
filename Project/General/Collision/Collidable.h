@@ -91,6 +91,10 @@ public:
 	//“–‚½‚è”»’è‚ğ‚·‚é/‚µ‚È‚¢
 	void EnableColl() { m_isThrough = false; };
 	void DisableColl() { m_isThrough = true; };
+
+	//ƒgƒŠƒK[
+	void EnableTrigger() { m_isTrigger = true; };
+	void DisableTrigger() { m_isTrigger = false; };
 private:
 	void CreateCollider(Shape shape);
 	//Physics‚ªCollidable‚ğ©—R‚ÉŠÇ—‚Å‚«‚é‚æ‚¤‚É
