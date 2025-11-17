@@ -89,6 +89,7 @@ public:
 	float GetSearchRange()const { return m_searchRange; };
 	float GetSearchAngle()const { return m_searchAngle; };
 	float GetMeleeAttackRange()const { return m_meleeAttackRange; };
+	void SetMeleeAttackRange(float meleeAttackRange){  m_meleeAttackRange = meleeAttackRange; };
 
 	//ƒsƒ“ƒ`
 	bool IsPinchHP()const;

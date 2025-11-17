@@ -16,7 +16,8 @@ public:
 	void End()override;
 
 	//フレームインデックスのセット
-	void SetArmIndex(int modelHandle, int startIndex, int endIndex);
+	void SetArmIndex(int startIndex, int endIndex);
+	void SetArmModel(int modelHandle);
 private:
 	//腕を構成するフレームインデックス
 	int m_startFrameIndex;

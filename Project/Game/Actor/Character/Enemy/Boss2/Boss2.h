@@ -30,11 +30,23 @@ public:
 
 private:
 	//ƒA[ƒ€‰Šú‰»
-	void InitArm(CSVDataLoader& csvLoader, std::vector<std::wstring>& pathData);
+	void InitArm(CSVDataLoader& csvLoader, std::wstring pathData);
+	//˜r‚Ìó‘Ô‚É‡‚í‚¹‚½ƒ‚ƒfƒ‹‚ğ‰Šú‰»
+	void InitArmStateModel(CSVDataLoader& csvLoader, std::wstring pathData);
+	//˜r‚Ìó‘Ô
+	void CheckArmState();
 private:
 	//˜r
 	std::weak_ptr<Boss2Arm> m_leftArm;
 	std::weak_ptr<Boss2Arm> m_rightArm;
 	std::shared_ptr<CharaStatusData> m_charaStatusData;
+
+	//˜r‚Ìó‘Ô‚É‡‚í‚¹‚½ƒ‚ƒfƒ‹
+	int m_noRightHandle;
+	int m_noLeftHandle;
+	int m_noBothHandle;
+	bool m_isInitNoRight;
+	bool m_isInitNoLeft;
+	bool m_isInitNoBoth;
 };
 

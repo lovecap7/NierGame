@@ -29,7 +29,7 @@ public:
 	void SetMatrix(Matrix4x4 mat);
 	void ResetColor();
 	//モデル変更
-	void SetModel(int modelHandle);
+	void SetModelHandle(int modelHandle);
 	//ゲッター
 	Vector3 GetPos() const { return m_pos; };
 	Vector3 GetScale() const { return m_scale; };

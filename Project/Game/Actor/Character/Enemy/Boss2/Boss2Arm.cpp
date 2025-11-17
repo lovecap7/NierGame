@@ -100,15 +100,21 @@ void Boss2Arm::End()
 {
 	//“o˜^‰ğœ
 	Collidable::End();
-	
+	//íœ
+	m_isDelete = true;
 }
 
-void Boss2Arm::SetArmIndex(int modelHandle, int startIndex, int endIndex)
+void Boss2Arm::SetArmIndex(int startIndex, int endIndex)
 {
-	m_modelHandle = modelHandle;
 	m_startFrameIndex = startIndex;
 	m_endFrameIndex = endIndex;
 }
+
+void Boss2Arm::SetArmModel(int modelHandle)
+{
+	m_modelHandle = modelHandle;
+}
+
 
 void Boss2Arm::UpdateArmPos()
 {

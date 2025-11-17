@@ -241,7 +241,7 @@ void Model::ResetColor()
 	DxLib::MV1SetAmbColorScale(m_modelHandle, color);
 }
 
-void Model::SetModel(int modelHandle)
+void Model::SetModelHandle(int modelHandle)
 {
 	//ƒ‚ƒfƒ‹‚Ìíœ
 	End();
