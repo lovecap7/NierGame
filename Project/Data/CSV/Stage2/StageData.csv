@@ -1,8 +1,8 @@
 ﻿名前,ID,アクタータイプ,座標X,座標Y,座標Z,回転X,回転Y,回転Z,大きさX,大きさY,大きさZ,モデルのパス,優先度,ゲームタグ,当たり判定無視,トリガー,重力を受ける,コリジョンの半径,コリジョンの高さ,パスをまとめたパス
-DBK_Concete_Floor_Full,10,Stage,15,-1,-5,2.504478E-06,0,0,10,5,5,Stage/DBK_Concete_Floor_Full,Static,Object,1,1,0,0,0,None
-Plane,2,Stage,0,0,2.5,0,0,0,3,1,1.5,Collision/Plane,Static,Object,0,0,0,0,0,None
-Plane,3,Stage,0,10,-5,0,90,90,3,1,5,Collision/Plane,Static,Object,0,0,0,0,0,None
-Plane,4,Stage,0,10.12,9.5,90,180,0,5,1,3,Collision/Plane,Static,Object,0,0,0,0,0,None
-Plane,5,Stage,-14.5,10.12,0.26,90,90,0,5,1,3,Collision/Plane,Static,Object,0,0,0,0,0,None
-Plane,6,Stage,14.5,10.12,0.26,90,270,0,5,1,3,Collision/Plane,Static,Object,0,0,0,0,0,None
-Plane,1,Stage,0,-11,2.5,0,0,0,3,1,1.5,Collision/Plane,Static,Object,1,1,0,0,0,None
+DBK_Concete_Floor_Full,8,Stage,15,-1,-5.5,2.504478E-06,0,0,10,5,3.5,Stage/DBK_Concete_Floor_Full,Static,Object,1,1,0,0,0,None
+Plane,11,Stage,0,0,0,0,0,0,3,1,1,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane,4,Stage,0,30,-5,0,90,90,10,1,3,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane,3,Stage,0,30,5,90,180,0,3,1,10,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane,2,Stage,-15,30,0,90,90,0,2,1,10,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane,1,Stage,15,30,0,90,270,0,2,1,10,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane,10,Stage,0,-11,2.5,0,0,0,0,0,0,Collision/Plane,Static,Object,1,1,0,0,0,None

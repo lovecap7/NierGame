@@ -47,5 +47,6 @@ void PlayerStateHit::Update()
 		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
 		return;
 	}
-	//owner->Get
+	//Œ¸‘¬
+	owner->GetRb()->SpeedDown();
 }

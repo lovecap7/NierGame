@@ -86,6 +86,8 @@ void EnemyStateHit::Update()
 			return;
 		}
 	}
+	//Œ¸‘¬
+	owner->GetRb()->SpeedDown();
 }
 
 void EnemyStateHit::MinUpVecY(std::shared_ptr<EnemyBase> owner)

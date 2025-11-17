@@ -41,9 +41,9 @@ public:
 
 	//体力
 	int GetMaxHP()const { return m_maxHp; };
-	void SetMaxHP(int maxHP) { m_maxHp = maxHP; };
+	void SetMaxHP(unsigned int maxHP) { m_maxHp = maxHP; };
 	int GetNowHP()const { return m_nowHp; };
-	void SetNowHP(int nowHP) { m_nowHp = nowHP; };
+	void SetNowHP(unsigned int nowHP) { m_nowHp = nowHP; };
 	float GetHPRate()const;
 
 	//攻撃力
@@ -96,8 +96,8 @@ public:
 
 private:
 	//ステータス
-	int					m_maxHp;	//最大体力
-	int					m_nowHp;	//現在体力
+	unsigned int		m_maxHp;	//最大体力
+	unsigned int		m_nowHp;	//現在体力
 	int					m_at;		//攻撃力
 	int					m_df;		//防御力
 	float				m_ms;		//移動速度

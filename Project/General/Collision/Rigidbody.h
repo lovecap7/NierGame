@@ -25,7 +25,7 @@ public:
 	//次の座標
 	Vector3 GetNextPos() const;
 	//スピードダウン
-	void SpeedDown(float decRate);
+	void SpeedDown(float decRate = 0.8f);
 	//自分のタイムスケールを使うか
 	void SetIsMyTimeScale(bool isUse) { m_isMyTimeScale = isUse; };
 	bool IsMyTimeScale() const { return m_isMyTimeScale; };

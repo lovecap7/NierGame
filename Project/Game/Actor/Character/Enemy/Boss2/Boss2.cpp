@@ -135,6 +135,7 @@ void Boss2::Update()
 
 void Boss2::Complete()
 {
+	m_rb->SetVec(Vector3::Zero());
 	m_rb->SetPos(m_rb->GetNextPos());
 	Vector3 endPos = m_rb->m_pos;
 	endPos.y += m_actorData->GetCollHeight();
@@ -186,6 +187,7 @@ void Boss2::InitArm(CSVDataLoader& csvLoader, std::wstring pathData)
 		actorData->SetCollRadius(armData->GetRadius());
 		actorData->SetGameTag(GameTag::Enemy);
 		actorData->SetIsTrough(false);
+		actorData->SetIsTrigger(false);
 		actorData->SetPriority(Priority::Static);
 		charaStatus->SetID(m_actorData->GetActorID());
 		charaStatus->SetHP(armData->GetHP());

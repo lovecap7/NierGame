@@ -174,6 +174,13 @@ void Player::Update()
 		//m_charaStatus->SetNowHP(m_charaStatus->GetMaxHP() / 3);
 		m_charaStatus->SetNowHP(0);
 	}
+	if (input.IsTrigger("TargetDeath"))
+	{
+		if (m_targetInfo.m_isFound)
+		{
+			m_targetInfo.m_pTarget.lock()->GetCharaStatus()->OnDamage(99999, 99999, CharaStatus::AttackWeight::Heaviest);
+		}
+	}
 
 	////タイムスケール
 	//if (input.IsTrigger("Y"))

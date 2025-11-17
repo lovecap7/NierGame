@@ -169,12 +169,8 @@ void PlayerCamera::NormalUpdate(Input& input, Vector3& targetPos)
     //理想カメラ位置
     Vector3 nextPos;
     nextPos = targetPos - m_look * m_distance;
-    //当たり判定をするか
-    if (!m_isThrough)
-    {
-        //位置補正
-        nextPos = Physics::GetInstance().GetCameraRatCastNearEndPos(targetPos, nextPos);
-    }
+    //位置補正
+    nextPos = Physics::GetInstance().GetCameraRatCastNearEndPos(targetPos, nextPos);
     //位置確定
     m_cameraPos = Vector3::Lerp(m_cameraPos, nextPos, 0.3f);
     //視点確定

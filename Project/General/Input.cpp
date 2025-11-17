@@ -60,6 +60,7 @@ void Input::Init()
 	m_inputActionMap["GlitchSub"] = { {InputType::kKeyboard,KEY_INPUT_H}};
 	m_inputActionMap["Gray"] = { {InputType::kKeyboard,KEY_INPUT_J}};
 	m_inputActionMap["GraySub"] = { {InputType::kKeyboard,KEY_INPUT_K}};
+	m_inputActionMap["TargetDeath"] = { {InputType::kKeyboard,KEY_INPUT_T}};
 #endif
 
 	//XV‚ğ‚·‚é

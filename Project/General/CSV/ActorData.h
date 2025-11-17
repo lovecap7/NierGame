@@ -48,6 +48,7 @@ public:
 	void SetIsTrough(bool isTrough) {  m_isTrough = isTrough; };
 	//ƒgƒŠƒK[
 	bool IsTrigger()const { return m_isTrigger; };
+	void SetIsTrigger(bool isTrigger) { m_isTrigger = isTrigger; };
 	//d—Í
 	bool IsGravity()const { return m_isGravity; };
 	//”¼Œa
