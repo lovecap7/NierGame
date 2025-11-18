@@ -1,3 +1,30 @@
 ﻿名前,ID,アクタータイプ,座標X,座標Y,座標Z,回転X,回転Y,回転Z,大きさX,大きさY,大きさZ,モデルのパス,優先度,ゲームタグ,当たり判定無視,トリガー,重力を受ける,コリジョンの半径,コリジョンの高さ,パスをまとめたパス
-Player,37,Character,2.8,42.51,-120,0,0,0,1,1,1,Player/Player,Middle,Player,0,0,1,30,100,Player/PlayerPathData
-Boss2,33,Character,0,0,30,0,180,0,20,20,20,Enemy/Boss/Boss2,High,Enemy,0,1,0,1200,1000,Enemy/Boss2/Boss2PathData
+Player,78,Character,0.41,74.06,-186.91,0,0,0,1,1,1,Player/Player,Middle,Player,0,0,1,30,100,Player/PlayerPathData
+Boss2,6,Character,0,0,30,0,180,0,20,20,20,Enemy/Boss/Boss2,High,Enemy,0,1,0,1200,1500,Enemy/Boss2/Boss2PathData
+Robot1,12,Character,22.57141,70.55,-148.1558,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
+Robot1 (3),55,Character,46.12352,70.55,-148.1558,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
+Robot1 (1),60,Character,33.24788,69.57001,-156.4263,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
+Robot1 (4),29,Character,56.8,69.57001,-156.4263,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
+Robot1 (2),21,Character,15.10445,69.57001,-144.4071,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
+Robot1 (5),15,Character,38.65657,69.57001,-144.4071,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
+Robot1,50,Character,17.11,69.00002,-115.02,0,101.4086,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
+Robot1 (1),9,Character,16.75,69.00002,-128.24,0,101.4086,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
+Robot1 (2),65,Character,24.72,69.00002,-125.41,0,101.4086,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
+Robot1 (3),53,Character,25.02,69.00002,-116.69,0,101.4086,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
+Robot1 (4),64,Character,34.26,69.00002,-120.46,0,101.4086,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
+Boss1,14,Character,0.3569452,11.76,-80.4465,0,199.0989,0,2,2,2,Enemy/Boss/Boss1,High,Enemy,0,0,1,400,400,Enemy/Boss1/Boss1PathData
+Robot2,11,Character,-7.641193,11.01,-79.02671,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot2,Middle,Enemy,0,0,1,30,120,Enemy/Robot2/Robot2PathData
+Robot2 (1),32,Character,6.987388,11.51,-80.18283,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot2,Middle,Enemy,0,0,1,30,120,Enemy/Robot2/Robot2PathData
+Robot1,16,Character,25.0163,42.82,-119.4417,0,319.1804,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
+Robot1 (6),26,Character,14.97,42.82,-118.3,0,7.934685,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
+Robot1 (8),30,Character,8.33,42.82,-113.01,0,7.934685,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
+Robot1 (10),54,Character,8.33,42.82,-113.01,0,7.934685,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
+Robot1 (1),62,Character,30.7552,42.85,-126.9427,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
+Robot1 (7),24,Character,13.11368,42.85,-127.5604,0,245.5044,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
+Robot1 (9),5,Character,6.473682,42.85,-122.2704,0,245.5044,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
+Robot1 (11),10,Character,6.473682,42.85,-122.2704,0,245.5044,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
+Robot2,45,Character,15.06085,12.45,-121.597,0,106.0866,0,0.3,0.3,0.3,Enemy/Normal/Robot2,Middle,Enemy,0,0,1,30,120,Enemy/Robot2/Robot2PathData
+Robot2 (1),47,Character,23.67202,12.45,-119.0586,0,106.0866,0,0.3,0.3,0.3,Enemy/Normal/Robot2,Middle,Enemy,0,0,1,30,120,Enemy/Robot2/Robot2PathData
+Robot2 (2),17,Character,28.84859,12.45,-120.2897,0,106.0866,0,0.3,0.3,0.3,Enemy/Normal/Robot2,Middle,Enemy,0,0,1,30,120,Enemy/Robot2/Robot2PathData
+Robot2 (3),36,Character,20.27772,12.45,-127.5447,0,106.0866,0,0.3,0.3,0.3,Enemy/Normal/Robot2,Middle,Enemy,0,0,1,30,120,Enemy/Robot2/Robot2PathData
+Robot2 (4),44,Character,27.48551,12.45,-127.1365,0,106.0866,0,0.3,0.3,0.3,Enemy/Normal/Robot2,Middle,Enemy,0,0,1,30,120,Enemy/Robot2/Robot2PathData

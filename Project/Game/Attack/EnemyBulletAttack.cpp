@@ -45,7 +45,6 @@ void EnemyBulletAttack::OnCollide(const std::shared_ptr<Collidable> other)
 			return;
 		}
 	}
-
 	//’Êí‚Ìˆ—
-	AttackBase::OnCollide(other);
+	BulletAttack::OnCollide(other);
 }

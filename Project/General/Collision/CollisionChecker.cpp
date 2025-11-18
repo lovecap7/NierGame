@@ -321,16 +321,47 @@ bool CollisionChecker::CheckCollSP(const std::shared_ptr<Collidable> collA, cons
 		-1,
 		rbA->GetNextPos().ToDxLibVector(),
 		collDataA->GetRadius());
-	//一つも当たっていないならfalse
-	if (hitDim.HitNum <= 0 || collA->m_isTrigger)
+	//当たっていないなら
+	if (hitDim.HitNum <= 0)
 	{
 		// 検出したプレイヤーの周囲のポリゴン情報を開放する
 		MV1CollResultPolyDimTerminate(hitDim);
-		return false;
+		
+		//連続的衝突判定（Continuous Collision Detection）
+		auto lineHitDim = MV1CollCheck_Line(
+			collDataB->GetModelHandle(),
+			-1,
+			rbA->GetPos().ToDxLibVector(),
+			rbA->GetNextPos().ToDxLibVector()
+		);
+
+		//当たったなら
+		if (lineHitDim.HitFlag)
+		{
+			//CCD判定をした
+			collDataB->SetIsCCD(true);
+
+			//当たり判定に使うので保存
+			collDataB->SetLineHit(lineHitDim);
+
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
-	//当たり判定に使うので保存
-	collDataB->SetHitDim(hitDim);
+	if (collA->m_isTrigger)
+	{
+		// 検出したプレイヤーの周囲のポリゴン情報を開放する
+		MV1CollResultPolyDimTerminate(hitDim);
+	}
+	else
+	{
+		//当たり判定に使うので保存
+		collDataB->SetHitDim(hitDim);
+	}
 
 	return true;
 }
@@ -352,15 +383,10 @@ bool CollisionChecker::CheckCollCP(const std::shared_ptr<Collidable> collA, cons
 		collDataA->GetRadius(),
 		-1);
 
-	if (collA->m_isTrigger)
+	//当たっていないなら
+	if (hitDim.HitNum <= 0)
 	{
 		// 検出したプレイヤーの周囲のポリゴン情報を開放する
-		MV1CollResultPolyDimTerminate(hitDim);
-	}
-	//当たっていないならfalse
-	else if (hitDim.HitNum <= 0)
-	{
-		//検出したプレイヤーの周囲のポリゴン情報を開放する
 		MV1CollResultPolyDimTerminate(hitDim);
 
 		//連続的衝突判定（Continuous Collision Detection）
@@ -407,9 +433,16 @@ bool CollisionChecker::CheckCollCP(const std::shared_ptr<Collidable> collA, cons
 			}
 		}
 	}
-
-	//当たり判定に使うので保存
-	collDataB->SetHitDim(hitDim);
+	if (collA->m_isTrigger)
+	{
+		// 検出したプレイヤーの周囲のポリゴン情報を開放する
+		MV1CollResultPolyDimTerminate(hitDim);
+	}
+	else
+	{
+		//当たり判定に使うので保存
+		collDataB->SetHitDim(hitDim);
+	}
 
 	return true;
 }

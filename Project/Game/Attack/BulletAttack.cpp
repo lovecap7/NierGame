@@ -72,6 +72,12 @@ void BulletAttack::Draw() const
 
 void BulletAttack::OnCollide(const std::shared_ptr<Collidable> other)
 {
+	if (other->GetGameTag() == GameTag::Object)
+	{
+		//“–‚½‚Á‚½ƒtƒ‰ƒO‚ðtrue‚É
+		m_isHit = true;
+		return;
+	}
 	AttackBase::OnCollide(other);
 }
 

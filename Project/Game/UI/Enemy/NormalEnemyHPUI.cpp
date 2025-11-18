@@ -14,6 +14,8 @@ namespace
 	//バーの画像サイズ
 	constexpr float kBarSizeX = 100.0f;
 	constexpr float kBarSizeY = 10.0f;
+	//体力に変動があった場合10秒間表示
+	constexpr int kChangeHPFrame = 60 * 10;
 
 	//背景
 	constexpr float kBackBarSizeX = 102.0f;
@@ -29,7 +31,8 @@ namespace
 
 NormalEnemyHPUI::NormalEnemyHPUI(std::shared_ptr<CharaStatus> charaStatus, std::weak_ptr<EnemyBase> pEnemy) :
 	HPUIBase(charaStatus),
-	m_pEnemy(pEnemy)
+	m_pEnemy(pEnemy),
+	m_changeHPCountFrame(0)
 
 {
 	auto& assetManager = AssetManager::GetInstance();
@@ -53,6 +56,12 @@ void NormalEnemyHPUI::Update()
 	auto enemy = m_pEnemy.lock();
 	if (!enemy->IsActive())return;
 
+	//カウントを減らす
+	if (m_changeHPCountFrame > 0)
+	{
+		--m_changeHPCountFrame;
+	}
+
 	float nowHP = m_playerStatus->GetNowHP();
 	//体力が前のフレームより低かったら
 	if (nowHP < m_beforeNowHP)
@@ -61,6 +70,8 @@ void NormalEnemyHPUI::Update()
 		m_damageFrame = kFluctuationValueFrame;
 		//回復バーは体力に合わせる
 		m_healValueRate = m_playerStatus->GetHPRate();
+		//体力に変動があったので
+		m_changeHPCountFrame = kChangeHPFrame;
 	}
 	else if (nowHP > m_beforeNowHP)
 	{
@@ -68,6 +79,8 @@ void NormalEnemyHPUI::Update()
 		m_healFrame = kFluctuationValueFrame;
 		//回復バーは体力に合わせる
 		m_healValueRate = m_playerStatus->GetHPRate();
+		//体力に変動があったので
+		m_changeHPCountFrame = kChangeHPFrame;
 	}
 	//現在の体力を更新
 	m_beforeNowHP = nowHP;
@@ -93,6 +106,7 @@ void NormalEnemyHPUI::Draw() const
 	if (!enemy->IsActive())return;
 	//カメラの範囲外の時は描画しない
 	if (!m_isDraw)return;
+	if (m_changeHPCountFrame <= 0)return;
 
 	auto backUIPos = m_enemyViewPos;
 	backUIPos.x -= (kBackBarSizeX * 0.5f);

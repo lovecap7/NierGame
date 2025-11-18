@@ -19,6 +19,7 @@ private:
 	std::weak_ptr<EnemyBase> m_pEnemy;
 	//敵の座標
 	Vector3 m_enemyViewPos;
-	
+	//体力の変動があった場合フレームをカウント
+	int m_changeHPCountFrame;
 };
 

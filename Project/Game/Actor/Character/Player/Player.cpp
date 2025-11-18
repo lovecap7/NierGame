@@ -15,6 +15,7 @@
 #include "../../../../General/Input.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/Animator.h"
+#include "../../../../General/Collision/Physics.h"
 #include "../../ActorManager.h"
 #include "../../../Attack/AttackManager.h"
 #include "../../../Camera/PlayerCamera.h"
@@ -596,15 +597,36 @@ void Player::LockOnNearestEnemy(std::shared_ptr<PlayerCamera> camera, const std:
 	std::shared_ptr<EnemyBase> nearestEnemy = nullptr;
 	float minDis = m_charaStatus->GetSearchRange();
 
+	//間に壁があるかをチェックする
+	auto& physics = Physics::GetInstance();
+
 	for (auto enemy : enemys)
 	{
 		if (!enemy->IsActive()) continue;
+		Vector3 dir = (enemy->GetNextPos() - playerPos);
+		auto colls = physics.RayCast(playerPos, enemy->GetNextPos());
 
-		float distance = (enemy->GetNextPos() - playerPos).Magnitude();
-		if (distance < minDis)
+		//間に壁や床があるかをチェック
+		bool isColl = false;
+		for (auto coll : colls)
 		{
-			minDis = distance;
-			nearestEnemy = enemy;
+			if (coll.expired())continue;
+			//間に壁や床があるなら無視
+			if (coll.lock()->GetGameTag() == GameTag::Object)
+			{
+				isColl = true;
+				break;
+			}
+		}
+		//何も間にないならチェック
+		if (!isColl)
+		{
+			float distance = dir.Magnitude();
+			if (distance < minDis)
+			{
+				minDis = distance;
+				nearestEnemy = enemy;
+			}
 		}
 	}
 
