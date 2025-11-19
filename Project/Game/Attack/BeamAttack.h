@@ -4,15 +4,16 @@
 class AttackData;
 class Actor;
 class CharacterBase;
-class SwordAttack :
+class BeamAttack :
     public CapsuleAttackBase
 {
 public:
-    SwordAttack(std::shared_ptr<AttackData> attackData, std::weak_ptr<CharacterBase> pOwner);
-    ~SwordAttack();
-	//更新
-	void Update() override;
+    BeamAttack(std::shared_ptr<AttackData> attackData, std::weak_ptr<CharacterBase> pOwner);
+    ~BeamAttack();
+    //更新
+    void Update() override;
     //描画
     void Draw()const override;
+ 
 };
 

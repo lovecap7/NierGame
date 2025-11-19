@@ -3,3 +3,5 @@ Melee,MeleeAttack
 Melee,MoveAttack
 LongRange,MoveAttack
 LongRange,MissileAttack
+Melee,Beam
+LongRange,Beam

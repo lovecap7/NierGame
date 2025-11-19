@@ -1,17 +1,17 @@
-#include "SwordAttack.h"
+#include "BeamAttack.h"
 #include "../../General/Collision/CapsuleCollider.h"
 #include "../../General/Collision/Rigidbody.h"
 
-SwordAttack::SwordAttack(std::shared_ptr<AttackData> attackData, std::weak_ptr<CharacterBase> pOwner) :
+BeamAttack::BeamAttack(std::shared_ptr<AttackData> attackData, std::weak_ptr<CharacterBase> pOwner) :
 	CapsuleAttackBase(attackData, pOwner)
 {
 }
 
-SwordAttack::~SwordAttack()
+BeamAttack::~BeamAttack()
 {
 }
 
-void SwordAttack::Update()
+void BeamAttack::Update()
 {
 	//äÓíÍÇÃçXêV
 	AttackBase::Update();
@@ -19,7 +19,7 @@ void SwordAttack::Update()
 	CapsuleAttackBase::Update();
 }
 
-void SwordAttack::Draw() const
+void BeamAttack::Draw() const
 {
 #if _DEBUG
 	//è’ìÀîªíË

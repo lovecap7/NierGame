@@ -26,7 +26,8 @@ public:
 		Throw	= 3, //投げもの
 		Punch	= 4, //パンチ
 		AOE		= 5, //範囲ダメージ
-		Missile	= 6	 //ミサイル
+		Missile	= 6, //ミサイル
+		Beam	= 7	 //ビーム
 	};
 	//攻撃タイプ
 	AttackType GetAttackType()const { return m_attackType; };
