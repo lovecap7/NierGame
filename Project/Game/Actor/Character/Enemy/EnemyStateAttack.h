@@ -23,9 +23,9 @@ protected:
 	//多段ヒット攻撃読み込み
 	virtual void ComboAttack(std::shared_ptr<EnemyBase> owner);
 	//攻撃移動更新
-	void UpdateMove(std::shared_ptr<EnemyBase> owner, std::shared_ptr<Model> model);
+	virtual void UpdateMove(std::shared_ptr<EnemyBase> owner, std::shared_ptr<Model> model);
 	//攻撃位置の更新
-	void UpdateAttackPos(std::shared_ptr<EnemyBase> owner);
+	virtual void UpdateAttackPos(std::shared_ptr<EnemyBase> owner);
 protected:
 	//攻撃データ
 	std::shared_ptr<AttackData> m_attackData;

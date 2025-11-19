@@ -1,0 +1,15 @@
+﻿攻撃の名前,多段ヒットか,攻撃タイプ,威力,攻撃の重さ,アーマー,ノックバックの大きさ,上方向の力,発生フレーム,持続フレーム,半径,長さ,前進速度,前進フレーム,アニメーションの名前,次の攻撃の名前,攻撃の基準位置,キャンセルフレーム,ヒットストップフレーム,ヒットストップの揺れ,ヒットエフェクト,攻撃エフェクト,パラメータ1,パラメータ2,パラメータ3,パラメータ4
+MeleeAttack,FALSE,1,50,3,3,50,0,90,10,100,100,0,10,MeleeAttack,None,Owner,80,5,5,None,None,69,68,0,0
+MoveAttack,TRUE,5,50,3,3,50,0,90,10,200,0,20,100,MoveAttack,MoveAttack_2,Owner,80,5,5,None,None,79,0,0,0
+MoveAttack_2,TRUE,5,50,3,3,50,0,90,10,200,0,20,100,MoveAttack,MoveAttack_3,Owner,80,5,5,None,None,79,0,0,0
+MoveAttack_3,TRUE,5,50,3,3,50,0,90,10,200,0,20,100,MoveAttack,MoveAttack_4,Owner,80,5,5,None,None,79,0,0,0
+MoveAttack_4,FALSE,5,50,3,3,50,0,90,10,200,0,20,100,MoveAttack,None,Owner,80,5,5,None,None,79,0,0,0
+MissileAttack,TRUE,6,50,3,3,50,0,90,200,50,0,0,0,Song,MissileAttack_2,Owner,80,5,5,None,Missile,5,20,0.6,60
+MissileAttack_2,TRUE,6,50,3,3,50,0,95,200,50,0,0,0,Song,MissileAttack_3,Owner,80,5,5,None,Missile,5,20,0.5,100
+MissileAttack_3,TRUE,6,50,3,3,50,0,100,200,50,0,0,0,Song,MissileAttack_4,Owner,80,5,5,None,Missile,5,20,0.6,60
+MissileAttack_4,TRUE,6,50,3,3,50,0,105,200,50,0,0,0,Song,MissileAttack_5,Owner,80,5,5,None,Missile,5,20,0.6,80
+MissileAttack_5,TRUE,6,50,3,3,50,0,110,200,50,0,0,0,Song,MissileAttack_6,Owner,80,5,5,None,Missile,5,20,0.6,60
+MissileAttack_6,TRUE,6,50,3,3,50,0,115,200,50,0,0,0,Song,MissileAttack_7,Owner,80,5,5,None,Missile,5,20,0.5,100
+MissileAttack_7,TRUE,6,50,3,3,50,0,120,200,50,0,0,0,Song,MissileAttack_8,Owner,80,5,5,None,Missile,5,20,0.5,100
+MissileAttack_8,TRUE,6,50,3,3,50,0,125,200,50,0,0,0,Song,MissileAttack_9,Owner,80,5,5,None,Missile,5,20,0.6,80
+MissileAttack_9,FALSE,6,50,3,3,50,0,130,200,50,0,0,0,Song,None,Owner,80,5,5,None,Missile,5,20,0.6,60

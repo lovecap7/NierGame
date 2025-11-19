@@ -18,6 +18,7 @@
 #include "Character/Enemy/EnemyManager.h"
 #include "Character/Enemy/Boss1/Boss1.h"
 #include "Character/Enemy/Boss2/Boss2.h"
+#include "Character/Enemy/Boss3/Boss3.h"
 #include "Stage/CheckPoint.h"
 
 
@@ -221,8 +222,13 @@ std::shared_ptr<CharacterBase> ActorManager::CreateChara(GameTag tag, std::share
 		}
 		else if (actorData->GetName() == L"Boss2")
 		{
-			//ボス1
+			//ボス2
 			chara = std::make_shared<Boss2>(actorData, charaStatusData, shared_from_this());
+		}
+		else if (actorData->GetName() == L"Boss3")
+		{
+			//ボス3
+			chara = std::make_shared<Boss3>(actorData, charaStatusData, shared_from_this());
 		}
 		else
 		{

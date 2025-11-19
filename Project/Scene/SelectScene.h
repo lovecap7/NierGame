@@ -26,7 +26,8 @@ private:
 		Tutorial3 = 2,
 		Stage1 = 3,
 		Stage2 = 4,
-		Title = 5,
+		Stage3 = 5,
+		Title = 6,
 	};
 	Menu m_currentMenu = Menu::Tutorial1;
 

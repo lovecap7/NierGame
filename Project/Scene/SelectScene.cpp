@@ -79,6 +79,9 @@ void SelectScene::Update()
 		case Menu::Stage2:
 			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, GetStageNameByIndex(StageIndex::Stage2)));
 			break;
+		case Menu::Stage3:
+			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, GetStageNameByIndex(StageIndex::Stage3)));
+			break;
 		case Menu::Title:
 			m_controller.ChangeScene(std::make_shared<TitleScene>(m_controller));
 			break;
@@ -129,6 +132,9 @@ void SelectScene::Draw()
 			break;
 		case Menu::Stage2:
 			text = L"Stage2";
+			break;
+		case Menu::Stage3:
+			text = L"Stage3";
 			break;
 		case Menu::Title:
 			text = L"Title";

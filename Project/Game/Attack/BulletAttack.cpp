@@ -42,10 +42,8 @@ void BulletAttack::Update()
 		}
 		else
 		{
-			//移動処理
-			m_rb->SetVec(m_moveVec);
-			m_rb->SetPos(m_rb->GetNextPos());
-			m_rb->SetVec(Vector3::Zero());
+			//移動
+			UpdateMove();
 			//エフェクトの更新
 			eff->SetPos(m_rb->GetPos());
 			//描画する
@@ -59,6 +57,7 @@ void BulletAttack::Update()
 		return;
 	}
 }
+
 
 void BulletAttack::Draw() const
 {
@@ -91,4 +90,13 @@ void BulletAttack::Reset(float keepFrame)
 	ResetHitID();
 	//活動
 	m_isActive = true;
+}
+
+
+void BulletAttack::UpdateMove()
+{
+	//移動処理
+	m_rb->SetVec(m_moveVec);
+	m_rb->SetPos(m_rb->GetNextPos());
+	m_rb->SetVec(Vector3::Zero());
 }

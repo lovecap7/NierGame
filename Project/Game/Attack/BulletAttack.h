@@ -22,7 +22,7 @@ public:
     //リセット
     void Reset(float keepFrame);
 
-    //移動方向
+    //移動ベクトル
     void SetMoveVec(Vector3 vec) { m_moveVec = vec; };
 
     //アクティブ
@@ -34,5 +34,9 @@ protected:
 
     //アクティブ(弾の更新と描画を行うか)
     bool m_isActive;
+
+protected:
+    //移動
+    virtual void UpdateMove();
 };
 

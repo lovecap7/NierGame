@@ -76,7 +76,7 @@ void DebugSelectScene::Update()
 			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, GetStageNameByIndex(StageIndex::Stage2)));
 			break;
 		case Menu::Stage3:
-			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, GetStageNameByIndex(StageIndex::Tutorial)));
+			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, GetStageNameByIndex(StageIndex::Stage3)));
 			break;
 		case Menu::Result:
 			m_controller.ChangeScene(std::make_shared<ResultScene>(GetStageNameByIndex(StageIndex::Tutorial),m_controller,std::make_shared<Timer>()));

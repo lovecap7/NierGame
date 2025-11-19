@@ -10,11 +10,17 @@
 #include "../../../Attack/SwordAttack.h"
 #include "../../../Attack/AOEAttack.h"
 #include "../../../Attack/EnemyBulletAttack.h"
+#include "../../../Attack/MissileAttack.h"
 #include "../../../../General/Math/MyMath.h"
 #include "../../../../General/Model.h"
 #include "../../../../General/CSV/AttackData.h"
 #include "../../../../General/Collision/Rigidbody.h"
 
+namespace
+{
+	//Šp“x
+	constexpr float kMissileAngle = 30.0f;
+}
 
 EnemyStateAttack::EnemyStateAttack(std::weak_ptr<Actor> enemy, std::shared_ptr<AttackData> attackData):
 	EnemyStateBase(enemy),
@@ -113,7 +119,9 @@ void EnemyStateAttack::UpdateAttackFrame(std::shared_ptr<EnemyBase> owner)
 	if (m_frame >= m_attackData->GetStartFrame())
 	{
 		//‘±‚ªØ‚ê‚½‚ç
-		if (m_isAppearedAttack && (m_pAttack.expired() || m_attackData->GetAttackType() == AttackData::AttackType::Bullet))
+		if (m_isAppearedAttack && (m_pAttack.expired() || 
+			m_attackData->GetAttackType() == AttackData::AttackType::Bullet ||
+			m_attackData->GetAttackType() == AttackData::AttackType::Missile ))
 		{
 			//‘½’iƒqƒbƒgUŒ‚‚Ìˆ—
 			if (m_attackData->IsMultipleHit() && m_attackData->GetNextAttackName() != L"None")
@@ -156,7 +164,7 @@ void EnemyStateAttack::CreateAttack(std::shared_ptr<EnemyBase> owner)
 	{
 		attack = std::make_shared<AOEAttack>(m_attackData, owner);
 	}
-	else if(m_attackData->GetAttackType() == AttackData::AttackType::Bullet)
+	else if (m_attackData->GetAttackType() == AttackData::AttackType::Bullet)
 	{
 		attack = std::make_shared<EnemyBulletAttack>(m_attackData, owner);
 		//’e‚Ì‰ŠúˆÊ’u‚Æ•ûŒü‚ğİ’è
@@ -182,7 +190,6 @@ void EnemyStateAttack::CreateAttack(std::shared_ptr<EnemyBase> owner)
 			bulletDir.y = targetDir.y;
 		}
 
-
 		//³‹K‰»
 		if (bulletDir.SqMagnitude() > 0.0f)
 		{
@@ -193,6 +200,32 @@ void EnemyStateAttack::CreateAttack(std::shared_ptr<EnemyBase> owner)
 
 		//‰ó‚ê‚é‚©
 		bulletAttack->SetIsDestructible(m_attackData->GetParam3() != 0.0f);
+
+		//’e‚ğ‘Å‚Á‚½
+		m_isShotBullet = true;
+	}
+	else if (m_attackData->GetAttackType() == AttackData::AttackType::Missile)
+	{
+		attack = std::make_shared<MissileAttack>(m_attackData, owner);
+		//’e‚Ì‰ŠúˆÊ’u‚Æ•ûŒü‚ğİ’è
+		auto bulletAttack = std::dynamic_pointer_cast<MissileAttack>(attack);
+		auto model = owner->GetModel();
+
+		//”­ËÀ•W
+		Vector3 bulletPos = MV1GetFramePosition(model->GetModelHandle(), static_cast<int>(m_attackData->GetParam1()));
+		bulletAttack->SetPos(bulletPos);
+
+		//ˆÚ“®
+		Vector3 moveDir = Quaternion::AngleAxis(MyMath::GetRandF(-kMissileAngle, kMissileAngle) * MyMath::DEG_2_RAD, model->GetDir()) * Vector3::Up();
+		bulletAttack->SetMoveVec(moveDir * m_attackData->GetParam2());
+
+		//ƒ^[ƒQƒbƒg‚ª‚¢‚é‚Æ‚«
+		if (owner->GetTargetInfo().m_isFound)
+		{
+			auto player = std::dynamic_pointer_cast<Player>(owner->GetTargetInfo().m_pTarget.lock());
+			//’Ç”öƒ^[ƒQƒbƒg
+			bulletAttack->SetTargetTracking(player, m_attackData->GetParam3(), m_attackData->GetParam4());
+		}
 
 		//’e‚ğ‘Å‚Á‚½
 		m_isShotBullet = true;
