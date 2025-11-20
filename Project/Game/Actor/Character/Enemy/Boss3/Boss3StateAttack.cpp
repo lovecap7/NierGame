@@ -153,23 +153,17 @@ void Boss3StateAttack::CreateAttack(std::shared_ptr<EnemyBase> owner)
 		//XZ•ûŒü‚Íƒ‚ƒfƒ‹‚ÌŒü‚«
 		Vector3 bulletDir = model->GetDir();
 
-		//ƒ^[ƒQƒbƒg‚ª‚¢‚é‚Æ‚«
-		if (owner->GetTargetInfo().m_isFound)
-		{
-			auto player = std::dynamic_pointer_cast<Player>(owner->GetTargetInfo().m_pTarget.lock());
-			Vector3 targetDir = player->GetCenterPos() - bulletPos;
-			if (targetDir.SqMagnitude() > 0.0f)
-			{
-				targetDir = targetDir.Normalize();
-			}
-			bulletDir.y = targetDir.y;
-		}
-
 		//³‹K‰»
 		if (bulletDir.SqMagnitude() > 0.0f)
 		{
 			bulletDir = bulletDir.Normalize();
 		}
+		//”­ŽËŠp“x
+		bulletDir = Quaternion::AngleAxis(m_attackData->GetParam4() * MyMath::DEG_2_RAD, Vector3::Up()) * bulletDir;
+		//c•ûŒü‚ÌŠp“x
+		bulletDir = Quaternion::AngleAxis(std::abs(std::cosf(m_frame * MyMath::DEG_2_RAD)) * m_attackData->GetLength()
+			* MyMath::DEG_2_RAD, bulletDir.Cross(Vector3::Up())) * bulletDir;
+
 		//ˆÚ“®
 		bulletAttack->SetMoveVec(bulletDir * m_attackData->GetParam2());
 
