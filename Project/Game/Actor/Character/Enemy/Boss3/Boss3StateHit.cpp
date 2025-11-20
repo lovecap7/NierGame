@@ -25,12 +25,15 @@ Boss3StateHit::Boss3StateHit(std::weak_ptr<Actor> enemy) :
 
 Boss3StateHit::~Boss3StateHit()
 {
+
 }
+
 void Boss3StateHit::Init()
 {
 	//Ÿ‚Ìó‘Ô‚ğ©•ª‚Ìó‘Ô‚ğ“ü‚ê‚é
 	ChangeState(shared_from_this());
 }
+
 void Boss3StateHit::Update()
 {
 	if (m_pOwner.expired())return;

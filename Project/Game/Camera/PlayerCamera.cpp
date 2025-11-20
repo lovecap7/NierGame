@@ -28,8 +28,8 @@ namespace
 	//ロックオン時の設定
     //カメラオフセット（右に寄せる）
     constexpr float kRightOffset = 150.0f;  //右オフセット距離
-    constexpr float kBackOffset = 450.0f;   //後方距離
-    constexpr float kUpOffset = 120.0f;     //上方向オフセット
+    constexpr float kBackOffset = 130.0f;   //後方距離
+    constexpr float kUpOffset = 150.0f;     //上方向オフセット
 	constexpr float kLockOnFollowSpeed = 0.1f;   //ロックオン中の追従速度
 	constexpr float kLockOnSideLerpRate = 0.05f;   //ロックオン中の追従速度
    
@@ -212,8 +212,7 @@ void PlayerCamera::LockOnUpdate(Input& input, Vector3& targetPos)
     }
 
     //中点（注視点）を計算
-    Vector3 center = Vector3::Lerp(playerPos , enemyPos,0.5f);
-    center.y += kCameraHeight; // 少し上を見る
+    Vector3 center = (enemyPos + playerPos) * 0.5f;
     lockPos = center;
 
     // カメラの理想位置
@@ -257,9 +256,8 @@ void PlayerCamera::LockOnUpdate(Input& input, Vector3& targetPos)
     }
     m_lockOnSide = MathSub::Lerp(m_lockOnSide, m_nextlockOnSide, kLockOnSideLerpRate);
 
-
     //カメラの理想の位置を決めていく
-    basePos.y = MathSub::Max(playerPos.y,lockPos.y) + kUpOffset;            //高いほうに合わせる
+    basePos.y = MathSub::Max(MathSub::Max(playerPos.y,lockPos.y) , playerPos.y + kUpOffset);            //高いほうに合わせる
     basePos -= (toEnemyXZ * (kBackOffset + abs(basePos.y - playerPos.y)));  //高さの差で距離を離す(でかい奴ほど引いた視点で見たいので)
     basePos += (playerRight * m_lockOnSide);                                //少し横から見たような視点にしたい
 

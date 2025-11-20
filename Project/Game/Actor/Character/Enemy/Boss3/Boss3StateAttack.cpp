@@ -195,6 +195,25 @@ void Boss3StateAttack::CreateAttack(std::shared_ptr<EnemyBase> owner)
 	else if (m_attackData->GetAttackType() == AttackData::AttackType::Beam)
 	{
 		attack = std::make_shared<BeamAttack>(m_attackData, owner);
+
+		//ビームを回転
+		auto beam = std::dynamic_pointer_cast<BeamAttack>(attack);
+		//フレームインデックス取得
+		int handle = owner->GetModel()->GetModelHandle();
+		Vector3 pos1 = MV1GetFramePosition(handle, static_cast<int>(m_attackData->GetParam1()));
+		//始点
+		beam->SetStartPos(pos1);
+		Vector3 dir = owner->GetModel()->GetDir();
+		if (dir.SqMagnitude() > 0.0f)
+		{
+			dir = dir.Normalize();
+		}
+		//終点を決める
+		dir = Quaternion::AngleAxis(m_attackData->GetParam2() * MyMath::DEG_2_RAD, Vector3::Up()) * dir;
+		beam->SetEndPos(pos1 + (dir * m_attackData->GetLength()));
+
+		//始点を軸に回転
+		beam->SetRotaAngleAndAxis(m_attackData->GetParam3(), Vector3::Up());
 	}
 
 	owner->SetAttack(attack);
@@ -213,9 +232,13 @@ void Boss3StateAttack::UpdateMove(std::shared_ptr<EnemyBase> owner, std::shared_
 	{
 		//向き
 		Vector3 dir = owner->GetToTargetVec();
+		if (m_attackData->GetAttackType() == AttackData::AttackType::Beam)
+		{
+			dir = model->GetDir();
+			dir = Quaternion::AngleAxis(m_attackData->GetParam3() * MyMath::DEG_2_RAD, Vector3::Up()) * dir;
+		}
 		//モデルの向き
 		model->SetDir(dir.XZ());
-		
 	}
 	//攻撃が出ている間移動
 	if (!m_pAttack.expired())
@@ -256,17 +279,5 @@ void Boss3StateAttack::UpdateAttackPos(std::shared_ptr<EnemyBase> owner)
 	{
 		auto attack = std::dynamic_pointer_cast<AOEAttack>(m_pAttack.lock());
 		attack->SetPos(pos1);
-	}
-	else if(m_attackData->GetAttackType() == AttackData::AttackType::Beam)
-	{
-		auto attack = std::dynamic_pointer_cast<BeamAttack>(m_pAttack.lock());
-		attack->SetStartPos(pos1);
-		Vector3 dir = owner->GetModel()->GetDir();
-		if (dir.SqMagnitude() > 0.0f)
-		{
-			dir = dir.Normalize();
-		}
-		dir = Quaternion::AngleAxis(m_attackData->GetParam2() * MyMath::DEG_2_RAD, Vector3::Up()) * dir;
-		attack->SetEndPos(pos1 + (dir * m_attackData->GetLength()));
 	}
 }
