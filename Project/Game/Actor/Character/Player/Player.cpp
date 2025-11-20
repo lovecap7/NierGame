@@ -654,31 +654,53 @@ std::shared_ptr<EnemyBase> Player::FindTargetInDirection(bool rightDir, std::sha
 	std::shared_ptr<EnemyBase> bestTarget;
 	float minAngle = FLT_MAX;
 
+	//間に壁があるかをチェックする
+	auto& physics = Physics::GetInstance();
+
 	for (auto enemy : enemys)
 	{
 		//活動していないまたは現在のターゲットなら無視
 		if (!enemy->IsActive() || enemy == currentTarget) continue;
 
-		Vector3 toEnemy = enemy->GetNextPos() - cameraPos;
-		if (toEnemy.SqMagnitude() > 0.0f)
+		//レイキャスト
+		auto colls = physics.RayCast(cameraPos, enemy->GetNextPos());
+
+		//間に壁や床があるかをチェック
+		bool isColl = false;
+		for (auto coll : colls)
 		{
-			toEnemy = toEnemy.Normalize();
+			if (coll.expired())continue;
+			//間に壁や床があるなら無視
+			if (coll.lock()->GetGameTag() == GameTag::Object)
+			{
+				isColl = true;
+				break;
+			}
 		}
-
-		//右方向ベクトルとの角度を計算
-		float dot = toEnemy.Dot(right);
-		//右方向かチェック
-		bool isRight = dot > 0.0f;
-
-		//右スティックの方向と一致する側だけ見る
-		if (rightDir != isRight) continue;
-
-		//角度の絶対値が小さいほど前方向に近い
-		float angle = std::acos(toEnemy.Dot(forward));
-		if (angle < minAngle)
+		//何も間にないならチェック
+		if (!isColl)
 		{
-			minAngle = angle;
-			bestTarget = enemy;
+			Vector3 toEnemy = enemy->GetNextPos() - cameraPos;
+			if (toEnemy.SqMagnitude() > 0.0f)
+			{
+				toEnemy = toEnemy.Normalize();
+			}
+
+			//右方向ベクトルとの角度を計算
+			float dot = toEnemy.Dot(right);
+			//右方向かチェック
+			bool isRight = dot > 0.0f;
+
+			//右スティックの方向と一致する側だけ見る
+			if (rightDir != isRight) continue;
+
+			//角度の絶対値が小さいほど前方向に近い
+			float angle = std::acos(toEnemy.Dot(forward));
+			if (angle < minAngle)
+			{
+				minAngle = angle;
+				bestTarget = enemy;
+			}
 		}
 	}
 	return bestTarget;

@@ -26,8 +26,21 @@ namespace
 }
 
 Boss3StateAttack::Boss3StateAttack(std::weak_ptr<Actor> enemy, std::shared_ptr<AttackData> attackData) :
-	EnemyStateAttack(enemy, attackData)
+	EnemyStateAttack(enemy, attackData),
+	m_beams()
 {
+}
+
+Boss3StateAttack::~Boss3StateAttack()
+{
+	if (!m_beams.empty())
+	{
+		for (auto& beam : m_beams)
+		{
+			if (beam.expired())continue;
+			beam.lock()->Delete();
+		}
+	}
 }
 
 void Boss3StateAttack::Update()
@@ -214,6 +227,9 @@ void Boss3StateAttack::CreateAttack(std::shared_ptr<EnemyBase> owner)
 
 		//始点を軸に回転
 		beam->SetRotaAngleAndAxis(m_attackData->GetParam3(), Vector3::Up());
+
+		//ビームの参照
+		m_beams.push_back(beam);
 	}
 
 	owner->SetAttack(attack);

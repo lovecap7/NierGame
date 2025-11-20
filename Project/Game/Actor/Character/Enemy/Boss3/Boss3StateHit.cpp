@@ -18,7 +18,7 @@ Boss3StateHit::Boss3StateHit(std::weak_ptr<Actor> enemy) :
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());
-	owner->GetModel()->SetAnim(owner->GetAnim(kHit).c_str(), true);
+	owner->GetModel()->SetAnim(owner->GetAnim(kHit).c_str(), false);
 	owner->SetCollState(CollisionState::Normal);
 }
 

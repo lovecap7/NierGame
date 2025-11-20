@@ -28,7 +28,8 @@ namespace
 	//ロックオン時の設定
     //カメラオフセット（右に寄せる）
     constexpr float kRightOffset = 150.0f;  //右オフセット距離
-    constexpr float kBackOffset = 130.0f;   //後方距離
+    constexpr float kBackOffset = 330.0f;   //後方距離
+    constexpr float kBackRate = 1.5f;       //後方距離倍率
     constexpr float kUpOffset = 150.0f;     //上方向オフセット
 	constexpr float kLockOnFollowSpeed = 0.1f;   //ロックオン中の追従速度
 	constexpr float kLockOnSideLerpRate = 0.05f;   //ロックオン中の追従速度
@@ -189,6 +190,9 @@ void PlayerCamera::LockOnUpdate(Input& input, Vector3& targetPos)
     auto lockOnTarget = m_lockOnTarget.lock();
     if (lockOnTarget->GetGameTag() != GameTag::Enemy)return;
 
+    //縦のアングル
+    m_vertexAngle = 0.0f;
+
     //UIの表示
     if (!m_lockOnUI.expired())
     {
@@ -218,25 +222,6 @@ void PlayerCamera::LockOnUpdate(Input& input, Vector3& targetPos)
     // カメラの理想位置
     Vector3 basePos = playerPos;
 
-
- //   //入力が入っているとき
-	//bool isStickInput = input.GetStickInfo().IsRightStickInput();
- //   if (isStickInput)
- //   {
- //       //スティック入力でカメラ回転
- //       UpdateStickAngle(input);
-	//	//理想位置計算
-	//	basePos.y += kCameraHeight; // 少し上を見る
- //       basePos += m_look * -kBackOffset;
-	//	//視点はプレイヤーからターゲットへのベクトルの少し前方
- //       lockPos = playerPos + toEnemy * kLockOnViewInput;
- //       lockPos.y += kCameraHeight;
- //   }
-    //水平方向リセット
-   
-    //縦のアングル
-    m_vertexAngle = 0.0f;
-
     //プレイヤー右方向を求める
     Vector3 playerRight = Vector3::Up().Cross(toEnemyXZ);
     if (playerRight.SqMagnitude() > 0.0f)
@@ -258,7 +243,7 @@ void PlayerCamera::LockOnUpdate(Input& input, Vector3& targetPos)
 
     //カメラの理想の位置を決めていく
     basePos.y = MathSub::Max(MathSub::Max(playerPos.y,lockPos.y) , playerPos.y + kUpOffset);            //高いほうに合わせる
-    basePos -= (toEnemyXZ * (kBackOffset + abs(basePos.y - playerPos.y)));  //高さの差で距離を離す(でかい奴ほど引いた視点で見たいので)
+    basePos -= (toEnemyXZ * (kBackOffset + abs(lockPos.y - playerPos.y) * kBackRate));  //高さの差で距離を離す(でかい奴ほど引いた視点で見たいので)
     basePos += (playerRight * m_lockOnSide);                                //少し横から見たような視点にしたい
 
     //次の座標を求める
