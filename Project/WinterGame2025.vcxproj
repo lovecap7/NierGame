@@ -159,6 +159,10 @@
     <ClCompile Include="Game\Actor\Character\Enemy\Boss3\Boss3StateAttack.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\Boss3\Boss3StateHit.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\Boss3\Boss3StateIdle.cpp" />
+    <ClCompile Include="Game\Actor\Character\Enemy\Boss4\Boss4.cpp" />
+    <ClCompile Include="Game\Actor\Character\Enemy\Boss4\Boss4StateAttack.cpp" />
+    <ClCompile Include="Game\Actor\Character\Enemy\Boss4\Boss4StateHit.cpp" />
+    <ClCompile Include="Game\Actor\Character\Enemy\Boss4\Boss4StateIdle.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyBase.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateAttack.cpp" />
@@ -292,6 +296,10 @@
     <ClInclude Include="Game\Actor\Character\Enemy\Boss3\Boss3StateAttack.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\Boss3\Boss3StateHit.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\Boss3\Boss3StateIdle.h" />
+    <ClInclude Include="Game\Actor\Character\Enemy\Boss4\Boss4.h" />
+    <ClInclude Include="Game\Actor\Character\Enemy\Boss4\Boss4StateAttack.h" />
+    <ClInclude Include="Game\Actor\Character\Enemy\Boss4\Boss4StateHit.h" />
+    <ClInclude Include="Game\Actor\Character\Enemy\Boss4\Boss4StateIdle.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyBase.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyManager.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateAttack.h" />

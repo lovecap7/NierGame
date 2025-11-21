@@ -1,6 +1,11 @@
 ﻿名前,ID,アクタータイプ,座標X,座標Y,座標Z,回転X,回転Y,回転Z,大きさX,大きさY,大きさZ,モデルのパス,優先度,ゲームタグ,当たり判定無視,トリガー,重力を受ける,コリジョンの半径,コリジョンの高さ,パスをまとめたパス
-Player,32,Character,0,0,0,0,0,0,1,1,1,Player/Player,Middle,Player,0,0,1,30,100,Player/PlayerPathData
-Boss1,8,Character,0.3000307,-1.5,160.5452,0,196.75,0,2.5,2.5,2.5,Enemy/Boss/Boss1,High,Enemy,0,0,1,400,400,Enemy/Boss1/Boss1PathData
-Robot1,7,Character,-0.13,-7,65.63,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,70,Enemy/Robot1/Robot1PathData
-Robot2,4,Character,-6.258661,-7,82.77306,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot2,Middle,Enemy,0,0,1,30,70,Enemy/Robot2/Robot2PathData
-Robot2,3,Character,6.646438,-7,83.35657,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot2,Middle,Enemy,0,0,1,30,70,Enemy/Robot2/Robot2PathData
+Player,57,Character,0,1.1,18.34,0,0,0,1,1,1,Player/Player,Middle,Player,0,0,1,30,100,Player/PlayerPathData
+Robot1,15,Character,-0.13,-3,65.63,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
+Robot2,22,Character,21.84,0.42,152.76,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot2,Middle,Enemy,0,0,1,30,120,Enemy/Robot2/Robot2PathData
+Robot2,1,Character,-21.55,0.42,154.11,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot2,Middle,Enemy,0,0,1,30,120,Enemy/Robot2/Robot2PathData
+Robot3,6,Character,-4.82,-2.26,103.6127,0,180,0,1,1,1,Enemy/Normal/Robot3,Middle,Enemy,0,0,1,50,100,Enemy/Robot3/Robot3PathData
+Robot3,3,Character,-9.540001,-2.26,105.08,0,180,0,1,1,1,Enemy/Normal/Robot3,Middle,Enemy,0,0,1,50,100,Enemy/Robot3/Robot3PathData
+Robot3,5,Character,2.93,-2.26,103.6127,0,180,0,1,1,1,Enemy/Normal/Robot3,Middle,Enemy,0,0,1,50,100,Enemy/Robot3/Robot3PathData
+Robot3,4,Character,-1.79,-2.26,105.08,0,180,0,1,1,1,Enemy/Normal/Robot3,Middle,Enemy,0,0,1,50,100,Enemy/Robot3/Robot3PathData
+Boss3,7,Character,-2.114338,-1.500008,241.5227,0,180,0,4,4,4,Enemy/Boss/Boss3,High,Enemy,0,0,1,150,600,Enemy/Boss3/Boss3PathData
+Robot4,2,Character,0.07,-1.529999,158.17,0,180,0,1.1,1.1,1.1,Enemy/Normal/Robot4,Middle,Enemy,0,0,1,80,200,Enemy/Robot4/Robot4PathData

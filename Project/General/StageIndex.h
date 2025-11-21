@@ -5,11 +5,9 @@ enum class StageIndex
 	Stage1,
 	Stage2,
 	Stage3,
-	Tutorial,
 	Tutorial1,
 	Tutorial2,
 	Tutorial3,
-	Tutorial4,
 };
 
 inline std::wstring GetStageNameByIndex(StageIndex index)
@@ -26,9 +24,6 @@ inline std::wstring GetStageNameByIndex(StageIndex index)
 	case StageIndex::Stage3:
 		name = L"Stage3";
 		break;
-	case StageIndex::Tutorial:
-		name = L"Tutorial";
-		break;
 	case StageIndex::Tutorial1:
 		name = L"Tutorial1";
 		break;
@@ -37,9 +32,6 @@ inline std::wstring GetStageNameByIndex(StageIndex index)
 		break;
 	case StageIndex::Tutorial3:
 		name = L"Tutorial3";
-		break;
-	case StageIndex::Tutorial4:
-		name = L"Tutorial4";
 		break;
 	default:
 		name = L"Stage1";
@@ -63,10 +55,6 @@ inline StageIndex GetStageIndexByName(const std::wstring stageName)
 	{
 		index = StageIndex::Stage3;
 	}
-	else if (stageName == L"Tutorial")
-	{
-		index = StageIndex::Tutorial;
-	}
 	else if (stageName == L"Tutorial1")
 	{
 		index = StageIndex::Tutorial1;
@@ -78,10 +66,6 @@ inline StageIndex GetStageIndexByName(const std::wstring stageName)
 	else if (stageName == L"Tutorial3")
 	{
 		index = StageIndex::Tutorial3;
-	}
-	else if (stageName == L"Tutorial4")
-	{
-		index = StageIndex::Tutorial4;
 	}
 	else
 	{
