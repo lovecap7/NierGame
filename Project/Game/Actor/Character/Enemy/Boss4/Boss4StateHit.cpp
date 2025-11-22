@@ -1,7 +1,7 @@
 #include "Boss4StateHit.h"
 #include "Boss4StateIdle.h"
+#include "Boss4StateDeath.h"
 #include "../EnemyBase.h"
-#include "../EnemyStateDeath.h"
 #include "../../../../../General/Model.h"
 #include "../../../../../General/Input.h"
 #include "../../../../../General/Collision/Rigidbody.h"
@@ -44,7 +44,7 @@ void Boss4StateHit::Update()
 	//€–S
 	if (status->IsDead())
 	{
-		ChangeState(std::make_shared<EnemyStateDeath>(m_pOwner));
+		ChangeState(std::make_shared<Boss4StateDeath>(m_pOwner));
 		return;
 	}
 	//ƒqƒbƒg’†‚ÉUŒ‚‚ğÄ“x‹ò‚ç‚Á‚½‚çÅ‰‚©‚ç

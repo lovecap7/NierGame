@@ -169,6 +169,7 @@ void CharacterBase::Operate()
 
 void CharacterBase::InitAttackData(CSVDataLoader& csvLoader, std::wstring path)
 {
+	m_attackDatas.clear();
 	auto datas = csvLoader.LoadCSV(path.c_str());
 	//“o˜^
 	for (auto& data : datas)
@@ -180,6 +181,7 @@ void CharacterBase::InitAttackData(CSVDataLoader& csvLoader, std::wstring path)
 
 void CharacterBase::InitAnimData(CSVDataLoader& csvLoader,std::wstring path)
 {
+	m_animDatas.clear();
 	auto datas = csvLoader.LoadCSV(path.c_str());
 	//“o˜^
 	for (auto& data : datas)
@@ -191,6 +193,7 @@ void CharacterBase::InitAnimData(CSVDataLoader& csvLoader,std::wstring path)
 
 void CharacterBase::InitEffectData(CSVDataLoader& csvLoader, std::wstring effectPath)
 {
+	m_effectDatas.clear();
 	auto effectDatas = csvLoader.LoadCSV(effectPath.c_str());
 	//“o˜^
 	for (auto data : effectDatas)
