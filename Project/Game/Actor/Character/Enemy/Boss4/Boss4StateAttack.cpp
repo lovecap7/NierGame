@@ -7,6 +7,8 @@
 #include "../../../../Attack/SwordAttack.h"
 #include "../../../../Attack/AOEAttack.h"
 #include "../../../../Attack/EnemyBulletAttack.h"
+#include "../../../../Attack/BeamAttack.h"
+#include "../../../../Attack/MissileAttack.h"
 #include "../../../../../General/Math/MyMath.h"
 #include "../../../../../General/Model.h"
 #include "../../../../../General/CSV/AttackData.h"
@@ -18,6 +20,8 @@ namespace
 	constexpr int kBulletAngle = 10;
 	//トリガー判定に変換
 	constexpr int kTriggerFrame = 280;
+	//ミサイルのばらつき
+	constexpr int kMissileAngle = 30;
 }
 
 Boss4StateAttack::Boss4StateAttack(std::weak_ptr<Actor> enemy, std::shared_ptr<AttackData> attackData) :
@@ -79,6 +83,37 @@ void Boss4StateAttack::Update()
 }
 
 
+void Boss4StateAttack::UpdateAttackFrame(std::shared_ptr<EnemyBase> owner)
+{
+	if (m_frame >= m_attackData->GetStartFrame())
+	{
+		//持続が切れたら
+		if (m_isAppearedAttack && (m_pAttack.expired() ||
+			m_attackData->GetAttackType() == AttackData::AttackType::Bullet ||
+			m_attackData->GetAttackType() == AttackData::AttackType::Missile ||
+			m_attackData->GetAttackType() == AttackData::AttackType::Beam))
+		{
+			//多段ヒット攻撃の処理
+			if (m_attackData->IsMultipleHit() && m_attackData->GetNextAttackName() != L"None")
+			{
+				//多段ヒット攻撃
+				ComboAttack(owner);
+				return;
+			}
+			else
+			{
+				//アーマーをもとに戻す
+				owner->InitArmor();
+			}
+		}
+		//まだ攻撃が発生していないなら発生
+		if (!m_isAppearedAttack)
+		{
+			CreateAttack(owner);
+		}
+	}
+}
+
 void Boss4StateAttack::CreateAttack(std::shared_ptr<EnemyBase> owner)
 {
 	if (!m_attackData)return;
@@ -137,6 +172,54 @@ void Boss4StateAttack::CreateAttack(std::shared_ptr<EnemyBase> owner)
 
 		//壊れるか
 		bulletAttack->SetIsDestructible(m_attackData->GetParam3() != 0.0f);
+
+		//弾を打った
+		m_isShotBullet = true;
+	}
+	else if (m_attackData->GetAttackType() == AttackData::AttackType::Beam)
+	{
+		attack = std::make_shared<BeamAttack>(m_attackData, owner);
+
+		//ビームを回転
+		auto beam = std::dynamic_pointer_cast<BeamAttack>(attack);
+		//フレームインデックス取得
+		int handle = owner->GetModel()->GetModelHandle();
+		Vector3 startPos = MV1GetFramePosition(handle, static_cast<int>(m_attackData->GetParam1()));
+		//始点
+		beam->SetStartPos(startPos);
+		Vector3 dir = owner->GetModel()->GetDir();
+		if (dir.SqMagnitude() > 0.0f)
+		{
+			dir = dir.Normalize();
+		}
+		//終点を決める
+		beam->SetEndPos(startPos + (dir * m_attackData->GetLength()));
+
+		//始点を軸に回転
+		beam->SetRotaAngleAndAxis(m_attackData->GetParam3(), Vector3::Up());
+	}
+	else if (m_attackData->GetAttackType() == AttackData::AttackType::Missile)
+	{
+		attack = std::make_shared<MissileAttack>(m_attackData, owner);
+		//弾の初期位置と方向を設定
+		auto bulletAttack = std::dynamic_pointer_cast<MissileAttack>(attack);
+		auto model = owner->GetModel();
+
+		//発射座標
+		Vector3 bulletPos = MV1GetFramePosition(model->GetModelHandle(), static_cast<int>(m_attackData->GetParam1()));
+		bulletAttack->SetPos(bulletPos);
+
+		//移動
+		Vector3 moveDir = Quaternion::AngleAxis(MyMath::GetRandF(-kMissileAngle, kMissileAngle) * MyMath::DEG_2_RAD, model->GetDir()) * Vector3::Up();
+		bulletAttack->SetMoveVec(moveDir * m_attackData->GetParam2());
+
+		//ターゲットがいるとき
+		if (owner->GetTargetInfo().m_isFound)
+		{
+			auto player = std::dynamic_pointer_cast<Player>(owner->GetTargetInfo().m_pTarget.lock());
+			//追尾ターゲット
+			bulletAttack->SetTargetTracking(player, m_attackData->GetParam3(), m_attackData->GetParam4());
+		}
 
 		//弾を打った
 		m_isShotBullet = true;

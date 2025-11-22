@@ -3,6 +3,7 @@
 #include "../../General/Collision/Rigidbody.h"
 #include "../../General/Effect/NormalEffect.h"
 #include "../../General/Effect/EffekseerManager.h"
+#include "../Actor/Character/CharacterBase.h"
 
 EnemyBulletAttack::EnemyBulletAttack(std::shared_ptr<AttackData> attackData, std::weak_ptr<CharacterBase> pOwner):
 	BulletAttack(attackData,pOwner),
@@ -37,6 +38,9 @@ void EnemyBulletAttack::OnCollide(const std::shared_ptr<Collidable> other)
 	//UŒ‚‚É“–‚½‚Á‚½Žž‰ó‚ê‚é‚©
 	if (other->GetGameTag() == GameTag::Attack)
 	{
+		if (m_pOwner.expired())return;
+		if(std::dynamic_pointer_cast<AttackBase>(other)->GetOwnerTag() == m_pOwner.lock()->GetGameTag())return;
+
 		//‰ó‚ê‚é‚È‚ç
 		if (m_isDestructible)
 		{

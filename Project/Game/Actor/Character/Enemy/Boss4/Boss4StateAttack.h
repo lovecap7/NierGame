@@ -12,7 +12,9 @@ public:
 	virtual ~Boss4StateAttack();
 	void Init() override;
 	void Update() override;
+private:
 	//UŒ‚ì¬
+	void UpdateAttackFrame(std::shared_ptr<EnemyBase> owner)override;
 	void CreateAttack(std::shared_ptr<EnemyBase> owner)override;
 };
 

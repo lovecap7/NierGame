@@ -1,2 +1,5 @@
 ﻿攻撃距離,攻撃の名前
-Melee,Attack1
+LongRange,Attack1
+Melee,Attack2
+Melee,Attack3
+LongRange,Attack4
