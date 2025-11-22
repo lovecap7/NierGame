@@ -15,7 +15,7 @@
 #include "../../../../Camera/PlayerCamera.h"
 #include "../../../../../General/CSV/CSVDataLoader.h"
 #include "../../../../../General/CSV/EnemyAttackKeyData.h"
-#include "../../../../UI/Enemy/NormalEnemyHPUI.h"
+#include "../../../../UI/Enemy/BossHPUI.h"
 #include <DxLib.h>
 #include <cmath>
 #include <cassert>
@@ -67,7 +67,7 @@ void Boss4::Init()
 	m_model->SetModelHeightAdjust(-m_actorData->GetCollRadius());
 
 	//‘Ì—ÍUI
-	auto enemyHPUI = std::make_shared<NormalEnemyHPUI>(m_charaStatus, thisPointer);
+	auto enemyHPUI = std::make_shared<BossHPUI>(m_charaStatus, thisPointer);
 	enemyHPUI->Init();
 	//‘Ì—Í‰ñ•œ
 	m_charaStatus->FullRecovery();

@@ -218,6 +218,7 @@
     <ClCompile Include="Game\Camera\TitleCamera.cpp" />
     <ClCompile Include="Game\Tutorial\TutorialManager.cpp" />
     <ClCompile Include="Game\UI\Camera\PlayerCameraUI.cpp" />
+    <ClCompile Include="Game\UI\Enemy\BossHPUI.cpp" />
     <ClCompile Include="Game\UI\Enemy\NormalEnemyHPUI.cpp" />
     <ClCompile Include="Game\UI\HPUIBase.cpp" />
     <ClCompile Include="Game\UI\Player\PlayerHPUI.cpp" />
@@ -356,6 +357,7 @@
     <ClInclude Include="Game\Camera\TitleCamera.h" />
     <ClInclude Include="Game\Tutorial\TutorialManager.h" />
     <ClInclude Include="Game\UI\Camera\PlayerCameraUI.h" />
+    <ClInclude Include="Game\UI\Enemy\BossHPUI.h" />
     <ClInclude Include="Game\UI\Enemy\NormalEnemyHPUI.h" />
     <ClInclude Include="Game\UI\HPUIBase.h" />
     <ClInclude Include="Game\UI\Player\PlayerHPUI.h" />
