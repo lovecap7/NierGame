@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include "ResultScene.h"
+#include "GameoverScene.h"
 #include <Dxlib.h>
 #include  "../General/Input.h"
 #include "SceneController.h"
@@ -112,8 +113,8 @@ void GameScene::Update()
 		}
 		else if (m_isGameover)
 		{
-			//再スタート
-			Restart();
+			m_controller.PushScene(std::make_unique<GameoverScene>(m_controller));
+			return;
 		}
 	}
 

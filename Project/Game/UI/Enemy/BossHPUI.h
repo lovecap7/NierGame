@@ -17,5 +17,7 @@ public:
 private:
 	//‚¿å
 	std::weak_ptr<EnemyBase> m_pEnemy;
+	//ƒ{ƒX
+	int m_bossNameHandle;
 };
 

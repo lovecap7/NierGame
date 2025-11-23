@@ -4,7 +4,7 @@
 #include "../../General/Math/MyMath.h"
 
 HPUIBase::HPUIBase(std::shared_ptr<CharaStatus> charaStatus):
-	m_playerStatus(charaStatus),
+	m_charaStatus(charaStatus),
 	m_nowValueHandle(-1),
 	m_backValueHandle(-1),
 	m_damageValueHandle(-1),
@@ -32,7 +32,7 @@ void HPUIBase::UpdateDamageBar()
 	else
 	{
 		//Œ»Ý‚Ì‘Ì—Í‚É‡‚í‚¹‚é
-		m_damageValueRate = MathSub::Lerp(m_damageValueRate, m_playerStatus->GetHPRate(), 0.1f);
+		m_damageValueRate = MathSub::Lerp(m_damageValueRate, m_charaStatus->GetHPRate(), 0.1f);
 	}
 }
 
@@ -45,6 +45,6 @@ void HPUIBase::UpdateHealBar()
 	else
 	{
 		//‰ñ•œ
-		m_nowHpRate = MathSub::Lerp(m_nowHpRate, m_playerStatus->GetHPRate(), 0.1f);
+		m_nowHpRate = MathSub::Lerp(m_nowHpRate, m_charaStatus->GetHPRate(), 0.1f);
 	}
 }

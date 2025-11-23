@@ -10,7 +10,7 @@ public:
 	~HPUIBase();
 protected:
 	//プレイヤーのステータス
-	std::shared_ptr<CharaStatus> m_playerStatus;
+	std::shared_ptr<CharaStatus> m_charaStatus;
 
 	//前の現在体力
 	float m_beforeNowHP;

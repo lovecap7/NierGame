@@ -64,8 +64,8 @@ public:
 			leftStickY = 0;
 			rightStickX = 0;
 			rightStickY = 0;
-			prevRightStickX;
-			prevRightStickY;
+			prevRightStickX = 0;
+			prevRightStickY = 0;
 		}
 		//入力が入ったかどうかを取得(移動状態に切り替えるときに使う)
 		bool IsLeftStickInput() { return leftStickX != 0 || leftStickY != 0; };
@@ -106,6 +106,37 @@ public:
 
 			//前のフレームで入力がなく今あるなら
 			return (prevMag <= 0.0f) && (currMag > 0.0f);
+		}
+	};
+
+	//十字キーの入力を保持する構造体
+	struct POVInfo
+	{
+		bool isUp = false;
+		bool isDown = false;
+		bool isLeft = false;
+		bool isRight = false;
+		bool isBeforeUp = false;
+		bool isBeforeDown = false;
+		bool isBeforeLeft = false;
+		bool isBeforeRight = false;
+		//十字キーが押された瞬間
+		bool IsUpTrigger() const { return isUp && !isBeforeUp; };
+		bool IsDownTrigger() const { return isDown && !isBeforeDown; };
+		bool IsLeftTrigger() const { return isLeft && !isBeforeLeft; };
+		bool IsRightTrigger() const { return isRight && !isBeforeRight; };
+		//十字キーを押しているか
+		bool IsUpPress() const { return isUp; };
+		bool IsDownPress() const { return isDown; };
+		bool IsLeftPress() const { return isLeft; };
+		bool IsRightPress() const { return isRight; };
+		//更新
+		void UpdatePrev()
+		{
+			isBeforeUp = isUp;
+			isBeforeDown = isDown;
+			isBeforeLeft = isLeft;
+			isBeforeRight = isRight;
 		}
 	};
 
@@ -166,6 +197,12 @@ public:
 	/// </summary>
 	/// <returns>スティックがどれだけ倒れているか</returns>
 	StickInfo GetStickInfo()const { return m_stickInfo; }
+
+	/// <summary>
+	/// 十字キーの情報を取得する
+	/// </summary>
+	/// <returns></returns>
+	POVInfo GetPOVInfo()const { return m_povInfo; }
 
 	/// <summary>
 	/// 少しだけ倒しているならtrue
@@ -245,17 +282,27 @@ private:
 		int buttonID;
 	};
 
+	//入力のマップ
 	std::map<std::string, std::vector<InputMapInfo>> m_inputActionMap;
+
 	//現在のフレームの入力
 	std::map<std::string, bool>m_currentInput;
+
 	//1フレーム前の入力
 	std::map<std::string, bool>m_lastInput;
+
 	//入力し続けてた時のフレームカウント
 	std::map<std::string, int>m_repeateCountFrame;
+
 	//スティックに関する入力情報
 	StickInfo m_stickInfo = StickInfo();
+
 	//トリガーの状態
 	TriggerInfo m_triggerInfo = TriggerInfo();
+
+	//十字キー
+	POVInfo m_povInfo = POVInfo();
+
 	//更新するか
 	bool m_isUpdate = true;
 

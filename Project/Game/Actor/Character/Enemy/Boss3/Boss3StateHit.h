@@ -10,5 +10,6 @@ public:
 	~Boss3StateHit();
 	void Init()override;
 	void Update() override;
+
 };
 

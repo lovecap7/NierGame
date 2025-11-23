@@ -28,6 +28,7 @@
 #include "../../../../Main/Application.h"
 #include "../../../../General/AssetManager.h"
 #include "../../../../Game/UI/Player/PlayerHPUI.h"
+#include "../../../../Game/UI/Player/HealCommandU.h"
 #include "../../../../Game/UI/UIManager.h"
 
 namespace
@@ -64,6 +65,9 @@ namespace
 	
 	//落下した際のリスポーン地点の位置調整
 	constexpr float kReturnPushBackDistance = 500.0f;
+
+	//回復可能回数
+	constexpr int kFullRecoveryNum = 3;
 }
 
 Player::Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager) :
@@ -84,7 +88,8 @@ Player::Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatus
 	m_totalJustAvoidNum(0),
 	m_isHitGlitch(false),
 	m_isGoal(false),
-	m_respawnPos(Vector3::Zero())
+	m_respawnPos(Vector3::Zero()),
+	m_fullRecoveryNum(kFullRecoveryNum)
 {
 	//初期リスポーン地点
 	SetRespawnPos(GetPos());
@@ -116,6 +121,7 @@ void Player::Init()
 	m_isHitGlitch = false;
 	m_isGoal = false;
 	m_isDelete = false;
+	m_fullRecoveryNum = kFullRecoveryNum;
 
 	//必要なパスを取得
 	auto& csvLoader = CSVDataLoader::GetInstance();
@@ -136,6 +142,9 @@ void Player::Init()
 	//体力UI
 	auto playerHPUI = std::make_shared<PlayerHPUI>(m_charaStatus);
 	playerHPUI->Init();
+	//回復コマンドUI
+	auto healCommandU = std::make_shared<HealCommandU>(thisPointer);
+	healCommandU->Init();
 
 	//体力回復
 	m_charaStatus->FullRecovery();
@@ -172,7 +181,11 @@ void Player::Update()
 	if (input.IsTrigger("Pinch"))
 	{
 		//ピンチに
-		//m_charaStatus->SetNowHP(m_charaStatus->GetMaxHP() / 3);
+		m_charaStatus->SetNowHP(m_charaStatus->GetMaxHP() / 3);
+	}
+	if (input.IsTrigger("Death"))
+	{
+		//死亡
 		m_charaStatus->SetNowHP(0);
 	}
 	if (input.IsTrigger("TargetDeath"))
@@ -210,6 +223,22 @@ void Player::Update()
 
 
 #endif
+
+	//回復
+	if (input.GetPOVInfo().IsDownTrigger())
+	{
+		//体力が満タンでなく、かつ死んでいなければ回復
+		if(m_charaStatus->GetNowHP() < m_charaStatus->GetMaxHP() &&
+			!m_charaStatus->IsDead() &&
+			m_fullRecoveryNum > 0)
+		{
+			//全回復
+			m_charaStatus->FullRecovery();
+			//回復可能回数を減らす
+			--m_fullRecoveryNum;
+		}
+	}
+
 	//体力に応じてポストエフェクトをかける
 	UpdateHit();
 

@@ -108,6 +108,9 @@ public:
 	//リスポーン地点
 	void SetRespawnPos(Vector3 pos);
 	void Respawn();
+
+	//回復可能回数
+	int GetFullRecoveryNum()const { return m_fullRecoveryNum; };
 private:
 	//カメラ
 	std::weak_ptr<PlayerCamera> GetPlayerCamera()const;
@@ -130,7 +133,6 @@ private:
 
 	//武器を収める
 	void UpdatePutAwayWeapon();
-
 private:
 	//回避判定
 	std::shared_ptr<AvoidColl> m_avoidColl;
@@ -148,6 +150,8 @@ private:
 	//リスポーン地点
 	Vector3 m_respawnPos;
 	
+	//回復可能回数
+	int m_fullRecoveryNum;
 
 	//無敵時間(ジャスト回避成功時数フレーム無敵)
 	bool m_isJustAvoided;

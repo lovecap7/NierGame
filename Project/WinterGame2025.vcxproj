@@ -220,7 +220,9 @@
     <ClCompile Include="Game\UI\Camera\PlayerCameraUI.cpp" />
     <ClCompile Include="Game\UI\Enemy\BossHPUI.cpp" />
     <ClCompile Include="Game\UI\Enemy\NormalEnemyHPUI.cpp" />
+    <ClCompile Include="Game\UI\Gameover\GameoverUI.cpp" />
     <ClCompile Include="Game\UI\HPUIBase.cpp" />
+    <ClCompile Include="Game\UI\Player\HealCommandU.cpp" />
     <ClCompile Include="Game\UI\Player\PlayerHPUI.cpp" />
     <ClCompile Include="Game\UI\Result\TutorialResultUI.cpp" />
     <ClCompile Include="Game\UI\Result\ResultUI.cpp" />
@@ -275,6 +277,7 @@
     <ClCompile Include="Main\main.cpp" />
     <ClCompile Include="Scene\DebugScene\DebugSelectScene.cpp" />
     <ClCompile Include="Scene\DebugScene\PlayerTestScene.cpp" />
+    <ClCompile Include="Scene\GameoverScene.cpp" />
     <ClCompile Include="Scene\GameScene.cpp" />
     <ClCompile Include="Scene\ResultScene.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
@@ -359,7 +362,9 @@
     <ClInclude Include="Game\UI\Camera\PlayerCameraUI.h" />
     <ClInclude Include="Game\UI\Enemy\BossHPUI.h" />
     <ClInclude Include="Game\UI\Enemy\NormalEnemyHPUI.h" />
+    <ClInclude Include="Game\UI\Gameover\GameoverUI.h" />
     <ClInclude Include="Game\UI\HPUIBase.h" />
+    <ClInclude Include="Game\UI\Player\HealCommandU.h" />
     <ClInclude Include="Game\UI\Player\PlayerHPUI.h" />
     <ClInclude Include="Game\UI\Result\TutorialResultUI.h" />
     <ClInclude Include="Game\UI\Result\ResultUI.h" />
@@ -419,6 +424,7 @@
     <ClInclude Include="Scene\DebugScene\PlayerTestScene.h" />
     <ClInclude Include="Scene\Debug\DebugSelectScene.h" />
     <ClInclude Include="Scene\Debug\PlayerTestScene.h" />
+    <ClInclude Include="Scene\GameoverScene.h" />
     <ClInclude Include="Scene\GameScene.h" />
     <ClInclude Include="Scene\ResultScene.h" />
     <ClInclude Include="Scene\SceneBase.h" />

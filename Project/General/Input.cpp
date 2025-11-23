@@ -49,6 +49,7 @@ void Input::Init()
 	m_inputActionMap["Gameover"] = { {InputType::kKeyboard,KEY_INPUT_V}};
 	m_inputActionMap["EnemyDead"] = { {InputType::kKeyboard,KEY_INPUT_E}};
 	m_inputActionMap["Pinch"] = { {InputType::kKeyboard,KEY_INPUT_X}};
+	m_inputActionMap["Death"] = { {InputType::kKeyboard,KEY_INPUT_Z}};
 	m_inputActionMap["AddFPS"] = { {InputType::kKeyboard,KEY_INPUT_6}};
 	m_inputActionMap["SubFPS"] = { {InputType::kKeyboard,KEY_INPUT_5}};
 	m_inputActionMap["AddTimeScale"] = { {InputType::kKeyboard,KEY_INPUT_8}};
@@ -138,6 +139,12 @@ void Input::Update()
 	m_triggerInfo.right = xInputState->RightTrigger;
 	delete xInputState;
 
+	//十字キーの更新
+	m_povInfo.UpdatePrev();
+	m_povInfo.isUp = (GetJoypadPOVState(DX_INPUT_PAD1, 0) == 0);
+	m_povInfo.isDown = (GetJoypadPOVState(DX_INPUT_PAD1, 0) == 18000);
+	m_povInfo.isLeft = (GetJoypadPOVState(DX_INPUT_PAD1, 0) == 27000);	
+	m_povInfo.isRight = (GetJoypadPOVState(DX_INPUT_PAD1, 0) == 9000);
 
 	//先行入力を更新
 	UpdateBuffer();

@@ -40,10 +40,10 @@ NormalEnemyHPUI::NormalEnemyHPUI(std::shared_ptr<CharaStatus> charaStatus, std::
 	m_backValueHandle = assetManager.GetImageHandle(kHPValueBack);
 	m_damageValueHandle = assetManager.GetImageHandle(kHPValueDamage);
 	m_healValueHandle = assetManager.GetImageHandle(kHPValueHeal);
-	m_beforeNowHP = m_playerStatus->GetNowHP();
-	m_nowHpRate = m_playerStatus->GetHPRate();
-	m_damageValueRate = m_playerStatus->GetHPRate();
-	m_healValueRate = m_playerStatus->GetHPRate();
+	m_beforeNowHP = m_charaStatus->GetNowHP();
+	m_nowHpRate = m_charaStatus->GetHPRate();
+	m_damageValueRate = m_charaStatus->GetHPRate();
+	m_healValueRate = m_charaStatus->GetHPRate();
 }
 
 NormalEnemyHPUI::~NormalEnemyHPUI()
@@ -62,14 +62,14 @@ void NormalEnemyHPUI::Update()
 		--m_changeHPCountFrame;
 	}
 
-	float nowHP = m_playerStatus->GetNowHP();
+	float nowHP = m_charaStatus->GetNowHP();
 	//体力が前のフレームより低かったら
 	if (nowHP < m_beforeNowHP)
 	{
 		//ダメージを受けた
 		m_damageFrame = kFluctuationValueFrame;
 		//回復バーは体力に合わせる
-		m_healValueRate = m_playerStatus->GetHPRate();
+		m_healValueRate = m_charaStatus->GetHPRate();
 		//体力に変動があったので
 		m_changeHPCountFrame = kChangeHPFrame;
 	}
@@ -78,7 +78,7 @@ void NormalEnemyHPUI::Update()
 		//回復
 		m_healFrame = kFluctuationValueFrame;
 		//回復バーは体力に合わせる
-		m_healValueRate = m_playerStatus->GetHPRate();
+		m_healValueRate = m_charaStatus->GetHPRate();
 		//体力に変動があったので
 		m_changeHPCountFrame = kChangeHPFrame;
 	}
