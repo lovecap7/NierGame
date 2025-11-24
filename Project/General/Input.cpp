@@ -62,6 +62,7 @@ void Input::Init()
 	m_inputActionMap["Gray"] = { {InputType::kKeyboard,KEY_INPUT_J}};
 	m_inputActionMap["GraySub"] = { {InputType::kKeyboard,KEY_INPUT_K}};
 	m_inputActionMap["TargetDeath"] = { {InputType::kKeyboard,KEY_INPUT_T}};
+	m_inputActionMap["Strongest"] = { {InputType::kKeyboard,KEY_INPUT_S}};
 #endif
 
 	//XV‚ğ‚·‚é

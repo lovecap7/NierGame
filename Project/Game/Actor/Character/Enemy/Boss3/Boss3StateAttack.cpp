@@ -14,6 +14,8 @@
 #include "../../../../../General/Model.h"
 #include "../../../../../General/CSV/AttackData.h"
 #include "../../../../../General/Collision/Rigidbody.h"
+#include "../../../../../General/Effect/NormalEffect.h"
+#include "../../../../../General/Effect/EffekseerManager.h"
 
 namespace
 {
@@ -23,23 +25,42 @@ namespace
 	constexpr int kTriggerFrame = 280;
 	//ミサイルのばらつき
 	constexpr float kMissileAngle = 30.0f;
+
+	//ビームポインター
+	const std::wstring kBeamPointer = L"BeamPointer";
 }
 
 Boss3StateAttack::Boss3StateAttack(std::weak_ptr<Actor> enemy, std::shared_ptr<AttackData> attackData) :
 	EnemyStateAttack(enemy, attackData),
-	m_beams()
+	m_pBeams(),
+	m_pointerDir(Vector3::Zero())
 {
+	//この攻撃がビームなら
+	if (m_attackData->GetAttackType() == AttackData::AttackType::Beam)
+	{
+		if (m_pOwner.expired())return;
+		auto owner = std::dynamic_pointer_cast<Boss3>(m_pOwner.lock());
+		//フレームインデックス取得
+		int handle = owner->GetModel()->GetModelHandle();
+		Vector3 pos = MV1GetFramePosition(handle, static_cast<int>(m_attackData->GetParam1()));
+		m_pBeamPointer = EffekseerManager::GetInstance().CreateEffect(owner->GetEffectPath(kBeamPointer), pos);
+		m_pointerDir = owner->GetModel()->GetDir();
+	}
 }
 
 Boss3StateAttack::~Boss3StateAttack()
 {
-	if (!m_beams.empty())
+	if (!m_pBeams.empty())
 	{
-		for (auto& beam : m_beams)
+		for (auto& beam : m_pBeams)
 		{
 			if (beam.expired())continue;
 			beam.lock()->Delete();
 		}
+	}
+	if(!m_pBeamPointer.expired())
+	{
+		m_pBeamPointer.lock()->Delete();
 	}
 }
 
@@ -83,6 +104,21 @@ void Boss3StateAttack::Update()
 	UpdateMove(owner, model);
 	//攻撃位置更新
 	UpdateAttackPos(owner);
+
+	//ビーム攻撃の際にポインターを出す
+	if (!m_pBeamPointer.expired())
+	{
+		auto beamPointer = m_pBeamPointer.lock();
+		//向き
+		if (m_pointerDir.SqMagnitude() > 0.0f)
+		{
+			m_pointerDir = m_pointerDir.Normalize();
+		}
+		//終点を決める
+		m_pointerDir = Quaternion::AngleAxis(m_attackData->GetParam3() * MyMath::DEG_2_RAD, Vector3::Up()) * m_pointerDir;
+		beamPointer->LookAt(m_pointerDir);
+		beamPointer->SetTimeScale(owner->GetTimeScale());
+	}
 
 	
 	//アニメーションが終了したら
@@ -201,6 +237,12 @@ void Boss3StateAttack::CreateAttack(std::shared_ptr<EnemyBase> owner)
 	}
 	else if (m_attackData->GetAttackType() == AttackData::AttackType::Beam)
 	{
+		//ポインター削除
+		if (!m_pBeamPointer.expired())
+		{
+			m_pBeamPointer.lock()->Delete();
+		}
+
 		attack = std::make_shared<BeamAttack>(m_attackData, owner);
 
 		//ビームを回転
@@ -210,7 +252,7 @@ void Boss3StateAttack::CreateAttack(std::shared_ptr<EnemyBase> owner)
 		Vector3 pos1 = MV1GetFramePosition(handle, static_cast<int>(m_attackData->GetParam1()));
 		//始点
 		beam->SetStartPos(pos1);
-		Vector3 dir = owner->GetModel()->GetDir();
+		Vector3 dir = m_pointerDir;
 		if (dir.SqMagnitude() > 0.0f)
 		{
 			dir = dir.Normalize();
@@ -223,7 +265,7 @@ void Boss3StateAttack::CreateAttack(std::shared_ptr<EnemyBase> owner)
 		beam->SetRotaAngleAndAxis(m_attackData->GetParam3(), Vector3::Up());
 
 		//ビームの参照
-		m_beams.push_back(beam);
+		m_pBeams.push_back(beam);
 	}
 
 	owner->SetAttack(attack);
@@ -242,11 +284,6 @@ void Boss3StateAttack::UpdateMove(std::shared_ptr<EnemyBase> owner, std::shared_
 	{
 		//向き
 		Vector3 dir = owner->GetToTargetVec();
-		if (m_attackData->GetAttackType() == AttackData::AttackType::Beam)
-		{
-			dir = model->GetDir();
-			dir = Quaternion::AngleAxis(m_attackData->GetParam3() * MyMath::DEG_2_RAD, Vector3::Up()) * dir;
-		}
 		//モデルの向き
 		model->SetDir(dir.XZ());
 	}

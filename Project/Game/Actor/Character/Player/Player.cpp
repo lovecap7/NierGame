@@ -195,6 +195,12 @@ void Player::Update()
 			m_targetInfo.m_pTarget.lock()->GetCharaStatus()->OnDamage(99999, 99999, CharaStatus::AttackWeight::Heaviest);
 		}
 	}
+	if (input.IsTrigger("Strongest"))
+	{
+		m_charaStatus->SetAT(9999);
+		m_charaStatus->SetDF(9999);
+		m_charaStatus->SetMS(100);
+	}
 
 	////タイムスケール
 	//if (input.IsTrigger("Y"))

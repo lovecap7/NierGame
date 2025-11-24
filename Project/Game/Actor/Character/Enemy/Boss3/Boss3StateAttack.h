@@ -6,6 +6,7 @@ class Actor;
 class AttackData;
 class AttackBase;
 class EnemyBase;
+class NormalEffect;
 class BeamAttack;
 class Boss3StateAttack :
 	public EnemyStateAttack
@@ -25,6 +26,12 @@ private:
 	void UpdateAttackPos(std::shared_ptr<EnemyBase> owner)override;
 private:
 	//ビーム
-	std::vector<std::weak_ptr<BeamAttack>> m_beams;
+	std::vector<std::weak_ptr<BeamAttack>> m_pBeams;
+
+	//ビームのポインター
+	std::weak_ptr<NormalEffect> m_pBeamPointer;
+
+	//ポインターの向き
+	Vector3 m_pointerDir;
 };
 

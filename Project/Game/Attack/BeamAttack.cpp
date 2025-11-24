@@ -1,6 +1,7 @@
 #include "BeamAttack.h"
 #include "../../General/Collision/CapsuleCollider.h"
 #include "../../General/Collision/Rigidbody.h"
+#include "../../General/Effect/NormalEffect.h"
 #include "../../Main/Application.h"
 
 BeamAttack::BeamAttack(std::shared_ptr<AttackData> attackData, std::weak_ptr<CharacterBase> pOwner) :
@@ -37,6 +38,11 @@ void BeamAttack::Update()
 		sToE = Quaternion::AngleAxis(m_rotaAngle * MyMath::DEG_2_RAD * Application::GetInstance().GetTimeScale(), m_axis) * sToE;
 		Vector3 nextEndPos = startPos + (sToE * len);
 		std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->SetEndPos(nextEndPos);
+
+		if (!m_attackEffect.expired())
+		{
+			m_attackEffect.lock()->LookAt(sToE);
+		}
 	}
 }
 
