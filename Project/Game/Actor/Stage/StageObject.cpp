@@ -3,7 +3,12 @@
 #include "../../../General/Collision/Rigidbody.h"
 #include "../../../General/Collision/Collidable.h"
 #include "../../../General/Collision/PolygonCollider.h"
+#include "../../../General/Effect/EffekseerManager.h"
+#include "../../../General/Effect/TrackActorEffect.h"
 #include "../../../General/Model.h"
+
+
+
 StageObject::StageObject(std::shared_ptr<ActorData> actorData, std::weak_ptr<ActorManager> pActorManager):
 	Actor(actorData,Shape::Polygon,pActorManager),
 	m_isDraw(true)

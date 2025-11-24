@@ -6,6 +6,7 @@ class StageObject;
 class EnemyBase;
 class EnemyManager;
 class ActorManager;
+class TrackActorEffect;
 class Player;
 class BattleArea
 {
@@ -28,13 +29,16 @@ private:
 	//範囲内の敵
 	std::list<std::weak_ptr<EnemyBase>> m_areaEnemies;
 	//エリア始点
-	std::weak_ptr<StageObject> m_startArea;
+	std::weak_ptr<StageObject> m_pStartArea;
 	//エリア終点
-	std::weak_ptr<StageObject> m_endArea;
+	std::weak_ptr<StageObject> m_pEndArea;
 	//エリア内にプレイヤーが入ったか
 	bool m_isBattleStart;
 	//全ての敵を倒した
 	bool m_isNoEnemys;
+	//エフェクト
+	std::weak_ptr<TrackActorEffect> m_pStartEffect;
+	std::weak_ptr<TrackActorEffect> m_pEndEffect;
 private:
 	//範囲内の敵を取得
 	void InitInEnemys(const std::shared_ptr<EnemyManager> enemyManager);

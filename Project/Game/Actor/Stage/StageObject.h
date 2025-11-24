@@ -4,6 +4,7 @@
 #include <DxLib.h>
 #include <memory>
 class Collidable;
+class NormalEffect;
 class ActorManager;
 class StageObject :
     public Actor

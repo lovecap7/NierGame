@@ -6,13 +6,22 @@
 #include "../Character/Enemy/EnemyBase.h"
 #include "../../../General/Collision/Physics.h"
 #include "../../../General/Collision/CapsuleCollider.h"
+#include "../../../General/Effect/TrackActorEffect.h"
+#include "../../../General/Effect/EffekseerManager.h"
+
+namespace
+{
+	const std::wstring kBarricadePath = L"Barricade";
+}
 
 BattleArea::BattleArea(std::weak_ptr<StageObject> start, std::weak_ptr<StageObject> end):
-	m_startArea(start),
-	m_endArea(end),
+	m_pStartArea(start),
+	m_pEndArea(end),
 	m_isBattleStart(false),
 	m_isNoEnemys(false),
-	m_update(&BattleArea::UpdatePlayerSearvh)
+	m_update(&BattleArea::UpdatePlayerSearvh),
+	m_pStartEffect(),
+	m_pEndEffect()
 {
 }
 
@@ -82,9 +91,9 @@ void BattleArea::CheckDeathEnemys()
 
 bool BattleArea::IsInArea(const Vector3& pos,float radius) const
 {
-	if (m_startArea.expired() || m_endArea.expired())return false;
-	auto startWall = m_startArea.lock();
-	auto endWall = m_endArea.lock();
+	if (m_pStartArea.expired() || m_pEndArea.expired())return false;
+	auto startWall = m_pStartArea.lock();
+	auto endWall = m_pEndArea.lock();
 
 	//始点
 	Vector3 startPos = startWall->GetPos();
@@ -104,25 +113,45 @@ bool BattleArea::IsInArea(const Vector3& pos,float radius) const
 
 void BattleArea::OnWall()
 {
-	if (m_startArea.expired() || m_endArea.expired())return;
+	if (m_pStartArea.expired() || m_pEndArea.expired())return;
+	//エフェクトの作成
+	m_pStartEffect = EffekseerManager::GetInstance().CreateTrackActorEffect(kBarricadePath, m_pStartArea);
+	m_pEndEffect = EffekseerManager::GetInstance().CreateTrackActorEffect(kBarricadePath, m_pEndArea);
+	auto startWall = m_pStartArea.lock();
+	auto endWall = m_pEndArea.lock();
+	if (!m_pStartEffect.expired() && !m_pEndEffect.expired())
+	{
+		auto startEffect = m_pStartEffect.lock();
+		auto endEffect = m_pEndEffect.lock();
+
+		//向き
+		startEffect->LookAt(startWall->GetDir());
+		endEffect->LookAt(endWall->GetDir());
+	}
+
 	//壁を展開
-	m_startArea.lock()->SetIsThrough(false);
-	m_endArea.lock()->SetIsThrough(false);
+	startWall->SetIsThrough(false);
+	endWall->SetIsThrough(false);
 }
 
 void BattleArea::OffWall()
 {
-	if (m_startArea.expired() || m_endArea.expired())return;
+	if (m_pStartArea.expired() || m_pEndArea.expired())return;
 	//壁を貫通
-	m_startArea.lock()->SetIsThrough(true);
-	m_endArea.lock()->SetIsThrough(true);
+	m_pStartArea.lock()->SetIsThrough(true);
+	m_pEndArea.lock()->SetIsThrough(true);
+	if (!m_pStartEffect.expired() && !m_pEndEffect.expired())
+	{
+		m_pStartEffect.lock()->Delete();
+		m_pEndEffect.lock()->Delete();
+	}
 }
 
 void BattleArea::End()
 {
 	m_areaEnemies.clear();
-	m_startArea.reset();
-	m_endArea.reset();
+	m_pStartArea.reset();
+	m_pEndArea.reset();
 }
 
 std::list<std::shared_ptr<EnemyBase>> BattleArea::GetAreaEnemys()
