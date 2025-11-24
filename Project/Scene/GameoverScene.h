@@ -22,8 +22,17 @@ public:
     virtual void Restart() override {};
     //デバッグ用
     virtual void DebugDraw() const override;
+    //メニューインデックス
+    enum class Menu : int
+    {
+        Continue = 0,
+        Restart = 1,
+        StageSelect = 2,
+    };
 private:
     //UI
 	std::weak_ptr<GameoverUI> m_pGameoverUI;
+    //メニュー
+    Menu m_menuIndex;
 };
 

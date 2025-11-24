@@ -2,6 +2,7 @@
 #include "../UIBase.h"
 #include "../../../General/Math/MyMath.h"
 #include "../../../General/StageIndex.h"    
+#include "../../../Scene/TutorialResultScene.h"    
 #include <memory>
 #include <string>
 class Timer;
@@ -19,7 +20,7 @@ public:
     bool IsFinish()const { return m_isFinish; };
 
     //メニューセレクト
-    void SetMenuIndex(int index);
+    void SetMenuIndex(TutorialResultScene::Menu index) { m_menuIndex = index; };
 private:
     //ハンドル
     int m_mcHandle;
@@ -39,14 +40,7 @@ private:
     Vector2 m_mcPos;
     Vector2 m_menuPos;
     Vector2 m_cousorPos;
-
-
     //メニュー
-    enum class Menu : int
-    {
-        Next = 0,
-        Select = 1,
-    };
-    Menu m_menuIndex;
+    TutorialResultScene::Menu m_menuIndex;
 };
 

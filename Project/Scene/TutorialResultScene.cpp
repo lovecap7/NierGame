@@ -83,7 +83,7 @@ void TutorialResultScene::Update()
 		if (input.IsTrigger("Down"))++index;
 		index = MathSub::ClampInt(index, static_cast<int>(Menu::Next), static_cast<int>(Menu::Select));
 		m_menuIndex = static_cast<Menu>(index);
-		ui->SetMenuIndex(index);
+		ui->SetMenuIndex(m_menuIndex);
 	}
 
 }

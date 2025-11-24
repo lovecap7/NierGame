@@ -26,17 +26,18 @@ public:
     virtual void Restart() override {};
     //デバッグ用
     virtual void DebugDraw() const override;
-private:
-    //リザルトのUI
-    std::weak_ptr<TutorialResultUI> m_mcUI;
-    //チュートリアル名
-    StageIndex m_tutorialIndex;
     //メニューインデックス
     enum class Menu : int
     {
         Next = 0,
         Select = 1
     };
+private:
+    //リザルトのUI
+    std::weak_ptr<TutorialResultUI> m_mcUI;
+    //チュートリアル名
+    StageIndex m_tutorialIndex;
+    //メニューインデックス
     Menu m_menuIndex;
 };
 

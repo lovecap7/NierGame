@@ -1,6 +1,10 @@
 #include "GameoverScene.h"
+#include "SceneController.h"
+#include "SelectScene.h"
 #include "../General/AssetManager.h"
 #include "../General/Fader.h"
+#include "../General/Input.h"
+#include "../General/Collision/Physics.h"
 #include "../Game/UI/Gameover/GameoverUI.h"
 #include "../Game/UI/UIManager.h"
 
@@ -20,6 +24,8 @@ void GameoverScene::Init()
 
 	//UIの削除
 	UIManager::GetInstance().AllDeleteUI();
+	//Phisicsを停止
+	Physics::GetInstance().StopUpdate();
 
 	auto gameoverUI = std::make_shared<GameoverUI>();
 	gameoverUI->Init();
@@ -28,6 +34,50 @@ void GameoverScene::Init()
 
 void GameoverScene::Update()
 {
+	auto& input = Input::GetInstance();
+	auto& fader = Fader::GetInstance();
+	//フェードアウトしきったら
+	if (fader.IsFinishFadeOut())
+	{
+		if (m_controller.GetBaseScene().expired())return;
+		auto baseScene = m_controller.GetBaseScene().lock();
+		switch (m_menuIndex)
+		{
+		case GameoverScene::Menu::Continue:
+			baseScene->Restart();
+			break;
+		case GameoverScene::Menu::Restart:
+			baseScene->End();
+			baseScene->Init();
+			break;
+		case GameoverScene::Menu::StageSelect:
+			m_controller.ChangeBaseScene(std::make_unique<SelectScene>(m_controller));
+			break;
+		default:
+			m_controller.ChangeBaseScene(std::make_unique<SelectScene>(m_controller));
+			break;
+		}
+		m_controller.PopScene();
+		return;
+	}
+	//ボタンを押したら次
+	if (m_pGameoverUI.expired())return;
+	auto ui = m_pGameoverUI.lock();
+	if (!fader.IsFadeNow() && ui->IsFinish())
+	{
+		if (input.IsTrigger("A"))
+		{
+			fader.FadeOut();
+		}
+		//カーソル
+		int index = static_cast<int>(m_menuIndex);
+		if (input.IsTrigger("Up"))--index;
+		if (input.IsTrigger("Down"))++index;
+		index = MathSub::ClampInt(index, static_cast<int>(Menu::Continue), static_cast<int>(Menu::StageSelect));
+		m_menuIndex = static_cast<Menu>(index);
+		ui->SetMenuIndex(m_menuIndex);
+	}
+
 }
 
 void GameoverScene::Draw()
@@ -36,6 +86,8 @@ void GameoverScene::Draw()
 
 void GameoverScene::End()
 {
+	//Phisicsを開始
+	Physics::GetInstance().StartUpdate();
 }
 
 void GameoverScene::DebugDraw() const

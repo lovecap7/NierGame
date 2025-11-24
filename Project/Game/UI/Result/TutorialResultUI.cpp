@@ -37,7 +37,7 @@ TutorialResultUI::TutorialResultUI(StageIndex tutorialIndex) :
 	m_mcPos{ -Game::kScreenWidth,Game::kScreenCenterY },
 	m_menuPos{ -Game::kScreenWidth, Game::kScreenCenterY },
 	m_cousorPos{ -Game::kScreenWidth, Game::kScreenCenterY },
-	m_menuIndex(Menu::Next)
+	m_menuIndex(TutorialResultScene::Menu::Next)
 {
 	auto& assetManager = AssetManager::GetInstance();
 	//ミッションコンプリート
@@ -73,10 +73,10 @@ void TutorialResultUI::Update()
 		selectStagePos.y += kMenuOffsetY;
 		switch (m_menuIndex)
 		{
-		case TutorialResultUI::Menu::Next:
+		case TutorialResultScene::Menu::Next:
 			nextCousorPos = nextTutorialPos;
 			break;
-		case TutorialResultUI::Menu::Select:
+		case TutorialResultScene::Menu::Select:
 			nextCousorPos = selectStagePos;
 			break;
 		default:
@@ -109,10 +109,10 @@ void TutorialResultUI::Draw() const
 	SetDrawBlendMode(DX_BLENDMODE_INVSRC, 255);
 	switch (m_menuIndex)
 	{
-	case TutorialResultUI::Menu::Next:
+	case TutorialResultScene::Menu::Next:
 		DrawRotaGraph(nextTutorialPos.x, nextTutorialPos.y, 1.0, 0.0, m_nextTutorialHandle, true);
 		break;
-	case TutorialResultUI::Menu::Select:
+	case TutorialResultScene::Menu::Select:
 		DrawRotaGraph(selectStagePos.x, selectStagePos.y, 1.0, 0.0, m_selectStageHandle, true);
 		break;
 	default:
@@ -124,9 +124,4 @@ void TutorialResultUI::Draw() const
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	
-}
-
-void TutorialResultUI::SetMenuIndex(int index)
-{
-	m_menuIndex = static_cast<Menu>(MathSub::ClampInt(index, static_cast<int>(Menu::Next), static_cast<int>(Menu::Select)));
 }

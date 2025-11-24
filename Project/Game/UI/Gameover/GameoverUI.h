@@ -2,6 +2,7 @@
 #include "../UIBase.h"
 #include "../../../General/Math/MyMath.h"
 #include "../../../General/StageIndex.h"    
+#include "../../../Scene/GameoverScene.h"    
 #include <memory>
 #include <string>
 class Timer;
@@ -15,7 +16,11 @@ public:
     void Update() override;
     //描画
     void Draw()const override;
-  
+    //インデックス
+    void SetMenuIndex(GameoverScene::Menu index) { m_menuIndex = index; };
+    //動きが終了したか
+    bool IsFinish()const { return m_isFinish; };
+
 private:
     //背景
     int m_backHandle;
@@ -27,6 +32,8 @@ private:
 	int m_restartHandle;
 	//ステージセレクトへ
 	int m_stageSelectHandle;
+    //カーソル
+    int m_cursorHandle;
 private:
     //フレームカウント
 	int m_countFrame;
@@ -34,13 +41,11 @@ private:
 	Vector2 m_gameoverPos;
     //メニューの位置
     Vector2 m_menuPos;
-    //メニューインデックス
-    enum class Menu : int
-    {
-        Continue = 0,
-        Restart = 1,
-        StageSelect = 2,
-    };
-	Menu m_menuIndex;
+	//カーソルの位置
+	Vector2 m_cousorPos;
+	//メニュー
+    GameoverScene::Menu m_menuIndex;
+	//動きが終了したか
+	bool m_isFinish;
 };
 
