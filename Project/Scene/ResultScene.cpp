@@ -47,9 +47,12 @@ void ResultScene::Update()
 		return;
 	}
 	//ƒ{ƒ^ƒ“‚ð‰Ÿ‚µ‚½‚çŽŸ
-	if (input.IsTrigger("A") && !fader.IsFadeNow())
+	if (input.IsTrigger("A") && !fader.IsFadeNow() && !m_resultUI.expired())
 	{
-		fader.FadeOut();
+		if (m_resultUI.lock()->IsFinish())
+		{
+			fader.FadeOut();
+		}
 	}
 }
 

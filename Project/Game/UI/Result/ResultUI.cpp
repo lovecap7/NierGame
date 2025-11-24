@@ -42,13 +42,16 @@ namespace
     constexpr int kTimeMaxHalfAnHour = 30;
 
     //リザルトの情報を表示するフレーム
-    constexpr int kDisplayResultInfoFrame = 60;
+    constexpr int kDisplayResultInfoFrame = 45;
 
     //透明度の最高
     constexpr int kAlphaMax = 255;
 
     //リザルトランクのパス
     const std::wstring kResultRankPath = L"/ResultRankData";
+
+    //終了フレーム
+	constexpr int kFinishFrame = 150;
 }
 
 ResultUI::ResultUI(std::wstring stageName, std::shared_ptr<Timer> timer):
@@ -156,4 +159,9 @@ void ResultUI::Draw() const
     SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_pressAnyBottonHandle.alpha);
     DrawRotaGraph(kPressAnyBottonPosX, kPressAnyBottonPosY, 1.0, 0.0, m_pressAnyBottonHandle.handle, true);
     SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+}
+
+bool ResultUI::IsFinish()const
+{
+    return m_countFrame >= kFinishFrame;
 }

@@ -20,16 +20,25 @@ namespace
 	const Vector2 kMenuFirstPos = Vector2(-Game::kScreenCenterX, Game::kScreenCenterY - 60);
 	const Vector2 kMenuSecondPos = Vector2(Game::kScreenCenterX, Game::kScreenCenterY - 60);
 
+	//影の位置をずらす
+	constexpr float kShadowOffsetX = 10.0f;
+	constexpr float kShadowOffsetY = 10.0f;
+
 	//カーソル位置
-	constexpr int kCursorOffsetX = 350;
-	const Vector2 kCursorPos = Vector2(-Game::kScreenCenterX - kCursorOffsetX, Game::kScreenCenterY - 60);
+	constexpr float kCursorOffsetX = 350.0f;
+	const Vector2 kCursorPos = Vector2(-Game::kScreenCenterX - kCursorOffsetX, Game::kScreenCenterY - 60.0f);
+
+	//カーソル速度
+	constexpr float kCursorSpeed = 10.0f;
+	//カーソル移動幅
+	constexpr float kCursorMoveWidth = 10.0f;
 
 	//メニューテキストをずらす
-	constexpr int kMenuOffsetY = 140;
+	constexpr float kMenuOffsetY = 140.0f;
 
 	//フレーム
-	constexpr int kGameoverMoveFrame = 60;
-	constexpr int kMenuMoveFrame = 80;
+	constexpr float kGameoverMoveFrame = 60.0f;
+	constexpr float kMenuMoveFrame = 80.0f;
 
 	//Lerp率
 	constexpr float kGameoverLerpRate = 0.1f;
@@ -128,36 +137,50 @@ void GameoverUI::Draw() const
 	Vector2 stageSelectPos = m_menuPos;
 	stageSelectPos.y += kMenuOffsetY * 2;
 
+	//カーソルをずらす
+	float cousorOffsetX = cosf(m_countFrame * kCursorSpeed * MyMath::DEG_2_RAD) * kCursorMoveWidth;
 
+	//影
+	SetDrawBlendMode(DX_BLENDMODE_SUB, 255);
 	//コンティニュー
-	DrawRotaGraph(continuePos.x, continuePos.y, 1.0, 0.0, m_continueHandle, true);
+	DrawRotaGraphF(continuePos.x + kShadowOffsetX, continuePos.y + kShadowOffsetY, 1.0, 0.0, m_continueHandle, true);
 	//リスタート
-	DrawRotaGraph(restartPos.x, restartPos.y, 1.0, 0.0, m_restartHandle, true);
+	DrawRotaGraphF(restartPos.x + kShadowOffsetX, restartPos.y + kShadowOffsetY, 1.0, 0.0, m_restartHandle, true);
 	//ステージセレクト
-	DrawRotaGraph(stageSelectPos.x, stageSelectPos.y, 1.0, 0.0, m_stageSelectHandle, true);
+	DrawRotaGraphF(stageSelectPos.x + kShadowOffsetX, stageSelectPos.y + kShadowOffsetY, 1.0, 0.0, m_stageSelectHandle, true);
+	//カーソル
+	DrawRotaGraphF(m_cousorPos.x + kShadowOffsetX + cousorOffsetX, m_cousorPos.y + kShadowOffsetY, 1.0, 0.0, m_cursorHandle, true);
+
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 	
+	//コンティニュー
+	DrawRotaGraphF(continuePos.x, continuePos.y, 1.0, 0.0, m_continueHandle, true);
+	//リスタート
+	DrawRotaGraphF(restartPos.x, restartPos.y, 1.0, 0.0, m_restartHandle, true);
+	//ステージセレクト
+	DrawRotaGraphF(stageSelectPos.x, stageSelectPos.y, 1.0, 0.0, m_stageSelectHandle, true);
 	//選んでいるものを反転
 	SetDrawBlendMode(DX_BLENDMODE_INVSRC, 255);
 	switch (m_menuIndex)
 	{
 	case GameoverScene::Menu::Continue:
 		//コンティニュー
-		DrawRotaGraph(continuePos.x, continuePos.y, 1.0, 0.0, m_continueHandle, true);
+		DrawRotaGraphF(continuePos.x, continuePos.y, 1.0, 0.0, m_continueHandle, true);
 		break;
 	case GameoverScene::Menu::Restart:
 		//リスタート
-		DrawRotaGraph(restartPos.x, restartPos.y, 1.0, 0.0, m_restartHandle, true);
+		DrawRotaGraphF(restartPos.x, restartPos.y, 1.0, 0.0, m_restartHandle, true);
 		break;
 	case GameoverScene::Menu::StageSelect:
 		//ステージセレクト
-		DrawRotaGraph(stageSelectPos.x, stageSelectPos.y, 1.0, 0.0, m_stageSelectHandle, true);
+		DrawRotaGraphF(stageSelectPos.x, stageSelectPos.y, 1.0, 0.0, m_stageSelectHandle, true);
 		break;
 	default:
 		break;
 	}
-
 	//カーソル
-	DrawRotaGraph(m_cousorPos.x, m_cousorPos.y, 1.0, 0.0, m_cursorHandle, true);
+	DrawRotaGraphF(m_cousorPos.x + cousorOffsetX, m_cousorPos.y, 1.0, 0.0, m_cursorHandle, true);
 
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	
 }

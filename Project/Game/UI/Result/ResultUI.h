@@ -13,6 +13,8 @@ public:
     void Update() override;
     //•`‰æ
     void Draw()const override;
+    //•`‰æI—¹
+    bool IsFinish()const;
 private:
     struct Image
     {

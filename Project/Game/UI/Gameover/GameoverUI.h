@@ -47,5 +47,6 @@ private:
     GameoverScene::Menu m_menuIndex;
 	//“®‚«‚ªI—¹‚µ‚½‚©
 	bool m_isFinish;
+    
 };
 

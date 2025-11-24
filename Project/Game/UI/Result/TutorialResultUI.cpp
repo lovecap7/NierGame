@@ -24,6 +24,13 @@ namespace
 	constexpr float kMenuLerpRate = 0.1f;
 	constexpr float kCousorLerpXRate = 0.1f;
 	constexpr float kCousorLerpYRate = 0.5f;
+	//影の位置をずらす
+	constexpr float kShadowOffsetX = 10.0f;
+	constexpr float kShadowOffsetY = 10.0f;
+	//カーソル速度
+	constexpr float kCousorSpeed = 10.0f;
+	//カーソル移動幅
+	constexpr float kCousorMoveWidth = 10.0f;
 }
 
 TutorialResultUI::TutorialResultUI(StageIndex tutorialIndex) :
@@ -92,7 +99,7 @@ void TutorialResultUI::Update()
 void TutorialResultUI::Draw() const
 {	
 	//背景
-	SetDrawBlendMode(DX_BLENDMODE_ADD, 100);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
 	DrawGraph(0, 0, m_backHandle, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
@@ -103,6 +110,16 @@ void TutorialResultUI::Draw() const
 	Vector2 nextTutorialPos = m_menuPos;
 	Vector2 selectStagePos = m_menuPos;
 	selectStagePos.y += kMenuOffsetY;
+
+	//カーソルを動かす
+	float cousorOffsetPosX = cosf(m_countFrame * kCousorSpeed * MyMath::DEG_2_RAD) * kCousorMoveWidth;
+
+	//影
+	SetDrawBlendMode(DX_BLENDMODE_SUB, 255);
+	DrawRotaGraph(nextTutorialPos.x + kShadowOffsetX, nextTutorialPos.y + kShadowOffsetY, 1.0, 0.0, m_nextTutorialHandle, true);
+	DrawRotaGraph(selectStagePos.x + kShadowOffsetX, selectStagePos.y + kShadowOffsetY, 1.0, 0.0, m_selectStageHandle, true);
+	DrawRotaGraph(m_cousorPos.x + kShadowOffsetX + cousorOffsetPosX, m_cousorPos.y + kShadowOffsetY, 1.0, 0.0, m_cursorHandle, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	DrawRotaGraph(nextTutorialPos.x, nextTutorialPos.y, 1.0, 0.0, m_nextTutorialHandle, true);
 	DrawRotaGraph(selectStagePos.x, selectStagePos.y , 1.0, 0.0, m_selectStageHandle, true);
@@ -119,7 +136,7 @@ void TutorialResultUI::Draw() const
 		break;
 	}
 	//カーソル
-	DrawRotaGraph(m_cousorPos.x, m_cousorPos.y, 1.0, 0.0, m_cursorHandle, true);
+	DrawRotaGraph(m_cousorPos.x + cousorOffsetPosX, m_cousorPos.y, 1.0, 0.0, m_cursorHandle, true);
 
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
