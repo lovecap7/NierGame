@@ -3,9 +3,10 @@
 #include "../../../../General/Collision/SphereCollider.h"
 #include "../../../../General/Collision/Rigidbody.h"
 
-AvoidColl::AvoidColl(float radius):
+AvoidColl::AvoidColl(float radius, unsigned int playerID):
 	Collidable(Shape::Sphere),
-	m_isHit(false)
+	m_isHit(false),
+	m_playerID(playerID)
 {
 	//”¼Œa
 	std::dynamic_pointer_cast<SphereCollider>(m_collisionData)->SetRadius(radius);
@@ -50,10 +51,11 @@ void AvoidColl::OnCollide(const std::shared_ptr<Collidable> other)
 	//UŒ‚‚É“–‚½‚Á‚½ê‡
 	if (other->GetGameTag() == GameTag::Attack)
 	{
+		auto attack = std::dynamic_pointer_cast<AttackBase>(other);
 		//“G‚ÌUŒ‚‚©‚ğƒ`ƒFƒbƒN
-		if (std::dynamic_pointer_cast<AttackBase>(other)->GetOwnerTag() == GameTag::Enemy)
+		if (attack->GetOwnerTag() == GameTag::Enemy)
 		{
-			m_isHit = true;
+			m_isHit = !attack->IsHitID(m_playerID);
 		}
 	}
 }

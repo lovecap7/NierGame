@@ -94,7 +94,7 @@ Player::Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatus
 	//初期リスポーン地点
 	SetRespawnPos(GetPos());
 	//回避判定作成
-	m_avoidColl = std::make_shared<AvoidColl>(m_actorData->GetCollRadius() * kAvoidCollRadiusRate);
+	m_avoidColl = std::make_shared<AvoidColl>(m_actorData->GetCollRadius() * kAvoidCollRadiusRate, m_id);
 }
 
 Player::~Player()
@@ -226,8 +226,6 @@ void Player::Update()
 	//{
 	//	HaveBigSword();
 	//}
-
-
 #endif
 
 	//回復

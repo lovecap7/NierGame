@@ -6,4 +6,4 @@ AreaE2,58,Stage,-22.33909,-0.01883316,109.9824,270,0,0,10,5,5,Collision/Plane,St
 AreaS3,69,Stage,30.16091,-0.01883316,130.1624,90,0,0,15,5,5,Collision/Plane,Static,Object,0,0,0,0,0,None
 AreaE3,55,Stage,-31.63909,-0.01883316,160.9624,270,0,0,15,5,5,Collision/Plane,Static,Object,0,0,0,0,0,None
 AreaS4,48,Stage,30.16091,-0.01883316,195.3624,90,0,0,15,5,5,Collision/Plane,Static,Object,0,0,0,0,0,None
-AreaE4,62,Stage,-31.63909,-0.01883316,288.6624,270,0,0,15,5,5,Collision/Plane,Static,Object,0,0,0,0,0,None
+AreaE4,62,Stage,-54.33909,-34.81883,338.1624,270,0,0,15,5,5,Collision/Plane,Static,Object,0,0,0,0,0,None

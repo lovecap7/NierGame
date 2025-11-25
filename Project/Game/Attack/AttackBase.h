@@ -49,6 +49,9 @@ public:
 
     //UŒ‚‚Ìƒ^ƒO
     GameTag GetOwnerTag()const;
+
+	//“–‚½‚Á‚½ID‚©
+    bool IsHitID(int otherID);
 protected:
     //ˆĞ—Í
     int m_attackPower;

@@ -14,7 +14,7 @@ namespace
 	constexpr int kTryNum = 3;
 
 	//重力
-	const Vector3 kGroundGravity = { 0.0f, -5.0f, 0.0f };
+	const Vector3 kGroundGravity = { 0.0f, -10.0f, 0.0f };
 	const Vector3 kAirGravity = { 0.0f, -0.5f, 0.0f };
 }
 
@@ -249,7 +249,10 @@ void Physics::Gravity()
 		auto rb = collidable->m_rb;
 		//地上にいるときと空中にいるときで重力の大きさを変える
 		auto gravity = kGroundGravity;
-		if (!collidable->IsFloor())//地上にいない場合
+		//地上にいない場合
+		if (!collidable->IsFloor() || 
+			collidable->m_collState == CollisionState::Jump ||
+			collidable->m_collState == CollisionState::Fall)
 		{
 			gravity = kAirGravity;
 		}

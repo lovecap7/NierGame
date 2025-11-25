@@ -144,7 +144,7 @@ void AttackBase::OnCollide(const std::shared_ptr<Collidable> other)
 		int otherID = otherColl->GetID();
 
 		//ID‚ª‚·‚Å‚É‹L˜^‚³‚ê‚Ä‚¢‚é‚©Šm”F
-		if (m_hitId.contains(otherID))
+		if (IsHitID(otherID))
 		{
 			//‚·‚Å‚É“–‚½‚Á‚Ä‚¢‚é
 			return; 
@@ -201,6 +201,7 @@ void AttackBase::OnCollide(const std::shared_ptr<Collidable> other)
 	}
 }
 
+
 void AttackBase::End()
 {
 	Collidable::End();
@@ -226,4 +227,9 @@ GameTag AttackBase::GetOwnerTag() const
 {
 	if (m_pOwner.expired())return GameTag::None;
 	return m_pOwner.lock()->GetGameTag();
+}
+
+bool AttackBase::IsHitID(int otherID)
+{
+	return m_hitId.contains(otherID);
 }

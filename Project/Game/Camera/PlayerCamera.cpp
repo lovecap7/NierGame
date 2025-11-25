@@ -242,9 +242,9 @@ void PlayerCamera::LockOnUpdate(Input& input, Vector3& targetPos)
     m_lockOnSide = MathSub::Lerp(m_lockOnSide, m_nextlockOnSide, kLockOnSideLerpRate);
 
     //カメラの理想の位置を決めていく
-    basePos.y = MathSub::Max(MathSub::Max(playerPos.y,lockPos.y) , playerPos.y + kUpOffset);            //高いほうに合わせる
-    basePos -= (toEnemyXZ * (kBackOffset + abs(lockPos.y - playerPos.y) * kBackRate));  //高さの差で距離を離す(でかい奴ほど引いた視点で見たいので)
-    basePos += (playerRight * m_lockOnSide);                                //少し横から見たような視点にしたい
+    basePos.y = MathSub::Max(MathSub::Max(playerPos.y,lockPos.y) , playerPos.y + kUpOffset);//高いほうに合わせる
+    basePos -= (toEnemyXZ * (kBackOffset + abs(lockPos.y - playerPos.y) * kBackRate));      //高さの差で距離を離す(でかい奴ほど引いた視点で見たいので)
+    basePos += (playerRight * m_lockOnSide);                                                //少し横から見たような視点にしたい
 
     //次の座標を求める
     Vector3 nextPos = basePos;
