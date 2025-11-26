@@ -60,6 +60,8 @@ public:
 	Vector3 GetToTargetVec() const;
 	//ターゲット情報取得
 	TargetInfo GetTargetInfo() const { return m_targetInfo; }
+	//ターゲットへモデルの向きを更新
+	void UpdateModelDirToTargetDir();
 
 	//近距離攻撃範囲
 	bool IsInMeleeRange() const;

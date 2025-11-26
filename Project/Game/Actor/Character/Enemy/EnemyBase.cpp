@@ -184,18 +184,25 @@ void EnemyBase::SearchTarget(std::shared_ptr<Player> player)
 
 Vector3 EnemyBase::GetToTargetVec() const
 {
+	if (!m_targetInfo.m_isFound || m_targetInfo.m_pTarget.expired())
 	{
-		if (!m_targetInfo.m_isFound || m_targetInfo.m_pTarget.expired())
-		{
-			return Vector3::Zero();
-		}
-		auto target = m_targetInfo.m_pTarget.lock();
-		Vector3 toTarget = target->GetRb()->GetPos() - this->GetRb()->GetPos();
-		if (toTarget.SqMagnitude() > 0.0f)
-		{
-			toTarget = toTarget.Normalize();
-		}
-		return toTarget;
+		return Vector3::Zero();
+	}
+	auto target = m_targetInfo.m_pTarget.lock();
+	Vector3 toTarget = target->GetRb()->GetPos() - this->GetRb()->GetPos();
+	if (toTarget.SqMagnitude() > 0.0f)
+	{
+		toTarget = toTarget.Normalize();
+	}
+	return toTarget;
+}
+
+void EnemyBase::UpdateModelDirToTargetDir()
+{
+	Vector2 dir = GetToTargetVec().XZ();
+	if(dir.Magnitude() > 0.0f)
+	{
+		m_model->SetDir(dir.XZ());
 	}
 }
 

@@ -69,6 +69,8 @@ void Boss3StateIdle::Update()
 				return;
 			}
 		}
+		//プレイヤーの方向を向く
+		owner->UpdateModelDirToTargetDir();
 	}
 
 	//移動量リセット

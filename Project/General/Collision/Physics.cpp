@@ -5,6 +5,7 @@
 #include "CapsuleCollider.h"
 #include "PolygonCollider.h"
 #include "Rigidbody.h"
+#include "../../Game/Attack/AttackBase.h"
 #include "../../Main/Application.h"
 #include <cassert>
 
@@ -93,6 +94,19 @@ void Physics::CheckCollidable(std::list<Physics::OnCollideInfo>& onCollideInfo)
 				//“–‚½‚è”»’è‚ğs‚í‚È‚¢‚È‚ç”ò‚Î‚·
 				if (collB->GetGameTag() == GameTag::None)continue;
 				if (collB->m_isThrough)continue;
+
+				//UŒ‚“¯m
+				if(collA->GetGameTag() == GameTag::Attack &&
+				   collB->GetGameTag() == GameTag::Attack)
+				{
+					//“¯‚¶ƒ^ƒCƒv‚ÌUŒ‚‚È‚ç“–‚½‚ç‚È‚¢
+					if (std::dynamic_pointer_cast<AttackBase>(collA)->GetOwnerTag() ==
+						std::dynamic_pointer_cast<AttackBase>(collB)->GetOwnerTag())
+					{
+						continue;
+					}
+				}
+
 				//“–‚½‚Á‚Ä‚é‚È‚ç
 				if (m_collChecker->IsCollide(collA, collB))
 				{

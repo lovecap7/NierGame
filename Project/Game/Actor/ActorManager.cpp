@@ -194,6 +194,8 @@ void ActorManager::CreateActorCSV(const wchar_t* folderName, const wchar_t* file
 			//チェックポイント
 			actor = std::make_shared<CheckPoint>(actorData, shared_from_this());
 		}
+
+		//登録
 		Entry(actor);
 
 		//プレイヤーなら

@@ -1,55 +1,379 @@
 ﻿名前,ID,アクタータイプ,座標X,座標Y,座標Z,回転X,回転Y,回転Z,大きさX,大きさY,大きさZ,モデルのパス,優先度,ゲームタグ,当たり判定無視,トリガー,重力を受ける,コリジョンの半径,コリジョンの高さ,パスをまとめたパス
-DBK_Concete_Floor_Full,21,Stage,15,-2,-15,2.504478E-06,0,0,10,10,10,Stage/DBK_Concete_Floor_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Wall_Full,11,Stage,15,-1,-15,2.504478E-06,0,0,10,5,3,Stage/DBK_Concete_Wall_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Wall_Full,32,Stage,15,-1,-15,0,90,0,10,5,3,Stage/DBK_Concete_Wall_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Wall_Full,39,Stage,-15,-1,-15,0,90,0,10,5,3,Stage/DBK_Concete_Wall_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Floor_Full,42,Stage,15,-2,15,2.504478E-06,0,0,10,10,10,Stage/DBK_Concete_Floor_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Wall_Full,22,Stage,15,-1,15,0,90,0,10,5,3,Stage/DBK_Concete_Wall_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Wall_Full,29,Stage,-15,-1,15,0,90,0,10,5,3,Stage/DBK_Concete_Wall_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Floor_Full,3,Stage,15,-9,45,2.504478E-06,0,0,10,10,10,Stage/DBK_Concete_Floor_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Wall_Full,13,Stage,15,-8,45,0,90,0,10,10,3,Stage/DBK_Concete_Wall_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Wall_Full,15,Stage,-15,-8,45,0,90,0,10,10,3,Stage/DBK_Concete_Wall_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Floor_Full,4,Stage,15,-9,75,2.504478E-06,0,0,10,10,10,Stage/DBK_Concete_Floor_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Wall_Full,26,Stage,15,-8,75,0,90,0,10,10,3,Stage/DBK_Concete_Wall_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Wall_Full,24,Stage,-15,-8,75,0,90,0,10,10,3,Stage/DBK_Concete_Wall_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Floor_Full,37,Stage,15,-9.23,97.88,350,0,0,10,10,11,Stage/DBK_Concete_Floor_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Wall_Full,17,Stage,15,-8,100,0,90,0,10,10,3,Stage/DBK_Concete_Wall_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Wall_Full,14,Stage,30,-8,130,0,90,0,30,10,3,Stage/DBK_Concete_Wall_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Wall_Full,20,Stage,30,-8,219.7,0,90,0,30,10,3,Stage/DBK_Concete_Wall_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Wall_Full,38,Stage,45,-8,275.8,0,0,0,30,10,3,Stage/DBK_Concete_Wall_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Wall_Full,1,Stage,45,-8,130,0,0,0,10,10,3,Stage/DBK_Concete_Wall_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Wall_Full,8,Stage,-15,-8,130,0,0,0,10,10,3,Stage/DBK_Concete_Wall_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Wall_Full,2,Stage,-30,-8,130,0,90,0,30,10,3,Stage/DBK_Concete_Wall_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Wall_Full,23,Stage,-5,-8,163.1,0,0,0,10,10,10,Stage/DBK_Concete_Wall_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Wall_Full,10,Stage,35,-8,163.1,0,0,0,10,10,10,Stage/DBK_Concete_Wall_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Wall_Full,6,Stage,-5,-8,195.25,0,0,0,10,10,10,Stage/DBK_Concete_Wall_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Wall_Full,25,Stage,-9.02,-8,162.4,0,90,0,10,10,10,Stage/DBK_Concete_Wall_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Wall_Full,41,Stage,11,-8,162.4,0,90,0,10,10,10,Stage/DBK_Concete_Wall_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Wall_Full,12,Stage,35,-8,195.25,0,0,0,10,10,10,Stage/DBK_Concete_Wall_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Wall_Full,36,Stage,-30,-8,219.7,0,90,0,30,10,3,Stage/DBK_Concete_Wall_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Wall_Full,34,Stage,-15,-8,100,0,90,0,10,10,3,Stage/DBK_Concete_Wall_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Wall_Full,5,Stage,15,-15,45.5,0,0,0,10,5,3,Stage/DBK_Concete_Wall_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Floor_Full,35,Stage,45,-3.53,130,2.504478E-06,0,0,30,10,20,Stage/DBK_Concete_Floor_Full,Static,Object,1,1,0,0,0,None
-DBK_Concete_Floor_Full,9,Stage,45,-3.5,189.9,2.504478E-06,0,0,30,10,40,Stage/DBK_Concete_Floor_Full,Static,Object,1,1,0,0,0,None
-Plane,68,Stage,14.4,0,30.2,90,270,0,20,5,5,Collision/Plane,Static,Object,0,0,0,0,0,None
-Plane,61,Stage,0,0,-15,90,0,0,5,5,5,Collision/Plane,Static,Object,0,0,0,0,0,None
-Plane,47,Stage,0,0,10.5,0,0,0,3,5,7,Collision/Plane,Static,Object,0,0,0,0,0,None
-Plane,49,Stage,0,-7,69.2,0,0,0,3,5,7,Collision/Plane,Static,Object,0,0,0,0,0,None
-Plane,67,Stage,0,-14.5,69.2,0,0,0,3,5,7,Collision/Plane,Static,Object,0,0,0,0,0,None
-Plane,46,Stage,0,-1.53,155,0,0,0,7,5,5,Collision/Plane,Static,Object,0,0,0,0,0,None
-Plane,70,Stage,0,-1.5,251.4,0,0,0,7,5,15,Collision/Plane,Static,Object,0,0,0,0,0,None
-Plane,51,Stage,0,-4.98,110.4,350,0,0,3,5,4,Collision/Plane,Static,Object,0,0,0,0,0,None
-Plane,64,Stage,0,-5.23,45.5,90,0,0,3,5,1,Collision/Plane,Static,Object,0,0,0,0,0,None
-Plane,53,Stage,-15,0,30.2,90,90,0,20,5,5,Collision/Plane,Static,Object,0,0,0,0,0,None
-Plane,43,Stage,-30,0,220.9,90,90,0,30,5,5,Collision/Plane,Static,Object,0,0,0,0,0,None
-Plane,60,Stage,29.4,0,197,90,270,0,30,5,5,Collision/Plane,Static,Object,0,0,0,0,0,None
-Plane,45,Stage,0,0,275.2,90,180,0,7,5,5,Collision/Plane,Static,Object,0,0,0,0,0,None
-Plane,63,Stage,24.5,0,130,90,0,0,2,5,5,Collision/Plane,Static,Object,0,0,0,0,0,None
-Plane,59,Stage,-25,0,130,90,0,0,2,5,5,Collision/Plane,Static,Object,0,0,0,0,0,None
-Cube,54,Stage,30.2,-3,162.1,0,0,0,50,50,2,Collision/Cube,Static,Object,0,0,0,0,0,None
-Cube,65,Stage,-30,-3,162.1,0,0,0,50,50,2,Collision/Cube,Static,Object,0,0,0,0,0,None
-Cube,71,Stage,30.2,-3,194.22,0,0,0,50,50,2,Collision/Cube,Static,Object,0,0,0,0,0,None
-Cube,50,Stage,-30,-3,194.22,0,0,0,50,50,2,Collision/Cube,Static,Object,0,0,0,0,0,None
-Cube,73,Stage,30.2,-3,194.22,0,0,0,50,50,2,Collision/Cube,Static,Object,0,0,0,0,0,None
-Cube,56,Stage,-10,-3,178.2,0,90,0,33,50,2,Collision/Cube,Static,Object,0,0,0,0,0,None
-Cube,52,Stage,10,-3,178.2,0,90,0,33,50,2,Collision/Cube,Static,Object,0,0,0,0,0,None
+wall-fortified-gate,330,Stage,0,0,15,0,0,0,10,10,10,Stage1/wall-fortified-gate,Static,Object,1,1,0,0,0,None
+wall-fortified-gate (2),384,Stage,0,5,101,0,0,0,13,13,13,Stage1/wall-fortified-gate,Static,Object,1,1,0,0,0,None
+floor,172,Stage,0,0,0,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (3),355,Stage,0,0,-5,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (4),275,Stage,5,0,-5,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (5),386,Stage,5,0,0,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (6),174,Stage,5,0,5,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (7),217,Stage,5,0,10,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (8),242,Stage,-5,0,-5,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (9),307,Stage,-5,0,0,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (10),364,Stage,-5,0,5,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (11),309,Stage,-5,0,10,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (1),376,Stage,0,0,5,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (2),287,Stage,0,0,10,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (12),253,Stage,0,0,15,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (13),365,Stage,0,0,20,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (14),300,Stage,0,0,25,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (15),199,Stage,0,0,30,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (16),367,Stage,0,0,35,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (25),252,Stage,0,0,40,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (26),97,Stage,0,0,45,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (27),349,Stage,5,0,45,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (28),304,Stage,-5,0,45,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (29),133,Stage,0,0,50,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (30),89,Stage,5,0,50,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (31),321,Stage,-5,0,50,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (32),368,Stage,0,0,55,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (33),128,Stage,5,0,55,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (34),358,Stage,-5,0,55,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (35),175,Stage,0,0,60,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (36),357,Stage,5,0,60,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (38),138,Stage,10,0,45,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (39),229,Stage,10,0,50,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (40),205,Stage,10,0,55,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (41),370,Stage,10,0,60,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (46),176,Stage,10,0,65,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (42),285,Stage,-10,0,45,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (43),107,Stage,-10,0,50,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (44),95,Stage,-10,0,55,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (45),211,Stage,-10,0,60,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (47),298,Stage,-10,0.3,65,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (37),208,Stage,-5,0,60,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (48),265,Stage,0,5.1,80,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (49),135,Stage,5,5.1,80,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (50),382,Stage,10,5.1,80,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (51),87,Stage,-10,5.1,80,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (52),299,Stage,-5,5.1,80,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (53),148,Stage,0,5.1,85,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (54),213,Stage,5,5.1,85,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (55),340,Stage,10,5.1,85,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (56),122,Stage,-10,5.1,85,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (57),105,Stage,-5,5.1,85,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (58),156,Stage,0,5.1,90,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (59),375,Stage,5,5.1,90,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (60),353,Stage,10,5.1,90,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (61),260,Stage,-10,5.1,90,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (62),203,Stage,-5,5.1,90,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (63),281,Stage,0,5.1,95,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (68),257,Stage,0,5.1,100,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (155),245,Stage,0,5.1,100,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (156),233,Stage,5,5.1,100,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (157),125,Stage,-5,5.1,100,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (69),231,Stage,0,5.1,105,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (70),385,Stage,0,5.1,110,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (72),303,Stage,-5,5.1,110,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (129),343,Stage,-10,5.1,110,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (152),380,Stage,-15,5.1,110,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (151),344,Stage,-10,5.1,105,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (71),171,Stage,5,5.1,110,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (138),134,Stage,10,5.1,110,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (150),102,Stage,10,5.1,105,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (149),190,Stage,15,5.1,110,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (127),182,Stage,-5,5.1,105,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (128),222,Stage,5,5.1,105,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (124),131,Stage,0,5.1,150,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (125),243,Stage,-5,5.1,150,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (130),317,Stage,-10,5.1,150,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (126),154,Stage,5,5.1,150,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (139),159,Stage,10,5.1,150,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (73),331,Stage,0,5.1,115,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (74),92,Stage,-5,5.1,115,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (75),291,Stage,5,5.1,115,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (76),219,Stage,-10,5.1,115,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (131),373,Stage,-15,5.1,115,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (153),180,Stage,-20,5.1,115,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (77),323,Stage,10,5.1,115,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (140),282,Stage,15,5.1,115,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (148),244,Stage,20,5.1,115,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (119),179,Stage,0,5.1,145,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (120),124,Stage,-5,5.1,145,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (121),267,Stage,5,5.1,145,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (122),99,Stage,-10,5.1,145,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (132),354,Stage,-15,5.1,145,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (123),183,Stage,10,5.1,145,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (141),345,Stage,15,5.1,145,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (80),224,Stage,0,5.1,120,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (81),109,Stage,-5,5.1,120,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (82),85,Stage,5,5.1,120,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (83),164,Stage,-10,5.1,120,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (84),207,Stage,10,5.1,120,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (78),318,Stage,-15,5.1,120,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (133),294,Stage,-20,5.1,120,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (154),126,Stage,-25,5.1,120,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (79),143,Stage,15,5.1,120,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (142),372,Stage,20,5.1,120,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (112),258,Stage,0,5.1,140,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (113),191,Stage,-5,5.1,140,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (114),155,Stage,5,5.1,140,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (115),132,Stage,-10,5.1,140,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (116),185,Stage,10,5.1,140,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (117),215,Stage,-15,5.1,140,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (134),136,Stage,-20,5.1,140,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (118),269,Stage,15,5.1,140,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (143),142,Stage,20,5.1,140,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (85),115,Stage,0,5.1,125,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (86),112,Stage,-5,5.1,125,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (87),278,Stage,5,5.1,125,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (88),216,Stage,-10,5.1,125,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (89),383,Stage,10,5.1,125,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (90),150,Stage,-15,5.1,125,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (91),329,Stage,15,5.1,125,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (92),223,Stage,-20,5.1,125,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (135),238,Stage,-25,5.1,125,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (93),276,Stage,20,5.1,125,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (144),178,Stage,25,5.1,125,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (147),310,Stage,25,5.1,120,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (94),210,Stage,0,5.1,130,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (95),141,Stage,-5,5.1,130,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (96),189,Stage,5,5.1,130,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (97),301,Stage,-10,5.1,130,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (98),130,Stage,10,5.1,130,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (99),140,Stage,-15,5.1,130,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (100),289,Stage,15,5.1,130,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (101),290,Stage,-20,5.1,130,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (136),352,Stage,-25,5.1,130,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (102),249,Stage,20,5.1,130,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (145),106,Stage,25,5.1,130,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (103),241,Stage,0,5.1,135,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (104),308,Stage,-5,5.1,135,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (105),209,Stage,5,5.1,135,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (106),280,Stage,-10,5.1,135,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (107),350,Stage,10,5.1,135,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (108),271,Stage,-15,5.1,135,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (109),151,Stage,15,5.1,135,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (110),144,Stage,-20,5.1,135,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (137),311,Stage,-25,5.1,135,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (111),378,Stage,20,5.1,135,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (146),361,Stage,25,5.1,135,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (64),312,Stage,5,5.1,95,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (65),320,Stage,10,5.1,95,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (66),302,Stage,-10,5.1,95,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (67),123,Stage,-5,5.1,95,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (17),366,Stage,5,0,20,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (18),266,Stage,5,0,25,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (19),250,Stage,5,0,30,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (20),225,Stage,5,0,35,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (21),118,Stage,-5,0,20,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (22),173,Stage,-5,0,25,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (23),186,Stage,-5,0,30,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+floor (24),93,Stage,-5,0,35,0,0,0,5,5,5,Stage1/floor,Static,Object,1,1,0,0,0,None
+wall-fortified-half,356,Stage,-5,0,0,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (1),305,Stage,-5,0,5,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (2),119,Stage,-5,0,-5,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (16),270,Stage,-5,0,-5.47,0,270,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (18),296,Stage,0,0,-5.47,0,270,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (17),254,Stage,5,0,-5.47,0,270,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (19),117,Stage,-5,5,-5.47,0,270,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (20),184,Stage,0,5,-5.47,0,270,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (21),251,Stage,5,5,-5.47,0,270,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (3),145,Stage,-5,0,10,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (4),336,Stage,-5,5,0,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (5),116,Stage,-5,5,5,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (6),90,Stage,-5,5,-5,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (7),288,Stage,-5,5,10,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (8),168,Stage,5,0,0,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (9),246,Stage,5,0,5,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (10),193,Stage,5,0,-5,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (11),379,Stage,5,0,10,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (12),335,Stage,5,5,0,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (13),147,Stage,5,5,5,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (14),334,Stage,5,5,-5,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (15),100,Stage,5,5,10,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (22),194,Stage,-5,0,20,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (23),333,Stage,-5,5,20,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (24),348,Stage,5,0,20,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (25),161,Stage,5,5,20,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (26),236,Stage,-5,0,25,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (27),108,Stage,-5,5,25,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (28),98,Stage,5,0,25,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (29),163,Stage,5,5,25,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (30),94,Stage,-5,0,30,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (31),286,Stage,-5,5,30,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (32),212,Stage,5,0,30,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (33),129,Stage,5,5,30,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (34),234,Stage,-5,0,35,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (35),152,Stage,-5,5,35,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (42),158,Stage,-10,0,45,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (43),196,Stage,-10,5,45,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (44),322,Stage,-10,0,50,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (45),103,Stage,-10,5,50,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (46),137,Stage,-10,0,55,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (47),227,Stage,-10,5,55,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (48),274,Stage,-10,0,60,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (49),157,Stage,-10,5,60,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (50),339,Stage,10,0,45,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (51),218,Stage,10,5,45,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (52),247,Stage,10,0,50,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (53),127,Stage,10,5,50,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (54),195,Stage,10,0,55,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (55),297,Stage,10,5,55,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (56),347,Stage,10,0,60,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (57),121,Stage,10,5,60,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (62),239,Stage,12.5,5,65,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (63),198,Stage,12.5,10,65,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (64),319,Stage,12.5,15,65,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (65),359,Stage,12.5,5,70,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (66),255,Stage,12.5,10,70,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (67),279,Stage,12.5,15,70,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (68),295,Stage,12.5,5,75,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (69),324,Stage,12.5,10,75,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (70),369,Stage,12.5,15,75,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (71),169,Stage,12.5,5,80,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (72),328,Stage,12.5,10,80,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (73),262,Stage,12.5,15,80,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (74),162,Stage,12.5,5,85,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (75),160,Stage,12.5,10,85,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (76),277,Stage,12.5,15,85,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (77),284,Stage,12.5,5,90,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (80),342,Stage,-12.5,5,65,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (81),113,Stage,-12.5,10,65,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (82),221,Stage,-12.5,15,65,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (83),226,Stage,-12.5,5,70,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (84),181,Stage,-12.5,10,70,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (85),363,Stage,-12.5,15,70,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (86),268,Stage,-12.5,5,75,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (87),338,Stage,-12.5,10,75,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (88),272,Stage,-12.5,15,75,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (89),360,Stage,-12.5,5,80,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (90),362,Stage,-12.5,10,80,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (91),84,Stage,-12.5,15,80,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (92),104,Stage,-12.5,5,85,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (93),110,Stage,-12.5,10,85,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (94),351,Stage,-12.5,15,85,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (95),327,Stage,-12.5,5,90,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (96),377,Stage,-12.5,10,90,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (97),326,Stage,-12.5,15,90,0,0,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (98),120,Stage,-10,5,92,0,90,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (99),220,Stage,-10,10,92,0,90,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (100),232,Stage,-10,15,92,0,90,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (104),315,Stage,-6,5,93.6,0,90,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (105),83,Stage,-6,10,93.6,0,90,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (106),188,Stage,-6,15,93.6,0,90,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (110),273,Stage,0,15,94,0,90,0,7,7,7,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (107),371,Stage,6,5,93.6,0,90,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (108),235,Stage,6,10,93.6,0,90,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (109),114,Stage,6,15,93.6,0,90,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (119),86,Stage,0,5,150,0,90,0,20,20,20,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (120),177,Stage,-25,5,130,0,0,0,20,20,20,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (122),111,Stage,-17,5,143,0,50,0,25,25,25,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (123),316,Stage,17,5,143,0,130,0,25,25,25,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (124),187,Stage,-16,5,114,0,310,0,25,25,25,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (125),201,Stage,16,5,114,0,230,0,25,25,25,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (121),146,Stage,25,5,130,0,180,0,20,20,20,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (101),200,Stage,10,5,92,0,90,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (102),167,Stage,10,10,92,0,90,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (103),202,Stage,10,15,92,0,90,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (78),341,Stage,12.5,10,90,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (79),149,Stage,12.5,15,90,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (58),293,Stage,-10,0,60,0,90,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (59),292,Stage,-10,5,60,0,90,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (112),49,Stage,-10,10,60,0,90,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (60),230,Stage,10,0,60,0,90,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (61),313,Stage,10,5,60,0,90,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (111),50,Stage,10,10,60,0,90,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (36),96,Stage,5,0,35,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (37),192,Stage,5,5,35,0,180,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (38),259,Stage,7.5,0,45,0,270,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (39),166,Stage,7.5,5,45,0,270,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (40),263,Stage,-7.5,0,45,0,270,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+wall-fortified-half (41),256,Stage,-7.5,5,45,0,270,0,5,5,5,Stage1/wall-fortified-half,Static,Object,1,1,0,0,0,None
+floor-stairs,204,Stage,0,0,65,0,0,0,5,5,5,Stage1/floor-stairs,Static,Object,1,1,0,0,0,None
+floor-stairs (1),248,Stage,5,0,65,0,0,0,5,5,5,Stage1/floor-stairs,Static,Object,1,1,0,0,0,None
+floor-stairs (2),153,Stage,-5,0,65,0,0,0,5,5,5,Stage1/floor-stairs,Static,Object,1,1,0,0,0,None
+floor-stairs (3),346,Stage,0,1.7,70,0,0,0,5,5,5,Stage1/floor-stairs,Static,Object,1,1,0,0,0,None
+floor-stairs (4),139,Stage,5,1.7,70,0,0,0,5,5,5,Stage1/floor-stairs,Static,Object,1,1,0,0,0,None
+floor-stairs (5),332,Stage,-5,1.7,70,0,0,0,5,5,5,Stage1/floor-stairs,Static,Object,1,1,0,0,0,None
+floor-stairs (6),214,Stage,0,3.4,75,0,0,0,5,5,5,Stage1/floor-stairs,Static,Object,1,1,0,0,0,None
+floor-stairs (7),165,Stage,5,3.4,75,0,0,0,5,5,5,Stage1/floor-stairs,Static,Object,1,1,0,0,0,None
+floor-stairs (8),228,Stage,-5,3.4,75,0,0,0,5,5,5,Stage1/floor-stairs,Static,Object,1,1,0,0,0,None
+wall,91,Stage,10,0.35,65,0,0,0,5,5,5,Stage1/wall,Static,Object,1,1,0,0,0,None
+wall (1),381,Stage,10,0.35,70,0,0,0,5,5,5,Stage1/wall,Static,Object,1,1,0,0,0,None
+wall (5),325,Stage,10,0.35,75,0,0,0,5,5,5,Stage1/wall,Static,Object,1,1,0,0,0,None
+wall (2),170,Stage,-10,0.35,65,0,0,0,5,5,5,Stage1/wall,Static,Object,1,1,0,0,0,None
+wall (3),264,Stage,-10,0.35,70,0,0,0,5,5,5,Stage1/wall,Static,Object,1,1,0,0,0,None
+wall (4),237,Stage,-10,0.35,75,0,0,0,5,5,5,Stage1/wall,Static,Object,1,1,0,0,0,None
+battlement,48,Stage,0,10,12.5,0,0,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (3),43,Stage,0,10,-8,0,180,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (1),47,Stage,5,10,12.5,0,0,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (4),44,Stage,5,10,-8,0,180,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (2),46,Stage,-5,10,12.5,0,0,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (6),40,Stage,0,10,37.5,0,0,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (7),41,Stage,5,10,37.5,0,0,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (8),42,Stage,-5,10,37.5,0,0,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (12),36,Stage,0,10,42.5,0,180,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (13),35,Stage,5,10,42.5,0,180,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (16),32,Stage,10,10,42.5,0,180,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (17),31,Stage,12.5,10,48,0,90,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (18),30,Stage,12.5,10,53,0,90,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (19),29,Stage,12.5,10,58,0,90,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (20),26,Stage,-12.5,10,48,0,270,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (21),27,Stage,-12.5,10,53,0,270,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (22),28,Stage,-12.5,10,58,0,270,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (23),25,Stage,-15,20,65,0,270,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (24),24,Stage,-15,20,70,0,270,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (25),23,Stage,-15,20,75,0,270,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (26),22,Stage,-15,20,80,0,270,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (27),21,Stage,-15,20,85,0,270,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (28),20,Stage,-15,20,90,0,270,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (35),13,Stage,-10,20,94.5,0,0,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (36),12,Stage,10,20,94.5,0,0,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (37),11,Stage,6,20,96,0,0,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (38),10,Stage,-6,20,96,0,0,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (39),9,Stage,0,20,96,0,0,0,7,7,7,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (29),14,Stage,15,20,65,0,90,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (40),8,Stage,10,15,62.5,0,0,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (41),7,Stage,-10,15,62.5,0,0,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (30),15,Stage,15,20,70,0,90,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (31),16,Stage,15,20,75,0,90,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (32),17,Stage,15,20,80,0,90,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (33),18,Stage,15,20,85,0,90,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (34),19,Stage,15,20,90,0,90,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (14),34,Stage,-5,10,42.5,0,180,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (15),33,Stage,-10,10,42.5,0,180,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (5),45,Stage,-5,10,-8,0,180,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (9),39,Stage,0,10,17.5,0,180,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (10),38,Stage,5,10,17.5,0,180,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+battlement (11),37,Stage,-5,10,17.5,0,180,0,5,5,5,Stage1/battlement,Static,Object,1,1,0,0,0,None
+Plane,88,Stage,0,0.3,29,0,0,0,2,1,8,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane (3),82,Stage,5,0.3,13.2,0,0,90,3,1,5,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane (10),73,Stage,12.5,11.12,77.56,0,0,90,2,1,3,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane (11),72,Stage,-12.5,11.12,77.56,0,180,90,2,1,3,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane (5),78,Stage,-5,0.3,13.2,0,0,270,3,1,5,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane (6),77,Stage,0,0,-5.45,0,90,90,2,1,5,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane (12),67,Stage,16.28,16,114.45,0,230,270,3,1,3,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane (13),66,Stage,-16.23,16,114.2,0,130,90,3,1,3,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane (14),65,Stage,-16.45,16,143.43,0,49.99999,270,3,1,3,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane (15),64,Stage,16.47,16,143.41,0,310,90,3,1,3,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane (16),63,Stage,24.96,16,129.01,0,0,90,3,1,3,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane (17),62,Stage,25,16,129,0,0,90,3,1,3,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane (18),61,Stage,0.7,16,150,0,270,90,3,1,3,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane (19),60,Stage,-25,16,128.19,0,180,90,3,1,3,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane (4),79,Stage,10,6.38,51.88,0,0,90,3,1,2,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane (7),76,Stage,-10,7.72,51.88,0,180,90,3,1,2,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane (8),75,Stage,-10,0.3,45,0,90,90,4,1,1,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane (9),74,Stage,10,0.3,45,0,90,90,4,1,1,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane (1),206,Stage,0,2.8,70,340,0,0,1.5,1,1.5,Collision/Plane,Static,Object,0,0,0,0,0,None
+Plane (2),337,Stage,0.05,5.4,117,0,0,0,6,1,8,Collision/Plane,Static,Object,0,0,0,0,0,None
+Cube,261,Stage,10,0.4,70,0,0,0,5,10,20,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube (2),81,Stage,10,13.42,61.2,0,0,0,5,30,2.5,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube (3),80,Stage,-10,12.2,61.2,0,0,0,5,30,2.5,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube (17),3,Stage,-8.678,0.486,47.3,0,0,0,1,1,1,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube (18),2,Stage,-7.98,0.486,45.62,0,0,0,1,1,1,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube (19),1,Stage,-9.52,2.76,45.37,0,0,0,2,5,1,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube (4),71,Stage,-10,10,93,0,0,0,5,20,2.5,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube (5),70,Stage,10,10,93,0,0,0,5,20,2.5,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube (6),69,Stage,6,10,95,0,0,0,5,20,2.5,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube (7),68,Stage,-6,10,95,0,0,0,5,20,2.5,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube (1),197,Stage,-10,0.4,70,0,0,0,5,10,20,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube (8),59,Stage,-4,5,15,0,0,0,3,10,10,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube (9),58,Stage,4,5,15,0,0,0,3,10,10,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube (10),57,Stage,0,9.5,15,0,0,270,5,10,10,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube (11),54,Stage,-4,5,40,0,0,0,3,10,10,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube (12),55,Stage,4,5,40,0,0,0,3,10,10,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube (13),56,Stage,0,9.5,40,0,0,270,5,10,10,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube (14),53,Stage,-5,10,101,0,0,0,4,15,13,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube (15),52,Stage,5,10,101,0,0,0,4,15,13,Collision/Cube,Static,Object,0,0,0,0,0,None
+Cube (16),51,Stage,0,16,101,0,0,270,3.5,10,13,Collision/Cube,Static,Object,0,0,0,0,0,None
+wall-fortified-gate (1),314,Stage,0,0,40,0,0,0,10,10,10,Stage1/wall-fortified-gate,Static,Object,1,1,0,0,0,None

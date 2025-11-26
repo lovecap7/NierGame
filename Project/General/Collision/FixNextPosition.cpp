@@ -389,7 +389,8 @@ void FixNextPosition::FixNextPosCP(const std::shared_ptr<Collidable> collA, cons
 		if (isFloorAndRoof)
 		{
 			//ジャンプしているなら
-			if (collA->m_collState == CollisionState::Jump)
+			if (collA->m_collState == CollisionState::Jump ||
+				rbA->GetVec().y > 0.0f)
 			{
 				//天井に当たった処理
 				HitRoofCP(collA, headPos, radius);
@@ -542,96 +543,92 @@ Vector3 FixNextPosition::HitWallCP(const Vector3& headPos, const Vector3& legPos
 
 bool FixNextPosition::HitFloorCP(const std::shared_ptr<Collidable> coll, const Vector3& legPos, const Vector3& headPos, float shortDis)
 {
-	//リジッドボディ
 	auto rb = coll->m_rb;
 
-	//垂線を下して近い点を探して最短距離を求める
-	float hitShortDis = shortDis;//最短距離
-	//当たった中で足元に一番近いY座標に合わせる
-	float lowHitPosY = legPos.y;
-	//床と当たったか
-	bool isHitFloor = false;
+	float finalFloorY = -FLT_MAX;// 足の真下にある床の中で最も高いY
+	bool hitFloor = false;
 
-	//当たらなかった場合の高さ
-	float defaultLowHitPosY = 0.0f;
+	//足の真下レイ（下方向）
+	VECTOR rayStart = legPos.ToDxLibVector();
+	VECTOR rayEnd = VAdd(rayStart, VGet(0.0f, kCheckUnder, 0.0f));
 
 	for (auto& floor : m_floorAndRoof)
 	{
-		//下向きの法線ベクトルなら飛ばす
-		if (floor.Normal.y < 0.0f)continue;
+		//下向き法線なら床ではない
+		if (floor.Normal.y < 0.0f) continue;
+
 		VECTOR pos1 = floor.Position[0];
 		VECTOR pos2 = floor.Position[1];
 		VECTOR pos3 = floor.Position[2];
 
-		//床の高さのデフォルト値を設定
-		defaultLowHitPosY = MathSub::Max(pos1.y, pos2.y, pos3.y);
+		//足の真下にあるポリゴンと交差チェック
+		HITRESULT_LINE res = HitCheck_Line_Triangle(rayStart, rayEnd, pos1, pos2, pos3);
 
-		//足の下にポリゴンがあるかをチェック
-		HITRESULT_LINE lineResult = HitCheck_Line_Triangle(legPos.ToDxLibVector(), VAdd(legPos.ToDxLibVector(), VGet(0.0f, kCheckUnder, 0.0f)), pos1, pos2, pos3);
-
-		if (lineResult.HitFlag)
+		if (res.HitFlag)
 		{
-			 //距離
-			 float dis = VSize(VSub(lineResult.Position, legPos.ToDxLibVector()));
-			 //初回または前回より距離が短いなら
-			 if (hitShortDis > dis)
-			 {
-				 isHitFloor = true;
-				 //現状の最短
-				 hitShortDis = dis;
-				 lowHitPosY = lineResult.Position.y;
-			 }
-		}
-	}
-	//当たったいるなら
-	if (isHitFloor)
-	{
-		//床の高さに合わせる
-		lowHitPosY += abs(shortDis + kOverlapGap);
-	}
-	else if(defaultLowHitPosY < legPos.y)
-	{
-		//当たっていないならデフォルトの高さに合わせる
-		lowHitPosY = defaultLowHitPosY + abs(shortDis + kOverlapGap);
-		isHitFloor = true;
-	}
-	else
-	{
-		//頭と足の間にポリゴンがあるかも
-		float capsuleHeight = (headPos - legPos).Magnitude();
-		lowHitPosY = headPos.y;
-		for (auto& floor : m_floorAndRoof)
-		{
-			//下向きの法線ベクトルなら飛ばす
-			if (floor.Normal.y < 0.0f)continue;
-			VECTOR pos1 = floor.Position[0];
-			VECTOR pos2 = floor.Position[1];
-			VECTOR pos3 = floor.Position[2];
+			float hitPosY = res.Position.y;
 
-			HITRESULT_LINE lineBetweenResult = HitCheck_Line_Triangle(headPos.ToDxLibVector(), legPos.ToDxLibVector(),
-				pos1, pos2, pos3);
-			if (lineBetweenResult.HitFlag)
+			// より「高い床」を優先する（坂道で安定）
+			if (hitPosY > finalFloorY)
 			{
-				if (lowHitPosY > lineBetweenResult.Position.y)
-				{
-					lowHitPosY = lineBetweenResult.Position.y;
-					isHitFloor = true;
-				}
+				finalFloorY = hitPosY;
+				hitFloor = true;
 			}
-
 		}
-		//床の高さに合わせる
-		lowHitPosY += abs(shortDis + capsuleHeight + kOverlapGap);
-	}
-	if (isHitFloor)
-	{
-		rb->SetPosY(lowHitPosY);
-		rb->SetVecY(0.0f);
-		//床に当たっているので
-		coll->SetIsFloor(true);
 	}
 
-	return isHitFloor;
+	//足の真下で床が見つかった
+	if (hitFloor)
+	{
+		float newY = finalFloorY + shortDis + kOverlapGap;
+
+		rb->SetPosY(newY);
+		rb->SetVecY(0.0f);
+		coll->SetIsFloor(true);
+
+		return true;
+	}
+
+	//足の真下に床が無かった場合キャラが坂の腹に刺さっている可能性あり
+	//headからleg のラインが床を貫通していないかチェック
+	float betweenY = -FLT_MAX;
+	bool hitBetween = false;
+
+	VECTOR head = headPos.ToDxLibVector();
+
+	for (auto& floor : m_floorAndRoof)
+	{
+		if (floor.Normal.y < 0.0f) continue;
+
+		VECTOR pos1 = floor.Position[0];
+		VECTOR pos2 = floor.Position[1];
+		VECTOR pos3 = floor.Position[2];
+
+		HITRESULT_LINE res = HitCheck_Line_Triangle(head, rayStart, pos1, pos2, pos3);
+
+		if (res.HitFlag)
+		{
+			if (res.Position.y > betweenY)
+			{
+				//間の床のY座標を保存
+				betweenY = res.Position.y;
+				hitBetween = true;
+			}
+		}
+	}
+
+	//headとlegの間で床が見つかった
+	if (hitBetween)
+	{
+		float newY = betweenY + shortDis + kOverlapGap;
+
+		rb->SetPosY(newY);
+		rb->SetVecY(0.0f);
+		coll->SetIsFloor(true);
+		return true;
+	}
+
+	return false;
 }
 
 void FixNextPosition::HitRoofCP(const std::shared_ptr<Collidable> coll, const Vector3& headPos, float shortDis)
