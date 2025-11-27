@@ -1,3 +1,9 @@
 ﻿名前,ID,アクタータイプ,座標X,座標Y,座標Z,回転X,回転Y,回転Z,大きさX,大きさY,大きさZ,モデルのパス,優先度,ゲームタグ,当たり判定無視,トリガー,重力を受ける,コリジョンの半径,コリジョンの高さ,パスをまとめたパス
-Player,374,Character,0,0,0,0,0,0,1,1,1,Player/Player,Middle,Player,0,0,1,30,100,Player/PlayerPathData
-Boss3,283,Character,0,5,130,0,180,0,4,4,4,Enemy/Boss/Boss3,High,Enemy,0,0,1,150,600,Enemy/Boss3/Boss3PathData
+Player,170,Character,0,0,0,0,0,0,1,1,1,Player/Player,Middle,Player,0,0,1,30,100,Player/PlayerPathData
+Boss3,166,Character,0,5,130,0,180,0,4,4,4,Enemy/Boss/Boss3,High,Enemy,0,0,1,150,600,Enemy/Boss3/Boss3PathData
+Robot1,14,Character,0,0,31.81,0,180,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
+Robot1,13,Character,0,1,55,0,180,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
+Robot1 (1),12,Character,3,1,55,0,180,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
+Robot1 (2),11,Character,-3,1,55,0,180,0,0.3,0.3,0.3,Enemy/Normal/Robot1,Middle,Enemy,0,0,1,30,120,Enemy/Robot1/Robot1PathData
+Robot2,10,Character,2,1,58,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot2,Middle,Enemy,0,0,1,30,120,Enemy/Robot2/Robot2PathData
+Robot2 (1),9,Character,-2,1,58,0,196.75,0,0.3,0.3,0.3,Enemy/Normal/Robot2,Middle,Enemy,0,0,1,30,120,Enemy/Robot2/Robot2PathData
