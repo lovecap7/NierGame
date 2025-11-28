@@ -539,11 +539,18 @@ void Player::SetRespawnPos(Vector3 pos)
 
 void Player::Respawn()
 {
+	//リスポーン地点に移動
 	m_rb->SetPos(m_respawnPos);
 	Vector3 endPos = m_rb->m_pos;
 	endPos.y += m_actorData->GetCollHeight();
 	std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->SetEndPos(endPos);
 	m_rb->SetVec(Vector3::Zero());
+	//ロックオン解除
+	if (!GetPlayerCamera().expired())
+	{
+		auto camera = GetPlayerCamera().lock();
+		ResetTarget(camera);
+	}
 }
 
 std::weak_ptr<PlayerCamera> Player::GetPlayerCamera() const
