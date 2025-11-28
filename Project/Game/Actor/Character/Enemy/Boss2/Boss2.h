@@ -46,6 +46,7 @@ private:
 	std::shared_ptr<CharaStatusData> m_charaStatusData;
 
 	//˜r‚Ìó‘Ô‚É‡‚í‚¹‚½ƒ‚ƒfƒ‹
+	int m_normalHandle;
 	int m_noRightHandle;
 	int m_noLeftHandle;
 	int m_noBothHandle;

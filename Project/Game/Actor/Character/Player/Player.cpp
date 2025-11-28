@@ -301,6 +301,19 @@ void Player::Draw() const
 	);
 	//‰ñ”ð”»’è
 	m_avoidColl->Draw();
+	//Œ©‚Ä‚é•ûŒü
+	if (m_model)
+	{
+		auto forward = m_model->GetDir();
+		forward = forward * m_charaStatus->GetSearchRange();
+		//Ž‹–ìŠp
+		auto viewDir1 = Quaternion::AngleAxis(m_charaStatus->GetSearchAngle() / 2.0f, Vector3::Up()) * forward;
+		auto viewDir2 = Quaternion::AngleAxis(-m_charaStatus->GetSearchAngle() / 2.0f, Vector3::Up()) * forward;
+		//•`‰æ
+		DrawLine3D(m_rb->m_pos.ToDxLibVector(), (m_rb->m_pos + forward).ToDxLibVector(), 0xff0000);
+		DrawLine3D(m_rb->m_pos.ToDxLibVector(), (m_rb->m_pos + viewDir1).ToDxLibVector(), 0xff0000);
+		DrawLine3D(m_rb->m_pos.ToDxLibVector(), (m_rb->m_pos + viewDir2).ToDxLibVector(), 0xff0000);
+	}
 #endif
 	if (m_isDraw)
 	{
