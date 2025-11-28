@@ -167,12 +167,6 @@ void GameScene::Restart()
 	//リセット
 	Physics::GetInstance().Reset();
 
-	//カメラ
-	auto camera = std::make_shared<PlayerCamera>();
-	auto& cameraController = CameraController::GetInstance();
-	cameraController.Init();
-	cameraController.ChangeCamera(camera);
-
 	//エフェクト
 	m_effectManager.End();
 	m_effectManager.Init();
@@ -188,6 +182,12 @@ void GameScene::Restart()
 
 	//Inputの入力情報リセット
 	Input::GetInstance().StopUpdate();
+
+	//カメラ
+	auto camera = std::make_shared<PlayerCamera>();
+	auto& cameraController = CameraController::GetInstance();
+	cameraController.Init();
+	cameraController.ChangeCamera(camera);
 
 	//アクターの再スタート
 	m_actorManager->Restart();
