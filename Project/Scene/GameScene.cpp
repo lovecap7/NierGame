@@ -149,6 +149,7 @@ void GameScene::Draw()
 
 void GameScene::End()
 {
+	Physics::GetInstance().Reset();
 	m_actorManager->End();
 	m_attackManager->End();
 	m_battleAreaManager->End();
@@ -162,6 +163,9 @@ void GameScene::Restart()
 
 	//ゲームクリア
 	m_isGameClear = false;
+
+	//リセット
+	Physics::GetInstance().Reset();
 
 	//カメラ
 	auto camera = std::make_shared<PlayerCamera>();

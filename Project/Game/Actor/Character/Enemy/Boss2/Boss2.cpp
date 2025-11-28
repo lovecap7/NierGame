@@ -35,7 +35,6 @@ namespace
 
 Boss2::Boss2(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager) :
 	EnemyBase(actorData, charaStatusData, pActorManager),
-	m_normalHandle(-1),
 	m_noRightHandle(-1),
 	m_noLeftHandle(-1),
 	m_noBothHandle(-1),
@@ -57,6 +56,23 @@ void Boss2::Init()
 	auto pathData = csvLoader.LoadCSV(m_actorData->GetCSVPathData().c_str()).front()->GetData();
 
 	assert(pathData.size() >= kPathNum);
+
+	//’Êíƒ‚ƒfƒ‹o‚È‚¢ê‡
+	if (m_isInitNoRight ||
+		m_isInitNoLeft ||
+		m_isInitNoBoth)
+	{
+		//’Êíƒ‚ƒfƒ‹
+		m_model->SetModelHandle(AssetManager::GetInstance().GetModelHandle(m_actorData->GetModelPath()));
+		//‘å‚«‚³
+		m_model->SetScale(m_actorData->GetScale().ToDxLibVector());
+		//‰ñ“]—Ê
+		m_model->SetRot(m_actorData->GetRot().ToDxLibVector());
+		//ˆÊ’u
+		m_model->SetPos(m_actorData->GetPos().ToDxLibVector());
+		m_model->ApplyMat();
+	}
+
 	//‹¤’Ê‰Šú‰»
 	CharacterBase::Init(pathData[0].c_str(), pathData[1].c_str(), pathData[2].c_str());
 
@@ -161,7 +177,6 @@ void Boss2::End()
 	MV1DeleteModel(m_noRightHandle);
 	MV1DeleteModel(m_noLeftHandle);
 	MV1DeleteModel(m_noBothHandle);
-	MV1DeleteModel(m_normalHandle);
 	//“o˜^‰ðœ
 	Collidable::End();
 	if (!m_rightArm.expired())
@@ -206,6 +221,16 @@ void Boss2::InitArm(CSVDataLoader& csvLoader, std::wstring pathData)
 	if (m_pActorManager.expired())return;
 	auto actorManger = m_pActorManager.lock();
 
+	//˜r‚ª‚ ‚é‚È‚ç
+	if (!m_rightArm.expired())
+	{
+		m_rightArm.lock()->End();
+	}
+	if (!m_leftArm.expired())
+	{
+		m_leftArm.lock()->End();
+	}
+
 	for (auto& data : armStrDatas)
 	{
 		auto armData = std::make_shared<ArmData>(data);
@@ -222,7 +247,7 @@ void Boss2::InitArm(CSVDataLoader& csvLoader, std::wstring pathData)
 		charaStatus->SetDF(armData->GetDF());
 		charaStatus->SetAR(armData->GetArmor());
 		if (armData->GetName() == L"Right")
-		{
+		{	
 			actorData->SetActorID(static_cast<int>(ArmIndex::RightArm));
 			auto rightArm = std::make_shared<Boss2Arm>(actorData, charaStatus, m_pActorManager);
 			rightArm->SetArmModel(m_model->GetModelHandle());
@@ -239,10 +264,6 @@ void Boss2::InitArm(CSVDataLoader& csvLoader, std::wstring pathData)
 			m_leftArm = leftArm;
 			actorManger->Entry(leftArm);
 		}
-		if (!m_rightArm.expired() && !m_leftArm.expired())
-		{
-			break;
-		}
 	}
 }
 
@@ -253,13 +274,9 @@ void Boss2::InitArmStateModel(CSVDataLoader& csvLoader, std::wstring pathData)
 	auto modelDatas = modelPaths.front()->GetData();
 	if (modelDatas.size() >= kArmStateModelNum)
 	{
-		m_normalHandle = assetManager.GetModelHandle(m_actorData->GetModelPath());
 		m_noRightHandle = assetManager.GetModelHandle(modelDatas[0]);
 		m_noLeftHandle = assetManager.GetModelHandle(modelDatas[1]);
 		m_noBothHandle = assetManager.GetModelHandle(modelDatas[2]);
-
-		//Å‰‚Í’Êíƒ‚ƒfƒ‹
-		m_model->SetModelHandle(m_normalHandle);
 	}
 	m_isInitNoRight = false;
 	m_isInitNoLeft = false;
