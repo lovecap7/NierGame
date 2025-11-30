@@ -49,3 +49,6 @@ JustAttackSub,BigSword,JustAttackSub
 PodAttack,None,PodAttack
 RisingAttack,LightSword,RisingAttack
 SelfDestruction,None,SelfDestruction
+Start,None,Start
+Start,LightSword,Start
+Start,BigSword,Start

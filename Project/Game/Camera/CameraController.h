@@ -44,6 +44,11 @@ public:
 	/// <param name=""></param>
 	void PopCamera();
 	/// <summary>
+	/// カメラをポップ(取り出す)する+パラメータを引き継ぐ
+	/// </summary>
+	/// <param name=""></param>
+	void PopCamera(Vector3 pos,Vector3 viewPos);
+	/// <summary>
 	/// 更新する
 	/// </summary>
 	void StartUpdate() { m_isUpdate = true; };

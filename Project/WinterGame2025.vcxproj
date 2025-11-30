@@ -188,6 +188,7 @@
     <ClCompile Include="Game\Actor\Character\Player\PlayerStateIdle.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\PlayerStateJump.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\PlayerStateMoving.cpp" />
+    <ClCompile Include="Game\Actor\Character\Player\PlayerStateStart.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\Pod\Pod.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\Pod\PodStateAttack.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\Pod\PodStateBase.cpp" />
@@ -215,6 +216,7 @@
     <ClCompile Include="Game\Camera\CameraBase.cpp" />
     <ClCompile Include="Game\Camera\CameraController.cpp" />
     <ClCompile Include="Game\Camera\PlayerCamera.cpp" />
+    <ClCompile Include="Game\Camera\StartCamera.cpp" />
     <ClCompile Include="Game\Camera\TitleCamera.cpp" />
     <ClCompile Include="Game\Tutorial\TutorialManager.cpp" />
     <ClCompile Include="Game\UI\Camera\PlayerCameraUI.cpp" />
@@ -330,6 +332,7 @@
     <ClInclude Include="Game\Actor\Character\Player\PlayerStateIdle.h" />
     <ClInclude Include="Game\Actor\Character\Player\PlayerStateJump.h" />
     <ClInclude Include="Game\Actor\Character\Player\PlayerStateMoving.h" />
+    <ClInclude Include="Game\Actor\Character\Player\PlayerStateStart.h" />
     <ClInclude Include="Game\Actor\Character\Player\Pod\Pod.h" />
     <ClInclude Include="Game\Actor\Character\Player\Pod\PodStateAttack.h" />
     <ClInclude Include="Game\Actor\Character\Player\Pod\PodStateBase.h" />
@@ -357,6 +360,7 @@
     <ClInclude Include="Game\Camera\CameraBase.h" />
     <ClInclude Include="Game\Camera\CameraController.h" />
     <ClInclude Include="Game\Camera\PlayerCamera.h" />
+    <ClInclude Include="Game\Camera\StartCamera.h" />
     <ClInclude Include="Game\Camera\TitleCamera.h" />
     <ClInclude Include="Game\Tutorial\TutorialManager.h" />
     <ClInclude Include="Game\UI\Camera\PlayerCameraUI.h" />

@@ -81,6 +81,7 @@ void PlayerCamera::Init()
     auto lockOnUI = std::make_shared<PlayerCameraUI>(std::dynamic_pointer_cast<PlayerCamera>(shared_from_this()));
     lockOnUI->Init();
     m_lockOnUI = lockOnUI;
+
 }
 
 void PlayerCamera::Update()

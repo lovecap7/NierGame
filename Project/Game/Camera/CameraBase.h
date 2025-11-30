@@ -17,6 +17,10 @@ public:
 	float GetVAngle()const { return m_vertexAngle; };
 	//右
 	const Vector3& GetRight() const { return m_right; };
+	//注視点設定
+	void SetViewPos(const Vector3& pos) { m_viewPos = pos; };
+	//カメラ位置設定
+	void SetPos(const Vector3& pos) { m_cameraPos = pos; };
 protected:
     //カメラ距離
     float m_distance;

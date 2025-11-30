@@ -17,8 +17,6 @@ namespace
 {
 	//アニメーション
 	const std::wstring kIdle = L"Idle";
-	//モデルの旋回速度
-	constexpr int kModelRotateSpeed = 5;
 }
 
 PlayerStateIdle::PlayerStateIdle(std::weak_ptr<Actor> player):

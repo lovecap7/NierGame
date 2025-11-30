@@ -34,11 +34,18 @@ public:
 	void BackDraw()const;
 	//削除
 	void AllDeleteUI();
+
+	//描画するか
+	void SetIsDraw(bool isDraw) { m_isDraw = isDraw; };
 private:
 	std::list<std::shared_ptr<UIBase>> m_uis;
 private:
 	//削除チェック
 	void CheckDelete();
+
+	//描画するか
+	bool m_isDraw = true;
+
 	
 };
 

@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "PlayerStateBase.h"
 #include "PlayerStateIdle.h"
+#include "PlayerStateStart.h"
 #include "PlayerStateAvoid.h"
 #include "PlayerStateFall.h"
 #include "AvoidColl.h"
@@ -133,7 +134,7 @@ void Player::Init()
 
 	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
 	auto thisPointer = std::dynamic_pointer_cast<Player>(shared_from_this());
-	m_state = std::make_shared<PlayerStateIdle>(thisPointer);
+	m_state = std::make_shared<PlayerStateStart>(thisPointer);
 	//状態を変化する
 	m_state->ChangeState(m_state);
 	//モデルの高さ調整

@@ -11,8 +11,6 @@ namespace
 {
 	//アニメーション
 	const std::wstring kDeath = L"Death";
-	//モデルの旋回速度
-	constexpr int kModelRotateSpeed = 5;
 }
 
 PlayerStateDeath::PlayerStateDeath(std::weak_ptr<Actor> player) :

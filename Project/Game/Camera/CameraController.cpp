@@ -61,3 +61,13 @@ void CameraController::PopCamera()
 	//最後のカメラを取り出す
 	m_cameras.pop_back();
 }
+
+void CameraController::PopCamera(Vector3 pos, Vector3 viewPos)
+{
+	if (m_cameras.size() <= 1)return;
+	//最後のカメラにパラメータを引き継ぐ
+	m_cameras.front()->SetPos(pos);
+	m_cameras.front()->SetViewPos(viewPos);
+	//最後のカメラを取り出す
+	m_cameras.pop_back();
+}

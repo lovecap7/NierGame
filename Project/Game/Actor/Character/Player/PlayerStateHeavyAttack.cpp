@@ -181,7 +181,7 @@ bool PlayerStateHeavyAttack::LoadNextChargeOrCombo(std::shared_ptr<Player> owner
 			{
 				m_nextAttackName = m_attackData->GetNextAttackName();
 				m_attackData = owner->GetAttackData(kChargeName);
-				model->SetAnim(owner->GetAnim(m_attackData->GetAnimName()).c_str(), true);
+				model->SetAnim(owner->GetAnim(m_attackData->GetAnimName()).c_str(), false);
 				DeleteAttack();
 			}
 			//ƒ`ƒƒ[ƒW

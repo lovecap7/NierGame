@@ -9,6 +9,7 @@
 #include "../Game/Actor/Stage/BattleAreaManager.h"
 #include "../Game/Camera/CameraController.h"
 #include "../Game/Camera/PlayerCamera.h"
+#include "../Game/Camera/StartCamera.h"
 #include "../General/Collision/Physics.h"
 #include "../General/CSV/ActorData.h"
 #include "../General/CSV/CharaStatusData.h"
@@ -49,14 +50,15 @@ void GameScene::Init()
 	auto stageName = m_stageName.c_str();
 
 	//カメラ
-	auto camera = std::make_shared<PlayerCamera>();
 	auto& cameraController = CameraController::GetInstance();
 	cameraController.Init();
-	cameraController.ChangeCamera(camera);
+	//プレイヤーカメラ
+	auto playerCamera = std::make_shared<PlayerCamera>();
+	cameraController.ChangeCamera(playerCamera);
 
 	m_attackManager = std::make_shared<AttackManager>();
 	m_attackManager->Init();
-	m_attackManager->SetPlayerCamera(camera);
+	m_attackManager->SetPlayerCamera(playerCamera);
 
 	//アクター
 	m_actorManager = std::make_shared<ActorManager>();
@@ -66,7 +68,7 @@ void GameScene::Init()
 	m_actorManager->CreateActorCSV(stageName, L"CheckPointData");
 
 	//カメラセット
-	m_actorManager->SetPlayerCamera(camera);
+	m_actorManager->SetPlayerCamera(playerCamera);
 	//攻撃マネージャーセット
 	m_actorManager->SetAttackManager(m_attackManager);
 
@@ -88,6 +90,10 @@ void GameScene::Init()
 	m_isGameover = false;
 	//ゲームクリア
 	m_isGameClear = false;
+
+	//スターとカメラ
+	auto startCamera = std::make_shared<StartCamera>(m_actorManager->GetPlayer());
+	cameraController.PushCamera(startCamera);
 }
 
 void GameScene::Update()
