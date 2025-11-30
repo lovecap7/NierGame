@@ -178,7 +178,7 @@ void ActorManager::CreateActorCSV(const wchar_t* folderName, const wchar_t* file
 			}
 			else if (actorData->GetGameTag() == GameTag::Sky)
 			{
-				//ステージ
+				//空
 				actor = std::make_shared<Sky>(actorData, shared_from_this());
 			}
 			else

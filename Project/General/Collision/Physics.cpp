@@ -143,9 +143,6 @@ void Physics::CheckCollidable(std::list<Physics::OnCollideInfo>& onCollideInfo)
 			break;
 		}
 	}
-
-
-	printf("CollNum = %d\n", m_collidables.size());
 }
 
 void Physics::Reset()

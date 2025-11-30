@@ -21,6 +21,13 @@ StageObject::~StageObject()
 
 void StageObject::Init()
 {
+	if(m_actorData->GetCSVPathData() != L"None")
+	{
+		//エフェクトのパスがあるならエフェクトを再生
+		auto& effekseerManager = EffekseerManager::GetInstance();
+		effekseerManager.CreateEffect(m_actorData->GetCSVPathData(), GetPos());
+	}
+
 	m_isDraw = m_isTrigger;
 	if (m_isThrough)return;
 	Collidable::Init();
