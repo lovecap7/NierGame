@@ -229,11 +229,14 @@ void Player::Update()
 	//}
 #endif
 
+	//体力に応じてポストエフェクトをかける
+	UpdateHit();
+
 	//回復
 	if (input.GetPOVInfo().IsDownTrigger())
 	{
 		//体力が満タンでなく、かつ死んでいなければ回復
-		if(m_charaStatus->GetNowHP() < m_charaStatus->GetMaxHP() &&
+		if (m_charaStatus->GetNowHP() < m_charaStatus->GetMaxHP() &&
 			!m_charaStatus->IsDead() &&
 			m_fullRecoveryNum > 0)
 		{
@@ -243,9 +246,6 @@ void Player::Update()
 			--m_fullRecoveryNum;
 		}
 	}
-
-	//体力に応じてポストエフェクトをかける
-	UpdateHit();
 
 	//武器を収める
 	UpdatePutAwayWeapon();
@@ -657,8 +657,8 @@ void Player::LockOnNearestEnemy(std::shared_ptr<PlayerCamera> camera, const std:
 	for (auto enemy : enemys)
 	{
 		if (!enemy->IsActive()) continue;
-		Vector3 dir = (enemy->GetNextPos() - playerPos);
-		auto colls = physics.RayCast(playerPos, enemy->GetNextPos());
+		Vector3 dir = (enemy->GetLockOnViewPos() - playerPos);
+		auto colls = physics.RayCast(playerPos, enemy->GetLockOnViewPos());
 
 		//間に壁や床があるかをチェック
 		bool isColl = false;
@@ -777,7 +777,7 @@ void Player::UpdateHit()
 	auto& postEff = app.GetPostProcess();
 
 	//ダメージを受けたら
-	if (m_charaStatus->IsHit() && !m_charaStatus->IsNoDamage())
+	if (m_charaStatus->IsDamaged() && !m_isJustAvoided)
 	{
 		//グリッジ
 		postEff->AddPostEffectState(ShaderPostProcess::PostEffectState::Glitch);
@@ -809,7 +809,7 @@ void Player::UpdateHit()
 	if (m_isHitGlitch)
 	{
 		//終了フレーム
-		if (m_glitchCountFrame >= m_glitchFrame || m_charaStatus->IsNoDamage())
+		if (m_glitchCountFrame >= m_glitchFrame || m_isJustAvoided)
 		{
 			//グリッジを削除
 			postEff->SubPostEffectState(ShaderPostProcess::PostEffectState::Glitch);

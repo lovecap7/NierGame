@@ -77,6 +77,14 @@ void NormalEnemy::Init()
 
 void NormalEnemy::Complete()
 {
+	if (!m_isActive)
+	{
+		//モデルの座標更新
+		m_model->SetPos(m_rb->m_pos.ToDxLibVector());
+		m_model->ApplyMat();
+		return;
+	}
+
 	m_rb->SetPos(m_rb->GetNextPos());
 	Vector3 endPos = m_rb->m_pos;
 	endPos.y += m_actorData->GetCollHeight();

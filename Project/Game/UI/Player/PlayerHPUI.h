@@ -1,5 +1,6 @@
 #pragma once
 #include "../HPUIBase.h"
+#include "../../../General/Math/MyMath.h"
 #include <memory>
 class CharaStatus;
 class PlayerHPUI :
@@ -12,5 +13,8 @@ public:
 	void Update() override;
 	//ï`âÊ
 	void Draw()const override;
+private:
+	//ï`âÊç¿ïW
+	Vector2 m_pos;
 };
 

@@ -61,7 +61,12 @@ BossHPUI::~BossHPUI()
 
 void BossHPUI::Update()
 {
-	if (m_pEnemy.expired())return;
+
+	if (m_pEnemy.expired())
+	{
+		m_isDelete = true;
+		return;
+	}
 	auto enemy = m_pEnemy.lock();
 	if (!enemy->IsActive())return;
 

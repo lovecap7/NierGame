@@ -6,6 +6,7 @@
 #include "PolygonCollider.h"
 #include "Rigidbody.h"
 #include "../../Game/Attack/AttackBase.h"
+#include "../../Game/Actor/Character/Enemy/EnemyBase.h"
 #include "../../Main/Application.h"
 #include <cassert>
 
@@ -59,7 +60,17 @@ void Physics::Update()
 	//遅延処理用
 	std::list<OnCollideInfo> onCollideInfo;
 	
-	//補正したことで別のオブジェクトに当たる可能性があるので一定回数チャックする
+	//チェック
+	CheckCollidable(onCollideInfo);
+
+	// 当たり通知
+	for (auto& collInfo : onCollideInfo)
+	{
+		collInfo.OnCollide();
+	}
+
+	onCollideInfo.clear();
+	//補正したことで別のオブジェクトに当たる可能性があるのでもう一度チェック
 	CheckCollidable(onCollideInfo);
 
 	// 当たり通知
@@ -78,71 +89,91 @@ void Physics::Update()
 
 void Physics::CheckCollidable(std::list<Physics::OnCollideInfo>& onCollideInfo)
 {
-	bool m_isOneMore = false;
-	for (int i = 0; i < kTryNum; ++i)
+	//当たり判定をチェック
+	for (auto& collA : m_collidables)
 	{
-		//当たり判定をチェック
-		for (auto& collA : m_collidables)
-		{
-			//当たり判定を行わないなら飛ばす
-			if (collA->GetGameTag() == GameTag::None)continue;
-			if (collA->m_isThrough)continue;
-			for (auto& collB : m_collidables)
-			{
-				//自分とは当たり判定をしない
-				if (collA == collB)continue;
-				//当たり判定を行わないなら飛ばす
-				if (collB->GetGameTag() == GameTag::None)continue;
-				if (collB->m_isThrough)continue;
+		//当たり判定を行わないなら飛ばす
+		if (collA->GetGameTag() == GameTag::None)continue;
+		if (collA->m_isThrough)continue;
 
-				//攻撃同士
-				if(collA->GetGameTag() == GameTag::Attack &&
-				   collB->GetGameTag() == GameTag::Attack)
+		//敵の場合
+		if (collA->GetGameTag() == GameTag::Enemy)
+		{
+			auto enemy = std::dynamic_pointer_cast<EnemyBase>(collA);
+			//非活動中は当たり判定を行わない
+			if (!enemy->IsActive())continue;
+		}
+
+		for (auto& collB : m_collidables)
+		{
+			//攻撃同士
+			if (collA->GetGameTag() == GameTag::Attack &&
+				collB->GetGameTag() == GameTag::Attack)
+			{
+				//同じタイプの攻撃なら当たらない
+				if (std::dynamic_pointer_cast<AttackBase>(collA)->GetOwnerTag() ==
+					std::dynamic_pointer_cast<AttackBase>(collB)->GetOwnerTag())
 				{
-					//同じタイプの攻撃なら当たらない
-					if (std::dynamic_pointer_cast<AttackBase>(collA)->GetOwnerTag() ==
-						std::dynamic_pointer_cast<AttackBase>(collB)->GetOwnerTag())
+					continue;
+				}
+			}
+
+			//自分とは当たり判定をしない
+			if (collA == collB)continue;
+			//当たり判定を行わないなら飛ばす
+			if (collB->GetGameTag() == GameTag::None)continue;
+			if (collB->m_isThrough)continue;
+
+			//敵の場合
+			if (collB->GetGameTag() == GameTag::Enemy)
+			{
+				auto enemy = std::dynamic_pointer_cast<EnemyBase>(collB);
+				//非活動中は当たり判定を行わない
+				if (!enemy->IsActive())continue;
+			}
+
+			//どちらもトリガーではないか
+			bool isBothNoTrigger = !collA->m_isTrigger && !collB->m_isTrigger;
+			if (isBothNoTrigger)
+			{
+				//動かないもの同士なら
+				if (collA->m_priority == Priority::Static &&
+					collB->m_priority == Priority::Static)
+				{
+					continue;
+				}
+			}
+
+			//当たってるなら
+			if (m_collChecker->IsCollide(collA, collB))
+			{
+				//どちらもトリガーなではないなら
+				if (isBothNoTrigger)
+				{
+					//衝突処理
+					m_collProcessor->FixNextPos(collA, collB);
+				}
+				//これまでにこの組み合わせで当たった情報があるかをチェック
+				bool isCollInfo = false;
+				for (const auto& item : onCollideInfo)
+				{
+					// 既に通知リストに含まれていたら呼ばない
+					if (item.owner == collA && item.colider == collB ||
+						item.owner == collB && item.colider == collA)
 					{
-						continue;
+						isCollInfo = true;
 					}
 				}
-
-				//当たってるなら
-				if (m_collChecker->IsCollide(collA, collB))
+				//ない場合
+				if (!isCollInfo)
 				{
-					//もう一度
-					m_isOneMore = true;
-					//どちらもトリガーなではないなら
-					if (!collA->m_isTrigger && !collB->m_isTrigger)
-					{
-						//衝突処理
-						m_collProcessor->FixNextPos(collA, collB);
-					}
-					//これまでにこの組み合わせで当たった情報があるかをチェック
-					bool isCollInfo = false;
-					for (const auto& item : onCollideInfo)
-					{
-						// 既に通知リストに含まれていたら呼ばない
-						if (item.owner == collA && item.colider == collB ||
-							item.owner == collB && item.colider == collA)
-						{
-							isCollInfo = true;
-						}
-					}
-					//ない場合
-					if (!isCollInfo)
-					{
-						onCollideInfo.emplace_back(OnCollideInfo{ collA, collB });
-						onCollideInfo.emplace_back(OnCollideInfo{ collB, collA });
-					}
+					onCollideInfo.emplace_back(OnCollideInfo{ collA, collB });
+					onCollideInfo.emplace_back(OnCollideInfo{ collB, collA });
 				}
 			}
 		}
-		if (!m_isOneMore)
-		{
-			break;
-		}
 	}
+
 }
 
 void Physics::Reset()

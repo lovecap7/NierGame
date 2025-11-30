@@ -76,7 +76,7 @@ void EnemyManager::Update()
 
 		//‹——£‚ðŒvŽZ
 		Vector3 enemyPos = enemy->GetRb()->GetNextPos();
-		float distance = (playerPos - enemyPos).Magnitude();
+		float distance = (playerPos - enemyPos).XZ().Magnitude();
 		//ƒGƒŠƒA“à‚Ì“G‚È‚ç
 		if (enemy->IsInArea())
 		{

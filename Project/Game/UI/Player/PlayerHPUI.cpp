@@ -21,10 +21,14 @@ namespace
 	const std::wstring kHPValueDamage = L"Player/HPValueDamage";
 	const std::wstring kHPValueHeal = L"Player/HPValueHeal";
 	const std::wstring kHPBarFrame = L"Player/HPFrame";
+
+	//Lerpの割合
+	constexpr float kLerpRate = 0.1f;
 }
 
 PlayerHPUI::PlayerHPUI(std::shared_ptr<CharaStatus> charaStatus):
-	HPUIBase(charaStatus)
+	HPUIBase(charaStatus),
+	m_pos{-kBasePosX, kBasePosY}
 {
 	auto& assetManager = AssetManager::GetInstance();
 	m_nowValueHandle = assetManager.GetImageHandle(kHPValue);
@@ -68,16 +72,19 @@ void PlayerHPUI::Update()
 
 	//体力が回復
 	UpdateHealBar();
+
+	//描画位置への移動
+	m_pos = Vector2::Lerp(m_pos, Vector2(kBasePosX, kBasePosY), kLerpRate);
 }
 
 void PlayerHPUI::Draw() const
 {
 	if (!m_isDraw)return;
 	//周りのフレーム
-	DrawRotaGraphF((kBasePosX + kBasePosX + kBarSizeX) * 0.5f, (kBasePosY + kBasePosY + kBarSizeY) * 0.5f, 1.0, 0.0, m_barFrameHandle, true);
+	DrawRotaGraphF((m_pos.x + m_pos.x + kBarSizeX) * 0.5f, (m_pos.y + m_pos.y + kBarSizeY) * 0.5f, 1.0, 0.0, m_barFrameHandle, true);
 	//バーの描画
-	DrawExtendGraphF(kBasePosX, kBasePosY, kBasePosX + kBarSizeX, kBasePosY + kBarSizeY, m_backValueHandle, true);
-	DrawExtendGraphF(kBasePosX, kBasePosY, kBasePosX + (kBarSizeX * m_damageValueRate), kBasePosY + kBarSizeY, m_damageValueHandle, true);
-	DrawExtendGraphF(kBasePosX, kBasePosY, kBasePosX + (kBarSizeX * m_healValueRate), kBasePosY + kBarSizeY, m_healValueHandle, true);
-	DrawExtendGraphF(kBasePosX, kBasePosY, kBasePosX + (kBarSizeX * m_nowHpRate), kBasePosY + kBarSizeY, m_nowValueHandle, true);
+	DrawExtendGraphF(m_pos.x, m_pos.y, m_pos.x + kBarSizeX, m_pos.y + kBarSizeY, m_backValueHandle, true);
+	DrawExtendGraphF(m_pos.x, m_pos.y, m_pos.x + (kBarSizeX * m_damageValueRate), m_pos.y + kBarSizeY, m_damageValueHandle, true);
+	DrawExtendGraphF(m_pos.x, m_pos.y, m_pos.x + (kBarSizeX * m_healValueRate), m_pos.y + kBarSizeY, m_healValueHandle, true);
+	DrawExtendGraphF(m_pos.x, m_pos.y, m_pos.x + (kBarSizeX * m_nowHpRate), m_pos.y + kBarSizeY, m_nowValueHandle, true);
 }

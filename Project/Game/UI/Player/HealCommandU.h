@@ -1,5 +1,6 @@
 #pragma once
 #include "../UIBase.h"
+#include "../../../General/Math/MyMath.h"
 #include <memory>
 class Player;
 class HealCommandU :
@@ -24,5 +25,8 @@ private:
 	float m_moveAngle;
 	//プレイヤーがピンチの時点滅させるためのカウント
 	int m_pinchBlinkCount;
+	//描画位置
+	Vector2 m_imagePos;
+	Vector2 m_textPos;
 };
 

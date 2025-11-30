@@ -10,9 +10,8 @@
 namespace
 {
 	//アニメーション
-	const std::wstring kHit = L"Hit";
-	//モデルの旋回速度
-	constexpr int kModelRotateSpeed = 5;
+	const std::wstring kHit1 = L"Hit1";
+	const std::wstring kHit2 = L"Hit2";
 }
 
 PlayerStateHit::PlayerStateHit(std::weak_ptr<Actor> player) :
@@ -20,10 +19,20 @@ PlayerStateHit::PlayerStateHit(std::weak_ptr<Actor> player) :
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
-	owner->GetModel()->SetAnim(owner->GetAnim(kHit).c_str(), false);
+	if (MyMath::IsRand())
+	{
+		owner->GetModel()->SetAnim(owner->GetAnim(kHit1).c_str(), false);
+	}
+	else
+	{
+		owner->GetModel()->SetAnim(owner->GetAnim(kHit2).c_str(), false);
+	}
 	owner->SetCollState(CollisionState::Normal);
 
 	auto status = owner->GetCharaStatus();
+
+	//無敵に
+	status->SetIsNoDamage(true);
 }
 
 PlayerStateHit::~PlayerStateHit()
@@ -31,6 +40,9 @@ PlayerStateHit::~PlayerStateHit()
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
 	auto status = owner->GetCharaStatus();
+
+	//無敵解除
+	status->SetIsNoDamage(false);
 }
 void PlayerStateHit::Init()
 {

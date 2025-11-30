@@ -46,6 +46,9 @@ public:
 	void SetNowHP(unsigned int nowHP) { m_nowHp = nowHP; };
 	float GetHPRate()const;
 
+	//ƒ_ƒ[ƒW‚ğó‚¯‚½
+	bool IsDamaged()const { return m_nowHp < m_beforeHp; };
+
 	//UŒ‚—Í
 	int GetAT()const { return m_at; };
 	void SetAT(int at) { m_at = at; };

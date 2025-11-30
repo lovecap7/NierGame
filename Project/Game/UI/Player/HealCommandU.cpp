@@ -23,6 +23,9 @@ namespace
 
 	//ハンドル
 	const std::wstring kBack = L"Player/HealCommandUI";
+
+	//Lerpの割合
+	constexpr float kLerpRate = 0.1f;
 }
 
 HealCommandU::HealCommandU(std::weak_ptr<Player> pPlayer):
@@ -32,7 +35,9 @@ HealCommandU::HealCommandU(std::weak_ptr<Player> pPlayer):
 	m_fontHandle(-1),
 	m_beforeFullRecoveryNum(0),
 	m_moveAngle(kMoveAngleMax),
-	m_pinchBlinkCount(0)
+	m_pinchBlinkCount(0),
+	m_imagePos{ -kBackPosX, kBackPosY },
+	m_textPos{ -kTextPosX,  kTextPosY }
 {
 	auto& assetManager = AssetManager::GetInstance();
 	m_backHandle = assetManager.GetImageHandle(kBack);
@@ -76,6 +81,10 @@ void HealCommandU::Update()
 			m_pinchBlinkCount = 0;
 		}
 	}
+
+	//表示位置への移動
+	m_imagePos = Vector2::Lerp(m_imagePos, Vector2(kBackPosX, kBackPosY), kLerpRate);
+	m_textPos = Vector2::Lerp(m_textPos, Vector2(kTextPosX, kTextPosY), kLerpRate);
 }
 
 void HealCommandU::Draw() const
@@ -87,18 +96,18 @@ void HealCommandU::Draw() const
 	//回復した際に動かす
 	int moveY = cosf(m_moveAngle * MyMath::DEG_2_RAD) * kMoveY;
 
-	DxLib::DrawGraph(kBackPosX, kBackPosY + moveY, m_backHandle, true);
+	DxLib::DrawGraph(m_imagePos.x, m_imagePos.y + moveY, m_backHandle, true);
 	if(player->GetCharaStatus()->IsPinchHP())
 	{
 		//ピンチの時は点滅
 		if (m_pinchBlinkCount >= kPinchBlinkFrame * 0.5f)
 		{
 			SetDrawBlendMode(DX_BLENDMODE_ADD, 255);
-			DxLib::DrawGraph(kBackPosX, kBackPosY + moveY, m_backHandle, true);
+			DxLib::DrawGraph(m_imagePos.x, m_imagePos.y + moveY, m_backHandle, true);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
 	}
 
 	const std::wstring healCommand = L"全回復（残り " + std::to_wstring(player->GetFullRecoveryNum()) + L" )";
-	DrawStringToHandle(kTextPosX, kTextPosY + moveY, healCommand.c_str(), 0x4e4b42, m_fontHandle);
+	DrawStringToHandle(m_textPos.x, m_textPos.y + moveY, healCommand.c_str(), 0x4e4b42, m_fontHandle);
 }

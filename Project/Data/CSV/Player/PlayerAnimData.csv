@@ -21,9 +21,12 @@ Fall,BigSword,Fall
 PodFall,None,PodFall
 PodFall,LightSword,PodFall
 PodFall,BigSword,PodFall
-Hit,None,Hit1
-Hit,LightSword,Hit1
-Hit,BigSword,Hit1
+Hit1,None,Hit1
+Hit1,LightSword,Hit1
+Hit1,BigSword,Hit1
+Hit2,None,Hit2
+Hit2,LightSword,Hit2
+Hit2,BigSword,Hit2
 Death,None,Death
 Death,LightSword,Death
 Death,BigSword,Death

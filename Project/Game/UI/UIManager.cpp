@@ -25,6 +25,8 @@ void UIManager::Exit(std::shared_ptr<UIBase> ui)
 
 void UIManager::Update()
 {
+	if (!m_isDraw)return;
+
 	//UI‚ÌXV
 	for (auto& ui : m_uis)
 	{
