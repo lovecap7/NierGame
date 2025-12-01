@@ -610,8 +610,8 @@ void Player::SearchTarget(Input& input, std::shared_ptr<PlayerCamera> camera, co
 		//ターゲット
 		auto target = std::dynamic_pointer_cast<EnemyBase>(m_targetInfo.m_pTarget.lock());
 
-		//アクティブじゃないなら解除
-		if (!target->IsActive())
+		//アクティブじゃないなら解除または死亡しているなら解除
+		if (!target->IsActive() || target->GetCharaStatus()->IsDead())
 		{
 			//他の敵を探す
 			LockOnNearestEnemy(camera, enemys);
@@ -677,6 +677,7 @@ void Player::LockOnNearestEnemy(std::shared_ptr<PlayerCamera> camera, const std:
 	for (auto enemy : enemys)
 	{
 		if (!enemy->IsActive()) continue;
+		if (enemy->GetCharaStatus()->IsDead()) continue;
 		Vector3 dir = (enemy->GetLockOnViewPos() - playerPos);
 		auto colls = physics.RayCast(playerPos, enemy->GetLockOnViewPos());
 
