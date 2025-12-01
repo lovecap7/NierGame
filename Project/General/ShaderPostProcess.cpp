@@ -78,6 +78,11 @@ void ShaderPostProcess::Draw(const int rt) const
 	MyDraw::DrawPS(Game::kScreenCenterX, Game::kScreenCenterY, 1.0, 0.0, m_cbuff1Handle, m_cbuff2Handle, rt, m_psHandle);
 }
 
+void ShaderPostProcess::Draw(float x, float y, const int handle) const
+{
+	MyDraw::DrawPS(x, y, 1.0, 0.0, m_cbuff1Handle, m_cbuff2Handle, handle, m_psHandle);
+}
+
 void ShaderPostProcess::End()
 {
 	//‰ð•ú

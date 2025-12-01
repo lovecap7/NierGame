@@ -73,6 +73,11 @@ PS_OUTPUT main(PS_INPUT input)
     
     // 元のテクスチャ色を取得
     float4 color = tex.Sample(smp, input.uv);
+    
+    if(color.a <= 0.0)
+    {
+        discard;   
+    }
 
     //状態がグリッチ
     if (isUseGlitch || isUseGlitchNoColor)

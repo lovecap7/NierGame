@@ -24,22 +24,11 @@ namespace
 	constexpr float kBlockScele = 10.0f;
 	constexpr float kNoiseSpeed = 10.0f;
 	constexpr float kShakeStrength = 10.0f;
-	//揺れるフレーム
-	constexpr int kIrregularFrameMin = 80;
-	constexpr int kIrregularFrameMax = 150;
-	//カウントリセット
-	constexpr int kResetIrregularFrame = 10;
-	//lerp率
-	constexpr float kLerpRate = 0.1f;
-	//0とみなす値
-	constexpr float kEpsilon = 0.1f;
 }
 
 TitleScene::TitleScene(SceneController& controller):
 	SceneBase(controller),
 	m_hardShakingCountFrame(kStartHardShakingFrame),
-	m_IrregularCountFrame(0),
-	m_IrregularFrame(kStartHardShakingFrame),
 	m_blockScele(kBlockScele),
 	m_noiseSpeed(kNoiseSpeed),
 	m_shakeStrength(kShakeStrength)
@@ -132,37 +121,13 @@ void TitleScene::UpdateGlitch()
 	{
 		//激しく
 		--m_hardShakingCountFrame;
+		//グリッジの各値の設定
+		postPrecess->SetBlockScele(m_blockScele);
+		postPrecess->SetNoiseSpeed(m_noiseSpeed);
+		postPrecess->SetShakeStrength(m_shakeStrength);
 	}
 	else
 	{
-		// 各値
-		float scale, speed, strength;
-		scale = speed = strength = 0.0f;
-
-		//不定期に揺れる
-		++m_IrregularCountFrame;
-		if (m_IrregularCountFrame >= m_IrregularFrame + kResetIrregularFrame)
-		{
-			m_IrregularCountFrame = 0;
-			m_IrregularFrame = MyMath::GetRand(kIrregularFrameMin, kIrregularFrameMax);
-		}
-		else if (m_IrregularCountFrame >= m_IrregularFrame)
-		{
-			scale = kBlockScele;
-			speed = kNoiseSpeed;
-			strength = kShakeStrength;
-		}
-		m_blockScele = MathSub::Lerp(m_blockScele, scale, kLerpRate);
-		m_noiseSpeed = MathSub::Lerp(m_noiseSpeed, speed, kLerpRate);
-		m_shakeStrength = MathSub::Lerp(m_shakeStrength, strength, kLerpRate);
-
-		//小さい値の場合0にする
-		if (m_blockScele < kEpsilon)m_blockScele = 0.0f;
-		if (m_noiseSpeed < kEpsilon)m_noiseSpeed = 0.0f;
-		if (m_shakeStrength < kEpsilon)m_shakeStrength = 0.0f;
+		postPrecess->SubPostEffectState(ShaderPostProcess::PostEffectState::NoColorGlitch);
 	}
-	//グリッジの各値の設定
-	postPrecess->SetBlockScele(m_blockScele);
-	postPrecess->SetNoiseSpeed(m_noiseSpeed);
-	postPrecess->SetShakeStrength(m_shakeStrength);
 }

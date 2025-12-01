@@ -2,7 +2,9 @@
 #include "../../../General/AssetManager.h"
 #include "../../../General/CharaStatus.h"
 #include "../../../General/Math/MyMath.h"
+#include "../../../General/MyDraw.h"
 #include "../../../General/Game.h"
+#include "../../../General/ShaderPostProcess.h"
 #include <DxLib.h>
 
 namespace
@@ -22,6 +24,11 @@ TitleUI::TitleUI() :
 	m_titleBackHandle = AssetManager::GetInstance().GetImageHandle(kTitleBackHandlePath);
 	//前描画
 	m_isFrontDraw = true;
+
+	//シェーダ
+	m_shader = std::make_shared<ShaderPostProcess>();
+	m_shader->Init();
+	m_shader->SetPostEffectState(ShaderPostProcess::PostEffectState::Glitch);
 }
 
 TitleUI::~TitleUI()
@@ -30,13 +37,15 @@ TitleUI::~TitleUI()
 
 void TitleUI::Update()
 {
-
+	m_shader->Update();
 }
 
 void TitleUI::Draw() const
 {
 	//タイトル背景
 	DrawRotaGraphF(Game::kScreenCenterX, Game::kScreenCenterY, 1.0, 0.0, m_titleBackHandle, true);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 	//タイトルロゴ
-	DrawRotaGraphF(Game::kScreenCenterX, Game::kScreenCenterY, 1.0, 0.0, m_titleLogoHandle, true);
+	m_shader->Draw(Game::kScreenCenterX, Game::kScreenCenterY, m_titleLogoHandle);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }

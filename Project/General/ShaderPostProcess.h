@@ -7,6 +7,7 @@ public:
 	void Init();
 	void Update();
 	void Draw(const int rt)const;
+	void Draw(float x,float y, const int handle)const;
 	void End();
 	//ポストエフェクトの状態
 	enum class PostEffectState : int
@@ -34,7 +35,7 @@ public:
 	void SetNoiseSpeed(float speed);
 	//揺れの強さ
 	void SetShakeStrength(float shake);
-private:
+
 	//グリッジ用の定数バッファ
 	struct CBuff1
 	{
@@ -51,7 +52,7 @@ private:
 		float dummy2 = 0.0f;
 		float dummy3 = 0.0f;
 	};
-
+private:
 	//定数バッファハンドル
 	int m_cbuff1Handle;
 	int m_cbuff2Handle;

@@ -27,9 +27,6 @@ public:
 private:
     //最初の激しいグリッジを行うフレームをカウント
     int m_hardShakingCountFrame;
-    //不定期でグリッジを行う
-    int m_IrregularCountFrame;
-    int m_IrregularFrame;
     //各項目の値
     float m_blockScele;
     float m_noiseSpeed;
