@@ -14,6 +14,12 @@ void CameraController::Update()
 	//最後にプッシュ(入れた)カメラのみ更新処理を行う
 	m_cameras.back()->Update();
 }
+void CameraController::Draw()const
+{
+	if (m_cameras.empty())return;
+	//最後にプッシュ(入れた)カメラのみ描画処理を行う
+	m_cameras.back()->Draw();
+}
 
 void CameraController::ChangeCamera(std::shared_ptr<CameraBase> camera)
 {

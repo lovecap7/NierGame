@@ -2,6 +2,8 @@
 #include "CameraController.h"
 #include "../Actor/Character/Player/Player.h"
 #include "../../General/Model.h"
+#include "../../General/Game.h"
+#include "../../General/AssetManager.h"
 
 namespace
 {
@@ -13,6 +15,8 @@ namespace
 	constexpr float kFirstAngle = -70.0f;
 	//距離
 	constexpr float kFirstDistance = 60.0f;
+	//Lerpの割合
+	constexpr float kLerpRate = 0.5f;
 
 	//第一フェーズ
 	constexpr int kFirstPhaseFrame = 202;
@@ -30,10 +34,31 @@ namespace
 	constexpr float kSecondDistance = 147.0f;
 	//高さ
 	constexpr float kSecondHeight = 95.0f;
-	//Lerpの割合
-	constexpr float kLerpRate = 0.5f;
 	//少し上を見る
 	constexpr float kLookUpAdjust = 10.0f;
+
+	//第三フェーズ
+	constexpr int kThirdPhaseFrame = 300;
+	//距離
+	constexpr float kThirdDistance = 400.0f;
+	//後ろの角度
+	constexpr float kBackAngle = 180.0f;
+	//角速度
+	constexpr float kBackRotaSpeed = 2.0f;
+
+	//シネマスコープ
+	const std::wstring kCinemaScopeImagePath = L"CinemaScope";
+
+	//シネマスコープのY移動速度
+	constexpr float kCinemaScopeMoveSpeed = 5.0f;
+	//シネマスコープの画面外位置
+	constexpr float kCinemaScopeOutTopPosY = -50.0f;
+	constexpr float kCinemaScopeOutUnderPosY = Game::kScreenHeight + 50.0f;
+	//シネマスコープの画面内位置
+	constexpr float kCinemaScopeInTopPosY = 30.0f;
+	constexpr float kCinemaScopeInUnderPosY = Game::kScreenHeight - 30.0f;
+	//シネマスコープのlerp率
+	constexpr float kCinemaScopeLerpRate = 0.05f;
 
 }
 
@@ -42,7 +67,8 @@ StartCamera::StartCamera(std::weak_ptr<Player> pPlayer):
 	m_pPlayer(pPlayer),
 	m_rotaAngle(kFirstAngle),
 	m_heightAdjust(0.0f),
-	m_countFrame(0)
+	m_countFrame(0),
+	m_cinemaScopeHandle(-1)
 {
 	
 }
@@ -53,6 +79,7 @@ StartCamera::~StartCamera()
 
 void StartCamera::Init()
 {
+	//値の初期化
 	m_distance = kFirstDistance;
 	m_vertexAngle = 0.0f;
 	m_front = Vector3::Forward();
@@ -64,10 +91,19 @@ void StartCamera::Init()
 	m_rotaAngle = kFirstAngle;
 	m_heightAdjust = 0.0f;
 	m_countFrame = 0;
+	m_cinemaScopeHandle = AssetManager::GetInstance().GetImageHandle(kCinemaScopeImagePath);
+	m_cinemaScopeTopPosY = kCinemaScopeOutTopPosY;
+	m_cinemaScopeUnderPosY = kCinemaScopeOutUnderPosY;
+
 	if (m_pPlayer.expired())return;
+
+	//初期位置設定
 	auto player = m_pPlayer.lock();
 	m_look = player->GetPos();
 	m_cameraPos = player->GetPos() + player->GetModel()->GetDir() * m_distance;
+
+	//プレイヤーをスタート状態に
+	player->SetStartState();
 }
 
 void StartCamera::Update()
@@ -83,6 +119,10 @@ void StartCamera::Update()
 
 	if (m_countFrame <= kFirstPhaseFrame)
 	{
+		//画面内へ移動
+		m_cinemaScopeUnderPosY = MathSub::Lerp(m_cinemaScopeUnderPosY, kCinemaScopeInUnderPosY, kCinemaScopeLerpRate);
+		m_cinemaScopeTopPosY = MathSub::Lerp(m_cinemaScopeTopPosY, kCinemaScopeInTopPosY, kCinemaScopeLerpRate);
+
 		++m_rotaAngle;
 		if(m_rotaAngle > kSideAngle)
 		{
@@ -106,6 +146,23 @@ void StartCamera::Update()
 		m_cameraPos.y += m_heightAdjust;
 		m_viewPos.y = m_cameraPos.y + kLookUpAdjust;
 	}
+	else if (m_countFrame <= kThirdPhaseFrame)
+	{
+		//画面外へ移動
+		m_cinemaScopeUnderPosY = MathSub::Lerp(m_cinemaScopeUnderPosY, kCinemaScopeOutUnderPosY, kCinemaScopeLerpRate);
+		m_cinemaScopeTopPosY = MathSub::Lerp(m_cinemaScopeTopPosY, kCinemaScopeOutTopPosY, kCinemaScopeLerpRate);
+
+		m_distance = MathSub::Lerp(m_distance, kThirdDistance, kLerpRate);
+		m_rotaAngle += kBackRotaSpeed;
+		if (m_rotaAngle > kBackAngle)
+		{
+			m_rotaAngle = kBackAngle;
+		}
+		m_viewPos = player->GetPos();
+		m_cameraPos = (Quaternion::AngleAxis(m_rotaAngle * MyMath::DEG_2_RAD, Vector3::Up()) * (player->GetModel()->GetDir() * m_distance)) + player->GetPos();
+		m_cameraPos.y += m_heightAdjust;
+		m_viewPos.y = m_cameraPos.y + kLookUpAdjust;
+	}
 	else
 	{
 		//反映 
@@ -123,4 +180,10 @@ void StartCamera::Update()
 		m_viewPos.ToDxLibVector()
 	);
 	
+}
+
+void StartCamera::Draw() const
+{
+	DrawRotaGraphF(Game::kScreenCenterX, m_cinemaScopeTopPosY, 1.0, 0.0, m_cinemaScopeHandle, true);
+	DrawRotaGraphF(Game::kScreenCenterX, m_cinemaScopeUnderPosY, 1.0, 0.0, m_cinemaScopeHandle, true);
 }

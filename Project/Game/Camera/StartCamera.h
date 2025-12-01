@@ -8,8 +8,9 @@ class StartCamera :
 public:
 	StartCamera(std::weak_ptr<Player> pPlayer);
 	~StartCamera();
-	virtual void Init() override;
-	virtual void Update() override;
+	void Init() override;
+	void Update() override;
+	void Draw() const override;
 
 private:
 	//プレイヤーの参照
@@ -20,5 +21,9 @@ private:
 	float m_heightAdjust;
 	//フレームカウント
 	int m_countFrame;
+	//シネマスコープ
+	int m_cinemaScopeHandle;
+	float m_cinemaScopeTopPosY;
+	float m_cinemaScopeUnderPosY;
 };
 

@@ -43,6 +43,7 @@ void TutorialScene::Init()
 	Application::GetInstance().SetTimeScale(1.0f);
 	//UIíœ
 	UIManager::GetInstance().AllDeleteUI();
+	UIManager::GetInstance().SetIsDraw(true);
 	//Input‚Ì“ü—Íî•ñƒŠƒZƒbƒg
 	Input::GetInstance().StopUpdate();
 

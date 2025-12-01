@@ -6,7 +6,8 @@ class TitleCamera :
 public:
     TitleCamera();
     ~TitleCamera();
-    virtual void Init() override;
-    virtual void Update() override;
+    void Init() override;
+    void Update() override;
+    void Draw() const override;
 };
 

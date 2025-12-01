@@ -134,7 +134,7 @@ void Player::Init()
 
 	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
 	auto thisPointer = std::dynamic_pointer_cast<Player>(shared_from_this());
-	m_state = std::make_shared<PlayerStateStart>(thisPointer);
+	m_state = std::make_shared<PlayerStateIdle>(thisPointer);
 	//状態を変化する
 	m_state->ChangeState(m_state);
 	//モデルの高さ調整
@@ -229,9 +229,6 @@ void Player::Update()
 	//}
 #endif
 
-	//体力に応じてポストエフェクトをかける
-	UpdateHit();
-
 	//回復
 	if (input.GetPOVInfo().IsDownTrigger())
 	{
@@ -256,8 +253,22 @@ void Player::Update()
 		m_charaStatus->SetIsHit(true);
 	}
 
-	//共通処理
-	CharacterBase::Update();
+	//状態に合わせた更新
+	m_state->Update();
+	//状態が変わったかをチェック
+	if (m_state != m_state->GetNextState())
+	{
+		//状態を変化する
+		m_state = m_state->GetNextState();
+		m_state->Init();
+	}
+	//アニメーションの更新
+	m_model->Update();
+
+	//体力に応じてポストエフェクトをかける
+	UpdateHit();
+	//状態のリセット
+	m_charaStatus->InitHitState();
 
 	//ジャスト回避無敵時間
 	UpdateJustAvoid();
@@ -552,6 +563,15 @@ void Player::Respawn()
 		auto camera = GetPlayerCamera().lock();
 		ResetTarget(camera);
 	}
+}
+
+void Player::SetStartState()
+{
+	//スタート状態にする
+	auto thisPointer = std::dynamic_pointer_cast<Player>(shared_from_this());
+	m_state = std::make_shared<PlayerStateStart>(thisPointer);
+	//状態を変化する
+	m_state->ChangeState(m_state);
 }
 
 std::weak_ptr<PlayerCamera> Player::GetPlayerCamera() const

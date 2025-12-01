@@ -271,7 +271,6 @@ void PlayerStateAvoid::InitJustAvoid(std::shared_ptr<Model> model, std::shared_p
 	//フレームリセット
 	m_frame = 0.0f;
 
-
 	auto status = owner->GetCharaStatus();
 	//無敵
 	status->SetIsNoDamage(true);
@@ -337,6 +336,7 @@ void PlayerStateAvoid::MoveAvoid(Input& input, Application& app, std::shared_ptr
 		owner->GetModel()->SetDir(dir.XZ());
 	}
 	float timeScale = app.GetTimeScale();
+
 	m_speed = MathSub::Lerp(m_speed, m_endSpeed, kLerpSpeedRate);
 	Vector3 vec = m_avoidDir * m_speed * timeScale;
 	//移動

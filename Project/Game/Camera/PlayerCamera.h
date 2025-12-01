@@ -12,8 +12,9 @@ class PlayerCamera :
 public:
 	PlayerCamera();
 	~PlayerCamera();
-	virtual void Init() override;
-	virtual void Update() override;
+	void Init() override;
+	void Update() override;
+	void Draw() const override {};
 	
 	//ロックオン開始
 	void StartLockOn(std::weak_ptr<Actor> lockOnTarget);

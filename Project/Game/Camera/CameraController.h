@@ -24,6 +24,7 @@ public:
 	}
 	void Init();
 	void Update();
+	void Draw()const;
 	/// <summary>
 	/// ƒJƒƒ‰‚ğ•ÏX‚·‚é
 	/// </summary>

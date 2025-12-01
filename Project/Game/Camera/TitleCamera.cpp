@@ -15,3 +15,7 @@ void TitleCamera::Init()
 void TitleCamera::Update()
 {
 }
+
+void TitleCamera::Draw() const
+{
+}

@@ -151,6 +151,7 @@ void GameScene::Draw()
 	m_actorManager->Draw();
 	m_attackManager->Draw();
 	m_effectManager.Draw();
+	CameraController::GetInstance().Draw();
 }
 
 void GameScene::End()

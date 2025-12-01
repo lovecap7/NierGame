@@ -10,6 +10,7 @@ public:
 	virtual ~CameraBase();
 	virtual void Init() abstract;
 	virtual void Update() abstract;
+	virtual void Draw() const abstract;
 	const Vector3& GetPos() const { return m_cameraPos; };
 	const Vector3& GetLook() const { return m_look; };
 	const Vector3& GetForward() const { return m_front; };

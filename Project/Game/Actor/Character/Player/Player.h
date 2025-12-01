@@ -111,6 +111,9 @@ public:
 
 	//回復可能回数
 	int GetFullRecoveryNum()const { return m_fullRecoveryNum; };
+
+	//スタート状態にする
+	void SetStartState();
 private:
 	//カメラ
 	std::weak_ptr<PlayerCamera> GetPlayerCamera()const;
