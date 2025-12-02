@@ -68,7 +68,9 @@ StartCamera::StartCamera(std::weak_ptr<Player> pPlayer):
 	m_rotaAngle(kFirstAngle),
 	m_heightAdjust(0.0f),
 	m_countFrame(0),
-	m_cinemaScopeHandle(-1)
+	m_cinemaScopeHandle(-1),
+	m_cinemaScopeTopPosY(kCinemaScopeOutTopPosY),
+	m_cinemaScopeUnderPosY(kCinemaScopeOutUnderPosY)
 {
 	
 }

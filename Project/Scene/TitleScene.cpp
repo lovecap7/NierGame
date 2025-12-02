@@ -9,6 +9,7 @@
 #include "../General/Game.h"
 #include "../Game/UI/Title/TitleUI.h"
 #include "../Game/UI/UIManager.h"
+#include "../Game/Actor/ActorManager.h"
 #include "../General/AssetManager.h"
 #include "../Game/Camera/CameraController.h"
 #include "../Game/Camera/TitleCamera.h"
@@ -65,6 +66,11 @@ void TitleScene::Init()
 	postPrecess->SetBlockScele(m_blockScele);
 	postPrecess->SetNoiseSpeed(m_noiseSpeed);
 	postPrecess->SetShakeStrength(m_shakeStrength);
+
+	//アクターマネージャー
+	m_actorManager = std::make_shared<ActorManager>();
+	m_actorManager->Init();
+	
 }
 
 void TitleScene::Update()
@@ -94,6 +100,10 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
+	DrawSphere3D({ 0.0f,0.0f,500.0f }, 50.0f, 16, 16, 0xff0000, TRUE);
+	DrawSphere3D({ 0.0f,0.0f,-500.0f }, 50.0f, 16, 16, 0xff0000, TRUE);
+	DrawSphere3D({ 500.0f,0.0f,0.0f }, 50.0f, 16, 16, 0xff0000, TRUE);
+	DrawSphere3D({ -500.0f,0.0f,0.0f }, 50.0f, 16, 16, 0xff0000, TRUE);
 }
 
 void TitleScene::End()

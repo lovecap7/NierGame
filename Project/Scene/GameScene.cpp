@@ -22,11 +22,20 @@
 #include "../Game/UI/UIManager.h"
 #include "../Game/Tutorial/TutorialManager.h"
 
+namespace
+{
+	//CSVデータ名
+	const std::wstring kCharacterDataName = L"CharacterData";
+	const std::wstring kStageDataName = L"StageData";
+	const std::wstring kCheckPointDataName = L"CheckPointData";
+}
 
 GameScene::GameScene(SceneController& controller, std::wstring stageName) :
 	SceneBase(controller),
 	m_stageName(stageName),
-	m_effectManager(EffekseerManager::GetInstance())
+	m_effectManager(EffekseerManager::GetInstance()),
+	m_isGameClear(false),
+	m_isGameover(false)
 {
 
 }
@@ -63,9 +72,9 @@ void GameScene::Init()
 	//アクター
 	m_actorManager = std::make_shared<ActorManager>();
 	m_actorManager->Init();
-	m_actorManager->CreateActorCSV(stageName, L"CharacterData");
-	m_actorManager->CreateActorCSV(stageName, L"StageData");
-	m_actorManager->CreateActorCSV(stageName, L"CheckPointData");
+	m_actorManager->CreateActorCSV(stageName, kCharacterDataName.c_str());
+	m_actorManager->CreateActorCSV(stageName, kStageDataName.c_str());
+	m_actorManager->CreateActorCSV(stageName, kCheckPointDataName.c_str());
 
 	//カメラセット
 	m_actorManager->SetPlayerCamera(playerCamera);

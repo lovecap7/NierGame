@@ -73,11 +73,6 @@ PS_OUTPUT main(PS_INPUT input)
     
     // 元のテクスチャ色を取得
     float4 color = tex.Sample(smp, input.uv);
-    
-    if(color.a <= 0.0)
-    {
-        discard;   
-    }
 
     //状態がグリッチ
     if (isUseGlitch || isUseGlitchNoColor)
@@ -90,20 +85,20 @@ PS_OUTPUT main(PS_INPUT input)
         float noise = blockNoise(input.uv.y * blockScale);
 
         //横方向に少しランダム成分を追加
-        noise += random(input.uv.x) * 0.3;
+        noise += random(input.uv.x);
 
         //ランダム値を生成（揺れ用）
         float2 randomvalue = noiserandom(float2(input.uv.y, shakeStrength * noiseSpeed));
 
         //X方向のUVを揺らしてグリッチ効果を作成
-        gv.x += randomvalue * sin(sin(1) * 0.5) * sin(-sin(noise) * 0.2) * frac(shakeStrength);
+        gv.x += randomvalue * sin(sin(1)) * sin(-sin(noise)*0.5) * frac(shakeStrength);
 
         if (isUseGlitchNoColor)
         {
             //全ての色を同じだけ動かす
-            color.r = tex.Sample(smp, gv + float2(0.006, 0)).r;
-            color.g = tex.Sample(smp, gv + float2(0.006, 0)).g;
-            color.b = tex.Sample(smp, gv + float2(0.006, 0)).b;
+            color.r = tex.Sample(smp, gv + float2(0.009, 0)).r;
+            color.g = tex.Sample(smp, gv + float2(0.009, 0)).g;
+            color.b = tex.Sample(smp, gv + float2(0.009, 0)).b;
             color.a = 1.0;
         }
         else
@@ -113,6 +108,12 @@ PS_OUTPUT main(PS_INPUT input)
             color.g = tex.Sample(smp, gv).g; //緑はそのまま
             color.b = tex.Sample(smp, gv - float2(0.008, 0)).b; //青を左にずらす
             color.a = 1.0;
+        }
+        
+        //色ズレ後のcolorが白い領域なら透明にする
+        if (color.r > 0.99 && color.g > 0.99 && color.b > 0.99)
+        {
+            discard; // ← ここで“穴”が開く
         }
     }
   
@@ -160,7 +161,6 @@ PS_OUTPUT main(PS_INPUT input)
         color = lerp(color, vignetteColor, vignetteDistance);
     }
    
-
     //最終的なカラーを出力
     output.color = color;
     return output;

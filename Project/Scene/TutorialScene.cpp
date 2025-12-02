@@ -20,6 +20,13 @@
 #include "../Game/UI/UIManager.h"
 #include "../Game/Tutorial/TutorialManager.h"
 
+namespace
+{
+	//CSVデータ名
+	const std::wstring kCharacterDataName = L"CharacterData";
+	const std::wstring kStageDataName = L"StageData";
+	const std::wstring kCheckPointDataName = L"CheckPointData";
+}
 
 TutorialScene::TutorialScene(SceneController& controller, std::wstring stageName) :
 	SceneBase(controller),
@@ -63,9 +70,9 @@ void TutorialScene::Init()
 	//アクター
 	m_actorManager = std::make_shared<ActorManager>();
 	m_actorManager->Init();
-	m_actorManager->CreateActorCSV(stageName, L"CharacterData");
-	m_actorManager->CreateActorCSV(stageName, L"StageData");
-	m_actorManager->CreateActorCSV(stageName, L"CheckPointData");
+	m_actorManager->CreateActorCSV(stageName, kCharacterDataName.c_str());
+	m_actorManager->CreateActorCSV(stageName, kStageDataName.c_str());
+	m_actorManager->CreateActorCSV(stageName, kCheckPointDataName.c_str());
 	//カメラセット
 	m_actorManager->SetPlayerCamera(camera);
 	//攻撃マネージャーセット

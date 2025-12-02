@@ -6,6 +6,7 @@ class Input;
 class SceneController;
 class CameraController;
 class TitleUI;
+class ActorManager;
 class TitleScene :
     public SceneBase
 {
@@ -31,6 +32,9 @@ private:
     float m_blockScele;
     float m_noiseSpeed;
     float m_shakeStrength;
+
+    //アクターマネージャー
+    std::shared_ptr<ActorManager> m_actorManager;
 private:
     //グリッジの更新
     void UpdateGlitch();
