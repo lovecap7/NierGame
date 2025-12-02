@@ -70,6 +70,8 @@ void TitleScene::Init()
 	//アクターマネージャー
 	m_actorManager = std::make_shared<ActorManager>();
 	m_actorManager->Init();
+	m_actorManager->CreateActorCSV(L"Title", L"CharacterData");
+	m_actorManager->CreateActorCSV(L"Title", L"StageData");
 	
 }
 
@@ -96,14 +98,13 @@ void TitleScene::Update()
 	{
 		fader.FadeOut();
 	}
+
+	m_actorManager->Update();
 }
 
 void TitleScene::Draw()
 {
-	DrawSphere3D({ 0.0f,0.0f,500.0f }, 50.0f, 16, 16, 0xff0000, TRUE);
-	DrawSphere3D({ 0.0f,0.0f,-500.0f }, 50.0f, 16, 16, 0xff0000, TRUE);
-	DrawSphere3D({ 500.0f,0.0f,0.0f }, 50.0f, 16, 16, 0xff0000, TRUE);
-	DrawSphere3D({ -500.0f,0.0f,0.0f }, 50.0f, 16, 16, 0xff0000, TRUE);
+	m_actorManager->Draw();
 }
 
 void TitleScene::End()
@@ -111,6 +112,8 @@ void TitleScene::End()
 	//グリッジ削除
 	auto& postPrecess = Application::GetInstance().GetPostProcess();
 	postPrecess->SubPostEffectState(ShaderPostProcess::PostEffectState::NoColorGlitch);
+
+	m_actorManager->End();
 }
 
 void TitleScene::DebugDraw() const

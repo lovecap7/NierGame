@@ -25,9 +25,19 @@
 
 namespace
 {
+	//CSVデータ名
 	const std::wstring kCharaStatusDataName = L"CharaStatusData";
 	const std::wstring kWeaponDataName = L"Player/WeaponData";
 	const std::wstring kPodDataName = L"Player/PodData";
+	//特殊処理アクター名
+	const std::wstring kBoss1Name = L"Boss1";
+	const std::wstring kBoss2Name = L"Boss2";
+	const std::wstring kBoss3Name = L"Boss3";
+	const std::wstring kBoss4Name = L"Boss4";
+	const std::wstring kGoalName = L"Goal";
+	const std::wstring kHiganbanaName = L"Higanbana";
+	const std::wstring kLightSwordName = L"LightSword";
+
 }
 
 ActorManager::ActorManager():
@@ -171,7 +181,7 @@ void ActorManager::CreateActorCSV(const wchar_t* folderName, const wchar_t* file
 		}
 		else if (actorData->GetActorType() == ActorData::ActorType::Stage)
 		{
-			if (actorData->GetName() == L"Goal")
+			if (actorData->GetName() == kGoalName)
 			{
 				//ゴール
 				actor = std::make_shared<Goal>(actorData, shared_from_this());
@@ -183,6 +193,11 @@ void ActorManager::CreateActorCSV(const wchar_t* folderName, const wchar_t* file
 			}
 			else
 			{
+				if (actorData->GetName() == kHiganbanaName)
+				{
+					actorData->SetScale(actorData->GetScale() * 100.0f);
+				}
+
 				//ステージ
 				actor = std::make_shared<StageObject>(actorData, shared_from_this());
 			}
@@ -218,22 +233,22 @@ std::shared_ptr<CharacterBase> ActorManager::CreateChara(GameTag tag, std::share
 	}
 	else if (tag == GameTag::Enemy)
 	{
-		if (actorData->GetName() == L"Boss1")
+		if (actorData->GetName() == kBoss1Name)
 		{
 			//ボス1
 			chara = std::make_shared<Boss1>(actorData, charaStatusData, shared_from_this());
 		}
-		else if (actorData->GetName() == L"Boss2")
+		else if (actorData->GetName() == kBoss2Name)
 		{
 			//ボス2
 			chara = std::make_shared<Boss2>(actorData, charaStatusData, shared_from_this());
 		}
-		else if (actorData->GetName() == L"Boss3")
+		else if (actorData->GetName() == kBoss3Name)
 		{
 			//ボス3
 			chara = std::make_shared<Boss3>(actorData, charaStatusData, shared_from_this());
 		}
-		else if (actorData->GetName() == L"Boss4")
+		else if (actorData->GetName() == kBoss4Name)
 		{
 			//ボス4
 			chara = std::make_shared<Boss4>(actorData, charaStatusData, shared_from_this());
@@ -271,7 +286,7 @@ void ActorManager::SetUpPlayer(std::shared_ptr<Player> player)
 		Entry(weapon);
 
 		//武器をセット
-		if (weaponData->GetName() == L"LightSword")
+		if (weaponData->GetName() == kLightSwordName)
 		{
 			//片手剣
 			player->SetSword(weapon,true);
