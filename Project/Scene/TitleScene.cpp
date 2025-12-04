@@ -16,6 +16,7 @@
 #include "../Main/Application.h"
 #include "../General/ShaderPostProcess.h"
 #include "../General/Math/MyMath.h"
+#include "../General/Effect/EffekseerManager.h"
 
 namespace
 {
@@ -32,7 +33,8 @@ TitleScene::TitleScene(SceneController& controller):
 	m_hardShakingCountFrame(kStartHardShakingFrame),
 	m_blockScele(kBlockScele),
 	m_noiseSpeed(kNoiseSpeed),
-	m_shakeStrength(kShakeStrength)
+	m_shakeStrength(kShakeStrength),
+	m_effectManager(EffekseerManager::GetInstance())
 {
 }
 
@@ -50,6 +52,9 @@ void TitleScene::Init()
 	UIManager::GetInstance().AllDeleteUI();
 	//フェードイン
 	Fader::GetInstance().FadeIn();
+	//エフェクトマネージャー初期化
+	m_effectManager.Init();
+
 	//カメラ
 	auto camera = std::make_shared<TitleCamera>();
 	auto& cameraController = CameraController::GetInstance();
@@ -79,6 +84,9 @@ void TitleScene::Update()
 {
 	auto& input = Input::GetInstance();
 
+	//エフェクトの再生
+	m_effectManager.Update();
+
 	auto& fader = Fader::GetInstance();
 	//フェードアウトしきったら
 	if (fader.IsFinishFadeOut())
@@ -105,6 +113,7 @@ void TitleScene::Update()
 void TitleScene::Draw()
 {
 	m_actorManager->Draw();
+	m_effectManager.Draw();
 }
 
 void TitleScene::End()

@@ -2,21 +2,23 @@
 
 namespace
 {
-	//カメラ回転
-	constexpr float kCameraRotateSpeed = 0.2f;
 	//カメラ距離
 	constexpr float kCameraDistance = 100.0f;
 	//カメラ視界高さ
-	constexpr float kCameraViewPosY = 30.0f;
+	constexpr float kCameraViewPosY = 10.0f;
 	//カメラ高さ
-	constexpr float kCameraPosY = 90.0f;
+	constexpr float kCameraPosY = 100.0f;
 	//ニアファー
 	constexpr float kNear = 0.1f;
 	constexpr float kFar = 20000.0f;
+
+	//カメラを上下に動かす速さ
+	constexpr float kCameraMoveSpeed = 0.3f;
 }
 
 TitleCamera::TitleCamera():
-	CameraBase()
+	CameraBase(),
+	m_angle(0.0f)
 {
 }
 
@@ -35,6 +37,7 @@ void TitleCamera::Init()
 	m_rotH = Quaternion::IdentityQ();
 	m_viewPos = Vector3::Zero();
 	m_cameraPos = Vector3{ 0.0f,kCameraPosY,0.0f };
+	m_angle = 0.0f;
 }
 
 void TitleCamera::Update()
@@ -42,13 +45,14 @@ void TitleCamera::Update()
 	//ニアファー
 	SetCameraNearFar(kNear, kFar);
 
-	m_front = Quaternion::AngleAxis(kCameraRotateSpeed * MyMath::DEG_2_RAD, Vector3::Up()) * m_front;
-	if(m_front.SqMagnitude() > 0.0f)
+	m_angle += kCameraMoveSpeed;
+	if(m_angle >= 360.0f)
 	{
-		m_front.Normalize();
+		m_angle -= 360.0f;
 	}
+
 	m_viewPos = m_cameraPos + (m_front * m_distance);
-	m_viewPos.y += kCameraViewPosY;
+	m_viewPos.y += kCameraViewPosY * cosf(m_angle * MyMath::DEG_2_RAD);
 
 	//反映 
 	DxLib::SetCameraPositionAndTarget_UpVecY(

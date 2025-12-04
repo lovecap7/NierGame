@@ -7,6 +7,7 @@ class SceneController;
 class CameraController;
 class TitleUI;
 class ActorManager;
+class EffekseerManager;
 class TitleScene :
     public SceneBase
 {
@@ -35,6 +36,9 @@ private:
 
     //アクターマネージャー
     std::shared_ptr<ActorManager> m_actorManager;
+
+    //エフェクト
+    EffekseerManager& m_effectManager;
 private:
     //グリッジの更新
     void UpdateGlitch();

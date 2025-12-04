@@ -11,6 +11,7 @@ public:
     void Draw() const override;
 
 private:
-
+    //Šp“x
+	float m_angle;
 };
 

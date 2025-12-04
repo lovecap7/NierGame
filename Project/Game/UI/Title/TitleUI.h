@@ -24,6 +24,7 @@ private:
 	int m_gearHandle;
     //時計
 	int m_clockHandle;
+  
     //シェーダ
 	std::shared_ptr<ShaderPostProcess> m_shader;
     //不定期に揺れる

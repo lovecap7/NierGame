@@ -17,6 +17,7 @@ namespace
 	const std::wstring kTitleBackHandlePath = L"Title/TitleBack";
 	const std::wstring kGearHandlePath = L"Title/Gear";
 	const std::wstring kClockHandlePath = L"Title/Time";
+	
 	//—h‚ê‚éƒtƒŒ[ƒ€
 	constexpr int kShakeStartFrame = 200;
 	constexpr int kShakeFrame = 20;
