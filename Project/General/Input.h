@@ -257,7 +257,7 @@ public:
 	/// 入力があった時一定間隔でtrueを返す
 	/// </summary>
 	/// <returns></returns>
-	bool IsRepeate(const std::string& action,int deltaTime = 30)const;
+	bool IsRepeate(const std::string& action,int deltaTime = 20)const;
 
 	/// <summary>
    /// 先行入力をチェックする

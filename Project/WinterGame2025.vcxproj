@@ -228,6 +228,7 @@
     <ClCompile Include="Game\UI\Player\PlayerHPUI.cpp" />
     <ClCompile Include="Game\UI\Result\TutorialResultUI.cpp" />
     <ClCompile Include="Game\UI\Result\ResultUI.cpp" />
+    <ClCompile Include="Game\UI\SelectStage\SelectStageUI.cpp" />
     <ClCompile Include="Game\UI\TalkUI.cpp" />
     <ClCompile Include="Game\UI\Title\TitleUI.cpp" />
     <ClCompile Include="Game\UI\Tutorial\TutorialManualUI.cpp" />
@@ -372,6 +373,7 @@
     <ClInclude Include="Game\UI\Player\PlayerHPUI.h" />
     <ClInclude Include="Game\UI\Result\TutorialResultUI.h" />
     <ClInclude Include="Game\UI\Result\ResultUI.h" />
+    <ClInclude Include="Game\UI\SelectStage\SelectStageUI.h" />
     <ClInclude Include="Game\UI\TalkUI.h" />
     <ClInclude Include="Game\UI\Title\TitleUI.h" />
     <ClInclude Include="Game\UI\Tutorial\TutorialManualUI.h" />

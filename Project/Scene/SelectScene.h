@@ -1,5 +1,7 @@
 #pragma once
 #include "SceneBase.h"
+class Input;
+class Fader;
 class SelectScene :
     public SceneBase
 {
@@ -19,17 +21,42 @@ public:
 	//デバッグ用
 	virtual void DebugDraw() const override;
 private:
-	enum class Menu : int
+	enum class MainMenu : int
+	{
+		Tutorial = 0,
+		Stage = 1,
+		Title = 2
+	};
+	enum class TutorialMenu : int
 	{
 		Tutorial1 = 0,
 		Tutorial2 = 1,
 		Tutorial3 = 2,
-		Stage1 = 3,
-		Stage2 = 4,
-		Stage3 = 5,
-		Title = 6,
 	};
-	Menu m_currentMenu = Menu::Tutorial1;
+	enum class StageMenu : int
+	{
+		Stage1 = 0,
+		Stage2 = 1,
+		Stage3 = 2,
+	};
 
+	//メインメニューの現在地
+	MainMenu m_currentMainMenu = MainMenu::Tutorial;
+	//チュートリアルメニューの現在地
+	TutorialMenu m_currentTutorialMenu = TutorialMenu::Tutorial1;
+	//ステージメニューの現在地
+	StageMenu m_currentStageMenu = StageMenu::Stage1;
+
+	//状態に合わせた更新
+	using UpdateFunc = void(SelectScene::*)(Input& input, Fader& fader);
+	UpdateFunc m_update;
+	
+private:
+	//メインメニュー更新
+	void UpdateMainMenu(Input& input, Fader& fader);
+	//チュートリアルメニュー更新
+	void UpdateTutorialMenu(Input& input, Fader& fader);
+	//ステージメニュー更新
+	void UpdateStageMenu(Input& input, Fader& fader);
 };
 
