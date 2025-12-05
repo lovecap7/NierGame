@@ -16,6 +16,7 @@
 #include "../General/CSV/CSVDataLoader.h"
 #include "../General/CSV/TextData.h"
 #include "../General/Fader.h"
+#include "../Game/UI/SelectStage/SelectStageUI.h"
 
 
 SelectScene::SelectScene(SceneController& controller) :
@@ -57,74 +58,23 @@ void SelectScene::Init()
 	m_currentMainMenu = MainMenu::Tutorial;
 	m_currentStageMenu = StageMenu::Stage1;
 	m_currentTutorialMenu = TutorialMenu::Tutorial1;
+
+	//UI作成
+	auto ui = std::make_shared<SelectStageUI>(static_cast<int>(MainMenu::Max), static_cast<int>(TutorialMenu::Max), static_cast<int>(StageMenu::Max));
+	ui->Init();
+	m_selectStageUI = ui;
 }
 
 void SelectScene::Update()
 {
 	auto& input = Input::GetInstance();
-	
 	auto& fader = Fader::GetInstance();
-
 	//状態ごとの更新処理
 	(this->*m_update)(input, fader);
 }
 
 void SelectScene::Draw()
 {
-	DrawString(100, 100, L"Tutorial Menu", GetColor(255, 255, 255));
-	DrawString(100, 180, L"Stage Menu", GetColor(255, 255, 255));
-	DrawString(100, 260, L"Title Menu", GetColor(255, 255, 255));
-	switch (m_currentMainMenu)
-	{
-	case SelectScene::MainMenu::Tutorial:
-		DrawString(100, 100, L"Tutorial Menu", GetColor(0, 255, 0));
-		break;
-	case SelectScene::MainMenu::Stage:
-		DrawString(100, 180, L"Stage Menu", GetColor(0, 255, 0));
-		break;
-	case SelectScene::MainMenu::Title:
-		DrawString(100, 260, L"Title Menu", GetColor(0, 255, 0));
-		break;
-	default:
-		break;
-	}
-
-	DrawString(300, 120, L"1", GetColor(255, 255, 255));
-	DrawString(300, 140, L"2", GetColor(255, 255, 255));
-	DrawString(300, 160, L"3", GetColor(255, 255, 255));
-	switch (m_currentTutorialMenu)
-	{
-	case SelectScene::TutorialMenu::Tutorial1:
-		DrawString(300, 120, L"1", GetColor(255, 0, 0));
-		break;
-	case SelectScene::TutorialMenu::Tutorial2:
-		DrawString(300, 140, L"2", GetColor(255, 0, 0));
-		break;
-	case SelectScene::TutorialMenu::Tutorial3:
-		DrawString(300, 160, L"3", GetColor(255, 0, 0));
-		break;
-	default:
-		break;
-	}
-
-	DrawString(300, 200, L"1", GetColor(255, 255, 255));
-	DrawString(300, 220, L"2", GetColor(255, 255, 255));
-	DrawString(300, 240, L"3", GetColor(255, 255, 255));
-	switch (m_currentStageMenu)
-	{
-	case SelectScene::StageMenu::Stage1:
-		DrawString(300, 200, L"1", GetColor(255, 0, 0));
-		break;
-	case SelectScene::StageMenu::Stage2:
-		DrawString(300, 220, L"2", GetColor(255, 0, 0));
-		break;
-	case SelectScene::StageMenu::Stage3:
-		DrawString(300, 240, L"3", GetColor(255, 0, 0));
-		break;
-	default:
-		break;
-	}
-
 
 }
 
@@ -160,6 +110,10 @@ void SelectScene::UpdateMainMenu(Input& input, Fader& fader)
 				//ステージセレクトへ遷移
 				m_update = &SelectScene::UpdateStageMenu;
 				break;
+			case SelectScene::MainMenu::Option:
+				//タイトルへ
+				fader.FadeOut();
+				break;
 			case SelectScene::MainMenu::Title:
 				//タイトルへ
 				fader.FadeOut();
@@ -185,6 +139,12 @@ void SelectScene::UpdateMainMenu(Input& input, Fader& fader)
 		}
 
 		m_currentMainMenu = static_cast<MainMenu>(menu);
+
+		//UI
+		if (!m_selectStageUI.expired())
+		{
+			m_selectStageUI.lock()->SetSelectMainMenuIndex(menu);
+		}
 	}
 }
 
@@ -240,6 +200,12 @@ void SelectScene::UpdateTutorialMenu(Input& input, Fader& fader)
 		}
 
 		m_currentTutorialMenu = static_cast<TutorialMenu>(menu);
+
+		//UI
+		if (!m_selectStageUI.expired())
+		{
+			m_selectStageUI.lock()->SetSelectTutorialMenuIndex(menu);
+		}
 	}
 }
 
@@ -295,5 +261,11 @@ void SelectScene::UpdateStageMenu(Input& input, Fader& fader)
 		}
 
 		m_currentStageMenu = static_cast<StageMenu>(menu);
+
+		//UI
+		if (!m_selectStageUI.expired())
+		{
+			m_selectStageUI.lock()->SetSelectStageMenuIndex(menu);
+		}
 	}
 }

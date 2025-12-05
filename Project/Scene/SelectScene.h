@@ -1,7 +1,9 @@
 #pragma once
 #include "SceneBase.h"
+#include <memory>
 class Input;
 class Fader;
+class SelectStageUI;
 class SelectScene :
     public SceneBase
 {
@@ -25,19 +27,23 @@ private:
 	{
 		Tutorial = 0,
 		Stage = 1,
-		Title = 2
+		Option = 2,
+		Title = 3,
+		Max = 4,
 	};
 	enum class TutorialMenu : int
 	{
 		Tutorial1 = 0,
 		Tutorial2 = 1,
 		Tutorial3 = 2,
+		Max = 3,
 	};
 	enum class StageMenu : int
 	{
 		Stage1 = 0,
 		Stage2 = 1,
 		Stage3 = 2,
+		Max = 3,
 	};
 
 	//メインメニューの現在地
@@ -46,6 +52,9 @@ private:
 	TutorialMenu m_currentTutorialMenu = TutorialMenu::Tutorial1;
 	//ステージメニューの現在地
 	StageMenu m_currentStageMenu = StageMenu::Stage1;
+
+	//UI
+	std::weak_ptr<SelectStageUI> m_selectStageUI;
 
 	//状態に合わせた更新
 	using UpdateFunc = void(SelectScene::*)(Input& input, Fader& fader);
