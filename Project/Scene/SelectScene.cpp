@@ -16,8 +16,9 @@
 #include "../General/CSV/CSVDataLoader.h"
 #include "../General/CSV/TextData.h"
 #include "../General/Fader.h"
-#include "../Game/UI/SelectStage/SelectStageUI.h"
-
+#include "../Game/UI/Select/SelectUI.h"
+#include "../Game/Camera/SelectCamera.h"
+#include "../Game/Camera/CameraController.h"
 
 SelectScene::SelectScene(SceneController& controller) :
 	SceneBase(controller),
@@ -43,39 +44,41 @@ void SelectScene::Init()
 	//フェードイン
 	Fader::GetInstance().FadeIn();
 
-	auto& csvLoader = CSVDataLoader::GetInstance();
-	auto datas = csvLoader.LoadCSV(L"DebugScene/TextData");
-	std::list<std::shared_ptr<TextData>> textDatas;
-	for (auto& data : datas)
-	{
-		auto textData = std::make_shared<TextData>(data);
-		textDatas.push_back(textData);
-	}
-
-	UIManager::GetInstance().Entry(std::make_shared<TalkUI>(textDatas));
-
 	//一番上の項目から
 	m_currentMainMenu = MainMenu::Tutorial;
 	m_currentStageMenu = StageMenu::Stage1;
 	m_currentTutorialMenu = TutorialMenu::Tutorial1;
 
 	//UI作成
-	auto ui = std::make_shared<SelectStageUI>(static_cast<int>(MainMenu::Max), static_cast<int>(TutorialMenu::Max), static_cast<int>(StageMenu::Max));
+	auto ui = std::make_shared<SelectUI>();
 	ui->Init();
 	m_selectStageUI = ui;
+
+	//カメラ
+	auto camera = std::make_shared<SelectCamera>();
+	auto& cameraController = CameraController::GetInstance();
+	cameraController.Init();
+	cameraController.ChangeCamera(camera);
+	m_selectCamera = camera;
 }
 
 void SelectScene::Update()
 {
 	auto& input = Input::GetInstance();
 	auto& fader = Fader::GetInstance();
+
+	auto& cameraController = CameraController::GetInstance();
+	cameraController.Update();
+
+	if (m_selectCamera.expired())return;
+	
 	//状態ごとの更新処理
-	(this->*m_update)(input, fader);
+	(this->*m_update)(input, fader, m_selectCamera.lock());
 }
 
 void SelectScene::Draw()
 {
-
+	DrawSphere3D(VGet(0.0f, 0.0f,300.0f), 30.0f, 16, 0xff0000, 0xff0000, true);
 }
 
 void SelectScene::End()
@@ -86,7 +89,7 @@ void SelectScene::DebugDraw() const
 {
 }
 
-void SelectScene::UpdateMainMenu(Input& input, Fader& fader)
+void SelectScene::UpdateMainMenu(Input& input, Fader& fader,std::shared_ptr<SelectCamera> startCamera)
 {
 	//フェードアウトしきったら
 	if (fader.IsFinishFadeOut())
@@ -94,6 +97,9 @@ void SelectScene::UpdateMainMenu(Input& input, Fader& fader)
 		m_controller.ChangeScene(std::make_shared<TitleScene>(m_controller));
 		return;
 	}
+
+	//引きカメラ
+	startCamera->PullCamera();
 
 	//フェード中は操作できない
 	if (!fader.IsFadeNow())
@@ -145,11 +151,31 @@ void SelectScene::UpdateMainMenu(Input& input, Fader& fader)
 		{
 			m_selectStageUI.lock()->SetSelectMainMenuIndex(menu);
 		}
+
+		//カメらの視点を変更
+		switch (m_currentMainMenu)
+		{
+		case MainMenu::Tutorial:
+			startCamera->SetViewPos(Vector3(0.0f, 0.0f, 500.0f));
+			break;
+		case MainMenu::Stage:
+			startCamera->SetViewPos(Vector3(50.0f, 0.0f, 500.0f));
+			break;
+		case MainMenu::Option:
+			startCamera->SetViewPos(Vector3(50.0f, 50.0f, 500.0f));
+			break;
+		case MainMenu::Title:
+			startCamera->SetViewPos(Vector3(0.0f, 50.0f, 500.0f));
+			break;
+		}
 	}
 }
 
-void SelectScene::UpdateTutorialMenu(Input& input, Fader& fader)
+void SelectScene::UpdateTutorialMenu(Input& input, Fader& fader, std::shared_ptr<SelectCamera> startCamera)
 {
+	//ズームカメラ
+	startCamera->ZoomInCamera();
+
 	//フェードアウトしきったら
 	if (fader.IsFinishFadeOut())
 	{
@@ -209,8 +235,11 @@ void SelectScene::UpdateTutorialMenu(Input& input, Fader& fader)
 	}
 }
 
-void SelectScene::UpdateStageMenu(Input& input, Fader& fader)
+void SelectScene::UpdateStageMenu(Input& input, Fader& fader, std::shared_ptr<SelectCamera> startCamera)
 {
+	//ズームカメラ
+	startCamera->ZoomInCamera();
+
 	//フェードアウトしきったら
 	if (fader.IsFinishFadeOut())
 	{

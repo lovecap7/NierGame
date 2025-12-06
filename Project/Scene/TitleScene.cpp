@@ -26,6 +26,11 @@ namespace
 	constexpr float kBlockScele = 10.0f;
 	constexpr float kNoiseSpeed = 10.0f;
 	constexpr float kShakeStrength = 10.0f;
+
+	//タイトル
+	const std::wstring kTitle = L"Title";
+	const std::wstring kCharacterData = L"CharacterData";
+	const std::wstring kStageData = L"StageData";
 }
 
 TitleScene::TitleScene(SceneController& controller):
@@ -75,8 +80,8 @@ void TitleScene::Init()
 	//アクターマネージャー
 	m_actorManager = std::make_shared<ActorManager>();
 	m_actorManager->Init();
-	m_actorManager->CreateActorCSV(L"Title", L"CharacterData");
-	m_actorManager->CreateActorCSV(L"Title", L"StageData");
+	m_actorManager->CreateActorCSV(kTitle.c_str(), kCharacterData.c_str());
+	m_actorManager->CreateActorCSV(kTitle.c_str(), kStageData.c_str());
 	
 }
 

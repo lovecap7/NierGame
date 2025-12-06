@@ -216,6 +216,7 @@
     <ClCompile Include="Game\Camera\CameraBase.cpp" />
     <ClCompile Include="Game\Camera\CameraController.cpp" />
     <ClCompile Include="Game\Camera\PlayerCamera.cpp" />
+    <ClCompile Include="Game\Camera\SelectCamera.cpp" />
     <ClCompile Include="Game\Camera\StartCamera.cpp" />
     <ClCompile Include="Game\Camera\TitleCamera.cpp" />
     <ClCompile Include="Game\Tutorial\TutorialManager.cpp" />
@@ -228,7 +229,7 @@
     <ClCompile Include="Game\UI\Player\PlayerHPUI.cpp" />
     <ClCompile Include="Game\UI\Result\TutorialResultUI.cpp" />
     <ClCompile Include="Game\UI\Result\ResultUI.cpp" />
-    <ClCompile Include="Game\UI\SelectStage\SelectStageUI.cpp" />
+    <ClCompile Include="Game\UI\Select\SelectUI.cpp" />
     <ClCompile Include="Game\UI\TalkUI.cpp" />
     <ClCompile Include="Game\UI\Title\TitleUI.cpp" />
     <ClCompile Include="Game\UI\Tutorial\TutorialManualUI.cpp" />
@@ -361,6 +362,7 @@
     <ClInclude Include="Game\Camera\CameraBase.h" />
     <ClInclude Include="Game\Camera\CameraController.h" />
     <ClInclude Include="Game\Camera\PlayerCamera.h" />
+    <ClInclude Include="Game\Camera\SelectCamera.h" />
     <ClInclude Include="Game\Camera\StartCamera.h" />
     <ClInclude Include="Game\Camera\TitleCamera.h" />
     <ClInclude Include="Game\Tutorial\TutorialManager.h" />
@@ -373,7 +375,7 @@
     <ClInclude Include="Game\UI\Player\PlayerHPUI.h" />
     <ClInclude Include="Game\UI\Result\TutorialResultUI.h" />
     <ClInclude Include="Game\UI\Result\ResultUI.h" />
-    <ClInclude Include="Game\UI\SelectStage\SelectStageUI.h" />
+    <ClInclude Include="Game\UI\Select\SelectUI.h" />
     <ClInclude Include="Game\UI\TalkUI.h" />
     <ClInclude Include="Game\UI\Title\TitleUI.h" />
     <ClInclude Include="Game\UI\Tutorial\TutorialManualUI.h" />

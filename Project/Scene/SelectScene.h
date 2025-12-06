@@ -3,7 +3,8 @@
 #include <memory>
 class Input;
 class Fader;
-class SelectStageUI;
+class SelectUI;
+class SelectCamera;
 class SelectScene :
     public SceneBase
 {
@@ -54,18 +55,21 @@ private:
 	StageMenu m_currentStageMenu = StageMenu::Stage1;
 
 	//UI
-	std::weak_ptr<SelectStageUI> m_selectStageUI;
+	std::weak_ptr<SelectUI> m_selectStageUI;
+
+	//カメラ
+	std::weak_ptr<SelectCamera> m_selectCamera;
 
 	//状態に合わせた更新
-	using UpdateFunc = void(SelectScene::*)(Input& input, Fader& fader);
+	using UpdateFunc = void(SelectScene::*)(Input& input, Fader& fader,std::shared_ptr<SelectCamera> startCamera);
 	UpdateFunc m_update;
 	
 private:
 	//メインメニュー更新
-	void UpdateMainMenu(Input& input, Fader& fader);
+	void UpdateMainMenu(Input& input, Fader& fader, std::shared_ptr<SelectCamera> startCamera);
 	//チュートリアルメニュー更新
-	void UpdateTutorialMenu(Input& input, Fader& fader);
+	void UpdateTutorialMenu(Input& input, Fader& fader, std::shared_ptr<SelectCamera> startCamera);
 	//ステージメニュー更新
-	void UpdateStageMenu(Input& input, Fader& fader);
+	void UpdateStageMenu(Input& input, Fader& fader, std::shared_ptr<SelectCamera> startCamera);
 };
 

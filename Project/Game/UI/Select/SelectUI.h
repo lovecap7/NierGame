@@ -3,42 +3,47 @@
 #include "../../../General/Math/MyMath.h"
 #include <vector>
 class Fader;
-class SelectStageUI :
-    public UIBase
+class SelectUI :
+	public UIBase
 {
 public:
-	SelectStageUI(int mainSize,int tutorialSize,int stageSelectSize);
-	~SelectStageUI();
+	SelectUI();
+	~SelectUI();
 	//更新
 	void Update() override;
 	//描画
 	void Draw()const override;
-	void DrawMenu(Fader& fader) const;
+
 	//選んでるメニューのインデックスを設定
 	void SetSelectMainMenuIndex(int index);
 	void SetSelectTutorialMenuIndex(int index);
 	void SetSelectStageMenuIndex(int index);
 private:
-	//テスト
-	int m_testHandle;
 
-	//メインメニューの項目座標
-	std::vector<Vector2> m_mainMenuPos;
+	//メニューUI
+	struct MenuUI
+	{
+		int handle = -1;
+		Vector2 pos;
+	};
+
+	//メインメニューの項目
+	std::vector<MenuUI> m_mainMenus;
 	//選んでるメニューのインデックス
 	int m_selectMainMenuIndex;
 
 	//チュートリアルメニューの項目座標
-	std::vector<Vector2> m_tutorialMenuPos;
+	std::vector<MenuUI> m_tutorialMenus;
 	//選んでるメニューのインデックス
 	int m_selectTutorialMenuIndex;
 
 	//ステージメニューの項目座標
-	std::vector<Vector2> m_stageMenuPos;
+	std::vector<MenuUI> m_stageMenus;
 	//選んでるメニューのインデックス
 	int m_selectStageMenuIndex;
 
 	//状態に合わせた更新
-	using UpdateFunc = void(SelectStageUI::*)();
+	using UpdateFunc = void(SelectUI::*)();
 	UpdateFunc m_update;
 
 	//メインメニューの更新
@@ -49,6 +54,6 @@ private:
 	void UpdateStageMenu();
 
 	//メニュー描画
-	void DrawMenu(Fader& fader,const std::vector<Vector2>& menuPos, int selectMeueIndex,bool isMenuMode) const;
+	void DrawMenu(Fader& fader, const std::vector<MenuUI>& menuPos, int selectMeueIndex, bool isMenuMode) const;
 };
 
