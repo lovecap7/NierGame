@@ -5,6 +5,7 @@ class Input;
 class Fader;
 class SelectUI;
 class SelectCamera;
+class ActorManager;
 class SelectScene :
     public SceneBase
 {
@@ -53,6 +54,9 @@ private:
 	TutorialMenu m_currentTutorialMenu = TutorialMenu::Tutorial1;
 	//ステージメニューの現在地
 	StageMenu m_currentStageMenu = StageMenu::Stage1;
+
+	//アクターマネージャー
+	std::shared_ptr<ActorManager> m_actorManager;
 
 	//UI
 	std::weak_ptr<SelectUI> m_selectStageUI;

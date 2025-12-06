@@ -60,6 +60,9 @@ void SelectScene::Init()
 	cameraController.Init();
 	cameraController.ChangeCamera(camera);
 	m_selectCamera = camera;
+
+	//アクターマネージャー
+	m_actorManager = std::shared_ptr<ActorManager>();
 }
 
 void SelectScene::Update()
