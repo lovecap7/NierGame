@@ -12,6 +12,7 @@
 #include "Stage/Sky.h"
 #include "Character/CharacterBase.h"
 #include "Character/Player/Player.h"
+#include "Character/Select/SelectPlayer.h"
 #include "Character/Enemy/NormalEnemy.h"
 #include "Character/Player/Weapon/Weapon.h"
 #include "Character/Player/Pod/Pod.h"
@@ -37,6 +38,8 @@ namespace
 	const std::wstring kGoalName = L"Goal";
 	const std::wstring kHiganbanaName = L"Higanbana";
 	const std::wstring kLightSwordName = L"LightSword";
+	const std::wstring kPlayerName = L"Player";
+	const std::wstring kSelectPlayerName = L"SelectPlayer";
 
 }
 
@@ -214,7 +217,8 @@ void ActorManager::CreateActorCSV(const wchar_t* folderName, const wchar_t* file
 		Entry(actor);
 
 		//プレイヤーなら
-		if (actorData->GetGameTag() == GameTag::Player)
+		if (actorData->GetGameTag() == GameTag::Player &&
+			actorData->GetName() == kPlayerName)
 		{
 			//武器を持たせる
 			SetUpPlayer(std::dynamic_pointer_cast<Player>(actor));
@@ -229,7 +233,14 @@ std::shared_ptr<CharacterBase> ActorManager::CreateChara(GameTag tag, std::share
 	//プレイヤー
 	if (tag == GameTag::Player)
 	{
-		chara = std::make_shared<Player>(actorData, charaStatusData, shared_from_this());
+		if (actorData->GetName() == kPlayerName)
+		{
+			chara = std::make_shared<Player>(actorData, charaStatusData, shared_from_this());
+		}
+		else if (actorData->GetName() == kSelectPlayerName)
+		{
+			chara = std::make_shared<SelectPlayer>(actorData, charaStatusData, shared_from_this());
+		}
 	}
 	else if (tag == GameTag::Enemy)
 	{

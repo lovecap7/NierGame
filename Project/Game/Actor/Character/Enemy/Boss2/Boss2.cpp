@@ -88,7 +88,7 @@ void Boss2::Init()
 	//腕の作成
 	InitArm(csvLoader, pathData[5]);
 
-	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
+	//待機状態にする
 	auto thisPointer = std::dynamic_pointer_cast<Boss2>(shared_from_this());
 	m_state = std::make_shared<Boss2StateIdle>(thisPointer);
 	//状態を変化する

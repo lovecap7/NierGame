@@ -18,6 +18,8 @@ public:
 private:
 	//Ÿ‚Ì‹“_
 	Vector3 m_nextViewPos;
+	//Ÿ‚ÌÀ•W
+	Vector3 m_nextPos;
 
 	//‹–ìŠp
 	float m_perspective;

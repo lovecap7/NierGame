@@ -48,7 +48,7 @@ void Boss1::Init()
 	//目の位置
 	InitEyeIndex(csvLoader, pathData[4]);
 
-	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
+	//待機状態にする
 	auto thisPointer = std::dynamic_pointer_cast<Boss1>(shared_from_this());
 	m_state = std::make_shared<EnemyStateIdle>(thisPointer);
 	//状態を変化する

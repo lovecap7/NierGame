@@ -55,3 +55,6 @@ SelfDestruction,None,SelfDestruction
 Start,None,Start
 Start,LightSword,Start
 Start,BigSword,Start
+TitleIdle,None,Player|TitleIdle
+SelectIdle,None,Player|SelectIdle
+Start2,None,Player|Start

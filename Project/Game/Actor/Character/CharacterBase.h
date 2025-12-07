@@ -22,9 +22,10 @@ public:
 
     //初期化処理
     void Init(std::wstring animPath, std::wstring attackPath, std::wstring effectPath);
-    
 	//更新処理
 	virtual void Update() override;
+    //半径
+    virtual float GetRadius()const abstract;
 
     //ステートにアクセスさせる関数
     //リジッドボディ
@@ -54,8 +55,6 @@ public:
     //アーマーを元に戻す
     void InitArmor();
 
-    //半径
-    virtual float GetRadius()const abstract;
     //中心座標
     Vector3 GetCenterPos()const;
 

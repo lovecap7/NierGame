@@ -58,7 +58,7 @@ void Boss4::Init()
 	//第二形態のデータパス
 	m_secondPhaseDataPath = pathData[5];
 
-	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
+	//待機状態にする
 	auto thisPointer = std::dynamic_pointer_cast<Boss4>(shared_from_this());
 	m_state = std::make_shared<Boss4StateIdle>(thisPointer);
 	//状態を変化する

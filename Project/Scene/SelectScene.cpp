@@ -16,9 +16,26 @@
 #include "../General/CSV/CSVDataLoader.h"
 #include "../General/CSV/TextData.h"
 #include "../General/Fader.h"
+#include "../Game/Actor/ActorManager.h"
 #include "../Game/UI/Select/SelectUI.h"
 #include "../Game/Camera/SelectCamera.h"
 #include "../Game/Camera/CameraController.h"
+
+namespace
+{
+	//チュートリアル
+	const Vector3 kTutorialViewPos = { -5.0f, 10.0f, -50.0f };
+	const Vector3 kTutorialPos = { 10.0f, 10.0f, 10.0f };
+	//ステージ
+	const Vector3 kStageViewPos = { -50.0f, 10.0f, -50.0f };
+	const Vector3 kStagePos = { 0.0f, 20.0f, 10.0f };
+	//オプション
+	const Vector3 kOptionViewPos = { 50.0f, 10.0f, -20.0f };
+	const Vector3 kOptionPos = { 0.0f, 20.0f, 0.0f };
+	//オプション
+	const Vector3 kTitleViewPos = { 0.0f, 10.0f, 30.0f };
+	const Vector3 kTitlePos = { 0.0f, 10.0f, 0.0f };
+}
 
 SelectScene::SelectScene(SceneController& controller) :
 	SceneBase(controller),
@@ -62,16 +79,20 @@ void SelectScene::Init()
 	m_selectCamera = camera;
 
 	//アクターマネージャー
-	m_actorManager = std::shared_ptr<ActorManager>();
+	m_actorManager = std::make_shared<ActorManager>();
+	m_actorManager->Init();
+	m_actorManager->CreateActorCSV(L"Select", L"CharacterData");
+	m_actorManager->CreateActorCSV(L"Select", L"StageData");
 }
 
 void SelectScene::Update()
 {
 	auto& input = Input::GetInstance();
 	auto& fader = Fader::GetInstance();
-
+	//更新
 	auto& cameraController = CameraController::GetInstance();
 	cameraController.Update();
+	m_actorManager->Update();
 
 	if (m_selectCamera.expired())return;
 	
@@ -82,6 +103,7 @@ void SelectScene::Update()
 void SelectScene::Draw()
 {
 	DrawSphere3D(VGet(0.0f, 0.0f,300.0f), 30.0f, 16, 0xff0000, 0xff0000, true);
+	m_actorManager->Draw();
 }
 
 void SelectScene::End()
@@ -159,16 +181,20 @@ void SelectScene::UpdateMainMenu(Input& input, Fader& fader,std::shared_ptr<Sele
 		switch (m_currentMainMenu)
 		{
 		case MainMenu::Tutorial:
-			startCamera->SetViewPos(Vector3(0.0f, 0.0f, 500.0f));
+			startCamera->SetViewPos(kTutorialViewPos);
+			startCamera->SetPos(kTutorialPos);
 			break;
 		case MainMenu::Stage:
-			startCamera->SetViewPos(Vector3(50.0f, 0.0f, 500.0f));
+			startCamera->SetViewPos(kStageViewPos);
+			startCamera->SetPos(kStagePos);
 			break;
 		case MainMenu::Option:
-			startCamera->SetViewPos(Vector3(50.0f, 50.0f, 500.0f));
+			startCamera->SetViewPos(kOptionViewPos);
+			startCamera->SetPos(kOptionPos);
 			break;
 		case MainMenu::Title:
-			startCamera->SetViewPos(Vector3(0.0f, 50.0f, 500.0f));
+			startCamera->SetViewPos(kTitleViewPos);
+			startCamera->SetPos(kTitlePos);
 			break;
 		}
 	}

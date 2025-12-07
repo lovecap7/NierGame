@@ -195,6 +195,9 @@
     <ClCompile Include="Game\Actor\Character\Player\Pod\PodStateGliding.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\Pod\PodStateIdle.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\Weapon\Weapon.cpp" />
+    <ClCompile Include="Game\Actor\Character\Select\SelectPlayer.cpp" />
+    <ClCompile Include="Game\Actor\Character\Select\SelectPlayerStateIdle.cpp" />
+    <ClCompile Include="Game\Actor\Character\Title\TitlePlayer.cpp" />
     <ClCompile Include="Game\Actor\DebugActor\DebugAttack.cpp" />
     <ClCompile Include="Game\Actor\DebugActor\DebugEnemy.cpp" />
     <ClCompile Include="Game\Actor\Stage\BattleArea.cpp" />
@@ -341,6 +344,9 @@
     <ClInclude Include="Game\Actor\Character\Player\Pod\PodStateGliding.h" />
     <ClInclude Include="Game\Actor\Character\Player\Pod\PodStateIdle.h" />
     <ClInclude Include="Game\Actor\Character\Player\Weapon\Weapon.h" />
+    <ClInclude Include="Game\Actor\Character\Select\SelectPlayer.h" />
+    <ClInclude Include="Game\Actor\Character\Select\SelectPlayerStateIdle.h" />
+    <ClInclude Include="Game\Actor\Character\Title\TitlePlayer.h" />
     <ClInclude Include="Game\Actor\DebugActor\DebugAttack.h" />
     <ClInclude Include="Game\Actor\DebugActor\DebugEnemy.h" />
     <ClInclude Include="Game\Actor\Stage\BattleArea.h" />

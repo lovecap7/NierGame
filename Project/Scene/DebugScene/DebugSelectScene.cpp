@@ -2,6 +2,7 @@
 #include "PlayerTestScene.h"
 #include "../SceneController.h"
 #include "../TitleScene.h"
+#include "../SelectScene.h"
 #include "../GameScene.h"
 #include "../ResultScene.h"
 #include "../TutorialScene.h"
@@ -66,6 +67,9 @@ void DebugSelectScene::Update()
 		case Menu::Title:
 			m_controller.ChangeScene(std::make_shared<TitleScene>(m_controller));
 			break;
+		case Menu::Select:
+			m_controller.ChangeScene(std::make_shared<SelectScene>(m_controller));
+			break;
 		case Menu::Stage1:
 			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, GetStageNameByIndex(StageIndex::Stage1)));
 			break;
@@ -96,8 +100,8 @@ void DebugSelectScene::Update()
 		return;
 	}
 	int menu = static_cast<int>(m_currentMenu);
-	if (input.IsTrigger("Up"))menu--;
-	if (input.IsTrigger("Down"))menu++;
+	if (input.IsRepeate("Up"))menu--;
+	if (input.IsRepeate("Down"))menu++;
 	menu = MathSub::ClampInt(menu, 0, static_cast<int>(Menu::PlayerTest));
 	m_currentMenu = static_cast<Menu>(menu);
 }
@@ -116,6 +120,9 @@ void DebugSelectScene::Draw()
 		{
 		case Menu::Title:
 			text = L"Title";
+			break;
+		case Menu::Select:
+			text = L"Select";
 			break;
 		case Menu::Stage1:
 			text = L"Stage1";

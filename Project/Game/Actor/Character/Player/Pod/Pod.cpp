@@ -37,7 +37,7 @@ void Pod::Init()
 	//共通初期化
 	CharacterBase::Init(kAnimPath, kAttackPath, kEffectPath);
 
-	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
+	//待機状態にする
 	auto thisPointer = std::dynamic_pointer_cast<Pod>(shared_from_this());
 	m_state = std::make_shared<PodStateIdle>(thisPointer);
 	//状態を変化する
