@@ -5,11 +5,11 @@ namespace
 	//カメラ距離
 	constexpr float kCameraDistance = 100.0f;
 	//カメラ視界高さ
-	constexpr float kCameraViewPosY = 10.0f;
+	constexpr float kCameraViewPosY = 5.0f;
 	//カメラ高さ
 	constexpr float kCameraPosY = 100.0f;
 	//ニアファー
-	constexpr float kNear = 0.1f;
+	constexpr float kNear = 10.0f;
 	constexpr float kFar = 20000.0f;
 
 	//カメラを上下に動かす速さ

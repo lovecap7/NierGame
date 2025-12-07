@@ -35,6 +35,11 @@ namespace
 	//オプション
 	const Vector3 kTitleViewPos = { 0.0f, 10.0f, 30.0f };
 	const Vector3 kTitlePos = { 0.0f, 10.0f, 0.0f };
+
+	//パス
+	const std::wstring kSelect = L"Select";
+	const std::wstring kCharacterData = L"CharacterData";
+	const std::wstring kStageData = L"StageData";
 }
 
 SelectScene::SelectScene(SceneController& controller) :
@@ -81,8 +86,8 @@ void SelectScene::Init()
 	//アクターマネージャー
 	m_actorManager = std::make_shared<ActorManager>();
 	m_actorManager->Init();
-	m_actorManager->CreateActorCSV(L"Select", L"CharacterData");
-	m_actorManager->CreateActorCSV(L"Select", L"StageData");
+	m_actorManager->CreateActorCSV(kSelect.c_str(), kCharacterData.c_str());
+	m_actorManager->CreateActorCSV(kSelect.c_str(), kStageData.c_str());
 }
 
 void SelectScene::Update()

@@ -1,12 +1,14 @@
 #include "GameScene.h"
 #include "ResultScene.h"
 #include "GameoverScene.h"
+#include "PauseScene.h"
 #include <Dxlib.h>
 #include  "../General/Input.h"
 #include "SceneController.h"
 #include "../Game/Actor/ActorManager.h"
 #include "../Game/Attack/AttackManager.h"
 #include "../Game/Actor/Stage/BattleAreaManager.h"
+#include "../Game/Actor/Character/Player/Player.h"
 #include "../Game/Camera/CameraController.h"
 #include "../Game/Camera/PlayerCamera.h"
 #include "../Game/Camera/StartCamera.h"
@@ -151,6 +153,14 @@ void GameScene::Update()
 			m_isGameover = true;
 			//フェードアウト
 			fader.FadeOut();
+		}
+		else if (input.IsTrigger("Pause"))
+		{
+			if (m_actorManager->GetPlayer().expired())return;
+			if (m_actorManager->GetPlayer().lock()->IsStartState())return;	//スタート状態ならポーズには遷移できない
+			//ポーズ
+			m_controller.PushScene(std::make_unique<PauseScene>(m_controller));
+			return;
 		}
 	}
 }

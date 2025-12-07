@@ -574,6 +574,11 @@ void Player::SetStartState()
 	m_state->ChangeState(m_state);
 }
 
+bool Player::IsStartState() const
+{
+	return std::dynamic_pointer_cast<PlayerStateStart>(m_state) != nullptr;
+}
+
 std::weak_ptr<PlayerCamera> Player::GetPlayerCamera() const
 {
 	std::weak_ptr<PlayerCamera> camera;

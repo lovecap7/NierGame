@@ -13,6 +13,7 @@
 #include "Character/CharacterBase.h"
 #include "Character/Player/Player.h"
 #include "Character/Select/SelectPlayer.h"
+#include "Character/Title/TitlePlayer.h"
 #include "Character/Enemy/NormalEnemy.h"
 #include "Character/Player/Weapon/Weapon.h"
 #include "Character/Player/Pod/Pod.h"
@@ -40,6 +41,7 @@ namespace
 	const std::wstring kLightSwordName = L"LightSword";
 	const std::wstring kPlayerName = L"Player";
 	const std::wstring kSelectPlayerName = L"SelectPlayer";
+	const std::wstring kTitlePlayerName = L"TitlePlayer";
 
 }
 
@@ -169,6 +171,10 @@ void ActorManager::CreateActorCSV(const wchar_t* folderName, const wchar_t* file
 		auto actorData = std::make_shared<ActorData>(data);
 		//アクターを作成
 		std::shared_ptr<Actor> actor;
+
+		auto aa = actorData->GetActorType();
+
+
 		if (actorData->GetActorType() == ActorData::ActorType::Character)
 		{
 			for (auto& statusData : csvStatusDatas)
@@ -240,6 +246,10 @@ std::shared_ptr<CharacterBase> ActorManager::CreateChara(GameTag tag, std::share
 		else if (actorData->GetName() == kSelectPlayerName)
 		{
 			chara = std::make_shared<SelectPlayer>(actorData, charaStatusData, shared_from_this());
+		}
+		else if (actorData->GetName() == kTitlePlayerName)
+		{
+			chara = std::make_shared<TitlePlayer>(actorData, charaStatusData, shared_from_this());
 		}
 	}
 	else if (tag == GameTag::Enemy)

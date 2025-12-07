@@ -44,7 +44,7 @@ namespace
 	//時計目的地
 	const Vector2 kClockFinishPos = { Game::kScreenCenterX, Game::kScreenCenterY };
 	//時計大きさ
-	constexpr double kClockScale = 0.8;
+	constexpr double kClockScale = 0.7;
 
 	//歯車位置
 	const Vector2 kGear1StartPos = { - 500.0f , -500.0f };
@@ -52,19 +52,19 @@ namespace
 	const Vector2 kGear3StartPos = { - 600.0f, Game::kScreenHeight + 100.0f};
 	const Vector2 kGear4StartPos = { Game::kScreenWidth + 700.0f, -800.0f};
 	//歯車目的地
-	const Vector2 kGear1FinishPos = { Game::kScreenCenterX - 220.0f , Game::kScreenCenterY - 50.0f };
-	const Vector2 kGear2FinishPos = { Game::kScreenCenterX + 220.0f, Game::kScreenCenterY + 30.0f };
+	const Vector2 kGear1FinishPos = { Game::kScreenCenterX - 200.0f , Game::kScreenCenterY - 30.0f };
+	const Vector2 kGear2FinishPos = { Game::kScreenCenterX + 200.0f, Game::kScreenCenterY + 30.0f };
 	const Vector2 kGear3FinishPos = { Game::kScreenCenterX - 150.0f, Game::kScreenCenterY + 60.0f };
 	const Vector2 kGear4FinishPos = { Game::kScreenCenterX + 150.0f, Game::kScreenCenterY - 60.0f };
 	//歯車大きさ
 	constexpr double kGear1Scale = 0.4;
-	constexpr double kGear2Scale = 0.3;
-	constexpr double kGear3Scale = 0.2;
-	constexpr double kGear4Scale = 0.2;
+	constexpr double kGear2Scale = 0.4;
+	constexpr double kGear3Scale = 0.3;
+	constexpr double kGear4Scale = 0.3;
 	
 
 	//やや上にタイトルをずらす
-	constexpr float kTitlePosYAdjust = -80.0f;
+	constexpr float kTitlePosYAdjust = -120.0f;
 
 	//歯車回転速度
 	constexpr double kGearRotateSpeed = 1.0;
