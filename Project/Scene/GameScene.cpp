@@ -157,7 +157,9 @@ void GameScene::Update()
 		else if (input.IsTrigger("Pause"))
 		{
 			if (m_actorManager->GetPlayer().expired())return;
-			if (m_actorManager->GetPlayer().lock()->IsStartState())return;	//スタート状態ならポーズには遷移できない
+			auto player = m_actorManager->GetPlayer().lock();
+			if (player->IsStartState())return;				//スタート状態ならポーズには遷移できない
+			if (player->GetCharaStatus()->IsDead())return;	//死亡状態ならポーズには遷移できない
 			//ポーズ
 			m_controller.PushScene(std::make_unique<PauseScene>(m_controller));
 			return;

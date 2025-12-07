@@ -42,9 +42,15 @@ private:
 	//選んでるメニューのインデックス
 	int m_selectStageMenuIndex;
 
+	//カーソル
+	MenuUI m_cursor;
+	float m_cursorAngle;
+
 	//状態に合わせた更新
 	using UpdateFunc = void(SelectUI::*)();
 	UpdateFunc m_update;
+
+private:
 
 	//メインメニューの更新
 	void UpdateMainMenu();

@@ -6,23 +6,27 @@
 namespace
 {
 	//メインメニューの位置
-	constexpr float kMainMenuStartX = 200.0f;
+	constexpr float kMainMenuStartX = 300.0f;
 	constexpr float kMainMenuOffsetX = -600.0f;
 	constexpr float kMainMenuStartY = 110.0f;
 	constexpr float kMainMenuOffsetY = 110.0f;
 	constexpr float kMainMenuLerpRate = 0.3f;
+	constexpr float kMainMenuSecondX = 0.0f;
 
 	//チュートリアルメニューの位置
-	constexpr float kTutorialMenuStartX = 600.0f;
+	constexpr float kTutorialMenuStartX = 420.0f;
 	constexpr float kTutorialMenuStartY = 110.0f;
 	constexpr float kTutorialMenuOffsetY = 110.0f;
 	constexpr float kTutorialMenuLerpRate = 0.3f;
 
 	//ステージメニューの位置
-	constexpr float kStageMenuStartX = 600.0f;
+	constexpr float kStageMenuStartX = 420.0f;
 	constexpr float kStageMenuStartY = 110.0f;
 	constexpr float kStageMenuOffsetY = 110.0f;
 	constexpr float kStageMenuLerpRate = 0.3f;
+
+	//影
+	const Vector2 kShadowOffsetPos = { 10.0f,10.0f };
 
 	//選択中にずらす量
 	constexpr float kSelectOffsetX = 30.0f;
@@ -43,6 +47,13 @@ namespace
 	const std::wstring kSelectMission3Path = L"Select/SelectMission3";
 	const std::wstring kOptionPath = L"Select/Option";
 	const std::wstring kBackTitlePath = L"Select/BackTitle";
+	const std::wstring kCursorPath = L"Mark/Cursor";
+
+	//カーソル
+	constexpr float kCursorOffsetPosX = -220.0f;
+	constexpr float kCursorRange = 10.0f;
+	constexpr float kCursorAngleSpeed = 5.0f;
+	constexpr float kCursorLerpRate = 0.3f;
 }
 
 SelectUI::SelectUI() :
@@ -50,7 +61,9 @@ SelectUI::SelectUI() :
 	m_selectMainMenuIndex(0),
 	m_selectTutorialMenuIndex(0),
 	m_selectStageMenuIndex(0),
-	m_update(&SelectUI::UpdateMainMenu)
+	m_update(&SelectUI::UpdateMainMenu),
+	m_cursor(),
+	m_cursorAngle(0.0f)
 {
 	auto& assetManager = AssetManager::GetInstance();
 
@@ -84,6 +97,11 @@ SelectUI::SelectUI() :
 	m_stageMenus[0].handle = assetManager.GetImageHandle(kSelectMission1Path);
 	m_stageMenus[1].handle = assetManager.GetImageHandle(kSelectMission2Path);
 	m_stageMenus[2].handle = assetManager.GetImageHandle(kSelectMission3Path);
+
+	//カーソル
+	m_cursor.handle = assetManager.GetImageHandle(kCursorPath);
+	m_cursor.pos = m_mainMenus[0].pos;
+	m_cursor.pos.x += kCursorOffsetPosX;
 }
 
 SelectUI::~SelectUI()
@@ -92,6 +110,8 @@ SelectUI::~SelectUI()
 
 void SelectUI::Update()
 {
+	m_cursorAngle += kCursorAngleSpeed;
+	m_cursorAngle = static_cast<int>(m_cursorAngle) % 360;
 	(this->*m_update)();
 }
 
@@ -99,14 +119,29 @@ void SelectUI::Draw() const
 {
 	auto& fader = Fader::GetInstance();
 
-	//チュートリアルメニュー描画
-	DrawMenu(fader, m_tutorialMenus, m_selectTutorialMenuIndex, m_update == &SelectUI::UpdateTutorialMenu);
+	if (m_update == &SelectUI::UpdateTutorialMenu)
+	{
+		//チュートリアルメニュー描画
+		DrawMenu(fader, m_tutorialMenus, m_selectTutorialMenuIndex, m_update == &SelectUI::UpdateTutorialMenu);
+	}
 
-	//ステージメニュー描画
-	DrawMenu(fader, m_stageMenus, m_selectStageMenuIndex, m_update == &SelectUI::UpdateStageMenu);
+	if (m_update == &SelectUI::UpdateStageMenu)
+	{
+		//ステージメニュー描画
+		DrawMenu(fader, m_stageMenus, m_selectStageMenuIndex, m_update == &SelectUI::UpdateStageMenu);
+	}
 
 	//メインメニュー描画
 	DrawMenu(fader, m_mainMenus, m_selectMainMenuIndex, m_update == &SelectUI::UpdateMainMenu);
+
+	//カーソル
+	float cursorMoveX = kCursorRange * cosf(m_cursorAngle * MyMath::DEG_2_RAD);
+	SetDrawBlendMode(DX_BLENDMODE_SUB, 255);
+	DrawRotaGraphF(m_cursor.pos.x + kShadowOffsetPos.x + cursorMoveX, m_cursor.pos.y + kShadowOffsetPos.y, 1.0, 0.0, m_cursor.handle, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+	SetDrawBlendMode(DX_BLENDMODE_INVSRC, 255);
+	DrawRotaGraphF(m_cursor.pos.x + cursorMoveX, m_cursor.pos.y, 1.0, 0.0, m_cursor.handle, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 }
 
 void SelectUI::SetSelectMainMenuIndex(int index)
@@ -138,6 +173,11 @@ void SelectUI::UpdateMainMenu()
 		if (m_selectMainMenuIndex == i && (!fader.IsFadeNow() || (fader.IsFadeOutNow())))
 		{
 			targetX += kSelectOffsetX;
+
+			//カーソルを動かす
+			Vector2 cursorNextPos = m_mainMenus[i].pos;
+			cursorNextPos.x += kCursorOffsetPosX;
+			m_cursor.pos = Vector2::Lerp(m_cursor.pos, cursorNextPos, kCursorLerpRate);
 		}
 		m_mainMenus[i].pos.x = MathSub::Lerp(m_mainMenus[i].pos.x, targetX, kMainMenuLerpRate);
 	}
@@ -171,9 +211,25 @@ void SelectUI::UpdateTutorialMenu()
 		if (m_selectTutorialMenuIndex == i)
 		{
 			targetX += kSelectOffsetX;
+
+			//カーソルを動かす
+			Vector2 cursorNextPos = m_tutorialMenus[i].pos;
+			cursorNextPos.x += kCursorOffsetPosX;
+			m_cursor.pos = Vector2::Lerp(m_cursor.pos, cursorNextPos, kCursorLerpRate);
 		}
 		m_tutorialMenus[i].pos.x = MathSub::Lerp(m_tutorialMenus[i].pos.x, targetX, kTutorialMenuLerpRate);
 		m_tutorialMenus[i].pos.y = MathSub::Lerp(m_tutorialMenus[i].pos.y, targetY, kTutorialMenuLerpRate);
+	}
+	//メインメニュー
+	for (int i = 0; i < m_mainMenus.size(); ++i)
+	{
+		float targetX = kMainMenuSecondX;
+		//選んでいるメニューなら右に動かす
+		if (m_selectMainMenuIndex == i)
+		{
+			targetX += kSelectOffsetX;
+		}
+		m_mainMenus[i].pos.x = MathSub::Lerp(m_mainMenus[i].pos.x, targetX, kMainMenuLerpRate);
 	}
 }
 
@@ -187,9 +243,25 @@ void SelectUI::UpdateStageMenu()
 		if (m_selectStageMenuIndex == i)
 		{
 			targetX += kSelectOffsetX;
+
+			//カーソルを動かす
+			Vector2 cursorNextPos = m_stageMenus[i].pos;
+			cursorNextPos.x += kCursorOffsetPosX;
+			m_cursor.pos = Vector2::Lerp(m_cursor.pos, cursorNextPos, kCursorLerpRate);
 		}
 		m_stageMenus[i].pos.x = MathSub::Lerp(m_stageMenus[i].pos.x, targetX, kStageMenuLerpRate);
 		m_stageMenus[i].pos.y = MathSub::Lerp(m_stageMenus[i].pos.y, targetY, kStageMenuLerpRate);
+	}
+	//メインメニュー
+	for (int i = 0; i < m_mainMenus.size(); ++i)
+	{
+		float targetX = kMainMenuSecondX;
+		//選んでいるメニューなら右に動かす
+		if (m_selectMainMenuIndex == i)
+		{
+			targetX += kSelectOffsetX;
+		}
+		m_mainMenus[i].pos.x = MathSub::Lerp(m_mainMenus[i].pos.x, targetX, kMainMenuLerpRate);
 	}
 }
 
@@ -197,6 +269,10 @@ void SelectUI::DrawMenu(Fader& fader, const std::vector<MenuUI>& menus, int sele
 {
 	for (int i = 0; i < menus.size(); ++i)
 	{
+		SetDrawBlendMode(DX_BLENDMODE_SUB, 255);
+		DrawRotaGraph(menus[i].pos.x + kShadowOffsetPos.x, menus[i].pos.y + kShadowOffsetPos.y, 1.0, 0.0, menus[i].handle, true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+
 		//選んでいるメニューなら反転
 		if (selectMenuIndex == i &&
 			(!fader.IsFadeNow() || (fader.IsFadeOutNow())) &&
