@@ -162,6 +162,15 @@ void Input::Update()
 
 void Input::StopUpdate()
 {
+	//リセット
+	Reset();
+
+	//更新をとめる
+	m_isUpdate = false;
+}
+
+void Input::Reset()
+{
 	for (auto& item : m_currentInput)
 	{
 		item.second = false;
@@ -184,8 +193,31 @@ void Input::StopUpdate()
 		m_inputBufferFrame[keyInfo.first] = 0;
 	}
 
-	//更新をとめる
-	m_isUpdate = false;
+}
+
+void Input::ResetChangeScene()
+{
+	for (auto& item : m_currentInput)
+	{
+		item.second = true;
+	}
+	for (auto& item : m_lastInput)
+	{
+		item.second = true;
+	}
+
+	m_stickInfo.leftStickX = 0;
+	m_stickInfo.leftStickY = 0;
+	m_stickInfo.rightStickX = 0;
+	m_stickInfo.rightStickY = 0;
+
+	m_triggerInfo.left = 0;
+	m_triggerInfo.right = 0;
+
+	for (const auto& keyInfo : m_currentInput)
+	{
+		m_inputBufferFrame[keyInfo.first] = 0;
+	}
 }
 
 bool Input::IsPress(const std::string& action)const

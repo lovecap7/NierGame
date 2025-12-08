@@ -66,6 +66,9 @@ PauseScene::PauseScene(SceneController& controller) :
 
 PauseScene::~PauseScene()
 {
+	auto& input = Input::GetInstance();
+	//“ü—Í‚ðƒŠƒZƒbƒg
+	input.ResetChangeScene();
 }
 
 void PauseScene::Init()

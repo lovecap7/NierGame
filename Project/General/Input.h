@@ -167,6 +167,17 @@ public:
 	void StopUpdate();
 
 	/// <summary>
+	/// 入力情報をリセット
+	/// </summary>
+	void Reset();
+
+	/// <summary>
+	/// 入力情報をリセット(シーン切り替え時用)
+	/// Resetだと切り替えた瞬間にトリガーがTrueになるので
+	/// </summary>
+	void ResetChangeScene();
+
+	/// <summary>
 	/// 入力情報を受け付けないようにする
 	/// </summary>
 	void StartUpdate() { m_isUpdate = true; };

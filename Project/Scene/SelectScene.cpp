@@ -107,7 +107,7 @@ void SelectScene::Update()
 
 void SelectScene::Draw()
 {
-	DrawSphere3D(VGet(0.0f, 0.0f,300.0f), 30.0f, 16, 0xff0000, 0xff0000, true);
+	DrawSphere3D(VGet(0.0f, 0.0f, 300.0f), 30.0f, 16, 0xff0000, 0xff0000, true);
 	m_actorManager->Draw();
 }
 
@@ -173,7 +173,6 @@ void SelectScene::UpdateMainMenu(Input& input, Fader& fader,std::shared_ptr<Sele
 		{
 			menu = static_cast<int>(MainMenu::Tutorial);
 		}
-
 		m_currentMainMenu = static_cast<MainMenu>(menu);
 
 		//UI
