@@ -60,17 +60,18 @@ void Physics::Update()
 	//遅延処理用
 	std::list<OnCollideInfo> onCollideInfo;
 	
-	//チェック
-	CheckCollidable(onCollideInfo);
+	//攻撃当たり判定チェック(ノックバックが発生する可能性があるので先に処理)
+	CheckAttackColl(onCollideInfo);
 
 	// 当たり通知
 	for (auto& collInfo : onCollideInfo)
 	{
 		collInfo.OnCollide();
 	}
-
+	//リセット
 	onCollideInfo.clear();
-	//補正したことで別のオブジェクトに当たる可能性があるのでもう一度チェック
+
+	//当たり判定処理
 	CheckCollidable(onCollideInfo);
 
 	// 当たり通知
@@ -89,23 +90,128 @@ void Physics::Update()
 
 void Physics::CheckCollidable(std::list<Physics::OnCollideInfo>& onCollideInfo)
 {
+	bool isOneMore = false;
+	for (int i = 0; i < kTryNum; ++i)
+	{
+		//当たり判定をチェック
+		for (auto& collA : m_collidables)
+		{
+			//当たり判定を行わないなら飛ばす
+			if (collA->GetGameTag() == GameTag::None)continue;
+			if (collA->m_isThrough)continue;
+			//攻撃ならスキップ
+			if (collA->GetGameTag() == GameTag::Attack)continue;
+			//回避判定ならスキップ
+			if (collA->GetGameTag() == GameTag::Avoid)continue;
+
+			//敵の場合
+			if (collA->GetGameTag() == GameTag::Enemy)
+			{
+				auto enemy = std::dynamic_pointer_cast<EnemyBase>(collA);
+				//非活動中は当たり判定を行わない
+				if (!enemy->IsActive())continue;
+			}
+
+			for (auto& collB : m_collidables)
+			{
+				//自分とは当たり判定をしない
+				if (collA == collB)continue;
+				//当たり判定を行わないなら飛ばす
+				if (collB->GetGameTag() == GameTag::None)continue;
+				if (collB->m_isThrough)continue;
+				//攻撃ならスキップ
+				if (collB->GetGameTag() == GameTag::Attack)continue;
+				//エリア同士ならスキップ
+				if (collA->GetGameTag() == GameTag::Area && 
+					collB->GetGameTag() == GameTag::Area)
+				{
+					continue;
+				}
+				//回避判定ならスキップ
+				if (collB->GetGameTag() == GameTag::Avoid)continue;
+
+				//敵の場合
+				if (collB->GetGameTag() == GameTag::Enemy)
+				{
+					auto enemy = std::dynamic_pointer_cast<EnemyBase>(collB);
+					//非活動中は当たり判定を行わない
+					if (!enemy->IsActive())continue;
+				}
+
+				//どちらもトリガーではないか
+				bool isBothNoTrigger = !collA->m_isTrigger && !collB->m_isTrigger;
+				if (isBothNoTrigger)
+				{
+					//動かないもの同士なら
+					if (collA->m_priority == Priority::Static &&
+						collB->m_priority == Priority::Static)
+					{
+						continue;
+					}
+				}
+
+				//当たってるなら
+				if (m_collChecker->IsCollide(collA, collB))
+				{
+					//どちらもトリガーなではないなら
+					if (isBothNoTrigger)
+					{
+						//もう一度ループする(押し戻しによって別のオブジェクトに当たっているかもしれないので)
+						isOneMore = true;
+
+						//衝突処理
+						m_collProcessor->FixNextPos(collA, collB);
+					}
+					//これまでにこの組み合わせで当たった情報があるかをチェック
+					bool isCollInfo = false;
+					for (const auto& item : onCollideInfo)
+					{
+						// 既に通知リストに含まれていたら呼ばない
+						if (item.owner == collA && item.colider == collB ||
+							item.owner == collB && item.colider == collA)
+						{
+							isCollInfo = true;
+						}
+					}
+					//ない場合
+					if (!isCollInfo)
+					{
+						onCollideInfo.emplace_back(OnCollideInfo{ collA, collB });
+						onCollideInfo.emplace_back(OnCollideInfo{ collB, collA });
+					}
+				}
+			}
+		}
+
+		//繰り返す必要がない場合
+		if (!isOneMore)
+		{
+			break;
+		}
+	}
+}
+
+void Physics::CheckAttackColl(std::list<Physics::OnCollideInfo>& onCollideInfo)
+{
 	//当たり判定をチェック
 	for (auto& collA : m_collidables)
 	{
 		//当たり判定を行わないなら飛ばす
 		if (collA->GetGameTag() == GameTag::None)continue;
 		if (collA->m_isThrough)continue;
-
-		//敵の場合
-		if (collA->GetGameTag() == GameTag::Enemy)
-		{
-			auto enemy = std::dynamic_pointer_cast<EnemyBase>(collA);
-			//非活動中は当たり判定を行わない
-			if (!enemy->IsActive())continue;
-		}
+		//攻撃以外ならスキップ
+		if (collA->GetGameTag() != GameTag::Attack)continue;
 
 		for (auto& collB : m_collidables)
 		{
+			//自分とは当たり判定をしない
+			if (collA == collB)continue;
+			//当たり判定を行わないなら飛ばす
+			if (collB->GetGameTag() == GameTag::None)continue;
+			if (collB->m_isThrough)continue;
+			//エリアは無視
+			if (collB->GetGameTag() == GameTag::Area)continue;
+
 			//攻撃同士
 			if (collA->GetGameTag() == GameTag::Attack &&
 				collB->GetGameTag() == GameTag::Attack)
@@ -117,12 +223,6 @@ void Physics::CheckCollidable(std::list<Physics::OnCollideInfo>& onCollideInfo)
 					continue;
 				}
 			}
-
-			//自分とは当たり判定をしない
-			if (collA == collB)continue;
-			//当たり判定を行わないなら飛ばす
-			if (collB->GetGameTag() == GameTag::None)continue;
-			if (collB->m_isThrough)continue;
 
 			//敵の場合
 			if (collB->GetGameTag() == GameTag::Enemy)

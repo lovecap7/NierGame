@@ -72,6 +72,9 @@ private:
 
 	//衝突処理
 	void CheckCollidable(std::list<Physics::OnCollideInfo>& onCollideInfo);
+	//攻撃処理
+	void CheckAttackColl(std::list<Physics::OnCollideInfo>& onCollideInfo);
+
 	//時間のスケールを初期化
 	void InitTimeScale();
 	//重力

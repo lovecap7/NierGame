@@ -1,5 +1,5 @@
 #include "ResultScene.h"
-#include "TitleScene.h"
+#include "SelectScene.h"
 #include <Dxlib.h>
 #include  "../General/Input.h"
 #include  "../General/Timer.h"
@@ -43,7 +43,7 @@ void ResultScene::Update()
 	//フェードアウトしきったら
 	if (fader.IsFinishFadeOut())
 	{
-		m_controller.ChangeScene(std::make_unique<TitleScene>(m_controller));
+		m_controller.ChangeScene(std::make_unique<SelectScene>(m_controller));
 		return;
 	}
 	//ボタンを押したら次

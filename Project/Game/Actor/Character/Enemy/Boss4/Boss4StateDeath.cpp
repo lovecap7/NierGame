@@ -6,11 +6,15 @@
 #include "../../../../../General/Input.h"
 #include "../../../../../General/Collision/Rigidbody.h"
 #include "../../../../../General/CharaStatus.h"
+#include "../../../../../General/Effect/EffekseerManager.h"
 
 namespace
 {
 	//アニメーション
 	const std::wstring kDeath = L"Death";
+	//エフェクト
+	const std::wstring kDeadEff = L"Dead";
+
 	//ふっとばす力
 	constexpr float kMinSmashPower = 10.0f;
 	constexpr float kMaxSmashPower = 20.0f;
@@ -60,6 +64,11 @@ void Boss4StateDeath::Update()
 	{
 		if (owner->IsSecondPhase())
 		{
+			if (!owner->IsDelete())
+			{
+				//爆発
+				EffekseerManager::GetInstance().CreateEffect(owner->GetEffectPath(kDeadEff), owner->GetPos());
+			}
 			//第二形態なら志望
 			owner->Delete();
 		}
