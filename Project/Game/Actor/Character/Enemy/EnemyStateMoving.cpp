@@ -106,5 +106,14 @@ void EnemyStateMoving::Move(std::shared_ptr<EnemyBase> owner)
 	owner->GetRb()->SetMoveVec(vec);
 
 	//モデルの向き
-	owner->GetModel()->SetDir(vec.XZ());
+	if (m_speed > 0.0f)
+	{
+		//移動速度0の時
+		owner->GetModel()->SetDir(vec.XZ());
+	}
+	else
+	{
+		//プレイヤーの方向を向く
+		owner->UpdateModelDirToTargetDir();
+	}
 }

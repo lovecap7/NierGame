@@ -137,8 +137,13 @@ void PauseScene::Update()
 			break;
 		case PauseScene::MenuIndex::RestartGame:
 			//ゲームを最初から
-			m_controller.RestartBaseScene();
-			m_controller.PopScene();
+			if (!m_controller.GetBaseScene().expired())
+			{
+				auto baseScene = m_controller.GetBaseScene().lock();
+				baseScene->End();	//終了処理
+				baseScene->Init();	//初期化
+				m_controller.PopScene();
+			}
 			break;
 		case PauseScene::MenuIndex::Option:
 			//設定
@@ -213,10 +218,14 @@ void PauseScene::Draw()
 
 void PauseScene::End()
 {
-	//Physicsを開始
-	Physics::GetInstance().StartUpdate();
-	//エフェクト開始
-	EffekseerManager::GetInstance().StartEffect();
-	//描画停止
-	UIManager::GetInstance().SetIsDraw(true);
+	//再スタート以外の処理なら呼ぶ
+	if (m_menuIndex != MenuIndex::RestartGame)
+	{
+		//Physicsを開始
+		Physics::GetInstance().StartUpdate();
+		//エフェクト開始
+		EffekseerManager::GetInstance().StartEffect();
+		//描画停止
+		UIManager::GetInstance().SetIsDraw(true);
+	}
 }

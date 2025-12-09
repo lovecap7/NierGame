@@ -1,5 +1,7 @@
 ﻿名前,ID,アクタータイプ,座標X,座標Y,座標Z,回転X,回転Y,回転Z,大きさX,大きさY,大きさZ,モデルのパス,優先度,ゲームタグ,当たり判定無視,トリガー,重力を受ける,コリジョンの半径,コリジョンの高さ,パスをまとめたパス
-AreaS1,330,Stage,-48.4,7.3,102.5,90,0,0,30,5,5,Collision/Plane,Static,Object,0,0,0,0,0,None
-AreaE1,306,Stage,-152.9,0.6,177,270,0,0,30,5,10,Collision/Plane,Static,Object,0,0,0,0,0,None
-AreaS2,313,Stage,-46.91,7.3,82.98,90,180,0,5,5,5,Collision/Plane,Static,Object,0,0,0,0,0,None
-AreaE2,141,Stage,-35.7,7.3,71.58,90,0,0,5,5,5,Collision/Plane,Static,Object,0,0,0,0,0,None
+AreaS1,339,Stage,22.9,7.3,60,90,0,0,30,5,5,Collision/Plane,Static,Area,0,0,0,0,0,None
+AreaE1,338,Stage,-24.62,0.62,105,270,0,0,30,5,10,Collision/Plane,Static,Area,0,0,0,0,0,None
+AreaS2,242,Stage,25.2,18.5,181.66,90,0,0,30,5,5,Collision/Plane,Static,Area,0,0,0,0,0,None
+AreaE2,243,Stage,-24.62,0.6,224.6,270,0,0,30,5,10,Collision/Plane,Static,Area,0,0,0,0,0,None
+AreaS3,237,Stage,42.3,18.5,251,90,0,0,30,5,5,Collision/Plane,Static,Area,0,0,0,0,0,None
+AreaE3,236,Stage,-54.6,0.6,305.5,270,0,0,30,5,10,Collision/Plane,Static,Area,0,0,0,0,0,None

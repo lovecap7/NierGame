@@ -56,6 +56,11 @@ void GameScene::Init()
 	Application::GetInstance().SetTimeScale(1.0f);
 	//UI削除
 	UIManager::GetInstance().AllDeleteUI();
+	//リセット
+	Physics::GetInstance().Reset();
+	//Physicsを開始
+	Physics::GetInstance().StartUpdate();
+
 
 	//ステージインデックス
 	auto stageName = m_stageName.c_str();
@@ -194,6 +199,8 @@ void GameScene::Restart()
 
 	//リセット
 	Physics::GetInstance().Reset();
+	//Physicsを開始
+	Physics::GetInstance().StartUpdate();
 
 	//エフェクト
 	m_effectManager.End();
