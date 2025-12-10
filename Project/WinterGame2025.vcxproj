@@ -279,6 +279,11 @@
     <ClCompile Include="General\Math\Vector3.cpp" />
     <ClCompile Include="General\Model.cpp" />
     <ClCompile Include="General\ShaderPostProcess.cpp" />
+    <ClCompile Include="General\Sound\BGM.cpp" />
+    <ClCompile Include="General\Sound\SE.cpp" />
+    <ClCompile Include="General\Sound\SoundBase.cpp" />
+    <ClCompile Include="General\Sound\SoundManager.cpp" />
+    <ClCompile Include="General\Sound\Voice.cpp" />
     <ClCompile Include="General\StringUtil.cpp" />
     <ClCompile Include="General\Timer.cpp" />
     <ClCompile Include="Main\Application.cpp" />
@@ -432,6 +437,11 @@
     <ClInclude Include="General\Model.h" />
     <ClInclude Include="General\MyDraw.h" />
     <ClInclude Include="General\ShaderPostProcess.h" />
+    <ClInclude Include="General\Sound\BGM.h" />
+    <ClInclude Include="General\Sound\SE.h" />
+    <ClInclude Include="General\Sound\SoundBase.h" />
+    <ClInclude Include="General\Sound\SoundManager.h" />
+    <ClInclude Include="General\Sound\Voice.h" />
     <ClInclude Include="General\StageIndex.h" />
     <ClInclude Include="General\StringUtil.h" />
     <ClInclude Include="General\TargetInfo.h" />
