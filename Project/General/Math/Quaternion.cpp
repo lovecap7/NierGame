@@ -195,7 +195,7 @@ Matrix4x4 Quaternion::GetMatrix() const
 	{
 		q = q.NormQ();
 	}
-	// クオータニオンの各成分を使って行列の要素を計算
+	// クォータニオンの各成分を使って行列の要素を計算
 	auto xy2 = q.x * q.y * 2;
 	auto xz2 = q.x * q.z * 2;
 	auto xw2 = q.x * q.w * 2;
@@ -292,6 +292,7 @@ Quaternion Quaternion::Slerp(const Quaternion& sRota, const Quaternion& eRota, f
 
 Quaternion Quaternion::CalcHorizontalQuat(const Vector3& dir)
 {
+	//水平方向の回転
 	float angleY = atan2f(dir.x, dir.z);
 	return Quaternion::AngleAxis(angleY, Vector3::Up());
 }
