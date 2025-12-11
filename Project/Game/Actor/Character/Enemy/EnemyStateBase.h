@@ -8,7 +8,7 @@ class EnemyStateBase abstract :
 	public CharacterStateBase
 {
 public:
-	EnemyStateBase(std::weak_ptr<Actor> enemy);
+	EnemyStateBase(std::weak_ptr<Actor> enemy, bool isWait);
 	virtual ~EnemyStateBase();
 
 

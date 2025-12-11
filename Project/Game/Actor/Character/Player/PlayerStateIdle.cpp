@@ -19,8 +19,8 @@ namespace
 	const std::wstring kIdle = L"Idle";
 }
 
-PlayerStateIdle::PlayerStateIdle(std::weak_ptr<Actor> player):
-	PlayerStateBase(player)
+PlayerStateIdle::PlayerStateIdle(std::weak_ptr<Actor> player, bool isWait):
+	PlayerStateBase(player, isWait)
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
@@ -54,49 +54,49 @@ void PlayerStateIdle::Update()
 		//‰ñ”ğ
 		if (input.IsBuffered("B") && owner->IsAvoidable())
 		{
-			ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
+			ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner,m_isWait));
 			return;
 		}
 		//€–S
 		if (status->IsDead())
 		{
-			ChangeState(std::make_shared<PlayerStateDeath>(m_pOwner));
+			ChangeState(std::make_shared<PlayerStateDeath>(m_pOwner, m_isWait));
 			return;
 		}
 		//—‰º
 		if (owner->IsFall())
 		{
-			ChangeState(std::make_shared<PlayerStateFall>(m_pOwner));
+			ChangeState(std::make_shared<PlayerStateFall>(m_pOwner, m_isWait));
 			return;
 		}
 		//‚â‚ç‚ê
 		if (owner->GetCharaStatus()->IsHitReaction())
 		{
-			ChangeState(std::make_shared<PlayerStateHit>(m_pOwner));
+			ChangeState(std::make_shared<PlayerStateHit>(m_pOwner, m_isWait));
 			return;
 		}
 		//UŒ‚
 		if (input.IsBuffered("X"))
 		{
-			ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner, false, status->IsNoDamage()));
+			ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner, m_isWait, false, status->IsNoDamage()));
 			return;
 		}
 		if (input.IsBuffered("Y"))
 		{
-			ChangeState(std::make_shared<PlayerStateHeavyAttack>(m_pOwner, false, status->IsNoDamage()));
+			ChangeState(std::make_shared<PlayerStateHeavyAttack>(m_pOwner, m_isWait, false, status->IsNoDamage()));
 			return;
 		}
 		//ƒWƒƒƒ“ƒv
 		if (owner->IsJumpable() && input.IsBuffered("A"))
 		{
-			ChangeState(std::make_shared<PlayerStateJump>(m_pOwner));
+			ChangeState(std::make_shared<PlayerStateJump>(m_pOwner, m_isWait));
 			return;
 		}
 		//“ü—Í‚ª‚ ‚é‚È‚çˆÚ“®
 		if (input.GetStickInfo().IsLeftStickInput())
 		{
 			//•à‚«
-			ChangeState(std::make_shared<PlayerStateMoving>(m_pOwner, false));
+			ChangeState(std::make_shared<PlayerStateMoving>(m_pOwner, m_isWait, false));
 			return;
 		}
 	}

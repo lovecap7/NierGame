@@ -9,7 +9,7 @@ class EnemyStateAttack :
 	public EnemyStateBase, public std::enable_shared_from_this<EnemyStateAttack>
 {
 public:
-	EnemyStateAttack(std::weak_ptr<Actor> enemy,std::shared_ptr<AttackData> attackData);
+	EnemyStateAttack(std::weak_ptr<Actor> enemy, bool isWait,std::shared_ptr<AttackData> attackData);
 	virtual ~EnemyStateAttack();
 	virtual void Init() override;
 	virtual void Update() override;

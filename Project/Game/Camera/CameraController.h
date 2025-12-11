@@ -73,6 +73,22 @@ public:
 		if (m_cameras.empty())return Quaternion::IdentityQ();
 		return m_cameras.back()->GetRotH();
 	};
+	//下のカメラを取得
+	Vector3 GetBaseCameraPos() const 
+	{
+		if (m_cameras.empty())return Vector3::Zero();
+		return m_cameras.front()->GetPos();
+	};
+	Vector3 GetBaseCameraLook() const
+	{
+		if (m_cameras.empty())return Vector3::Zero();
+		return m_cameras.front()->GetLook();
+	};
+	Quaternion GetBaseCameraRot() const
+	{
+		if (m_cameras.empty())return Quaternion::IdentityQ();
+		return m_cameras.front()->GetRotH();
+	};
 private:
 	std::list<std::shared_ptr<CameraBase>> m_cameras;
 	//シーンの更新

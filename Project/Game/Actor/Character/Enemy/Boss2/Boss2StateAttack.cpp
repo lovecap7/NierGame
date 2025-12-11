@@ -20,8 +20,8 @@ namespace
 	constexpr int kTriggerFrame = 280;
 }
 
-Boss2StateAttack::Boss2StateAttack(std::weak_ptr<Actor> enemy, std::shared_ptr<AttackData> attackData):
-	EnemyStateAttack(enemy,attackData)
+Boss2StateAttack::Boss2StateAttack(std::weak_ptr<Actor> enemy, bool isWait, std::shared_ptr<AttackData> attackData):
+	EnemyStateAttack(enemy,isWait,attackData)
 {
 }
 
@@ -52,7 +52,7 @@ void Boss2StateAttack::Update()
 	//ã≠êßë“ã@èÛë‘Ç÷
 	if (m_isWait)
 	{
-		ChangeState(std::make_shared<Boss2StateIdle>(m_pOwner));
+		ChangeState(std::make_shared<Boss2StateIdle>(m_pOwner,m_isWait));
 		return;
 	}
 
@@ -61,7 +61,7 @@ void Boss2StateAttack::Update()
 	//éÄñS
 	if (status->IsDead())
 	{
-		ChangeState(std::make_shared<EnemyStateDeath>(m_pOwner));
+		ChangeState(std::make_shared<EnemyStateDeath>(m_pOwner, m_isWait));
 		return;
 	}
 
@@ -88,7 +88,7 @@ void Boss2StateAttack::Update()
 	if (model->IsFinishAnim())
 	{
 		//ë“ã@
-		ChangeState(std::make_shared<Boss2StateIdle>(m_pOwner));
+		ChangeState(std::make_shared<Boss2StateIdle>(m_pOwner, m_isWait));
 		return;
 	}
 }

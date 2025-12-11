@@ -17,8 +17,8 @@ namespace
 	const std::wstring kIdle = L"Idle";
 }
 
-Boss4StateIdle::Boss4StateIdle(std::weak_ptr<Actor> enemy) :
-	EnemyStateBase(enemy)
+Boss4StateIdle::Boss4StateIdle(std::weak_ptr<Actor> enemy,bool isWait) :
+	EnemyStateBase(enemy,isWait)
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());
@@ -48,14 +48,14 @@ void Boss4StateIdle::Update()
 		//死亡
 		if (status->IsDead())
 		{
-			ChangeState(std::make_shared<Boss4StateDeath>(m_pOwner));
+			ChangeState(std::make_shared<Boss4StateDeath>(m_pOwner, m_isWait));
 			return;
 		}
 		//ヒット状態
 		if (owner->GetCharaStatus()->IsHitReaction())
 		{
 			//ヒット状態ならヒットステートへ
-			ChangeState(std::make_shared<Boss4StateHit>(m_pOwner));
+			ChangeState(std::make_shared<Boss4StateHit>(m_pOwner, m_isWait));
 			return;
 		}
 		//攻撃可能なら
@@ -66,7 +66,7 @@ void Boss4StateIdle::Update()
 			if (attackData)
 			{
 				//攻撃状態へ
-				ChangeState(std::make_shared<Boss4StateAttack>(m_pOwner, attackData));
+				ChangeState(std::make_shared<Boss4StateAttack>(m_pOwner, m_isWait, attackData));
 				return;
 			}
 		}

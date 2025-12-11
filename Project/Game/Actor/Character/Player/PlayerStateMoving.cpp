@@ -25,8 +25,8 @@ namespace
 	const std::wstring kRun = L"Run";
 }
 
-PlayerStateMoving::PlayerStateMoving(std::weak_ptr<Actor> player, bool isDash) :
-	PlayerStateBase(player),
+PlayerStateMoving::PlayerStateMoving(std::weak_ptr<Actor> player, bool isWait, bool isDash) :
+	PlayerStateBase(player,isWait),
 	m_speed(0.0f),
 	m_isDash(isDash)
 {
@@ -74,7 +74,7 @@ void PlayerStateMoving::Update()
 	if (m_isWait)
 	{
 		//待機
-		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner, m_isWait));
 		return;
 	}
 
@@ -85,49 +85,49 @@ void PlayerStateMoving::Update()
 	if (input.IsBuffered("B") && owner->IsAvoidable())
 	{
 		//回避
-		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner, m_isWait));
 		return;
 	}
 	//死亡
 	if (status->IsDead())
 	{
-		ChangeState(std::make_shared<PlayerStateDeath>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateDeath>(m_pOwner, m_isWait));
 		return;
 	}
 	//やられ
 	if (status->IsHitReaction())
 	{
-		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner, m_isWait));
 		return;
 	}
 	//落下
 	if (owner->IsFall())
 	{
-		ChangeState(std::make_shared<PlayerStateFall>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateFall>(m_pOwner, m_isWait));
 		return;
 	}
 	//攻撃
 	if (input.IsBuffered("X"))
 	{
-		ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner,false, status->IsNoDamage()));
+		ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner, m_isWait, false, status->IsNoDamage()));
 		return;
 	}
 	if (input.IsBuffered("Y"))
 	{
-		ChangeState(std::make_shared<PlayerStateHeavyAttack>(m_pOwner, m_isDash, status->IsNoDamage()));
+		ChangeState(std::make_shared<PlayerStateHeavyAttack>(m_pOwner, m_isWait, m_isDash, status->IsNoDamage()));
 		return;
 	}
 	//待機
 	if (!input.GetStickInfo().IsLeftStickInput())
 	{
 		//待機
-		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner, m_isWait));
 		return;
 	}
 	//ジャンプ
 	if (owner->IsJumpable() && input.IsBuffered("A"))
 	{
-		ChangeState(std::make_shared<PlayerStateJump>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateJump>(m_pOwner, m_isWait));
 		return;
 	}
 

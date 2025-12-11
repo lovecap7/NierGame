@@ -233,6 +233,37 @@ void ActorManager::CreateActorCSV(const wchar_t* folderName, const wchar_t* file
 }
 
 
+void ActorManager::AllWait()
+{
+	for (auto actor : m_actors)
+	{
+		//全てのキャラクターを待機状態に
+		auto gameTag = actor->GetGameTag();
+		if (gameTag == GameTag::Player ||
+			gameTag == GameTag::Enemy)
+		{
+			if (!std::dynamic_pointer_cast<CharacterBase>(actor))continue;
+			std::dynamic_pointer_cast<CharacterBase>(actor)->Wait();
+		}
+	}
+}
+
+void ActorManager::AllOperate()
+{
+	for (auto actor : m_actors)
+	{
+		//全てのキャラクターを行動可能状態に
+		auto gameTag = actor->GetGameTag();
+		if (gameTag == GameTag::Player ||
+			gameTag == GameTag::Enemy)
+		{
+
+			if (!std::dynamic_pointer_cast<CharacterBase>(actor))continue;
+			std::dynamic_pointer_cast<CharacterBase>(actor)->Operate();
+		}
+	}
+}
+
 std::shared_ptr<CharacterBase> ActorManager::CreateChara(GameTag tag, std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData)
 {
 	std::shared_ptr<CharacterBase> chara;

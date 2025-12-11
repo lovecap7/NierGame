@@ -1,5 +1,5 @@
 #include "Boss3.h"
-#include "Boss3StateIdle.h"
+#include "Boss3StateStart.h"
 #include "../EnemyStateIdle.h"
 #include "../../../../../General/game.h"
 #include "../../../../../General/Collision/CapsuleCollider.h"
@@ -17,6 +17,7 @@
 #include <DxLib.h>
 #include <cmath>
 #include <cassert>
+
 
 namespace
 {
@@ -51,7 +52,7 @@ void Boss3::Init()
 
 	//‘Ò‹@ó‘Ô‚É‚·‚é
 	auto thisPointer = std::dynamic_pointer_cast<Boss3>(shared_from_this());
-	m_state = std::make_shared<Boss3StateIdle>(thisPointer);
+	m_state = std::make_shared<Boss3StateStart>(thisPointer);
 	//ó‘Ô‚ğ•Ï‰»‚·‚é
 	m_state->ChangeState(m_state);
 	//ƒ‚ƒfƒ‹‚Ì‚‚³’²®

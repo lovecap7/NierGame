@@ -17,8 +17,8 @@ namespace
 	//最低保証フレーム数
 	constexpr int kMinFrame = 10;
 }
-EnemyStateMoving::EnemyStateMoving(std::weak_ptr<Actor> enemy):
-	EnemyStateBase(enemy)
+EnemyStateMoving::EnemyStateMoving(std::weak_ptr<Actor> enemy, bool isWait):
+	EnemyStateBase(enemy,isWait)
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());
@@ -47,7 +47,7 @@ void EnemyStateMoving::Update()
 	//強制待機状態へ
 	if (m_isWait)
 	{
-		ChangeState(std::make_shared<EnemyStateIdle>(m_pOwner));
+		ChangeState(std::make_shared<EnemyStateIdle>(m_pOwner, m_isWait));
 		return;
 	}
 
@@ -58,20 +58,20 @@ void EnemyStateMoving::Update()
 	//死亡
 	if (status->IsDead())
 	{
-		ChangeState(std::make_shared<EnemyStateDeath>(m_pOwner));
+		ChangeState(std::make_shared<EnemyStateDeath>(m_pOwner, m_isWait));
 		return;
 	}
 	//ヒット状態
 	if (owner->GetCharaStatus()->IsHitReaction())
 	{
 		//ヒット状態ならヒットステートへ
-		ChangeState(std::make_shared<EnemyStateHit>(m_pOwner));
+		ChangeState(std::make_shared<EnemyStateHit>(m_pOwner, m_isWait));
 		return;
 	}
 	//落下
 	if (!owner->IsFloor())
 	{
-		ChangeState(std::make_shared<EnemyStateFall>(m_pOwner, false));
+		ChangeState(std::make_shared<EnemyStateFall>(m_pOwner, m_isWait, false));
 		return;
 	}
 	//攻撃可能なら
@@ -82,7 +82,7 @@ void EnemyStateMoving::Update()
 		if(attackData)
 		{
 			//攻撃状態へ
-			ChangeState(std::make_shared<EnemyStateAttack>(m_pOwner, attackData));
+			ChangeState(std::make_shared<EnemyStateAttack>(m_pOwner, m_isWait, attackData));
 			return;
 		}
 	}
@@ -90,7 +90,7 @@ void EnemyStateMoving::Update()
 	if (!owner->GetTargetInfo().m_isFound || 
 		(owner->IsInMeleeRange() && m_frame >= kMinFrame))
 	{
-		ChangeState(std::make_shared<EnemyStateIdle>(m_pOwner));
+		ChangeState(std::make_shared<EnemyStateIdle>(m_pOwner, m_isWait));
 		return;
 	}
 	//移動

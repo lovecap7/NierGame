@@ -20,8 +20,8 @@ namespace
 	constexpr float kMaxSmashPower = 20.0f;
 }
 
-Boss4StateDeath::Boss4StateDeath(std::weak_ptr<Actor> enemy) :
-	EnemyStateBase(enemy)
+Boss4StateDeath::Boss4StateDeath(std::weak_ptr<Actor> enemy, bool isWait) :
+	EnemyStateBase(enemy,isWait)
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());
@@ -76,7 +76,7 @@ void Boss4StateDeath::Update()
 		{
 			//‘æˆêŒ`‘Ô‚È‚ç‘æ“ñŒ`‘Ô‚ÖˆÚs
 			owner->ChangeSecondPhase();
-			ChangeState(std::make_shared<Boss4StateIdle>(m_pOwner));
+			ChangeState(std::make_shared<Boss4StateIdle>(m_pOwner, m_isWait));
 			return;
 		}
 	}

@@ -24,8 +24,8 @@ namespace
 	constexpr int kMissileAngle = 30;
 }
 
-Boss4StateAttack::Boss4StateAttack(std::weak_ptr<Actor> enemy, std::shared_ptr<AttackData> attackData) :
-	EnemyStateAttack(enemy, attackData)
+Boss4StateAttack::Boss4StateAttack(std::weak_ptr<Actor> enemy, bool isWait, std::shared_ptr<AttackData> attackData) :
+	EnemyStateAttack(enemy, isWait, attackData)
 {
 }
 
@@ -47,7 +47,7 @@ void Boss4StateAttack::Update()
 	//ã≠êßë“ã@èÛë‘Ç÷
 	if (m_isWait)
 	{
-		ChangeState(std::make_shared<Boss4StateIdle>(m_pOwner));
+		ChangeState(std::make_shared<Boss4StateIdle>(m_pOwner,m_isWait));
 		return;
 	}
 
@@ -56,7 +56,7 @@ void Boss4StateAttack::Update()
 	//éÄñS
 	if (status->IsDead())
 	{
-		ChangeState(std::make_shared<Boss4StateDeath>(m_pOwner));
+		ChangeState(std::make_shared<Boss4StateDeath>(m_pOwner, m_isWait));
 		return;
 	}
 
@@ -77,7 +77,7 @@ void Boss4StateAttack::Update()
 	if (model->IsFinishAnim())
 	{
 		//ë“ã@
-		ChangeState(std::make_shared<Boss4StateIdle>(m_pOwner));
+		ChangeState(std::make_shared<Boss4StateIdle>(m_pOwner, m_isWait));
 		return;
 	}
 }

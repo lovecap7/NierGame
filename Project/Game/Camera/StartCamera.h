@@ -2,11 +2,12 @@
 #include "CameraBase.h"
 #include <memory>
 class Player;
+class ActorManager;
 class StartCamera :
 	public CameraBase
 {
 public:
-	StartCamera(std::weak_ptr<Player> pPlayer);
+	StartCamera(std::weak_ptr<Player> pPlayer, std::weak_ptr<ActorManager> pActorManager);
 	~StartCamera();
 	void Init() override;
 	void Update() override;
@@ -25,5 +26,8 @@ private:
 	int m_cinemaScopeHandle;
 	float m_cinemaScopeTopPosY;
 	float m_cinemaScopeUnderPosY;
+
+	//アクターマネージャーの参照
+	std::weak_ptr<ActorManager> m_pActorManager;
 };
 

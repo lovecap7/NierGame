@@ -10,7 +10,7 @@ class PlayerStateHeavyAttack :
     public PlayerStateAttackBase, public std::enable_shared_from_this<PlayerStateHeavyAttack>
 {
 public:
-    PlayerStateHeavyAttack(std::weak_ptr<Actor>  player,bool isDash = false, bool isJust = false);
+    PlayerStateHeavyAttack(std::weak_ptr<Actor>  player, bool isWait,bool isDash = false, bool isJust = false);
     ~PlayerStateHeavyAttack();
     void Init()override;
     void Update() override;

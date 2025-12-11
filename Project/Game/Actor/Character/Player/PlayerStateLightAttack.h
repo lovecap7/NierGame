@@ -8,7 +8,7 @@ class PlayerStateLightAttack :
     public PlayerStateAttackBase, public std::enable_shared_from_this<PlayerStateLightAttack>
 {
 public:
-    PlayerStateLightAttack(std::weak_ptr<Actor> player, bool isJump = false, bool isJust = false);
+    PlayerStateLightAttack(std::weak_ptr<Actor> player, bool isWait, bool isJump = false, bool isJust = false);
     ~PlayerStateLightAttack();
     void Init()override;
     void Update() override;

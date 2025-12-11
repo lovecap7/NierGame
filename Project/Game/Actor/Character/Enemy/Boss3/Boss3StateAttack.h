@@ -12,7 +12,7 @@ class Boss3StateAttack :
 	public EnemyStateAttack
 {
 public:
-	Boss3StateAttack(std::weak_ptr<Actor> enemy, std::shared_ptr<AttackData> attackData);
+	Boss3StateAttack(std::weak_ptr<Actor> enemy, bool isWait, std::shared_ptr<AttackData> attackData);
 	~Boss3StateAttack();
 	void Update() override;
 private:

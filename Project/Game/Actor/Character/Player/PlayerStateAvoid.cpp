@@ -37,8 +37,8 @@ namespace
 	constexpr float kEnableFinishAvoidFrame = kJustFrame + 5;
 }
 
-PlayerStateAvoid::PlayerStateAvoid(std::weak_ptr<Actor> player) :
-	PlayerStateBase(player),
+PlayerStateAvoid::PlayerStateAvoid(std::weak_ptr<Actor> player, bool isWait) :
+	PlayerStateBase(player,isWait),
 	m_avoidDir(),
 	m_speed(0.0f),
 	m_endSpeed(0.0f),
@@ -155,20 +155,20 @@ void PlayerStateAvoid::Update()
 	if (m_isWait)
 	{
 		//ë“ã@
-		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner, m_isWait));
 		return;
 	}
 
 	//éÄñS
 	if (owner->GetCharaStatus()->IsDead())
 	{
-		ChangeState(std::make_shared<PlayerStateDeath>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateDeath>(m_pOwner, m_isWait));
 		return;
 	}
 	//Ç‚ÇÁÇÍ
 	if (owner->GetCharaStatus()->IsHitReaction() && !m_isJustAvoid)
 	{
-		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner, m_isWait));
 		return;
 	}
 
@@ -197,13 +197,13 @@ void PlayerStateAvoid::Update()
 			if (input.GetStickInfo().IsLeftStickInput())
 			{
 				//ëñÇÈ
-				ChangeState(std::make_shared<PlayerStateMoving>(m_pOwner, true));
+				ChangeState(std::make_shared<PlayerStateMoving>(m_pOwner, m_isWait, true));
 				return;
 			}
 			else
 			{
 				//ë“ã@
-				ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
+				ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner, m_isWait));
 				return;
 			}
 			return;
@@ -215,12 +215,12 @@ void PlayerStateAvoid::Update()
 		//çUåÇ
 		if (m_isLightAttack)
 		{
-			ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner, false, true));
+			ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner, m_isWait, false, true));
 			return;
 		}
 		else if(m_isHeavyAttack)
 		{
-			ChangeState(std::make_shared<PlayerStateHeavyAttack>(m_pOwner, false, true));
+			ChangeState(std::make_shared<PlayerStateHeavyAttack>(m_pOwner, m_isWait, false, true));
 			return;
 		}
 		
@@ -231,13 +231,13 @@ void PlayerStateAvoid::Update()
 		if (input.GetStickInfo().IsLeftStickInput())
 		{
 			//ëñÇÈ
-			ChangeState(std::make_shared<PlayerStateMoving>(m_pOwner, true));
+			ChangeState(std::make_shared<PlayerStateMoving>(m_pOwner, m_isWait, true));
 			return;
 		}
 		else
 		{
 			//ë“ã@
-			ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
+			ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner, m_isWait));
 			return;
 		}
 	}

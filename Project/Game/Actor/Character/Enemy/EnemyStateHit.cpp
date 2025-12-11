@@ -20,8 +20,8 @@ namespace
 	constexpr float kHorizontalSpeedDownRate = 0.7f;
 }
 
-EnemyStateHit::EnemyStateHit(std::weak_ptr<Actor> enemy) :
-	EnemyStateBase(enemy),
+EnemyStateHit::EnemyStateHit(std::weak_ptr<Actor> enemy, bool isWait) :
+	EnemyStateBase(enemy,isWait),
 	m_isFall(false)
 {
 	if (m_pOwner.expired())return;
@@ -53,7 +53,7 @@ void EnemyStateHit::Update()
 	//死亡
 	if (status->IsDead())
 	{
-		ChangeState(std::make_shared<EnemyStateDeath>(m_pOwner));
+		ChangeState(std::make_shared<EnemyStateDeath>(m_pOwner, m_isWait));
 		return;
 	}
 	//状態に合わせてアニメーション変更
@@ -76,13 +76,13 @@ void EnemyStateHit::Update()
 		if(!m_isFall)
 		{
 			//待機
-			ChangeState(std::make_shared<EnemyStateIdle>(m_pOwner));
+			ChangeState(std::make_shared<EnemyStateIdle>(m_pOwner, m_isWait));
 			return;
 		}
 		else
 		{
 			//落下状態へ
-			ChangeState(std::make_shared<EnemyStateFall>(m_pOwner,true));
+			ChangeState(std::make_shared<EnemyStateFall>(m_pOwner, m_isWait, true));
 			return;
 		}
 	}

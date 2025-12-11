@@ -16,8 +16,8 @@ namespace
 	constexpr float kDownFrame = 5.0f * 60.0f;
 }
 
-EnemyStateDown::EnemyStateDown(std::weak_ptr<Actor> enemy):
-	EnemyStateBase(enemy)
+EnemyStateDown::EnemyStateDown(std::weak_ptr<Actor> enemy, bool isWait):
+	EnemyStateBase(enemy,isWait)
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());
@@ -43,7 +43,7 @@ void EnemyStateDown::Update()
 	//ã≠êßë“ã@èÛë‘Ç÷
 	if (m_isWait)
 	{
-		ChangeState(std::make_shared<EnemyStateIdle>(m_pOwner));
+		ChangeState(std::make_shared<EnemyStateIdle>(m_pOwner, m_isWait));
 		return;
 	}
 
@@ -52,7 +52,7 @@ void EnemyStateDown::Update()
 	//éÄñS
 	if (status->IsDead())
 	{
-		ChangeState(std::make_shared<EnemyStateDeath>(m_pOwner));
+		ChangeState(std::make_shared<EnemyStateDeath>(m_pOwner, m_isWait));
 		return;
 	}
 
@@ -63,7 +63,7 @@ void EnemyStateDown::Update()
 	if (m_frame >= kDownFrame)
 	{
 		//ë“ã@
-		ChangeState(std::make_shared<EnemyStateIdle>(m_pOwner));
+		ChangeState(std::make_shared<EnemyStateIdle>(m_pOwner, m_isWait));
 		return;
 	}
 	

@@ -13,8 +13,8 @@ namespace
 	const std::wstring kDeath = L"Death";
 }
 
-PlayerStateDeath::PlayerStateDeath(std::weak_ptr<Actor> player) :
-	PlayerStateBase(player)
+PlayerStateDeath::PlayerStateDeath(std::weak_ptr<Actor> player, bool isWait) :
+	PlayerStateBase(player,isWait)
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
@@ -47,7 +47,7 @@ void PlayerStateDeath::Update()
 	if (!status->IsDead())
 	{
 		//‘Ò‹@
-		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner, m_isWait));
 		return;
 	}
 #endif

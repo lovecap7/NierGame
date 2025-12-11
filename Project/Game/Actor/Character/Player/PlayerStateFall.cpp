@@ -26,8 +26,8 @@ namespace
 	constexpr float kWallAccelRate = 0.1f;
 }
 
-PlayerStateFall::PlayerStateFall(std::weak_ptr<Actor> player) :
-	PlayerStateBase(player),
+PlayerStateFall::PlayerStateFall(std::weak_ptr<Actor> player, bool isWait) :
+	PlayerStateBase(player,isWait),
 	m_isGliding(false),
 	m_isGlided(false)
 {
@@ -53,7 +53,7 @@ void PlayerStateFall::Update()
 	if (m_isWait)
 	{
 		//待機
-		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner, m_isWait));
 		return;
 	}
 	//ステータス
@@ -61,31 +61,31 @@ void PlayerStateFall::Update()
 	//回避
 	if (input.IsBuffered("B") && owner->IsAvoidable())
 	{
-		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner, m_isWait));
 		return;
 	}
 	//死亡
 	if (status->IsDead())
 	{
-		ChangeState(std::make_shared<PlayerStateDeath>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateDeath>(m_pOwner, m_isWait));
 		return;
 	}
 	//やられ
 	if (status->IsHitReaction())
 	{
-		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner, m_isWait));
 		return;
 	}
 	//地面に付いたら
 	if (owner->IsFloor())
 	{
-		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner, m_isWait));
 		return;
 	}
 	//ジャンプ
 	if (owner->IsJumpable() && input.IsBuffered("A"))
 	{
-		ChangeState(std::make_shared<PlayerStateJump>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateJump>(m_pOwner, m_isWait));
 		return;
 	}
 
@@ -95,12 +95,12 @@ void PlayerStateFall::Update()
 		//攻撃
 		if (input.IsBuffered("X"))
 		{
-			ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner));
+			ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner, m_isWait));
 			return;
 		}
 		if (input.IsBuffered("Y"))
 		{
-			ChangeState(std::make_shared<PlayerStateHeavyAttack>(m_pOwner));
+			ChangeState(std::make_shared<PlayerStateHeavyAttack>(m_pOwner, m_isWait));
 			return;
 		}
 	}

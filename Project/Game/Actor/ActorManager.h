@@ -53,6 +53,11 @@ public:
 
 	//ゲームオーバー
 	bool IsGameover()const { return m_isGameover; };
+
+	//全てのキャラクターを待機状態に
+	void AllWait();
+	//全てのキャラクターを行動可能に
+	void AllOperate();
 private:
 	//アクター
 	std::list<std::shared_ptr<Actor>> m_actors;

@@ -17,7 +17,7 @@ class ActorManager;
 class CharacterStateBase abstract
 {
 public:
-	CharacterStateBase(std::weak_ptr<Actor> owner);
+	CharacterStateBase(std::weak_ptr<Actor> owner,bool isWait);
 	virtual ~CharacterStateBase();
 	//‰Šú‰»ˆ—
 	virtual void Init()abstract;

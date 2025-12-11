@@ -22,8 +22,8 @@ namespace
 	constexpr float kMissileAngle = 30.0f;
 }
 
-EnemyStateAttack::EnemyStateAttack(std::weak_ptr<Actor> enemy, std::shared_ptr<AttackData> attackData):
-	EnemyStateBase(enemy),
+EnemyStateAttack::EnemyStateAttack(std::weak_ptr<Actor> enemy, bool isWait, std::shared_ptr<AttackData> attackData):
+	EnemyStateBase(enemy,isWait),
 	m_isAppearedAttack(false),
 	m_isShotBullet(false)
 {
@@ -72,7 +72,7 @@ void EnemyStateAttack::Update()
 	//強制待機状態へ
 	if (m_isWait)
 	{
-		ChangeState(std::make_shared<EnemyStateIdle>(m_pOwner));
+		ChangeState(std::make_shared<EnemyStateIdle>(m_pOwner,m_isWait));
 		return;
 	}
 
@@ -81,14 +81,14 @@ void EnemyStateAttack::Update()
 	//死亡
 	if (status->IsDead())
 	{
-		ChangeState(std::make_shared<EnemyStateDeath>(m_pOwner));
+		ChangeState(std::make_shared<EnemyStateDeath>(m_pOwner, m_isWait));
 		return;
 	}
 	//ヒット状態
 	if (owner->GetCharaStatus()->IsHitReaction())
 	{
 		//ヒット状態ならヒットステートへ
-		ChangeState(std::make_shared<EnemyStateHit>(m_pOwner));
+		ChangeState(std::make_shared<EnemyStateHit>(m_pOwner, m_isWait));
 		return;
 	}
 
@@ -109,7 +109,7 @@ void EnemyStateAttack::Update()
 	if (model->IsFinishAnim())
 	{
 		//待機
-		ChangeState(std::make_shared<EnemyStateIdle>(m_pOwner));
+		ChangeState(std::make_shared<EnemyStateIdle>(m_pOwner, m_isWait));
 		return;
 	}
 }

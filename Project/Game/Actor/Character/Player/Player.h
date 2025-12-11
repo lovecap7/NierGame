@@ -115,6 +115,7 @@ public:
 	//スタート状態にする
 	void SetStartState();
 	bool IsStartState()const;
+
 private:
 	//カメラ
 	std::weak_ptr<PlayerCamera> GetPlayerCamera()const;

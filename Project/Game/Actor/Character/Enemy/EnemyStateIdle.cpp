@@ -16,8 +16,8 @@ namespace
 	const std::wstring kIdle = L"Idle";
 }
 
-EnemyStateIdle::EnemyStateIdle(std::weak_ptr<Actor> enemy) :
-	EnemyStateBase(enemy)
+EnemyStateIdle::EnemyStateIdle(std::weak_ptr<Actor> enemy, bool isWait) :
+	EnemyStateBase(enemy,isWait)
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());
@@ -47,20 +47,20 @@ void EnemyStateIdle::Update()
 		//€–S
 		if (status->IsDead())
 		{
-			ChangeState(std::make_shared<EnemyStateDeath>(m_pOwner));
+			ChangeState(std::make_shared<EnemyStateDeath>(m_pOwner,m_isWait));
 			return;
 		}
 		//ƒqƒbƒgó‘Ô
 		if (owner->GetCharaStatus()->IsHitReaction())
 		{
 			//ƒqƒbƒgó‘Ô‚È‚çƒqƒbƒgƒXƒe[ƒg‚Ö
-			ChangeState(std::make_shared<EnemyStateHit>(m_pOwner));
+			ChangeState(std::make_shared<EnemyStateHit>(m_pOwner, m_isWait));
 			return;
 		}
 		//—‰º
 		if (!owner->IsFloor())
 		{
-			ChangeState(std::make_shared<EnemyStateFall>(m_pOwner, false));
+			ChangeState(std::make_shared<EnemyStateFall>(m_pOwner, m_isWait, false));
 			return;
 		}
 		//UŒ‚‰Â”\‚È‚ç
@@ -71,7 +71,7 @@ void EnemyStateIdle::Update()
 			if (attackData)
 			{
 				//UŒ‚ó‘Ô‚Ö
-				ChangeState(std::make_shared<EnemyStateAttack>(m_pOwner, attackData));
+				ChangeState(std::make_shared<EnemyStateAttack>(m_pOwner, m_isWait, attackData));
 				return;
 			}
 		}
@@ -80,7 +80,7 @@ void EnemyStateIdle::Update()
 		{
 			if (!owner->IsInMeleeRange())
 			{
-				ChangeState(std::make_shared<EnemyStateMoving>(m_pOwner));
+				ChangeState(std::make_shared<EnemyStateMoving>(m_pOwner, m_isWait));
 				return;
 			}
 		}

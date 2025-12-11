@@ -17,8 +17,8 @@ namespace
 	constexpr float kDistanceRate = 0.005f;
 }
 
-PlayerStateAttackBase::PlayerStateAttackBase(std::weak_ptr<Actor> player):
-	PlayerStateBase(player),
+PlayerStateAttackBase::PlayerStateAttackBase(std::weak_ptr<Actor> player, bool isWait):
+	PlayerStateBase(player,isWait),
 	m_isAppearedAttack(false),
 	m_attackData(),
 	m_pAttack(),

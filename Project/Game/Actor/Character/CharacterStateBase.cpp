@@ -4,10 +4,10 @@
 #include "../../Attack/AttackBase.h"
 #include "../../../General/Input.h"
 
-CharacterStateBase::CharacterStateBase(std::weak_ptr<Actor> owner):
+CharacterStateBase::CharacterStateBase(std::weak_ptr<Actor> owner, bool isWait):
 	m_pOwner(owner),
 	m_frame(0.0f),
-	m_isWait(false)
+	m_isWait(isWait)
 {
 }
 

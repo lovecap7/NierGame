@@ -30,8 +30,8 @@ namespace
 	const std::wstring kBeamPointer = L"BeamPointer";
 }
 
-Boss3StateAttack::Boss3StateAttack(std::weak_ptr<Actor> enemy, std::shared_ptr<AttackData> attackData) :
-	EnemyStateAttack(enemy, attackData),
+Boss3StateAttack::Boss3StateAttack(std::weak_ptr<Actor> enemy, bool isWait, std::shared_ptr<AttackData> attackData) :
+	EnemyStateAttack(enemy,isWait, attackData),
 	m_pBeams(),
 	m_pointerDir(Vector3::Zero())
 {
@@ -72,7 +72,7 @@ void Boss3StateAttack::Update()
 	//強制待機状態へ
 	if (m_isWait)
 	{
-		ChangeState(std::make_shared<Boss3StateIdle>(m_pOwner));
+		ChangeState(std::make_shared<Boss3StateIdle>(m_pOwner,m_isWait));
 		return;
 	}
 
@@ -81,14 +81,14 @@ void Boss3StateAttack::Update()
 	//死亡
 	if (status->IsDead())
 	{
-		ChangeState(std::make_shared<EnemyStateDeath>(m_pOwner));
+		ChangeState(std::make_shared<EnemyStateDeath>(m_pOwner, m_isWait));
 		return;
 	}
 	//ヒット状態
 	if (owner->GetCharaStatus()->IsHitReaction())
 	{
 		//ヒット状態ならヒットステートへ
-		ChangeState(std::make_shared<Boss3StateHit>(m_pOwner));
+		ChangeState(std::make_shared<Boss3StateHit>(m_pOwner, m_isWait));
 		return;
 	}
 
@@ -125,7 +125,7 @@ void Boss3StateAttack::Update()
 	if (model->IsFinishAnim())
 	{
 		//待機
-		ChangeState(std::make_shared<Boss3StateIdle>(m_pOwner));
+		ChangeState(std::make_shared<Boss3StateIdle>(m_pOwner, m_isWait));
 		return;
 	}
 }

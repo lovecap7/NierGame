@@ -13,8 +13,8 @@ namespace
 	const std::wstring kHit = L"Hit";
 }
 
-Boss3StateHit::Boss3StateHit(std::weak_ptr<Actor> enemy) :
-	EnemyStateBase(enemy)
+Boss3StateHit::Boss3StateHit(std::weak_ptr<Actor> enemy, bool isWait) :
+	EnemyStateBase(enemy,isWait)
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());
@@ -44,7 +44,7 @@ void Boss3StateHit::Update()
 	//Ž€–S
 	if (status->IsDead())
 	{
-		ChangeState(std::make_shared<EnemyStateDeath>(m_pOwner));
+		ChangeState(std::make_shared<EnemyStateDeath>(m_pOwner, m_isWait));
 		return;
 	}
 	//ƒqƒbƒg’†‚ÉUŒ‚‚ðÄ“x‹ò‚ç‚Á‚½‚çÅ‰‚©‚ç
@@ -58,7 +58,7 @@ void Boss3StateHit::Update()
 	if (owner->GetModel()->IsFinishAnim())
 	{
 		//‘Ò‹@
-		ChangeState(std::make_shared<Boss3StateIdle>(m_pOwner));
+		ChangeState(std::make_shared<Boss3StateIdle>(m_pOwner, m_isWait));
 		return;
 	}
 	auto rb = owner->GetRb();

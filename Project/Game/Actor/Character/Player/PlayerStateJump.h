@@ -7,7 +7,7 @@ class PlayerStateJump :
     public PlayerStateBase, public std::enable_shared_from_this<PlayerStateJump>
 {
 public:
-    PlayerStateJump(std::weak_ptr<Actor> player);
+    PlayerStateJump(std::weak_ptr<Actor> player, bool isWait);
     ~PlayerStateJump();
     void Init()override;
     void Update() override;

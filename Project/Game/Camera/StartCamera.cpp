@@ -4,6 +4,7 @@
 #include "../../General/Model.h"
 #include "../../General/Game.h"
 #include "../../General/AssetManager.h"
+#include "../Actor/ActorManager.h"
 
 namespace
 {
@@ -62,7 +63,7 @@ namespace
 
 }
 
-StartCamera::StartCamera(std::weak_ptr<Player> pPlayer):
+StartCamera::StartCamera(std::weak_ptr<Player> pPlayer, std::weak_ptr<ActorManager> pActorManager):
 	CameraBase(),
 	m_pPlayer(pPlayer),
 	m_rotaAngle(kFirstAngle),
@@ -70,13 +71,17 @@ StartCamera::StartCamera(std::weak_ptr<Player> pPlayer):
 	m_countFrame(0),
 	m_cinemaScopeHandle(-1),
 	m_cinemaScopeTopPosY(kCinemaScopeOutTopPosY),
-	m_cinemaScopeUnderPosY(kCinemaScopeOutUnderPosY)
+	m_cinemaScopeUnderPosY(kCinemaScopeOutUnderPosY),
+	m_pActorManager(pActorManager)
 {
 	
 }
 
 StartCamera::~StartCamera()
 {
+	//キャラクターを活動可能状態に
+	if (m_pActorManager.expired())return;
+	m_pActorManager.lock()->AllOperate();
 }
 
 void StartCamera::Init()
@@ -106,6 +111,10 @@ void StartCamera::Init()
 
 	//プレイヤーをスタート状態に
 	player->SetStartState();
+
+	//キャラクターを待機状態に
+	if (m_pActorManager.expired())return;
+	m_pActorManager.lock()->AllWait();
 }
 
 void StartCamera::Update()
@@ -172,6 +181,8 @@ void StartCamera::Update()
 			m_cameraPos.ToDxLibVector(),
 			m_viewPos.ToDxLibVector()
 		);
+
+		//削除
 		auto& cameraController = CameraController::GetInstance();
 		cameraController.PopCamera(m_cameraPos, m_viewPos);
 		return;

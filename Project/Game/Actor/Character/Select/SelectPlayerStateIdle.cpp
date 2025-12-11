@@ -9,7 +9,7 @@ namespace
 }
 
 SelectPlayerStateIdle::SelectPlayerStateIdle(std::weak_ptr<Actor> player):
-	CharacterStateBase(player)
+	CharacterStateBase(player,false)
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<SelectPlayer>(m_pOwner.lock());

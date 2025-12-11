@@ -162,11 +162,11 @@ void Player::Update()
 	//入力の取得
 	auto& input = Input::GetInstance();
 
-	//ターゲットの検索
 	if (!m_pActorManager.expired() && !GetPlayerCamera().expired() && !m_state->IsWait())
 	{
 		auto actorM = m_pActorManager.lock();
 		auto camera = GetPlayerCamera().lock();
+		//ターゲットの検索
 		SearchTarget(input, camera,actorM->GetEnemyManager()->GetEnemys());
 	}
 	

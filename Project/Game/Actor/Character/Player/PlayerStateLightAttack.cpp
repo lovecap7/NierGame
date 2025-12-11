@@ -24,8 +24,8 @@ namespace
 	constexpr float kChargeFrame = 20.0f;
 }
 
-PlayerStateLightAttack::PlayerStateLightAttack(std::weak_ptr<Actor> player, bool isJump, bool isJust):
-	PlayerStateAttackBase(player),
+PlayerStateLightAttack::PlayerStateLightAttack(std::weak_ptr<Actor> player, bool isWait, bool isJump, bool isJust):
+	PlayerStateAttackBase(player,isWait),
 	m_isJust(isJust)
 {
 	if (m_pOwner.expired())return;
@@ -113,7 +113,7 @@ void PlayerStateLightAttack::Update()
 	if (m_isWait)
 	{
 		//待機
-		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner, m_isWait));
 		return;
 	}
 
@@ -122,19 +122,19 @@ void PlayerStateLightAttack::Update()
 	if (input.IsBuffered("B") && owner->IsAvoidable() && !m_isJust)
 	{
 		//回避
-		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner, m_isWait));
 		return;
 	}
 	//死亡
 	if (owner->GetCharaStatus()->IsDead())
 	{
-		ChangeState(std::make_shared<PlayerStateDeath>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateDeath>(m_pOwner, m_isWait));
 		return;
 	}
 	//やられ
 	if (owner->GetCharaStatus()->IsHitReaction())
 	{
-		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner, m_isWait));
 		return;
 	}
 	//フレームをカウント
@@ -221,13 +221,13 @@ void PlayerStateLightAttack::Update()
 			//ジャンプ
 			if (owner->IsJumpable() && input.IsBuffered("A"))
 			{
-				ChangeState(std::make_shared<PlayerStateJump>(m_pOwner));
+				ChangeState(std::make_shared<PlayerStateJump>(m_pOwner, m_isWait));
 				return;
 			}
 			//大剣攻撃
 			if (input.IsBuffered("Y"))
 			{
-				ChangeState(std::make_shared<PlayerStateHeavyAttack>(m_pOwner));
+				ChangeState(std::make_shared<PlayerStateHeavyAttack>(m_pOwner, m_isWait));
 				return;
 			}
 		}
@@ -304,15 +304,15 @@ void PlayerStateLightAttack::ChangeToMoveOrIdle(std::shared_ptr<Player> owner, I
 	//空中にいるなら落下
 	if (!owner->IsFloor())
 	{
-		ChangeState(std::make_shared<PlayerStateFall>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateFall>(m_pOwner, m_isWait));
 		return;
 	}
 	if (input.GetStickInfo().IsLeftStickInput())
 	{
-		ChangeState(std::make_shared<PlayerStateMoving>(m_pOwner, false));
+		ChangeState(std::make_shared<PlayerStateMoving>(m_pOwner, m_isWait, false));
 	}
 	else
 	{
-		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner, m_isWait));
 	}
 }

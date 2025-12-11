@@ -89,6 +89,7 @@ void PauseScene::Update()
 	auto& input = Input::GetInstance();
 	if (input.IsTrigger("Pause") || input.IsTrigger("B"))
 	{
+		m_menuIndex = MenuIndex::BackGame;
 		m_controller.PopScene();
 		return;
 	}

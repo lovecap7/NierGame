@@ -35,6 +35,8 @@ public:
     //コリジョンの状態を設定
     void SetCollState(CollisionState collState) { m_collState = collState; }
     CollisionState GetCollState()const { return m_collState; };
+    //アクターマネージャー
+    std::weak_ptr<ActorManager> GetActorManager()const { return m_pActorManager; };
 
     //ステータス
     std::shared_ptr<CharaStatus> GetCharaStatus()const;
@@ -63,6 +65,8 @@ public:
     void Wait();
     //自由に動く
     void Operate();
+
+
 protected:
     //攻撃データを読み込む
     void InitAttackData(CSVDataLoader& csvLoader, std::wstring path);

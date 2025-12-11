@@ -108,7 +108,7 @@ void GameScene::Init()
 	m_isGameClear = false;
 
 	//スターとカメラ
-	auto startCamera = std::make_shared<StartCamera>(m_actorManager->GetPlayer());
+	auto startCamera = std::make_shared<StartCamera>(m_actorManager->GetPlayer(),m_actorManager);
 	cameraController.PushCamera(startCamera);
 }
 

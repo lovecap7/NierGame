@@ -3,8 +3,8 @@
 #include "PlayerStateIdle.h"
 #include "../../../../General/Input.h"
 
-PlayerStateBase::PlayerStateBase(std::weak_ptr<Actor>  player):
-	CharacterStateBase(player)
+PlayerStateBase::PlayerStateBase(std::weak_ptr<Actor>  player, bool isWait) :
+	CharacterStateBase(player, isWait)
 {
 }
 

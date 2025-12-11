@@ -3,7 +3,7 @@
 #include "../../Enemy/EnemyBase.h"
 
 PodStateBase::PodStateBase(std::weak_ptr<Actor> pod):
-	CharacterStateBase(pod)
+	CharacterStateBase(pod,false)
 {
 }
 

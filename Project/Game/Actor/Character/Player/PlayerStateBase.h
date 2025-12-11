@@ -11,7 +11,7 @@ class PlayerStateBase abstract:
 	public CharacterStateBase
 {
 public:
-	PlayerStateBase(std::weak_ptr<Actor> player);
+	PlayerStateBase(std::weak_ptr<Actor> player, bool isWait);
 	virtual ~PlayerStateBase();
 protected:
 	//ˆÚ“®•ûŒü

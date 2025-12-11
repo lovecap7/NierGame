@@ -27,8 +27,8 @@ namespace
 	constexpr float kWallAccelRate = 0.1f;
 }
 
-PlayerStateJump::PlayerStateJump(std::weak_ptr<Actor> player) :
-	PlayerStateBase(player)
+PlayerStateJump::PlayerStateJump(std::weak_ptr<Actor> player, bool isWait) :
+	PlayerStateBase(player,isWait)
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Player>(m_pOwner.lock());
@@ -74,7 +74,7 @@ void PlayerStateJump::Update()
 	if (m_isWait)
 	{
 		//ë“ã@
-		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner,m_isWait));
 		return;
 	}
 
@@ -83,36 +83,36 @@ void PlayerStateJump::Update()
 	//âÒî
 	if (input.IsBuffered("B") && owner->IsAvoidable())
 	{
-		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner, m_isWait));
 		return;
 	}
 	//éÄñS
 	if (status->IsDead())
 	{
-		ChangeState(std::make_shared<PlayerStateDeath>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateDeath>(m_pOwner, m_isWait));
 		return;
 	}
 	//Ç‚ÇÁÇÍ
 	if (status->IsHitReaction())
 	{
-		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner, m_isWait));
 		return;
 	}
 	//óéâ∫
 	if (owner->IsFall())
 	{
-		ChangeState(std::make_shared<PlayerStateFall>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateFall>(m_pOwner, m_isWait));
 		return;
 	}
 	//çUåÇ
 	if (input.IsBuffered("X"))
 	{
-		ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner, true, false));
+		ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner, m_isWait, true, false));
 		return;
 	}
 	if (input.IsBuffered("Y"))
 	{
-		ChangeState(std::make_shared<PlayerStateHeavyAttack>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateHeavyAttack>(m_pOwner, m_isWait));
 		return;
 	}
 

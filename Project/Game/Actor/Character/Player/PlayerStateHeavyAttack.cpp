@@ -24,8 +24,8 @@ namespace
 	const std::wstring kJustAttackName = L"JustAttackSub";
 }
 
-PlayerStateHeavyAttack::PlayerStateHeavyAttack(std::weak_ptr<Actor> player,bool isDash, bool isJust):
-	PlayerStateAttackBase(player),
+PlayerStateHeavyAttack::PlayerStateHeavyAttack(std::weak_ptr<Actor> player, bool isWait,bool isDash, bool isJust):
+	PlayerStateAttackBase(player,isWait),
 	m_nextAttackName(),
 	m_update(&PlayerStateHeavyAttack::GroundUpdate),
 	m_isJust(isJust)
@@ -105,7 +105,7 @@ void PlayerStateHeavyAttack::Update()
 	if (m_isWait)
 	{
 		//‘Ò‹@
-		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner,m_isWait));
 		return;
 	}
 
@@ -119,18 +119,18 @@ void PlayerStateHeavyAttack::Update()
 	if (input.IsBuffered("B") && owner->IsAvoidable() && 
 		m_update == &PlayerStateHeavyAttack::GroundUpdate)
 	{
-		return ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner));
+		return ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner, m_isWait));
 	}
 	//€–S
 	if (owner->GetCharaStatus()->IsDead())
 	{
-		ChangeState(std::make_shared<PlayerStateDeath>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateDeath>(m_pOwner, m_isWait));
 		return;
 	}
 	//‚â‚ç‚ê
 	if (owner->GetCharaStatus()->IsHitReaction())
 	{
-		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateHit>(m_pOwner, m_isWait));
 		return;
 	}
 
@@ -191,13 +191,13 @@ bool PlayerStateHeavyAttack::LoadNextChargeOrCombo(std::shared_ptr<Player> owner
 		//ƒWƒƒƒ“ƒv
 		if (owner->IsJumpable() && input.IsBuffered("A"))
 		{
-			ChangeState(std::make_shared<PlayerStateJump>(m_pOwner));
+			ChangeState(std::make_shared<PlayerStateJump>(m_pOwner,m_isWait));
 			return true;
 		}
 		//•ĞèŒ•UŒ‚
 		if (input.IsBuffered("X"))
 		{
-			ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner));
+			ChangeState(std::make_shared<PlayerStateLightAttack>(m_pOwner, m_isWait));
 			return true;
 		}
 		// ƒ`ƒƒ[ƒWŠ®—¹‚Ü‚½‚Í–¢Š®—¹‚É‚æ‚éUŒ‚‘JˆÚ
@@ -233,11 +233,11 @@ void PlayerStateHeavyAttack::ChangeToMoveOrIdle(std::shared_ptr<Player> owner, I
 {
 	if (input.GetStickInfo().IsLeftStickInput())
 	{
-		ChangeState(std::make_shared<PlayerStateMoving>(m_pOwner, false));
+		ChangeState(std::make_shared<PlayerStateMoving>(m_pOwner,m_isWait, false));
 	}
 	else
 	{
-		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner));
+		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner, m_isWait));
 	}
 }
 

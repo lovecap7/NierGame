@@ -10,7 +10,7 @@ class PlayerStateAvoid :
     public PlayerStateBase, public std::enable_shared_from_this<PlayerStateAvoid>
 {
 public:
-    PlayerStateAvoid(std::weak_ptr<Actor>  player);
+    PlayerStateAvoid(std::weak_ptr<Actor>  player, bool isWait);
     ~PlayerStateAvoid();
     void Init()override;
     void Update() override;

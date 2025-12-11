@@ -8,7 +8,7 @@ class Boss4StateAttack :
 	public EnemyStateAttack
 {
 public:
-	Boss4StateAttack(std::weak_ptr<Actor> enemy, std::shared_ptr<AttackData> attackData);
+	Boss4StateAttack(std::weak_ptr<Actor> enemy, bool isWait, std::shared_ptr<AttackData> attackData);
 	virtual ~Boss4StateAttack();
 	void Init() override;
 	void Update() override;

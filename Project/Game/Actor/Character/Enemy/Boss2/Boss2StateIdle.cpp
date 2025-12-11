@@ -14,8 +14,8 @@ namespace
 	const std::wstring kIdle = L"Idle";
 }
 
-Boss2StateIdle::Boss2StateIdle(std::weak_ptr<Actor> enemy) :
-	EnemyStateBase(enemy)
+Boss2StateIdle::Boss2StateIdle(std::weak_ptr<Actor> enemy,bool isWait) :
+	EnemyStateBase(enemy,isWait)
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());
@@ -45,7 +45,7 @@ void Boss2StateIdle::Update()
 		//€–S
 		if (status->IsDead())
 		{
-			ChangeState(std::make_shared<EnemyStateDeath>(m_pOwner));
+			ChangeState(std::make_shared<EnemyStateDeath>(m_pOwner,m_isWait));
 			return;
 		}
 		//UŒ‚‰Â”\‚È‚ç
@@ -56,7 +56,7 @@ void Boss2StateIdle::Update()
 			if (attackData)
 			{
 				//UŒ‚ó‘Ô‚Ö
-				ChangeState(std::make_shared<Boss2StateAttack>(m_pOwner, attackData));
+				ChangeState(std::make_shared<Boss2StateAttack>(m_pOwner,m_isWait, attackData));
 				return;
 			}
 		}
