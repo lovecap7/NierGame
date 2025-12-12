@@ -486,6 +486,9 @@
     <ClCompile Include="Game\Actor\Character\Enemy\Boss2\Boss2StateStart.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Actor\Character\Enemy\Boss4\Boss4StateStart.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main\Application.h">
@@ -993,6 +996,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Game\Actor\Character\Enemy\Boss2\Boss2StateStart.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Actor\Character\Enemy\Boss4\Boss4StateStart.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

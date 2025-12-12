@@ -1,5 +1,5 @@
 #include "Boss4.h"
-#include "Boss4StateIdle.h"
+#include "Boss4StateStart.h"
 #include "../EnemyStateIdle.h"
 #include "../../../../../General/game.h"
 #include "../../../../../General/Collision/CapsuleCollider.h"
@@ -60,7 +60,7 @@ void Boss4::Init()
 
 	//‘Ò‹@ó‘Ô‚É‚·‚é
 	auto thisPointer = std::dynamic_pointer_cast<Boss4>(shared_from_this());
-	m_state = std::make_shared<Boss4StateIdle>(thisPointer);
+	m_state = std::make_shared<Boss4StateStart>(thisPointer);
 	//ó‘Ô‚ğ•Ï‰»‚·‚é
 	m_state->ChangeState(m_state);
 	//ƒ‚ƒfƒ‹‚Ì‚‚³’²®

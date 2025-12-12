@@ -1,12 +1,12 @@
 #pragma once
 #include "../EnemyStateBase.h"
 class Actor;
-class Boss3StateStart :
-    public EnemyStateBase, public std::enable_shared_from_this<Boss3StateStart>
+class Boss4StateStart :
+    public EnemyStateBase, public std::enable_shared_from_this<Boss4StateStart>
 {
 public:
-    Boss3StateStart(std::weak_ptr<Actor>  enemy);
-    ~Boss3StateStart();
+    Boss4StateStart(std::weak_ptr<Actor>  enemy);
+    ~Boss4StateStart();
     void Init()override;
     void Update() override;
 private:
