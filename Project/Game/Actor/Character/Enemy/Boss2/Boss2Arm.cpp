@@ -71,7 +71,11 @@ void Boss2Arm::Update()
 	//非活動中は更新しない
 	if (!m_isActive)return;
 	//死亡したか
-	m_isDelete = m_charaStatus->IsDead();
+	if (!m_isDelete)
+	{
+		m_isDelete = m_charaStatus->IsDead();
+	}
+	if (m_isDelete)return;
 	//腕の位置更新
 	UpdateArmPos();
 	//移動量リセット

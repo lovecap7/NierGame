@@ -22,6 +22,8 @@ public:
 	void SetViewPos(const Vector3& pos) { m_viewPos = pos; };
 	//カメラ位置設定
 	void SetPos(const Vector3& pos) { m_cameraPos = pos; };
+	//カメラの揺れ
+	void CameraShake(int frame, int shakePower);
 protected:
     //カメラ距離
     float m_distance;
@@ -36,5 +38,13 @@ protected:
     //位置
 	Vector3 m_viewPos; //注視点
 	Vector3 m_cameraPos; //カメラ位置
+	//カメラを揺らす
+	int m_shakeFrame;
+	int m_shakeCountFrame;
+	int m_shakePower;
+
+	//カメラを揺らす
+	void UpdateCameraShake();
+
 };
 

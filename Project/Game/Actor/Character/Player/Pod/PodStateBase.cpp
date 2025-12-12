@@ -33,6 +33,7 @@ Vector3 PodStateBase::GetPodDir(std::shared_ptr<Pod> owner)
 	//ターゲットがいるならターゲット方向を見る
 	if (owner->GetPlayerTargetInfo().m_isFound)
 	{
+		if (owner->GetPlayerTargetInfo().m_pTarget.expired())return dir;
 		auto target = owner->GetPlayerTargetInfo().m_pTarget.lock();
 		if(target->GetGameTag() == GameTag::Enemy)
 		{

@@ -121,6 +121,7 @@ void Boss2::Update()
 {
 	//”ñŠˆ“®’†‚ÍXV‚µ‚È‚¢
 	if (!m_isActive)return;
+	if (m_isDelete)return;
 
 	//˜rƒ`ƒFƒbƒN
 	CheckArmState();
@@ -186,15 +187,21 @@ void Boss2::End()
 	MV1DeleteModel(m_noRightHandle);
 	MV1DeleteModel(m_noLeftHandle);
 	MV1DeleteModel(m_noBothHandle);
+	m_noRightHandle = -1;
+	m_noLeftHandle = -1;
+	m_noBothHandle = -1;
+	m_isInitNoBoth = true;
+	m_isInitNoLeft = true;
+	m_isInitNoRight = true;
 	//“o˜^‰ðœ
 	Collidable::End();
 	if (!m_rightArm.expired())
 	{
-		m_rightArm.lock()->End();
+		m_rightArm.lock()->Delete();
 	}
 	if (!m_leftArm.expired())
 	{
-		m_leftArm.lock()->End();
+		m_leftArm.lock()->Delete();
 	}
 }
 
@@ -298,6 +305,8 @@ void Boss2::CheckArmState()
 	bool isNoRight = IsDestroyedRightArm();
 	bool isNoLeft = IsDestroyedLeftArm();
 	if (!m_charaStatus)return;
+	if (m_isDelete)return;
+	if (m_charaStatus->IsDead())return;
 	int damage = m_charaStatus->GetNowHP() - (m_charaStatus->GetMaxHP() * kDestroyDamageRate);
 	if (isNoLeft && isNoRight)
 	{

@@ -7,6 +7,8 @@
 #include "../../../../../General/Collision/Rigidbody.h"
 #include "../../../../../General/CharaStatus.h"
 #include "../../../../../General/Effect/EffekseerManager.h"
+#include "../../../../Camera/CameraController.h"
+#include "../../../../Camera/BossCamera.h"
 
 namespace
 {
@@ -18,6 +20,9 @@ namespace
 	//ふっとばす力
 	constexpr float kMinSmashPower = 10.0f;
 	constexpr float kMaxSmashPower = 20.0f;
+
+	//カメラ距離
+	constexpr float kCameraDistance = 300.0f;
 }
 
 Boss4StateDeath::Boss4StateDeath(std::weak_ptr<Actor> enemy, bool isWait) :
@@ -25,23 +30,24 @@ Boss4StateDeath::Boss4StateDeath(std::weak_ptr<Actor> enemy, bool isWait) :
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());
-	owner->GetModel()->SetAnim(owner->GetAnim(kDeath).c_str(), false);
+	auto model = owner->GetModel();
+	model->SetAnim(owner->GetAnim(kDeath).c_str(), false);
 	owner->SetCollState(CollisionState::Dead);
 
-	//ボスではないなら
-	if (!owner->IsBoss())
-	{
-		//ふっとばされる
-		owner->GetRb()->SetVecY(MyMath::GetRandF(kMinSmashPower, kMaxSmashPower));
-		owner->GetRb()->AddVec(owner->GetToTargetVec() * -MyMath::GetRandF(kMinSmashPower, kMaxSmashPower));
-	}
-	else
-	{
-		owner->GetRb()->ResetVec();
-	}
+	//移動量リセット
+	owner->GetRb()->SetMoveVec(Vector3::Zero());
 
 	//無敵に
 	owner->GetCharaStatus()->SetIsNoDamage(true);
+
+	Vector3 dir = model->GetDir();
+	if (owner->GetTargetInfo().m_isFound)
+	{
+		dir = owner->GetToTargetVec();
+	}
+	//カメラの作成
+	CameraController::GetInstance().PushCamera(std::make_shared<BossCamera>(owner->GetCenterPos(), dir,
+		kCameraDistance, owner->GetActorManager(), false));
 }
 
 Boss4StateDeath::~Boss4StateDeath()
@@ -58,9 +64,10 @@ void Boss4StateDeath::Update()
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<Boss4>(m_pOwner.lock());
+	auto model = owner->GetModel();
 
 	//モデルのアニメーションが終わったら
-	if (owner->GetModel()->IsFinishAnim())
+	if (model->IsFinishAnim())
 	{
 		if (owner->IsSecondPhase())
 		{

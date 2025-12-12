@@ -5,6 +5,8 @@
 #include "../../../../General/Collision/Rigidbody.h"
 #include "../../../../General/CharaStatus.h"
 #include "../../../../General/Effect/EffekseerManager.h"
+#include "../../../Camera/CameraController.h"
+#include "../../../Camera/BossCamera.h"
 
 namespace
 {
@@ -17,6 +19,9 @@ namespace
 	constexpr float kMaxSmashPower = 20.0f;
 	//死亡までのフレーム
 	constexpr int kDeadFrame = 20;
+
+	//カメラ角度
+	constexpr float kCameraAngle = 30.0f * MyMath::DEG_2_RAD;
 }
 
 EnemyStateDeath::EnemyStateDeath(std::weak_ptr<Actor> enemy, bool isWait) :
@@ -24,7 +29,8 @@ EnemyStateDeath::EnemyStateDeath(std::weak_ptr<Actor> enemy, bool isWait) :
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());
-	owner->GetModel()->SetAnim(owner->GetAnim(kDeath).c_str(), false);
+	auto model = owner->GetModel();
+	model->SetAnim(owner->GetAnim(kDeath).c_str(), false);
 	owner->SetCollState(CollisionState::Dead);
 
 	//ボスではないなら
@@ -36,7 +42,17 @@ EnemyStateDeath::EnemyStateDeath(std::weak_ptr<Actor> enemy, bool isWait) :
 	}
 	else
 	{
-		owner->GetRb()->ResetVec();
+		owner->GetRb()->SetMoveVec(Vector3::Zero());
+
+		Vector3 dir = model->GetDir();
+		if (owner->GetTargetInfo().m_isFound)
+		{
+			dir = owner->GetToTargetVec();
+		}
+		dir = Quaternion::AngleAxis(kCameraAngle, dir.Cross(Vector3::Up())) * dir;
+		//カメラの作成
+		CameraController::GetInstance().PushCamera(std::make_shared<BossCamera>(owner->GetCenterPos(), dir,
+			(owner->GetHeadPos() - owner->GetPos()).Magnitude(), owner->GetActorManager(), false));
 	}
 
 	//無敵に

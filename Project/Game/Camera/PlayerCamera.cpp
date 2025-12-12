@@ -49,9 +49,6 @@ PlayerCamera::PlayerCamera() :
     m_nextlockOnSide(kRightOffset),
     m_lastInputCountFrame(0.0f),
     m_lockOnUI(),
-    m_shakeFrame(0),
-    m_shakeCountFrame(0),
-    m_shakePower(0),
     m_isThrough(false)
 {
 }
@@ -122,15 +119,7 @@ void PlayerCamera::EndLockOn()
 	m_isLockOn = false;
 	m_lockOnTarget.reset();
 }
-void PlayerCamera::CameraShake(int frame, int shakePower)
-{
-    if (m_shakeCountFrame < frame)
-    {
-        m_shakeFrame = frame;
-        m_shakeCountFrame = frame;
-        m_shakePower = shakePower;
-    }
-}
+
 void PlayerCamera::NormalUpdate(Input& input, Vector3& targetPos)
 {
     //UIÇÃîÒï\é¶
@@ -328,35 +317,4 @@ void PlayerCamera::UpdateStickAngle(Input& input)
 
     //âÒì]ó ÇÃï€ë∂
     m_rotH = qH * m_rotH;
-}
-
-void PlayerCamera::UpdateCameraShake()
-{
-    if (m_shakeCountFrame > 0)
-    {
-        --m_shakeCountFrame;
-
-        //êiçsó¶ 0~1
-        float t = 1.0f - static_cast<float>(m_shakeCountFrame) / m_shakeFrame;
-
-        //ç≈èâã≠Ç≠ÅAèôÅXÇ…é˚Ç‹ÇÈ
-        float attenuation = 1.0f - t;
-        attenuation *= attenuation; 
-
-        //ècóhÇÍ
-        float wave = std::cos(static_cast<float>(attenuation));
-
-        //ã≠Ç≥
-        float power = m_shakePower * attenuation * wave;
-
-        //óhÇÁÇ∑
-        Vector3 shakeVec = Vector3::Up() * power;
-        Vector3 shakePos = m_cameraPos + shakeVec;
-        Vector3 shakeViewPos = m_viewPos + shakeVec;
-
-        DxLib::SetCameraPositionAndTarget_UpVecY(
-            shakePos.ToDxLibVector(),
-            shakeViewPos.ToDxLibVector()
-        );
-    }
 }

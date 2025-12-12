@@ -29,8 +29,6 @@ public:
 	//プレイヤーの向き
 	void SetPlayerDir(const Vector3& dir) { m_playerDir = dir; };
 
-	//カメラの揺れ
-	void CameraShake(int frame, int shakePower);
 	//ポリゴンとの当たり判定をする
 	void EnableColl() { m_isThrough = false; };
 	void DisableColl() { m_isThrough = true; };
@@ -57,11 +55,6 @@ private:
 	//ロックオンUI
 	std::weak_ptr<PlayerCameraUI> m_lockOnUI;
 
-	//カメラを揺らす
-	int m_shakeFrame;
-	int m_shakeCountFrame;
-	int m_shakePower;
-
 	//ポリゴンと当たり判定をするか
 	bool m_isThrough;
 
@@ -75,9 +68,5 @@ private:
 	void UpdateDirection(Vector3 newFront);
 	//スティックの角度更新
 	void UpdateStickAngle(Input& input);
-
-	//カメラを揺らす
-	void UpdateCameraShake();
-
 };
 

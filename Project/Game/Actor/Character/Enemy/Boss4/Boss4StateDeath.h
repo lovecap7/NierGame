@@ -9,6 +9,8 @@ public:
 	~Boss4StateDeath();
 	void Init()override;
 	void Update() override;
+private:
+
 };
 
 
