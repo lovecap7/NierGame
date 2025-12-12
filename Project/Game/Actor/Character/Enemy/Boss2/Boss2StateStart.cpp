@@ -1,6 +1,6 @@
-#include "Boss3StateStart.h"
-#include "Boss3StateIdle.h"
-#include "Boss3.h"
+#include "Boss2StateStart.h"
+#include "Boss2StateIdle.h"
+#include "Boss2.h"
 #include "../EnemyBase.h"
 #include "../../../../../General/Model.h"
 #include "../../../../../General/Input.h"
@@ -12,13 +12,14 @@
 namespace
 {
 	//アニメーション
-	const std::wstring kStart = L"Start";
+	const std::wstring kStart = L"Shot";
+
 	//カメラ距離
-	constexpr float kCameraDistance = 800.0f;
+	constexpr float kCameraDistance = 4000.0f;
 }
 
-Boss3StateStart::Boss3StateStart(std::weak_ptr<Actor> enemy) :
-	EnemyStateBase(enemy,false),
+Boss2StateStart::Boss2StateStart(std::weak_ptr<Actor> enemy) :
+	EnemyStateBase(enemy, false),
 	m_isCreateCamera(false)
 {
 	if (m_pOwner.expired())return;
@@ -27,34 +28,34 @@ Boss3StateStart::Boss3StateStart(std::weak_ptr<Actor> enemy) :
 	owner->SetCollState(CollisionState::Normal);
 }
 
-Boss3StateStart::~Boss3StateStart()
+Boss2StateStart::~Boss2StateStart()
 {
 }
 
-void Boss3StateStart::Init()
+void Boss2StateStart::Init()
 {
 	//次の状態を自分の状態を入れる
 	ChangeState(shared_from_this());
 }
 
-void Boss3StateStart::Update()
+void Boss2StateStart::Update()
 {
 	if (m_pOwner.expired())return;
-	auto owner = std::dynamic_pointer_cast<Boss3>(m_pOwner.lock());
+	auto owner = std::dynamic_pointer_cast<Boss2>(m_pOwner.lock());
 
 	auto model = owner->GetModel();
 
 	//カメラの作成
 	if (!m_isCreateCamera)
 	{
-		CameraController::GetInstance().PushCamera(std::make_shared<BossStartCamera>(owner->GetCenterPos(), model->GetDir(), kCameraDistance,owner->GetActorManager()));
+		CameraController::GetInstance().PushCamera(std::make_shared<BossStartCamera>(owner->GetCenterPos(), model->GetDir(), kCameraDistance, owner->GetActorManager()));
 		m_isCreateCamera = true;
 	}
 
 	//モデルのアニメーションが終わったら
 	if (model->IsFinishAnim())
 	{
-		ChangeState(std::make_shared<Boss3StateIdle>(owner, m_isWait));
+		ChangeState(std::make_shared<Boss2StateIdle>(owner, m_isWait));
 		return;
 	}
 

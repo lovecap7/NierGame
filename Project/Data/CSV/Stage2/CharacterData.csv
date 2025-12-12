@@ -1,6 +1,6 @@
 ﻿名前,ID,アクタータイプ,座標X,座標Y,座標Z,回転X,回転Y,回転Z,大きさX,大きさY,大きさZ,モデルのパス,優先度,ゲームタグ,当たり判定無視,トリガー,重力を受ける,コリジョンの半径,コリジョンの高さ,パスをまとめたパス
 Player,340,Character,0,0.42,25.45,0,0,0,1,1,1,Player/Player,Middle,Player,0,0,1,30,100,Player/PlayerPathData
-Boss2,336,Character,-1.3,-3,295.6,0,180,0,15,15,15,Enemy/Boss/Boss2,High,Enemy,0,0,0,800,1600,Enemy/Boss2/Boss2PathData
+Boss2,336,Character,-1.3,-2,295.6,0,180,0,15,15,15,Enemy/Boss/Boss2,High,Enemy,0,0,0,800,1600,Enemy/Boss2/Boss2PathData
 Boss1,330,Character,0,6.11,90,0,196.75,0,2.5,2.5,2.5,Enemy/Boss/Boss1,High,Enemy,0,0,1,360,400,Enemy/Boss1/Boss1PathData
 Robot4,233,Character,-15.58234,0.4000006,219.1694,0,180,0,1.1,1.1,1.1,Enemy/Normal/Robot4,Low,Enemy,0,0,1,80,200,Enemy/Robot4/Robot4PathData
 Robot4 (1),232,Character,15.73453,0.3999996,218.4595,0,180,0,1.1,1.1,1.1,Enemy/Normal/Robot4,Low,Enemy,0,0,1,80,200,Enemy/Robot4/Robot4PathData

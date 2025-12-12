@@ -4,8 +4,6 @@
 
 namespace
 {
-	//カメラ距離
-	constexpr float kCameraDistance = 800.0f;
 	//ニアファー
 	constexpr float kNear = 10.0f;
 	constexpr float kFar = 20000.0f;
@@ -16,14 +14,14 @@ namespace
 	constexpr int kPopFrame = 120;
 }
 
-BossStartCamera::BossStartCamera(Vector3 bossPos, Vector3 bossDir, std::weak_ptr<ActorManager> pActorManager):
+BossStartCamera::BossStartCamera(Vector3 bossPos, Vector3 bossDir, float distance, std::weak_ptr<ActorManager> pActorManager):
 	CameraBase(),
 	m_bossPos(bossPos),
 	m_bossDir(bossDir),
 	m_pActorManager(pActorManager),
 	m_countFrame(0)
 {
-	
+	m_distance = distance;
 }
 
 BossStartCamera::~BossStartCamera()
@@ -37,7 +35,6 @@ void BossStartCamera::Init()
 {
 	//値の初期化
 	m_countFrame = 0;
-	m_distance = kCameraDistance;
 	m_vertexAngle = 0.0f;
 	m_front = Vector3::Forward();
 	m_right = Vector3::Right();

@@ -6,7 +6,7 @@ class BossStartCamera :
     public CameraBase
 {
 public:
-    BossStartCamera(Vector3 bossPos,Vector3 bossDir, std::weak_ptr<ActorManager> pActorManager);
+    BossStartCamera(Vector3 bossPos,Vector3 bossDir,float distance, std::weak_ptr<ActorManager> pActorManager);
     ~BossStartCamera();
     void Init() override;
     void Update() override;

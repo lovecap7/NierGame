@@ -1,4 +1,5 @@
 #include "Boss2.h"
+#include "Boss2StateStart.h"
 #include "../EnemyStateBase.h"
 #include "Boss2StateIdle.h"
 #include "Boss2Arm.h"
@@ -90,7 +91,7 @@ void Boss2::Init()
 
 	//‘Ò‹@ó‘Ô‚É‚·‚é
 	auto thisPointer = std::dynamic_pointer_cast<Boss2>(shared_from_this());
-	m_state = std::make_shared<Boss2StateIdle>(thisPointer);
+	m_state = std::make_shared<Boss2StateStart>(thisPointer);
 	//ó‘Ô‚ğ•Ï‰»‚·‚é
 	m_state->ChangeState(m_state);
 	//ƒ‚ƒfƒ‹‚Ì‚‚³’²®
