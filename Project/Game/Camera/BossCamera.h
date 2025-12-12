@@ -2,12 +2,12 @@
 #include "CameraBase.h"
 #include <memory>
 class ActorManager;
-class BossStartCamera :
+class BossCamera :
     public CameraBase
 {
 public:
-    BossStartCamera(Vector3 bossPos,Vector3 bossDir,float distance, std::weak_ptr<ActorManager> pActorManager);
-    ~BossStartCamera();
+    BossCamera(Vector3 bossPos, Vector3 bossDir, float distance, std::weak_ptr<ActorManager> pActorManager,bool isStart);
+    ~BossCamera();
     void Init() override;
     void Update() override;
     void Draw() const override;
@@ -21,5 +21,7 @@ private:
 
     //フレームカウント
     int m_countFrame;
-};
 
+    //スタート状態
+    bool m_isStart;
+};

@@ -7,7 +7,7 @@
 #include "../../../../../General/Collision/Rigidbody.h"
 #include "../../../../../General/CharaStatus.h"
 #include "../../../../../General/Effect/EffekseerManager.h"
-#include "../../../../Camera/BossStartCamera.h"
+#include "../../../../Camera/BossCamera.h"
 #include "../../../../Camera/CameraController.h"
 namespace
 {
@@ -47,7 +47,8 @@ void Boss3StateStart::Update()
 	//ƒJƒƒ‰‚Ìì¬
 	if (!m_isCreateCamera)
 	{
-		CameraController::GetInstance().PushCamera(std::make_shared<BossStartCamera>(owner->GetCenterPos(), model->GetDir(), kCameraDistance,owner->GetActorManager()));
+		CameraController::GetInstance().PushCamera(std::make_shared<BossCamera>(owner->GetCenterPos(), model->GetDir(),
+			kCameraDistance,owner->GetActorManager(),true));
 		m_isCreateCamera = true;
 	}
 
