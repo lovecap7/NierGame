@@ -12,4 +12,15 @@ Attack4_7,TRUE,6,50,3,3,50,0,130,200,20,0,0,150,Attack10,Attack4_8,Owner,100,5,5
 Attack4_8,TRUE,6,50,3,3,50,0,135,200,20,0,0,150,Attack11,Attack4_9,Owner,100,5,5,None,Missile,11,20,0.7,30
 Attack4_9,TRUE,6,50,3,3,50,0,140,200,20,0,0,150,Attack12,Attack4_10,Owner,100,5,5,None,Missile,11,10,0.7,50
 Attack4_10,TRUE,6,50,3,3,50,0,145,200,20,0,0,150,Attack13,Attack4_11,Owner,100,5,5,None,Missile,11,20,0.7,30
-Attack4_11,FALSE,6,50,3,3,50,0,150,200,20,0,0,150,Attack14,Attack4_12,Owner,100,5,5,None,Missile,11,10,0.7,50
+Attack4_11,FALSE,6,50,3,3,50,0,150,200,20,0,0,150,Attack14,Attack4_12,Owner,100,5,5,None,Missile,11,30,0.7,20
+Attack5,TRUE,6,50,3,3,50,0,100,200,20,0,0,150,Attack1,Attack5_2,Owner,100,5,5,None,Missile,11,30,0.6,40
+Attack5_2,TRUE,6,50,3,3,50,0,105,200,20,0,0,150,Attack1,Attack5_3,Owner,100,5,5,None,Missile,11,30,0.6,40
+Attack5_3,TRUE,6,50,3,3,50,0,110,200,20,0,0,150,Attack1,Attack5_4,Owner,100,5,5,None,Missile,11,30,0.6,40
+Attack5_4,TRUE,6,50,3,3,50,0,115,200,20,0,0,150,Attack1,Attack5_5,Owner,100,5,5,None,Missile,11,30,0.6,40
+Attack5_5,TRUE,6,50,3,3,50,0,120,200,20,0,0,150,Attack1,Attack5_6,Owner,100,5,5,None,Missile,11,30,0.6,40
+Attack5_6,TRUE,6,50,3,3,50,0,125,200,20,0,0,150,Attack1,Attack5_7,Owner,100,5,5,None,Missile,11,30,0.6,40
+Attack5_7,TRUE,6,50,3,3,50,0,130,200,20,0,0,150,Attack1,Attack5_8,Owner,100,5,5,None,Missile,11,30,0.6,40
+Attack5_8,TRUE,6,50,3,3,50,0,135,200,20,0,0,150,Attack1,Attack5_9,Owner,100,5,5,None,Missile,11,30,0.6,40
+Attack5_9,TRUE,6,50,3,3,50,0,140,200,20,0,0,150,Attack1,Attack5_10,Owner,100,5,5,None,Missile,11,30,0.9,40
+Attack5_10,TRUE,6,50,3,3,50,0,145,200,20,0,0,150,Attack1,Attack5_11,Owner,100,5,5,None,Missile,11,30,0.9,40
+Attack5_11,FALSE,6,50,3,3,50,0,150,200,20,0,0,150,Attack1,None,Owner,100,5,5,None,Missile,11,30,0.9,40

@@ -26,6 +26,8 @@ namespace
 
 	//カメラ距離
 	constexpr float kCameraDistance = 300.0f;
+	//カメラ角度
+	constexpr float kCameraAngle = 30.0f * MyMath::DEG_2_RAD;
 
 	//変身フレーム
 	constexpr float kTransFrame = 300.0f;
@@ -45,18 +47,17 @@ Boss4StateDeath::Boss4StateDeath(std::weak_ptr<Actor> enemy, bool isWait) :
 	//無敵に
 	owner->GetCharaStatus()->SetIsNoDamage(true);
 
-	Vector3 dir = model->GetDir();
-	if (owner->GetTargetInfo().m_isFound)
-	{
-		dir = owner->GetToTargetVec();
-	}
-
 	//第二形態なら
 	if (owner->IsSecondPhase())
 	{
 		//死亡アニメーション
 		model->SetAnim(owner->GetAnim(kDeath).c_str(), false);
-
+		Vector3 dir = model->GetDir();
+		if (owner->GetTargetInfo().m_isFound)
+		{
+			dir = owner->GetToTargetVec();
+		}
+		dir = Quaternion::AngleAxis(kCameraAngle, dir.Cross(Vector3::Up())) * dir;
 		//カメラの作成
 		CameraController::GetInstance().PushCamera(std::make_shared<BossCamera>(owner->GetCenterPos(), dir,
 			kCameraDistance, owner->GetActorManager(), false));
