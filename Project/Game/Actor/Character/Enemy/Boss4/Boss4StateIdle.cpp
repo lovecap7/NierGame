@@ -2,6 +2,7 @@
 #include "Boss4StateHit.h"
 #include "Boss4StateAttack.h"
 #include "Boss4StateDeath.h"
+#include "Boss4StateRandMoving.h"
 #include "../EnemyStateAttack.h"
 #include "../EnemyStateDeath.h"
 #include "../EnemyStateHit.h"
@@ -67,6 +68,15 @@ void Boss4StateIdle::Update()
 			{
 				//UŒ‚ó‘Ô‚Ö
 				ChangeState(std::make_shared<Boss4StateAttack>(m_pOwner, m_isWait, attackData));
+				return;
+			}
+		}
+		//ˆÚ“®ó‘Ô‚Ö
+		if (owner->GetTargetInfo().m_isFound)
+		{
+			if (owner->IsInMeleeRange())
+			{
+				ChangeState(std::make_shared<Boss4StateRandMoving>(m_pOwner, m_isWait));
 				return;
 			}
 		}

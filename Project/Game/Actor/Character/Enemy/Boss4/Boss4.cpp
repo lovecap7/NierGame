@@ -118,7 +118,9 @@ void Boss4::Complete()
 	//オーラエフェクトの位置更新
 	if (!m_auraEffect.expired())
 	{
-		m_auraEffect.lock()->SetPos(m_rb->m_pos);
+		auto eff = m_auraEffect.lock();
+		eff->SetPos(m_rb->m_pos);
+		eff->LookAt(m_model->GetDir());
 	}
 
 	if (m_charaStatus->IsHit())
@@ -156,7 +158,7 @@ void Boss4::ChangeSecondPhase()
 	
 	if (!m_auraEffect.expired())
 	{
-		m_auraEffect.lock()->Delete();
+		m_auraEffect.lock()->End();
 	}
 	//オーラエフェクト
 	m_auraEffect = EffekseerManager::GetInstance().CreateEffect(GetEffectPath(kAuraEffect), m_rb->m_pos);

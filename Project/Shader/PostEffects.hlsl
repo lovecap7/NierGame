@@ -100,6 +100,11 @@ PS_OUTPUT main(PS_INPUT input)
             color.g = tex.Sample(smp, gv + float2(0.009, 0)).g;
             color.b = tex.Sample(smp, gv + float2(0.009, 0)).b;
             color.a = 1.0;
+            //色ズレ後のcolorが白い領域なら透明にする
+            if (color.r > 0.99 && color.g > 0.99 && color.b > 0.99)
+            {
+                discard;
+            }
         }
         else
         {
@@ -108,12 +113,6 @@ PS_OUTPUT main(PS_INPUT input)
             color.g = tex.Sample(smp, gv).g; //緑はそのまま
             color.b = tex.Sample(smp, gv - float2(0.008, 0)).b; //青を左にずらす
             color.a = 1.0;
-        }
-        
-        //色ズレ後のcolorが白い領域なら透明にする
-        if (color.r > 0.99 && color.g > 0.99 && color.b > 0.99)
-        {
-            discard; // ← ここで“穴”が開く
         }
     }
   
