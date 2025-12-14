@@ -2,6 +2,12 @@
 #include "game.h"
 #include "Input.h"
 #include <DxLib.h>
+
+namespace
+{
+	constexpr unsigned int kColor = 0x000000;
+}
+
 //èâä˙âª
 void Fader::Init()
 {
@@ -9,6 +15,7 @@ void Fader::Init()
 	m_isFadeOut = false;
 	m_countFrame = 0.0f;
 	m_fadeSpeed = 10.0f;
+	m_color = kColor;
 }
 
 //çXêV
@@ -57,7 +64,7 @@ void Fader::Update()
 void Fader::Draw()const
 {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(m_countFrame));
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x000000, true);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, m_color, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 }
 

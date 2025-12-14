@@ -30,6 +30,9 @@ namespace
 	const std::wstring kCharacterDataName = L"CharacterData";
 	const std::wstring kStageDataName = L"StageData";
 	const std::wstring kCheckPointDataName = L"CheckPointData";
+
+	//クリア時のフェードカラー
+	constexpr unsigned int kClearFadeColor = 0xeeeeee;
 }
 
 GameScene::GameScene(SceneController& controller, std::wstring stageName) :
@@ -39,7 +42,7 @@ GameScene::GameScene(SceneController& controller, std::wstring stageName) :
 	m_isGameClear(false),
 	m_isGameover(false)
 {
-
+	
 }
 
 GameScene::~GameScene()
@@ -148,6 +151,8 @@ void GameScene::Update()
 		{
 			//ゲームクリア
 			m_isGameClear = true;
+			//フェードカラー
+			fader.SetColor(kClearFadeColor);
 			//フェードアウト
 			fader.FadeOut();
 		}

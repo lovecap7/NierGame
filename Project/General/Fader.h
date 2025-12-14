@@ -40,6 +40,9 @@ public:
 	bool IsFadeNow()const { return m_isFadeNow; };
 	bool IsFadeInNow()const { return m_isFadeIn; };
 	bool IsFadeOutNow()const { return m_isFadeOut; };
+
+	//色変更
+	void SetColor(unsigned int color) { m_color = color; };
 private:
 	//だんだん明るくなる
 	bool m_isFadeIn;
@@ -51,5 +54,8 @@ private:
 	float m_fadeSpeed;
 	//フェード中
 	bool m_isFadeNow;
+
+	//色
+	unsigned int m_color = 0x000000;
 };
 

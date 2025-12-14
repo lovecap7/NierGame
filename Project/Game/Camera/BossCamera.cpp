@@ -1,6 +1,8 @@
 #include "BossCamera.h"
 #include "CameraController.h"
 #include "../Actor/ActorManager.h"
+#include "../UI/UIManager.h"
+#include "../../General/Input.h"
 
 namespace
 {
@@ -33,6 +35,11 @@ BossCamera::BossCamera(Vector3 bossPos, Vector3 bossDir, float distance, std::we
 
 BossCamera::~BossCamera()
 {
+	//入力を開始
+	Input::GetInstance().StartUpdate();
+	//UI表示
+	UIManager::GetInstance().SetIsDraw(true);
+
 	//キャラクターを行動可能状態に
 	if (m_pActorManager.expired())return;
 	m_pActorManager.lock()->AllOperate();
@@ -69,6 +76,11 @@ void BossCamera::Update()
 {
 	//ニアファー
 	SetCameraNearFar(kNear, kFar);
+
+	//入力を停止
+	Input::GetInstance().StopUpdate();
+	//UI非表示
+	UIManager::GetInstance().SetIsDraw(false);
 
 	if (m_isStart)
 	{

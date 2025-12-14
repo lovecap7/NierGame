@@ -8,8 +8,14 @@
 #include "../Game/UI/Gameover/GameoverUI.h"
 #include "../Game/UI/UIManager.h"
 
+namespace
+{
+	constexpr unsigned int kFadeColor = 0x000000;
+}
+
 GameoverScene::GameoverScene(SceneController& controller):
-	SceneBase(controller)
+	SceneBase(controller),
+	m_menuIndex(Menu::Continue)
 {
 }
 
@@ -67,6 +73,9 @@ void GameoverScene::Update()
 	{
 		if (input.IsTrigger("A"))
 		{
+			//フェードカラー
+			fader.SetColor(kFadeColor);
+			//フェードアウト
 			fader.FadeOut();
 		}
 		//カーソル

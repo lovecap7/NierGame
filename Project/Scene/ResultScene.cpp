@@ -9,6 +9,12 @@
 #include "GameScene.h"
 #include "../Game/UI/Result/ResultUI.h"
 #include "../Game/UI/UIManager.h"
+#include "../Game/Camera/CameraController.h"
+
+namespace
+{
+	constexpr unsigned int kFadeColor = 0x000000;
+}
 
 ResultScene::ResultScene(std::wstring stageName, SceneController& controller, std::shared_ptr<Timer> timer) :
 	SceneBase(controller),
@@ -27,8 +33,18 @@ void ResultScene::Init()
 	//フェードイン
 	Fader::GetInstance().FadeIn();
 	
+	auto& uiManager = UIManager::GetInstance();
 	//UIの削除
-	UIManager::GetInstance().AllDeleteUI();
+	uiManager.AllDeleteUI();
+	//UI表示
+	uiManager.SetIsDraw(true);
+
+	//カメラリセット
+	CameraController::GetInstance().Init();
+
+
+	//入力を開始
+	Input::GetInstance().StartUpdate();
 
 	//リザルトUI
 	auto resultUI = std::make_shared<ResultUI>(m_stageName,m_timer);
@@ -51,6 +67,9 @@ void ResultScene::Update()
 	{
 		if (m_resultUI.lock()->IsFinish())
 		{
+			//フェードカラー
+			fader.SetColor(kFadeColor);
+			//フェード
 			fader.FadeOut();
 		}
 	}
