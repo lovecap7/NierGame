@@ -163,10 +163,12 @@ void Boss4StateAttack::CreateAttack(std::shared_ptr<EnemyBase> owner)
 		{
 			bulletDir = bulletDir.Normalize();
 		}
-		//Šp“x‚ðƒ‰ƒ“ƒ_ƒ€‚Å‰ñ“]
-		bulletDir = Quaternion::AngleAxis(static_cast<float>(MyMath::GetRand(-kBulletAngle, kBulletAngle)) * MyMath::DEG_2_RAD, Vector3::Up().Cross(bulletDir)) * bulletDir;
-		bulletDir = Quaternion::AngleAxis(static_cast<float>(MyMath::GetRand(-kBulletAngle, kBulletAngle)) * MyMath::DEG_2_RAD, Vector3::Up()) * bulletDir;
-
+		if (m_attackData->GetParam4() > 0.0f)
+		{
+			//Šp“x‚ðƒ‰ƒ“ƒ_ƒ€‚Å‰ñ“]
+			bulletDir = Quaternion::AngleAxis(static_cast<float>(MyMath::GetRand(-kBulletAngle, kBulletAngle)) * MyMath::DEG_2_RAD, Vector3::Up().Cross(bulletDir)) * bulletDir;
+			bulletDir = Quaternion::AngleAxis(static_cast<float>(MyMath::GetRand(-kBulletAngle, kBulletAngle)) * MyMath::DEG_2_RAD, Vector3::Up()) * bulletDir;
+		}
 		//ˆÚ“®
 		bulletAttack->SetMoveVec(bulletDir * m_attackData->GetParam2());
 

@@ -48,6 +48,11 @@ EnemyStateDeath::EnemyStateDeath(std::weak_ptr<Actor> enemy, bool isWait) :
 		if (owner->GetTargetInfo().m_isFound)
 		{
 			dir = owner->GetToTargetVec();
+			dir.y = 0.0f;
+			if (dir.SqMagnitude() > 0.0f)
+			{
+				dir = dir.Normalize();
+			}
 		}
 		dir = Quaternion::AngleAxis(kCameraAngle, dir.Cross(Vector3::Up())) * dir;
 		//ƒJƒƒ‰‚Ìì¬
