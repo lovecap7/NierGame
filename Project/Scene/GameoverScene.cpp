@@ -5,12 +5,16 @@
 #include "../General/Fader.h"
 #include "../General/Input.h"
 #include "../General/Collision/Physics.h"
+#include "../General/Sound/SoundManager.h"
 #include "../Game/UI/Gameover/GameoverUI.h"
 #include "../Game/UI/UIManager.h"
 
 namespace
 {
 	constexpr unsigned int kFadeColor = 0x000000;
+
+	//BGM
+	const std::wstring kBGMGameoverPath = L"GameoverScene";
 }
 
 GameoverScene::GameoverScene(SceneController& controller):
@@ -32,6 +36,9 @@ void GameoverScene::Init()
 	UIManager::GetInstance().AllDeleteUI();
 	//Phisics‚ð’âŽ~
 	Physics::GetInstance().StopUpdate();
+
+	//BGM
+	SoundManager::GetInstance().PlayBGM(kBGMGameoverPath);
 
 	auto gameoverUI = std::make_shared<GameoverUI>();
 	gameoverUI->Init();

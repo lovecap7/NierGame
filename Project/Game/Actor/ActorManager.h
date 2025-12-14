@@ -54,6 +54,10 @@ public:
 	//ゲームオーバー
 	bool IsGameover()const { return m_isGameover; };
 
+	//ボス戦中
+	bool IsBossBattle()const { return m_isBossBattle; };
+	void SetIsBossBattle(bool isBattle){ m_isBossBattle = isBattle; };
+
 	//全てのキャラクターを待機状態に
 	void AllWait();
 	//全てのキャラクターを行動可能に
@@ -73,6 +77,8 @@ private:
 	float m_stageFallHeight;
 	//ゲームオーバー
 	bool m_isGameover;
+	//ボス戦中
+	bool m_isBossBattle;
 private:
 	//キャラクターの作成
 	std::shared_ptr<CharacterBase> CreateChara(GameTag tag, std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> data);

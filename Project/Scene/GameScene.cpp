@@ -21,6 +21,7 @@
 #include "../General/Timer.h"
 #include "../Main/Application.h"
 #include "../General/Effect/EffekseerManager.h"
+#include "../General/Sound/SoundManager.h"
 #include "../Game/UI/UIManager.h"
 #include "../Game/Tutorial/TutorialManager.h"
 
@@ -33,6 +34,13 @@ namespace
 
 	//クリア時のフェードカラー
 	constexpr unsigned int kClearFadeColor = 0xeeeeee;
+
+	//BGM
+	const std::wstring kBGMStage1Path = L"Stage1";
+	const std::wstring kBGMStage1BossPath = L"Stage1Boss";
+	const std::wstring kBGMStage2Path = L"Stage2";
+	const std::wstring kBGMStage2BossPath = L"Stage2Boss";
+	const std::wstring kBGMStage3Path = L"Stage3";
 }
 
 GameScene::GameScene(SceneController& controller, std::wstring stageName) :
@@ -63,7 +71,6 @@ void GameScene::Init()
 	Physics::GetInstance().Reset();
 	//Physicsを開始
 	Physics::GetInstance().StartUpdate();
-
 
 	//ステージインデックス
 	auto stageName = m_stageName.c_str();
@@ -105,6 +112,9 @@ void GameScene::Init()
 	m_timer = std::make_shared<Timer>();
 	m_timer->Init();
 
+	//音
+	PlayStageBGM();
+
 	//ゲームオーバー
 	m_isGameover = false;
 	//ゲームクリア
@@ -117,6 +127,8 @@ void GameScene::Init()
 
 void GameScene::Update()
 {
+	//ボス戦に入ったか
+	bool isBeforeBossBattle = m_actorManager->IsBossBattle();
 	//更新
 	m_actorManager->Update();
 	m_attackManager->Update();
@@ -124,6 +136,9 @@ void GameScene::Update()
 	m_battleAreaManager->Update(m_actorManager);
 	m_effectManager.Update();
 	m_timer->Update();
+
+	//ボス戦に入ったら
+	ChangeBossBattleBGM(isBeforeBossBattle);
 
 	auto& input = Input::GetInstance();
 
@@ -177,6 +192,7 @@ void GameScene::Update()
 	}
 }
 
+
 void GameScene::Draw()
 {
 	m_actorManager->Draw();
@@ -223,11 +239,15 @@ void GameScene::Restart()
 	//Inputの入力情報リセット
 	Input::GetInstance().StopUpdate();
 
+
 	//カメラ
 	auto camera = std::make_shared<PlayerCamera>();
 	auto& cameraController = CameraController::GetInstance();
 	cameraController.Init();
 	cameraController.ChangeCamera(camera);
+
+	//音
+	PlayStageBGM();
 
 	//アクターの再スタート
 	m_actorManager->Restart();
@@ -250,4 +270,49 @@ void GameScene::DebugDraw() const
 	DrawString(0, 0, L"Game Scene", 0xffffff);
 	DrawString(0, 16, L"[D]キーで Debug Scene", 0xffffff);
 #endif
+}
+
+void GameScene::PlayStageBGM()
+{
+	std::wstring bgmPath;
+	switch (GetStageIndexByName(m_stageName))
+	{
+	case StageIndex::Stage1:
+		if (m_actorManager->IsBossBattle())
+		{
+			bgmPath = kBGMStage1BossPath;
+		}
+		else
+		{
+			bgmPath = kBGMStage1Path;
+		}
+		break;
+	case StageIndex::Stage2:
+		if (m_actorManager->IsBossBattle())
+		{
+			bgmPath = kBGMStage2BossPath;
+		}
+		else
+		{
+			bgmPath = kBGMStage2Path;
+		}
+		break;
+	case StageIndex::Stage3:
+		bgmPath = kBGMStage3Path;
+		break;
+	default:
+		bgmPath = kBGMStage1Path;
+		break;
+	}
+	SoundManager::GetInstance().PlayBGM(bgmPath);
+}
+
+
+void GameScene::ChangeBossBattleBGM(bool isBeforeBossBattle)
+{
+	if (isBeforeBossBattle != m_actorManager->IsBossBattle())
+	{
+		//BGM変更
+		PlayStageBGM();
+	}
 }

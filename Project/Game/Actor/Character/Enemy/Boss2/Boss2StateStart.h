@@ -10,8 +10,8 @@ public:
     void Init()override;
     void Update() override;
 private:
-    //ƒJƒƒ‰¶¬
-    bool m_isCreateCamera;
+    //ƒJƒƒ‰‚ÆBGM‚Ì•ÏX
+    bool m_isCreate;
 };
 
 

@@ -31,6 +31,8 @@ public:
     //デバッグ用
     virtual void DebugDraw() const override;
    
+    //ステージBGM
+    void PlayStageBGM();
 private:
     //アクターマネージャー
     std::shared_ptr<ActorManager> m_actorManager;
@@ -54,5 +56,9 @@ private:
     bool m_isGameover;
     //ゲームクリア
     bool m_isGameClear;
+
+private:
+    //ボス戦に入ったらBGM変更
+    void ChangeBossBattleBGM(bool isBeforeBossBattle);
 };
 

@@ -42,18 +42,15 @@ public:
 	//保存
 	void SaveVolume();
 	//BGM再生
-	void PlayBGM(std::string name);
+	void PlayBGM(std::wstring path);
 	//BGM停止
 	void StopBGM();
 	//1度だけ再生する 
-	std::weak_ptr<SE> PlayOnceSE(std::string name);
-	std::weak_ptr<SE> PlayOnceSE(int handle);
+	std::weak_ptr<SE> PlayOnceSE(std::wstring path);
 	//ループ再生する
-	std::weak_ptr<SE> PlayLoopSE(std::string name);
-	std::weak_ptr<SE> PlayLoopSE(int handle);
+	std::weak_ptr<SE> PlayLoopSE(std::wstring path);
 	//1度だけ再生する 
-	std::weak_ptr<Voice> PlayVC(std::string name);
-	std::weak_ptr<Voice> PlayVC(int handle);
+	std::weak_ptr<Voice> PlayVC(std::wstring path);
 	//全ての再生を開始
 	void AllPlay();
 	//全ての再生を止める

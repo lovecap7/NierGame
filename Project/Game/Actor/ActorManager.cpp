@@ -47,7 +47,8 @@ namespace
 
 ActorManager::ActorManager():
 	m_stageFallHeight(0.0f),
-	m_isGameover(false)
+	m_isGameover(false),
+	m_isBossBattle(false)
 {
 	
 }
@@ -96,6 +97,7 @@ void ActorManager::Init()
 	m_pEnemyManager = std::make_shared<EnemyManager>(shared_from_this());
 	//フラグリセット
 	m_isGameover = false;
+	m_isBossBattle = false;
 }
 
 void ActorManager::Update()
@@ -150,6 +152,7 @@ void ActorManager::Restart()
 
 	//フラグリセット
 	m_isGameover = false;
+	m_isBossBattle = false;
 }
 
 void ActorManager::CreateActorCSV(const wchar_t* folderName, const wchar_t* fileName)

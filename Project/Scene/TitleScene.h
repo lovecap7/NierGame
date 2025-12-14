@@ -7,6 +7,7 @@ class SceneController;
 class CameraController;
 class TitleUI;
 class ActorManager;
+class SE;
 class EffekseerManager;
 class TitleScene :
     public SceneBase
@@ -39,6 +40,9 @@ private:
 
     //エフェクト
     EffekseerManager& m_effectManager;
+
+    //SE
+    std::weak_ptr<SE> m_noiseSE;
 private:
     //グリッジの更新
     void UpdateGlitch();

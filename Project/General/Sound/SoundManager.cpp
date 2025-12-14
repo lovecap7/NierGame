@@ -3,6 +3,7 @@
 #include "BGM.h"
 #include "SE.h"
 #include "Voice.h"
+#include "../AssetManager.h"
 #include "../Math/MyMath.h"
 #include <DxLib.h>
 #include <cassert>
@@ -17,6 +18,11 @@ namespace
 	constexpr int kDefaultVolume = 127;
 	//補正倍率
 	constexpr float kCorrectionRate = 1.2f;
+
+	//パス
+	const std::wstring kBGM = L"BGM/";
+	const std::wstring kSE = L"SE/";
+	const std::wstring kVC = L"VC/";
 }
 
 void SoundManager::Entry(std::shared_ptr<SoundBase> sound)
@@ -39,14 +45,17 @@ void SoundManager::Exit(std::shared_ptr<SoundBase> sound)
 
 void SoundManager::Init()
 {
-	
+	//SEの音量
+	m_seVolume = kDefaultVolume;
+	//BGMの音量
+	m_bgmVolume = kDefaultVolume;
+	//ボイスの音量
+	m_voiceVolume = kDefaultVolume;
+	//マスターの音量
+	m_masterVolume = kDefaultVolume;
 }
 void SoundManager::Update()
 {
-	if (m_bgm)
-	{
-		m_bgm->Update();
-	}
 	for (auto& sound : m_sounds)
 	{
 		sound->Update();
@@ -61,9 +70,9 @@ void SoundManager::End()
 	for (auto& sound : m_sounds) {
 		sound->Delete();
 	}
+	CheckDeleteSound();
 	m_sounds.clear();
 	InitSoundMem();
-	SaveVolume();
 }
 
 void SoundManager::SaveVolume()
@@ -79,16 +88,16 @@ void SoundManager::SaveVolume()
 }
 
 
-void SoundManager::PlayBGM(std::string name)
+void SoundManager::PlayBGM(std::wstring path)
 {
-	////すでに実体があるとき終了処理をする
-	//if (m_bgm)
-	//{
-	//	m_bgm->End();
-	//}
-	//m_bgm = std::make_shared<BGM>(DuplicateSoundMem(m_soundHandles[name]),m_bgmVolume);
-	//m_bgm->Init();
-	//m_bgm->Play();
+	//すでに実体があるとき終了処理をする
+	if (m_bgm)
+	{
+		m_bgm->End();
+	}
+	m_bgm = std::make_shared<BGM>(AssetManager::GetInstance().GetSoundHandle(kBGM + path),m_bgmVolume);
+	m_bgm->Init();
+	m_bgm->Play();
 }
 
 void SoundManager::StopBGM()
@@ -96,64 +105,29 @@ void SoundManager::StopBGM()
 	m_bgm->Stop();
 }
 
-std::weak_ptr<SE> SoundManager::PlayOnceSE(std::string name)
+std::weak_ptr<SE> SoundManager::PlayOnceSE(std::wstring path)
 {
 	std::shared_ptr<SE> se;
-	//auto it = m_soundHandles.find(name);
-	//if (it != m_soundHandles.end()) {
-	//	// キーがある場合
-	//	se = std::make_shared<SE>(DuplicateSoundMem(m_soundHandles[name]), m_seVolume, false);
-	//	se->Init();
-	//	se->Play();
-	//}
-	return se;
-}
-
-std::weak_ptr<SE> SoundManager::PlayOnceSE(int handle)
-{
-	auto se = std::make_shared<SE>(DuplicateSoundMem(handle), m_seVolume, false);
+	se = std::make_shared<SE>(AssetManager::GetInstance().GetSoundHandle(kSE + path), m_seVolume, false);
 	se->Init();
 	se->Play();
 	return se;
 }
 
-std::weak_ptr<SE> SoundManager::PlayLoopSE(std::string name)
+
+std::weak_ptr<SE> SoundManager::PlayLoopSE(std::wstring path)
 {
 	std::shared_ptr<SE> se;
-	//auto it = m_soundHandles.find(name);
-	//if (it != m_soundHandles.end()) {
-	//	// キーがある場合
-	//	se = std::make_shared<SE>(DuplicateSoundMem(m_soundHandles[name]), m_seVolume, true);
-	//	se->Init();
-	//	se->Play();
-	//}
-	return se;
-}
-
-std::weak_ptr<SE> SoundManager::PlayLoopSE(int handle)
-{
-	auto se = std::make_shared<SE>(DuplicateSoundMem(handle), m_seVolume, true);
+	se = std::make_shared<SE>(AssetManager::GetInstance().GetSoundHandle(kSE + path), m_seVolume, true);
 	se->Init();
 	se->Play();
 	return se;
 }
 
-std::weak_ptr<Voice> SoundManager::PlayVC(std::string name)
+std::weak_ptr<Voice> SoundManager::PlayVC(std::wstring path)
 {
 	std::shared_ptr<Voice> vc;
-	//auto it = m_soundHandles.find(name);
-	//if (it != m_soundHandles.end()) {
-	//	// キーがある場合
-	//	vc = std::make_shared<Voice>(DuplicateSoundMem(m_soundHandles[name]), m_seVolume);
-	//	vc->Init();
-	//	vc->Play();
-	//}
-	return vc;
-}
-
-std::weak_ptr<Voice> SoundManager::PlayVC(int handle)
-{
-	auto vc = std::make_shared<Voice>(DuplicateSoundMem(handle), m_seVolume);
+	vc = std::make_shared<Voice>(AssetManager::GetInstance().GetSoundHandle(path), m_seVolume);
 	vc->Init();
 	vc->Play();
 	return vc;
@@ -226,25 +200,21 @@ void SoundManager::SetMasterVolume(int volume)
 //消滅フラグをチェックして削除
 void SoundManager::CheckDeleteSound()
 {
+	if (m_sounds.empty())return;
+
 	std::list<std::shared_ptr<SoundBase>> deleteSound;
-	for (int i = 0;i < 3;++i)
+	for (auto& sound : m_sounds)
 	{
-		bool isOneMore = false;
-		for (auto& sound : m_sounds)
+		if (sound->IsDelete())
 		{
-			if (sound->IsDelete())
-			{
-				isOneMore = true;
-				//削除候補
-				deleteSound.emplace_back(sound);
-			}
+			//削除候補
+			deleteSound.emplace_back(sound);
 		}
-		//削除
-		for (auto& sound : deleteSound)
-		{
-			Exit(sound);
-		}
-		deleteSound.clear();
-		if (!isOneMore)break;
 	}
+	//削除
+	for (auto& sound : deleteSound)
+	{
+		Exit(sound);
+	}
+	deleteSound.clear();
 }

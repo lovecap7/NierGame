@@ -14,6 +14,7 @@
 #include "../General/CSV/CharaStatusData.h"
 #include "../General/AssetManager.h"
 #include "../General/Fader.h"
+#include "../General/Sound/SoundManager.h"
 #include "../General/ShaderPostProcess.h"
 #include "../Main/Application.h"
 #include "../General/Effect/EffekseerManager.h"
@@ -26,6 +27,9 @@ namespace
 	const std::wstring kCharacterDataName = L"CharacterData";
 	const std::wstring kStageDataName = L"StageData";
 	const std::wstring kCheckPointDataName = L"CheckPointData";
+
+	//BGM
+	const std::wstring kBGMTutorialPath = L"TutorialScene";
 }
 
 TutorialScene::TutorialScene(SceneController& controller, std::wstring stageName) :
@@ -53,6 +57,10 @@ void TutorialScene::Init()
 	UIManager::GetInstance().SetIsDraw(true);
 	//Inputの入力情報リセット
 	Input::GetInstance().StopUpdate();
+
+	//BGM
+	SoundManager::GetInstance().PlayBGM(kBGMTutorialPath);
+
 
 	//ステージインデックス
 	auto stageName = m_stageName.c_str();

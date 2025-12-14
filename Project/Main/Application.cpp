@@ -9,6 +9,7 @@
 #include "../General/Effect/EffekseerManager.h"
 #include "../General/AssetManager.h"
 #include "../Game/UI/UIManager.h"
+#include "../General/Sound/SoundManager.h"
 #include  <cassert>
 #include <chrono>
 namespace
@@ -38,7 +39,7 @@ bool Application::Init()
 	m_isFinishApplication = false;
 
 	//ゲームタイトル
-	SetWindowText(L"NieR");
+	SetWindowText(L"Project:NieR");
 	//ゲームアイコン
 	//SetWindowIconID(IDI_ICON1);
 
@@ -113,6 +114,10 @@ void Application::Run()
 	//UI
 	auto& uiManager = UIManager::GetInstance();
 
+	//音
+	auto& soundManager = SoundManager::GetInstance();
+	soundManager.Init();
+
 	//シーン
 	std::unique_ptr<SceneController> sceneController = std::make_unique<SceneController>();
 
@@ -160,15 +165,16 @@ void Application::Run()
 
 			//フェード
 			fader.Update();
-
+			//シーン
 			sceneController->Update();
-
+			//当たり判定処理
 			physics.Update();
-
+			//シェーダー
 			m_postProcess->Update();
-
+			//UIマネージャー
 			uiManager.Update();
-
+			//音
+			soundManager.Update();
 		}
 		
 		//描画
@@ -260,6 +266,9 @@ void Application::Terminate()
 	//当たり判定の終了
 	Physics::GetInstance().Reset();
 
+	//音
+	SoundManager::GetInstance().End();
+
 	//アセットの削除
 	AssetManager::GetInstance().End();
 
@@ -274,14 +283,14 @@ void Application::SetWindowMode(bool isWindow)
 
 void Application::ChangeScreenMode()
 {
-	//画面モード変更時(とウインドウモード変更時 )にグラフィックスシステムの設定やグラフィックハンドルをリセットするかどうかを設定する
+	//画面モード変更時(とウインドウモード変更時)にグラフィックスシステムの設定やグラフィックハンドルをリセットするかどうかを設定する
 	//Flag TRUE:リセットする(デフォルト)FALSE:リセットしない
 	SetChangeScreenModeGraphicsSystemResetFlag(false);
 	//解像度
 	SetGraphMode(Game::kScreenWidth, Game::kScreenHeight, Game::kColorBitNum);
 	//切り替え
 	ChangeWindowMode(m_isWindow);
-	// 実際のウィンドウサイズも設定（フレーム込み）
+	//実際のウィンドウサイズも設定（フレーム込み）
 	SetWindowSize(Game::kScreenWidth, Game::kScreenHeight);
 	//て拡大率を1倍に戻す
 	SetWindowSizeExtendRate(1.0);
@@ -291,7 +300,7 @@ void Application::ChangeScreenMode()
 
 void Application::DebugDrawFPS() const
 {
-	// デバッグ表示
+	//デバッグ表示
 	DrawFormatString(10, 10, 0xffffff, L"fps=%.2f", DxLib::GetFPS());
 	DrawFormatString(10, 26, 0xffffff, L"TimeScale=%.2f", m_timeScale);
 }

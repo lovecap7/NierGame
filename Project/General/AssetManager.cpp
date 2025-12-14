@@ -25,6 +25,9 @@ namespace
     const std::wstring kNotoName = L"Noto Sans JP Light";
     const std::wstring kRobotoName = L"Roboto Light";
 
+    //音
+    const std::wstring kSoundPath = L"Data/Sound/";
+    const std::wstring kMP3 = L".mp3";
 }
 
 void AssetManager::Init()
@@ -139,6 +142,37 @@ void AssetManager::DeleteImageHandle()
     m_imageHandles.clear();
 }
 
+int AssetManager::GetSoundHandle(std::wstring path)
+{
+    int handle = -1;
+    //サウンドがあったら
+    if (m_soundHandles.find(path) != m_soundHandles.end())
+    {
+        handle = m_soundHandles.at(path);
+    }
+    else
+    {
+        //ハンドルをロードする
+        std::wstring loadPath = kSoundPath + path + kMP3;
+        handle = LoadSoundMem(loadPath.c_str());
+        m_soundHandles[path] = handle;
+    }
+
+    //ハンドルチェック
+    //assert(handle >= 0);
+
+    return DuplicateSoundMem(handle);
+}
+
+void AssetManager::DeleteSoundHandle()
+{
+    //ハンドルをすべて削除
+    for (const auto& [key, value] : m_soundHandles) {
+        DeleteSoundMem(value);
+    }
+    m_soundHandles.clear();
+}
+
 int AssetManager::GetFontHandle(Font font)
 {
     int handle = -1;
@@ -192,4 +226,5 @@ void AssetManager::AllDelete()
     DeleteEffectHandle();
     DeleteModelHandle();
     DeleteFontHandle();
+    DeleteSoundHandle();
 }

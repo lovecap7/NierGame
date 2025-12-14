@@ -17,6 +17,8 @@
 #include "../General/ShaderPostProcess.h"
 #include "../General/Math/MyMath.h"
 #include "../General/Effect/EffekseerManager.h"
+#include "../General/Sound/SoundManager.h"
+#include "../General/Sound/SE.h"
 
 namespace
 {
@@ -28,9 +30,14 @@ namespace
 	constexpr float kShakeStrength = 10.0f;
 
 	//タイトル
-	const std::wstring kTitle = L"Title";
-	const std::wstring kCharacterData = L"CharacterData";
-	const std::wstring kStageData = L"StageData";
+	const std::wstring kTitlePath = L"Title";
+	const std::wstring kCharacterDataPath = L"CharacterData";
+	const std::wstring kStageDataPath = L"StageData";
+
+	//BGM
+	const std::wstring kBGMTitlePath = L"TitleScene";
+	//SE
+	const std::wstring kSENoisePath = L"Noise";
 }
 
 TitleScene::TitleScene(SceneController& controller):
@@ -39,7 +46,8 @@ TitleScene::TitleScene(SceneController& controller):
 	m_blockScele(kBlockScele),
 	m_noiseSpeed(kNoiseSpeed),
 	m_shakeStrength(kShakeStrength),
-	m_effectManager(EffekseerManager::GetInstance())
+	m_effectManager(EffekseerManager::GetInstance()),
+	m_noiseSE()
 {
 }
 
@@ -59,6 +67,10 @@ void TitleScene::Init()
 	Fader::GetInstance().FadeIn();
 	//エフェクトマネージャー初期化
 	m_effectManager.Init();
+	//音
+	auto& soundManager = SoundManager::GetInstance();
+	soundManager.PlayBGM(kBGMTitlePath);
+	m_noiseSE = soundManager.PlayLoopSE(kSENoisePath);
 
 	//カメラ
 	auto camera = std::make_shared<TitleCamera>();
@@ -80,8 +92,8 @@ void TitleScene::Init()
 	//アクターマネージャー
 	m_actorManager = std::make_shared<ActorManager>();
 	m_actorManager->Init();
-	m_actorManager->CreateActorCSV(kTitle.c_str(), kCharacterData.c_str());
-	m_actorManager->CreateActorCSV(kTitle.c_str(), kStageData.c_str());
+	m_actorManager->CreateActorCSV(kTitlePath.c_str(), kCharacterDataPath.c_str());
+	m_actorManager->CreateActorCSV(kTitlePath.c_str(), kStageDataPath.c_str());
 	
 }
 
@@ -155,6 +167,12 @@ void TitleScene::UpdateGlitch()
 	}
 	else
 	{
+		//ノイズSE停止
+		if (!m_noiseSE.expired())
+		{
+			m_noiseSE.lock()->Delete();
+		}
+		//ノイズ終了
 		postPrecess->SubPostEffectState(ShaderPostProcess::PostEffectState::NoColorGlitch);
 	}
 }

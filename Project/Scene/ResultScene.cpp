@@ -10,10 +10,15 @@
 #include "../Game/UI/Result/ResultUI.h"
 #include "../Game/UI/UIManager.h"
 #include "../Game/Camera/CameraController.h"
+#include "../General/AssetManager.h"
+#include "../General/Sound/SoundManager.h"
 
 namespace
 {
 	constexpr unsigned int kFadeColor = 0x000000;
+
+	//BGM
+	const std::wstring kBGMResultPath = L"ResultScene";
 }
 
 ResultScene::ResultScene(std::wstring stageName, SceneController& controller, std::shared_ptr<Timer> timer) :
@@ -32,6 +37,9 @@ void ResultScene::Init()
 {
 	//フェードイン
 	Fader::GetInstance().FadeIn();
+
+	//アセット削除
+	AssetManager::GetInstance().AllDelete();
 	
 	auto& uiManager = UIManager::GetInstance();
 	//UIの削除
@@ -41,6 +49,9 @@ void ResultScene::Init()
 
 	//カメラリセット
 	CameraController::GetInstance().Init();
+
+	//BGM
+	SoundManager::GetInstance().PlayBGM(kBGMResultPath);
 
 
 	//入力を開始

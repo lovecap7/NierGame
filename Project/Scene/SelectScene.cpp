@@ -16,6 +16,7 @@
 #include "../General/CSV/CSVDataLoader.h"
 #include "../General/CSV/TextData.h"
 #include "../General/Fader.h"
+#include "../General/Sound/SoundManager.h"
 #include "../Game/Actor/ActorManager.h"
 #include "../Game/UI/Select/SelectUI.h"
 #include "../Game/Camera/SelectCamera.h"
@@ -38,8 +39,11 @@ namespace
 
 	//パス
 	const std::wstring kSelect = L"Select";
-	const std::wstring kCharacterData = L"CharacterData";
-	const std::wstring kStageData = L"StageData";
+	const std::wstring kCharacterDataPath = L"CharacterData";
+	const std::wstring kStageDataPath = L"StageData";
+	
+	//BGM
+	const std::wstring kBGMSelectPath = L"SelectScene";
 }
 
 SelectScene::SelectScene(SceneController& controller) :
@@ -76,6 +80,10 @@ void SelectScene::Init()
 	ui->Init();
 	m_selectStageUI = ui;
 
+	//音
+	auto& soundManager = SoundManager::GetInstance();
+	soundManager.PlayBGM(kBGMSelectPath);
+
 	//カメラ
 	auto camera = std::make_shared<SelectCamera>();
 	auto& cameraController = CameraController::GetInstance();
@@ -86,8 +94,8 @@ void SelectScene::Init()
 	//アクターマネージャー
 	m_actorManager = std::make_shared<ActorManager>();
 	m_actorManager->Init();
-	m_actorManager->CreateActorCSV(kSelect.c_str(), kCharacterData.c_str());
-	m_actorManager->CreateActorCSV(kSelect.c_str(), kStageData.c_str());
+	m_actorManager->CreateActorCSV(kSelect.c_str(), kCharacterDataPath.c_str());
+	m_actorManager->CreateActorCSV(kSelect.c_str(), kStageDataPath.c_str());
 }
 
 void SelectScene::Update()

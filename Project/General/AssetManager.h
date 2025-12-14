@@ -44,6 +44,11 @@ public:
 	//画像ハンドル削除
 	void DeleteImageHandle();
 
+	//音ハンドル
+	int GetSoundHandle(std::wstring path);
+	//音ハンドル削除
+	void DeleteSoundHandle();
+
 	//フォントタイプ
 	enum class FontType : int
 	{
@@ -109,5 +114,7 @@ private:
 	std::map<std::wstring, int>m_imageHandles;
 	//フォントハンドル
 	std::map<Font, int>m_fontHandles;
+	//音リソース
+	std::map<std::wstring, int>m_soundHandles;
 };
 
