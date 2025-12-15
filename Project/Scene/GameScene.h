@@ -30,9 +30,7 @@ public:
     virtual void Restart() override;
     //デバッグ用
     virtual void DebugDraw() const override;
-   
-    //ステージBGM
-    void PlayStageBGM();
+  
 private:
     //アクターマネージャー
     std::shared_ptr<ActorManager> m_actorManager;
@@ -60,5 +58,9 @@ private:
 private:
     //ボス戦に入ったらBGM変更
     void ChangeBossBattleBGM(bool isBeforeBossBattle);
+    //ステージBGM
+    void PlayStageBGM();
+    //ステージBGM初期化
+    void InitStageBGM();
 };
 

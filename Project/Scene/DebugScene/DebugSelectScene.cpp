@@ -41,19 +41,7 @@ void DebugSelectScene::Init()
 	UIManager::GetInstance().AllDeleteUI();
 	//フェードイン
 	Fader::GetInstance().FadeIn();
-
-	auto& csvLoader = CSVDataLoader::GetInstance();
-	auto datas = csvLoader.LoadCSV(L"Tutorial/TextData");
-	std::list<std::shared_ptr<TextData>> textDatas;
-	for (auto& data : datas)
-	{
-		auto textData = std::make_shared<TextData>(data);
-		textDatas.push_back(textData);
-	}
-
-	UIManager::GetInstance().Entry(std::make_shared<TalkUI>(textDatas));
-
-
+	//現在の項目
 	m_currentMenu = Menu::Title;
 }
 
@@ -162,4 +150,5 @@ void DebugSelectScene::End()
 
 void DebugSelectScene::DebugDraw() const
 {
+	
 }

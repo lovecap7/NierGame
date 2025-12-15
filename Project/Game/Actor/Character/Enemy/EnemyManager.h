@@ -3,6 +3,7 @@
 #include <list>
 class EnemyBase;
 class ActorManager;
+class GroupManager;
 class EnemyManager : 
 	public std::enable_shared_from_this<EnemyManager>
 {
@@ -30,12 +31,16 @@ public:
 
 	//すべての敵が倒された
 	bool IsAllDeadEnemys()const;
+
+	//デバッグ描画
+	void DebugDraw()const;
 private:
 	//敵
 	std::list<std::shared_ptr<EnemyBase>> m_enemys;
 	//アクターマネージャーの参照
 	std::weak_ptr<ActorManager> m_pActorManager;
-
+	//グループマネージャー
+	std::shared_ptr<GroupManager> m_pGroupManager;
 	//エリア内で戦闘中
 	bool m_isInAreaBattle;
 };

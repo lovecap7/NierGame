@@ -2,7 +2,7 @@
 
 namespace
 {
-	constexpr int kDataNum = 11;
+	constexpr int kDataNum = 12;
 }
 
 CharaStatusData::CharaStatusData() :
@@ -15,7 +15,8 @@ CharaStatusData::CharaStatusData() :
 	m_ar(CharaStatus::Armor::Light),
 	m_searchAngle(0.0f),
 	m_searchRange(0.0f),
-	m_meleeAttackRange(0.0f)
+	m_meleeAttackRange(0.0f),
+	m_groupTag(L"")
 {
 }
 
@@ -29,7 +30,8 @@ CharaStatusData::CharaStatusData(std::shared_ptr<CSVData> data) :
 	m_ar(CharaStatus::Armor::Light),
 	m_searchAngle(0.0f),
 	m_searchRange(0.0f),
-	m_meleeAttackRange(0.0f)
+	m_meleeAttackRange(0.0f),
+	m_groupTag(L"")
 {
 	//データを取得
 	this->m_data = data->GetData();
@@ -67,4 +69,6 @@ void CharaStatusData::Conversion()
 	m_searchAngle = stof(m_data[9]) * MyMath::DEG_2_RAD;
 	//近接攻撃距離
 	m_meleeAttackRange = stof(m_data[10]);
+	//グループタグ
+	m_groupTag = m_data[11];
 }

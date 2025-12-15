@@ -179,6 +179,7 @@
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateIdle.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\EnemyStateMoving.cpp" />
     <ClCompile Include="Game\Actor\Character\Enemy\NormalEnemy.cpp" />
+    <ClCompile Include="Game\Actor\Character\GroupManager.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\AvoidColl.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\Player.cpp" />
     <ClCompile Include="Game\Actor\Character\Player\PlayerStateAttackBase.cpp" />
@@ -340,6 +341,7 @@
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateIdle.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\EnemyStateMoving.h" />
     <ClInclude Include="Game\Actor\Character\Enemy\NormalEnemy.h" />
+    <ClInclude Include="Game\Actor\Character\GroupManager.h" />
     <ClInclude Include="Game\Actor\Character\Player\AvoidColl.h" />
     <ClInclude Include="Game\Actor\Character\Player\Player.h" />
     <ClInclude Include="Game\Actor\Character\Player\PlayerStateAttackBase.h" />

@@ -113,6 +113,7 @@ void GameScene::Init()
 	m_timer->Init();
 
 	//音
+	InitStageBGM();
 	PlayStageBGM();
 
 	//ゲームオーバー
@@ -246,9 +247,6 @@ void GameScene::Restart()
 	cameraController.Init();
 	cameraController.ChangeCamera(camera);
 
-	//音
-	PlayStageBGM();
-
 	//アクターの再スタート
 	m_actorManager->Restart();
 	m_actorManager->SetPlayerCamera(camera);
@@ -259,6 +257,9 @@ void GameScene::Restart()
 
 	//エリアの再スタート
 	m_battleAreaManager->Restart();
+
+	//音
+	PlayStageBGM();
 
 	//フェードイン
 	Fader::GetInstance().FadeIn();
@@ -305,6 +306,30 @@ void GameScene::PlayStageBGM()
 		break;
 	}
 	SoundManager::GetInstance().PlayBGM(bgmPath);
+}
+
+void GameScene::InitStageBGM()
+{
+	auto& soundManager = SoundManager::GetInstance();
+
+	//ステージBGMで使うサウンドデータを先に全てロードする
+	switch (GetStageIndexByName(m_stageName))
+	{
+	case StageIndex::Stage1:
+		soundManager.PlayBGM(kBGMStage1BossPath);
+		soundManager.PlayBGM(kBGMStage1Path);
+		break;
+	case StageIndex::Stage2:
+		soundManager.PlayBGM(kBGMStage2BossPath);
+		soundManager.PlayBGM(kBGMStage2Path);
+		break;
+	case StageIndex::Stage3:
+		soundManager.PlayBGM(kBGMStage3Path);
+		break;
+	default:
+		break;
+	}
+	
 }
 
 

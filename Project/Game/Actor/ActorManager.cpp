@@ -123,6 +123,10 @@ void ActorManager::Draw() const
 	{
 		actor->Draw();
 	}
+
+#if _DEBUG
+	m_pEnemyManager->DebugDraw();
+#endif
 }
 
 void ActorManager::End()

@@ -5,6 +5,7 @@
 #include "../../../Camera/PlayerCamera.h"
 #include "../../../../General/Input.h"
 #include "../../../../General/Math/MyMath.h"
+#include "../GroupManager.h"
 
 namespace
 {
@@ -17,6 +18,7 @@ EnemyManager::EnemyManager(std::weak_ptr<ActorManager> actorM):
 	m_pActorManager(actorM),
 	m_isInAreaBattle(false)
 {
+	m_pGroupManager = std::make_shared<GroupManager>();
 }
 
 EnemyManager::~EnemyManager()
@@ -30,6 +32,13 @@ void EnemyManager::Entry(std::shared_ptr<EnemyBase> enemy)
 	if (it != m_enemys.end())return;
 	//敵を追加
 	m_enemys.emplace_back(enemy);
+
+	//グループマネージャーに追加
+	std::wstring tag = enemy->GetGroupTag();
+	if (!(tag == L"None" || tag == L""))
+	{
+		m_pGroupManager->Entry(enemy);
+	}
 }
 
 void EnemyManager::Exit(std::shared_ptr<EnemyBase> enemy)
@@ -38,12 +47,22 @@ void EnemyManager::Exit(std::shared_ptr<EnemyBase> enemy)
 	auto it = std::find(m_enemys.begin(), m_enemys.end(), enemy);
 	if (it == m_enemys.end())return;
 	m_enemys.erase(it);
+
+	//グループマネージャーから解除
+	std::wstring tag = enemy->GetGroupTag();
+	if (!(tag == L"None" || tag == L""))
+	{
+		m_pGroupManager->Exit(enemy);
+	}
 }
 
 
 void EnemyManager::Init()
 {
+	//バトルエリアの初期化
 	m_isInAreaBattle = false;
+	//グループマネージャーの初期化
+	m_pGroupManager->Init();
 }
 
 void EnemyManager::Update()
@@ -109,6 +128,9 @@ void EnemyManager::Update()
 	}
 #endif
 
+	//グループマネージャーの更新
+	m_pGroupManager->Update();
+
 }
 
 void EnemyManager::End()
@@ -151,4 +173,9 @@ void EnemyManager::FinishInAreaBattle()
 bool EnemyManager::IsAllDeadEnemys() const
 {
 	return m_enemys.empty();
+}
+
+void EnemyManager::DebugDraw()const
+{
+	m_pGroupManager->DebugDraw();
 }

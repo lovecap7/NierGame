@@ -7,6 +7,7 @@
 #include "../../../../../General/Collision/Rigidbody.h"
 #include "../../../../../General/CharaStatus.h"
 #include "../../../../../General/Effect/EffekseerManager.h"
+#include "../../../ActorManager.h"
 #include "../../../../Camera/BossCamera.h"
 #include "../../../../Camera/CameraController.h"
 namespace
@@ -19,7 +20,7 @@ namespace
 
 Boss3StateStart::Boss3StateStart(std::weak_ptr<Actor> enemy) :
 	EnemyStateBase(enemy,false),
-	m_isCreateCamera(false)
+	m_isCreate(false)
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());
@@ -44,12 +45,20 @@ void Boss3StateStart::Update()
 
 	auto model = owner->GetModel();
 
-	//カメラの作成
-	if (!m_isCreateCamera)
+	if (!m_isCreate)
 	{
-		CameraController::GetInstance().PushCamera(std::make_shared<BossCamera>(owner->GetCenterPos(), model->GetDir(),
-			kCameraDistance,owner->GetActorManager(),true));
-		m_isCreateCamera = true;
+		if (!owner->GetActorManager().expired())
+		{
+			auto actorManager = owner->GetActorManager().lock();
+
+			//カメラの作成
+			CameraController::GetInstance().PushCamera(std::make_shared<BossCamera>(owner->GetCenterPos(), model->GetDir(),
+				kCameraDistance, actorManager, true));
+
+			//ボス戦
+			actorManager->SetIsBossBattle(true);
+		}
+		m_isCreate = true;
 	}
 
 	//モデルのアニメーションが終わったら

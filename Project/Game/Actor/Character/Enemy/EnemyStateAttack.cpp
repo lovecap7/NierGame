@@ -56,6 +56,13 @@ EnemyStateAttack::~EnemyStateAttack()
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());
 	owner->SetAttackCoolTime(m_attackData->GetCancelFrame());
+
+	//ƒOƒ‹[ƒv‚ÉŠ‘®‚µ‚Ä‚¢‚é‚È‚ç
+	if (owner->IsInGroup())
+	{
+		//UŒ‚Œ ‚ðŽ¸‚¤
+		owner->SetCanAttack(false);
+	}
 }
 
 void EnemyStateAttack::Init()

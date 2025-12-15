@@ -10,6 +10,7 @@
 #include "../../../../General/CSV/CSVData.h"
 #include "../../../../General/CSV/AttackData.h"
 #include "../../../../General/CSV/EnemyAttackKeyData.h"
+#include "../../../../General/CSV/CharaStatusData.h"
 #include "../../ActorManager.h"
 
 namespace
@@ -18,11 +19,14 @@ namespace
 	constexpr float kAlertedDisRate = 2.0f;
 	//目の数
 	constexpr int kEyeNum = 2;
+
+	//初期攻撃クールタイム
+	constexpr float kFirstCoolTime = 60.0f;
 }
 
 EnemyBase::EnemyBase(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager):
 	CharacterBase(actorData, charaStatusData, Shape::Capsule, pActorManager),
-	m_attackCoolTime(0.0f),
+	m_attackCoolTime(kFirstCoolTime),
 	m_isActive(true),
 	m_isBoss(false),
 	m_isAlerted(true),
@@ -30,8 +34,14 @@ EnemyBase::EnemyBase(std::shared_ptr<ActorData> actorData, std::shared_ptr<Chara
 	m_rightEyeIndex(0),
 	m_leftEyeIndex(0),
 	m_nearEyeIndex(0),
-	m_eyeEffect()
+	m_eyeEffect(),
+	m_canAttack(true),
+	m_isInGroup(false)
 {
+	//グループタグ
+	m_groupTag = charaStatusData->GetGroupTag();
+	//グループに所属しているか
+	m_isInGroup = !(m_groupTag == L"None" || m_groupTag == L"");
 }
 
 EnemyBase::~EnemyBase()
@@ -110,7 +120,8 @@ void EnemyBase::Draw() const
 
 bool EnemyBase::IsEnableAttack() const
 {
-	return m_targetInfo.m_isFound && m_attackCoolTime <= 0.0f;
+	//攻撃可能な条件を満たした場合true
+	return m_targetInfo.m_isFound && m_attackCoolTime <= 0.0f && m_canAttack;
 }
 
 Vector3 EnemyBase::GetHeadPos() const

@@ -35,6 +35,8 @@ public:
 	float GetSearchAngle()const { return m_searchAngle; };
 	//近接攻撃距離
 	float GetMeleeAttackRange()const { return m_meleeAttackRange; };
+	//グループタグ
+	std::wstring GetGroupTag()const { return m_groupTag; };
 private:
 	//変換
 	void Conversion() override;
@@ -49,5 +51,6 @@ private:
 	float m_searchRange;			//索敵半径
 	float m_searchAngle;			//索敵アングル
 	float m_meleeAttackRange;		//近接攻撃距離
+	std::wstring m_groupTag;		//グループタグ
 };
 

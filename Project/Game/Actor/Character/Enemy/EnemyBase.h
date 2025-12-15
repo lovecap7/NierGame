@@ -78,6 +78,15 @@ public:
 
 	//半径
 	float GetRadius()const override;
+
+	//グループタグ
+	std::wstring GetGroupTag()const { return m_groupTag; };
+	//グループに所属しているか
+	bool IsInGroup()const { return m_isInGroup; };
+	//攻撃権
+	void SetCanAttack(bool canAttack) { m_canAttack = canAttack; };
+	bool CanAttack() const { return m_canAttack; };
+
 protected:
 	//ボスかどうか
 	bool m_isBoss;
@@ -104,6 +113,12 @@ protected:
 	int m_nearEyeIndex;
 	//目のエフェクトの参照
 	std::weak_ptr<NormalEffect> m_eyeEffect;
+	//グループタグ
+	std::wstring m_groupTag;
+	//攻撃権
+	bool m_canAttack;
+	//グループに所属しているか
+	bool m_isInGroup;
 protected:
 	//カウント
 	void CountAttackCoolTime();
