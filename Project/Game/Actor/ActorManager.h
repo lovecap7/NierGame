@@ -12,6 +12,7 @@ class CharaStatusData;
 class CharacterBase;
 class AttackManager;
 class EnemyManager;
+class Shadow;
 class AttackBase;
 class ActorManager : public std::enable_shared_from_this<ActorManager>
 {
@@ -28,6 +29,8 @@ public:
 	void Update();
 	//描画
 	void Draw() const;
+	//影の描画
+	void DrawShadow()const;
 	//終了処理
 	void End();
 	//再スタート(コンテニューが押されたとき)
@@ -73,6 +76,8 @@ private:
 	std::weak_ptr<Player> m_pPlayer;
 	//敵マネージャー
 	std::shared_ptr<EnemyManager> m_pEnemyManager;
+	//影
+	std::shared_ptr<Shadow> m_pShadow;
 	//ステージを落下したとみなす高さ
 	float m_stageFallHeight;
 	//ゲームオーバー
@@ -91,6 +96,5 @@ private:
 
 	//ステージを落ちたか
 	void CheckStageFall(std::shared_ptr<Actor> actor);
-
 };
 

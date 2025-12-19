@@ -333,6 +333,14 @@ void Player::Draw() const
 	}
 }
 
+void Player::DrawShadow() const
+{
+	if (m_isDraw)
+	{
+		m_model->Draw();
+	}
+}
+
 void Player::Complete()
 {
 	m_rb->SetPos(m_rb->GetNextPos());

@@ -56,6 +56,11 @@ void StageObject::Draw() const
 	m_model->Draw();
 }
 
+void StageObject::DrawShadow() const
+{
+	Draw();
+}
+
 void StageObject::Complete()
 {
 }

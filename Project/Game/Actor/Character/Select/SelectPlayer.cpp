@@ -79,6 +79,11 @@ void SelectPlayer::Draw() const
 	m_model->Draw();
 }
 
+void SelectPlayer::DrawShadow() const
+{
+	Draw();
+}
+
 void SelectPlayer::Complete()
 {
 }

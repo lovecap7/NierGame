@@ -7,6 +7,7 @@
 #include "../../General/CSV/CharaStatusData.h"
 #include "../../General/CSV/PodData.h"
 #include "../../General/Fader.h"
+#include "../../General/Shadow.h"
 #include "Stage/StageObject.h"
 #include "Stage/Goal.h"
 #include "Stage/Sky.h"
@@ -95,6 +96,8 @@ void ActorManager::Init()
 {
 	//敵マネージャーの作成
 	m_pEnemyManager = std::make_shared<EnemyManager>(shared_from_this());
+	//影
+	m_pShadow = std::make_shared<Shadow>();
 	//フラグリセット
 	m_isGameover = false;
 	m_isBossBattle = false;
@@ -118,6 +121,8 @@ void ActorManager::Update()
 
 void ActorManager::Draw() const
 {
+	//影描画
+	m_pShadow->DrawShadow(shared_from_this());
 	//アクターの描画
 	for (auto& actor : m_actors)
 	{
@@ -127,6 +132,14 @@ void ActorManager::Draw() const
 #if _DEBUG
 	m_pEnemyManager->DebugDraw();
 #endif
+}
+void ActorManager::DrawShadow() const
+{
+	//アクターの影描画
+	for (auto& actor : m_actors)
+	{
+		actor->DrawShadow();
+	}
 }
 
 void ActorManager::End()

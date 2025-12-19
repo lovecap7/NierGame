@@ -20,6 +20,7 @@ public:
     /// 対象のアクターを表示
     /// </summary>
     virtual void Draw() const override;
+    virtual void DrawShadow() const override;
     /// <summary>
     /// 終了処理
     /// </summary>

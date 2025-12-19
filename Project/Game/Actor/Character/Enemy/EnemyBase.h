@@ -22,6 +22,7 @@ public:
 	void OnCollide(const std::shared_ptr<Collidable> other)override {};
 	//描画
 	void Draw()const override;
+	void DrawShadow()const override;
 
 	//ステートにアクセスさせる関数
 	//リジッドボディ

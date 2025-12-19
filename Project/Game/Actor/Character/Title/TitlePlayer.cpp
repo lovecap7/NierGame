@@ -79,6 +79,11 @@ void TitlePlayer::Draw() const
 	m_model->Draw();
 }
 
+void TitlePlayer::DrawShadow() const
+{
+	Draw();
+}
+
 void TitlePlayer::Complete()
 {
 }

@@ -175,7 +175,7 @@ void GroupManager::DebugDraw()const
 	{
 		for (auto& enemy : m_groupEnemies.at(groupName))
 		{
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 230);
 			//色でどのグループかを判別
 			DrawSphere3D(enemy->GetCenterPos().ToDxLibVector(), enemy->GetRadius(), 16, m_groupColor.at(groupName), m_groupColor.at(groupName), true);
 			//攻撃権を持ってる場合

@@ -117,6 +117,12 @@ void EnemyBase::Draw() const
 	m_model->Draw();
 }
 
+void EnemyBase::DrawShadow() const
+{
+	if (!m_model)return;
+	m_model->Draw();
+}
+
 
 bool EnemyBase::IsEnableAttack() const
 {

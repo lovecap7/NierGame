@@ -149,15 +149,6 @@ void Input::Update()
 
 	//先行入力を更新
 	UpdateBuffer();
-
-	//新しく押された入力をバッファに登録
-	for (const auto& keyInfo : m_currentInput)
-	{
-		if (IsTrigger(keyInfo.first))
-		{
-			m_inputBufferFrame[keyInfo.first] = kBufferFrame;
-		}
-	}
 }
 
 void Input::StopUpdate()
@@ -419,12 +410,22 @@ bool Input::IsBuffered(const std::string& action)
 
 void Input::UpdateBuffer()
 {
+	//押された入力のフレームを減らしていく
 	for (auto& [key, frame] : m_inputBufferFrame)
 	{
 		//フレームを減らしていく
 		if (frame > 0.0f)
 		{
 			--frame;
+		}
+	}
+
+	//新しく押された入力をバッファに登録
+	for (const auto& keyInfo : m_currentInput)
+	{
+		if (IsTrigger(keyInfo.first))
+		{
+			m_inputBufferFrame[keyInfo.first] = kBufferFrame;
 		}
 	}
 }

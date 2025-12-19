@@ -44,6 +44,10 @@ public:
 	/// </summary>
 	virtual void Draw()const abstract;
 	/// <summary>
+	/// 対象のアクターの影を表示
+	/// </summary>
+	virtual void DrawShadow()const abstract;
+	/// <summary>
 	/// 終了処理
 	/// </summary>
 	virtual void End()abstract;

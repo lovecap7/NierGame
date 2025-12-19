@@ -88,6 +88,11 @@ void Pod::Draw() const
 	m_model->Draw();
 }
 
+void Pod::DrawShadow() const
+{
+	Draw();
+}
+
 void Pod::Complete()
 {
 	m_rb->SetPos(m_rb->GetNextPos());

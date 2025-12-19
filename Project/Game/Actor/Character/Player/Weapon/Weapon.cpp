@@ -54,6 +54,11 @@ void Weapon::Draw() const
     }
 }
 
+void Weapon::DrawShadow() const
+{
+    Draw();
+}
+
 void Weapon::End()
 {
     // ƒ‚ƒfƒ‹‚ð‰ð•ú

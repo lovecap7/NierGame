@@ -285,6 +285,7 @@
     <ClCompile Include="General\Math\Vector3.cpp" />
     <ClCompile Include="General\Model.cpp" />
     <ClCompile Include="General\ShaderPostProcess.cpp" />
+    <ClCompile Include="General\Shadow.cpp" />
     <ClCompile Include="General\Sound\BGM.cpp" />
     <ClCompile Include="General\Sound\SE.cpp" />
     <ClCompile Include="General\Sound\SoundBase.cpp" />
@@ -449,6 +450,7 @@
     <ClInclude Include="General\Model.h" />
     <ClInclude Include="General\MyDraw.h" />
     <ClInclude Include="General\ShaderPostProcess.h" />
+    <ClInclude Include="General\Shadow.h" />
     <ClInclude Include="General\Sound\BGM.h" />
     <ClInclude Include="General\Sound\SE.h" />
     <ClInclude Include="General\Sound\SoundBase.h" />

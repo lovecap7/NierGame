@@ -29,6 +29,7 @@ public:
 	void OnCollide(const std::shared_ptr<Collidable> other)override;
 	//描画
 	void Draw()const override;
+	void DrawShadow()const override;
 	//更新処理による結果の確定
 	void Complete() override;
 	//終了処理
