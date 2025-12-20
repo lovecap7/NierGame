@@ -95,7 +95,7 @@ void SoundManager::PlayBGM(std::wstring path)
 	{
 		m_bgm->End();
 	}
-	m_bgm = std::make_shared<BGM>(AssetManager::GetInstance().GetSoundHandle(kBGM + path),m_bgmVolume);
+	m_bgm = std::make_shared<BGM>(LoadBGM(path),m_bgmVolume);
 	m_bgm->Init();
 	m_bgm->Play();
 }
@@ -108,7 +108,7 @@ void SoundManager::StopBGM()
 std::weak_ptr<SE> SoundManager::PlayOnceSE(std::wstring path)
 {
 	std::shared_ptr<SE> se;
-	se = std::make_shared<SE>(AssetManager::GetInstance().GetSoundHandle(kSE + path), m_seVolume, false);
+	se = std::make_shared<SE>(LoadSE(path), m_seVolume, false);
 	se->Init();
 	se->Play();
 	return se;
@@ -118,7 +118,7 @@ std::weak_ptr<SE> SoundManager::PlayOnceSE(std::wstring path)
 std::weak_ptr<SE> SoundManager::PlayLoopSE(std::wstring path)
 {
 	std::shared_ptr<SE> se;
-	se = std::make_shared<SE>(AssetManager::GetInstance().GetSoundHandle(kSE + path), m_seVolume, true);
+	se = std::make_shared<SE>(LoadSE(path), m_seVolume, true);
 	se->Init();
 	se->Play();
 	return se;
@@ -127,7 +127,7 @@ std::weak_ptr<SE> SoundManager::PlayLoopSE(std::wstring path)
 std::weak_ptr<Voice> SoundManager::PlayVC(std::wstring path)
 {
 	std::shared_ptr<Voice> vc;
-	vc = std::make_shared<Voice>(AssetManager::GetInstance().GetSoundHandle(path), m_seVolume);
+	vc = std::make_shared<Voice>(LoadVC(path), m_seVolume);
 	vc->Init();
 	vc->Play();
 	return vc;
@@ -155,6 +155,21 @@ void SoundManager::AllStop()
 	{
 		m_bgm->Stop();
 	}
+}
+
+int SoundManager::LoadBGM(std::wstring path)
+{
+	return AssetManager::GetInstance().GetSoundHandle(kBGM + path);
+}
+
+int SoundManager::LoadSE(std::wstring path)
+{
+	return AssetManager::GetInstance().GetSoundHandle(kSE + path);
+}
+
+int SoundManager::LoadVC(std::wstring path)
+{
+	return AssetManager::GetInstance().GetSoundHandle(kVC + path);
 }
 
 int SoundManager::GetSEVolumeC() const

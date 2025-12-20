@@ -269,6 +269,7 @@
     <ClCompile Include="General\CSV\EnemyAttackKeyData.cpp" />
     <ClCompile Include="General\CSV\PodData.cpp" />
     <ClCompile Include="General\CSV\ResultRankData.cpp" />
+    <ClCompile Include="General\CSV\SEData.cpp" />
     <ClCompile Include="General\CSV\TextData.cpp" />
     <ClCompile Include="General\CSV\TutorialClearData.cpp" />
     <ClCompile Include="General\Effect\EffekseerManager.cpp" />
@@ -432,6 +433,7 @@
     <ClInclude Include="General\CSV\EnemyAttackKeyData.h" />
     <ClInclude Include="General\CSV\PodData.h" />
     <ClInclude Include="General\CSV\ResultRankData.h" />
+    <ClInclude Include="General\CSV\SEData.h" />
     <ClInclude Include="General\CSV\TextData.h" />
     <ClInclude Include="General\CSV\TutorialClearData.h" />
     <ClInclude Include="General\Effect\EffekseerManager.h" />

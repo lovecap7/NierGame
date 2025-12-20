@@ -38,6 +38,7 @@ namespace
 	const std::wstring kBGMTitlePath = L"TitleScene";
 	//SE
 	const std::wstring kSENoisePath = L"Noise";
+	const std::wstring kSEGameStartPath = L"GameStart";
 }
 
 TitleScene::TitleScene(SceneController& controller):
@@ -69,7 +70,14 @@ void TitleScene::Init()
 	m_effectManager.Init();
 	//音
 	auto& soundManager = SoundManager::GetInstance();
+	//サウンドデータのロード
+	soundManager.LoadBGM(kBGMTitlePath);
+	soundManager.LoadSE(kSENoisePath);
+	soundManager.LoadBGM(kSEGameStartPath);
+
+	//BGM再生
 	soundManager.PlayBGM(kBGMTitlePath);
+	//ノイズ再生
 	m_noiseSE = soundManager.PlayLoopSE(kSENoisePath);
 
 	//カメラ
@@ -121,7 +129,11 @@ void TitleScene::Update()
 
 	if (input.IsTrigger("A") && !fader.IsFadeNow())
 	{
+		//フェード
 		fader.FadeOut();
+		//クリックSE
+		auto& soundManager = SoundManager::GetInstance();
+		soundManager.PlayOnceSE(kSEGameStartPath);
 	}
 
 	m_actorManager->Update();

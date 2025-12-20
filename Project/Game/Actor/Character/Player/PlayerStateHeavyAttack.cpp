@@ -12,9 +12,11 @@
 #include "../../../../General/Model.h"
 #include "../../../../General/Input.h"
 #include "../../../../General/Collision/Rigidbody.h"
+#include "../../../../General/Sound/SoundManager.h"
 
 namespace
 {
+	//çUåÇÇÃñºëO
 	const std::wstring kFirstGroundAttackName = L"SubAttack1";
 	const std::wstring kStartAirAttackName = L"SubAttackAirStart";
 	const std::wstring kEndAirAttackName = L"SubAttackAirEnd";
@@ -22,6 +24,9 @@ namespace
 	const std::wstring kChargeAttackName = L"SubAttack3";
 	const std::wstring kChargeName = L"SubAttackCharge";
 	const std::wstring kJustAttackName = L"JustAttackSub";
+
+	//SEñº
+	const std::wstring kSESwordSwingName = L"SwordSwing";
 }
 
 PlayerStateHeavyAttack::PlayerStateHeavyAttack(std::weak_ptr<Actor> player, bool isWait,bool isDash, bool isJust):
@@ -161,6 +166,7 @@ void PlayerStateHeavyAttack::UpdateStartFrame(std::shared_ptr<Player> owner, std
 		//çUåÇçÏê¨
 		if (!m_isAppearedAttack)
 		{
+			//çUåÇî≠ê∂
 			CreateAttack(owner, weapon);
 		}
 	}

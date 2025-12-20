@@ -13,6 +13,7 @@ class AttackBase;
 class CSVDataLoader;
 class AttackData;
 class EffectData;
+class SEData;
 class CharacterBase abstract:
     public Actor
 {
@@ -21,7 +22,7 @@ public:
 	virtual ~CharacterBase() {};
 
     //初期化処理
-    void Init(std::wstring animPath, std::wstring attackPath, std::wstring effectPath);
+    void Init(std::wstring animPath, std::wstring attackPath, std::wstring effectPath, std::wstring sePath);
 	//更新処理
 	virtual void Update() override;
     //半径
@@ -52,6 +53,9 @@ public:
     //エフェクトの検索
     std::wstring GetEffectPath(std::wstring effectName)const;
 
+    //SEの検索
+    std::wstring GetSEPath(std::wstring seName)const;
+
     //アーマーを変える
     void ChangeArmor(CharaStatus::Armor armor);
     //アーマーを元に戻す
@@ -66,7 +70,6 @@ public:
     //自由に動く
     void Operate();
 
-
 protected:
     //攻撃データを読み込む
     void InitAttackData(CSVDataLoader& csvLoader, std::wstring path);
@@ -74,6 +77,8 @@ protected:
     void InitAnimData(CSVDataLoader& csvLoader, std::wstring path);
     //エフェクトの読み込み
     void InitEffectData(CSVDataLoader& csvLoader, std::wstring effectPath);
+    //SEの読み込み
+    void InitSE(CSVDataLoader& csvLoader, std::wstring sePath);
 protected:
     //キャラクターの状態
     std::shared_ptr<CharacterStateBase> m_state;
@@ -85,6 +90,8 @@ protected:
     std::vector<std::shared_ptr<AnimData>> m_animDatas;
     //エフェクトのデータ
     std::vector<std::shared_ptr<EffectData>> m_effectDatas;
+    //SEのデータ
+    std::vector<std::shared_ptr<SEData>> m_seDatas;
 
 };
 

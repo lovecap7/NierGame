@@ -7,9 +7,11 @@
 #include "../../../General/CSV/CSVData.h"
 #include "../../../General/CSV/AttackData.h"
 #include "../../../General/CSV/EffectData.h"
+#include "../../../General/CSV/SEData.h"
 #include "../../../General/AssetManager.h"
 #include "../../../General/Collision/CapsuleCollider.h"
 #include "../../../General/Collision/Rigidbody.h"
+#include "../../../General/Sound/SoundManager.h"
 #include "CharacterStateBase.h"
 #include <cassert>
 CharacterBase::CharacterBase(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, Shape shape, std::weak_ptr<ActorManager> pActorManager) :
@@ -20,7 +22,7 @@ CharacterBase::CharacterBase(std::shared_ptr<ActorData> actorData, std::shared_p
 	m_charaStatus = std::make_shared<CharaStatus>(charaStatusData);
 }
 
-void CharacterBase::Init(std::wstring animPath, std::wstring attackPath, std::wstring effectPath)
+void CharacterBase::Init(std::wstring animPath, std::wstring attackPath, std::wstring effectPath, std::wstring sePath)
 {
 	//Physics‚É“o˜^
 	Collidable::Init();
@@ -40,6 +42,11 @@ void CharacterBase::Init(std::wstring animPath, std::wstring attackPath, std::ws
 	{
 		//ƒGƒtƒFƒNƒg‚Ì€”õ
 		InitEffectData(csvLoader, effectPath);
+	}
+	if (sePath != L"" && sePath != L"None")
+	{
+		//SE‚Ì€”õ
+		InitSE(csvLoader, sePath);
 	}
 }
 
@@ -138,6 +145,24 @@ std::wstring CharacterBase::GetEffectPath(std::wstring effectName) const
 	return path;
 }
 
+std::wstring CharacterBase::GetSEPath(std::wstring seName) const
+{
+	std::wstring path;
+
+	//’T‚·
+	for (auto& data : m_seDatas)
+	{
+		//ðŒ‚É‡‚¤‚à‚Ì‚ª‚ ‚Á‚½‚ç
+		if (data->GetName() == seName)
+		{
+			path = data->GetPath();
+			break;
+		}
+	}
+
+	return path;
+}
+
 void CharacterBase::ChangeArmor(CharaStatus::Armor armor)
 {
 	m_charaStatus->SetArmor(armor);
@@ -201,5 +226,17 @@ void CharacterBase::InitEffectData(CSVDataLoader& csvLoader, std::wstring effect
 		auto effectData = std::make_shared<EffectData>(data);
 		m_effectDatas.emplace_back(effectData);
 		AssetManager::GetInstance().GetEffectHandle(effectData->GetPath());
+	}
+}
+
+void CharacterBase::InitSE(CSVDataLoader& csvLoader, std::wstring sePath)
+{
+	auto seDatas = csvLoader.LoadCSV(sePath.c_str());
+	//“o˜^
+	for (auto data : seDatas)
+	{
+		auto seData = std::make_shared<SEData>(data);
+		m_seDatas.emplace_back(seData);
+		SoundManager::GetInstance().LoadSE(seData->GetPath());
 	}
 }

@@ -6,6 +6,7 @@
 #include "../../../../General/Model.h"
 #include "../../../../General/Input.h"
 #include "../../../../General/Collision/Rigidbody.h"
+#include "../../../../General/Sound/SoundManager.h"
 #include "Player.h"
 
 namespace
@@ -42,8 +43,13 @@ void PlayerStateAttackBase::DeleteAttack()
 void PlayerStateAttackBase::CreateAttack(std::shared_ptr<Player> owner, std::shared_ptr<Weapon> weapon)
 {
 	if (!m_attackData)return;
-	std::shared_ptr<AttackBase> attack;
+
+	//SEÄ¶
+	SoundManager::GetInstance().PlayOnceSE(owner->GetSEPath(m_attackData->GetSEAppearPath()));
+
 	//UŒ‚ì¬
+	std::shared_ptr<AttackBase> attack;
+	
 	if (m_attackData->GetAttackType() == AttackData::AttackType::Sword ||
 		m_attackData->GetAttackType() == AttackData::AttackType::Throw)
 	{

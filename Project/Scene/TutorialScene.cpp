@@ -58,8 +58,11 @@ void TutorialScene::Init()
 	//Inputの入力情報リセット
 	Input::GetInstance().StopUpdate();
 
+	//サウンド
+	auto& soundManager = SoundManager::GetInstance();
+	soundManager.LoadBGM(kBGMTutorialPath);
 	//BGM
-	SoundManager::GetInstance().PlayBGM(kBGMTutorialPath);
+	soundManager.PlayBGM(kBGMTutorialPath);
 
 
 	//ステージインデックス

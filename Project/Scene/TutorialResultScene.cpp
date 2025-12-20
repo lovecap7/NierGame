@@ -7,10 +7,20 @@
 #include "../General/Fader.h"
 #include "../General/Input.h"
 #include "../General/Game.h"
+#include "../General/Sound/SoundManager.h"
 #include "../General/Collision/Physics.h"
 #include "../Game/UI/Result/TutorialResultUI.h"
 #include "../Game/UI/UIManager.h"
 #include "../Game/Camera/CameraController.h"
+
+namespace
+{
+	//BGM
+	const std::wstring kBGMTutorialResultPath = L"ResultScene";
+	//SE
+	const std::wstring kSESelectPath = L"Select";
+	const std::wstring kSEOKPath = L"OK";
+}
 
 TutorialResultScene::TutorialResultScene(SceneController& controller, StageIndex index):
 	SceneBase(controller),
@@ -33,23 +43,38 @@ void TutorialResultScene::Init()
 	auto ui = std::make_shared<TutorialResultUI>(m_tutorialIndex);
 	ui->Init();
 	m_mcUI = ui;
+
+	//サウンド
+	auto& soundManager = SoundManager::GetInstance();
+	soundManager.LoadBGM(kBGMTutorialResultPath);
+	soundManager.LoadSE(kSESelectPath);
+	soundManager.LoadSE(kSEOKPath);
+	//BGM
+	soundManager.PlayBGM(kBGMTutorialResultPath);
 }
 
 void TutorialResultScene::Update()
 {
 	auto& input = Input::GetInstance();
 	auto& fader = Fader::GetInstance();
+
+	//カメラ
 	CameraController::GetInstance().Update();
+	//サウンド
+	auto& soundManager = SoundManager::GetInstance();
+
 	//フェードアウトしきったら
 	if (fader.IsFinishFadeOut())
 	{
 		if (m_tutorialIndex != StageIndex::Tutorial3)
 		{
+			//次のチュートリアルへ
 			int index = static_cast<int>(m_tutorialIndex) + 1;
 			m_tutorialIndex = static_cast<StageIndex>(index);
 		}
 		else
 		{
+			//セレクトシーンへ
 			m_menuIndex = Menu::Select;
 		}
 
@@ -75,6 +100,9 @@ void TutorialResultScene::Update()
 	{
 		if (input.IsTrigger("A"))
 		{
+			//SE再生
+			soundManager.PlayOnceSE(kSEOKPath);
+			//フェード
 			fader.FadeOut();
 		}
 		//カーソル
@@ -82,6 +110,12 @@ void TutorialResultScene::Update()
 		if (input.IsTrigger("Up"))--index;
 		if (input.IsTrigger("Down"))++index;
 		index = MathSub::ClampInt(index, static_cast<int>(Menu::Next), static_cast<int>(Menu::Select));
+		//カーソルを動かしたら
+		if (index != static_cast<int>(m_menuIndex))
+		{
+			//SE再生
+			soundManager.PlayOnceSE(kSESelectPath);
+		}
 		m_menuIndex = static_cast<Menu>(index);
 		ui->SetMenuIndex(m_menuIndex);
 	}

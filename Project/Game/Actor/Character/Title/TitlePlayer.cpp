@@ -50,7 +50,7 @@ void TitlePlayer::Init()
 
 	assert(pathData.size() >= kPathNum);
 	//‹¤’Ê‰Šú‰»
-	CharacterBase::Init(pathData[0].c_str(), pathData[1].c_str(), pathData[2].c_str());
+	CharacterBase::Init(pathData[0].c_str(), pathData[1].c_str(), pathData[2].c_str(), pathData[3].c_str());
 
 	//‘Ò‹@ó‘Ô‚É‚·‚é
 	auto thisPointer = std::dynamic_pointer_cast<TitlePlayer>(shared_from_this());

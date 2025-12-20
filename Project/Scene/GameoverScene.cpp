@@ -15,6 +15,9 @@ namespace
 
 	//BGM
 	const std::wstring kBGMGameoverPath = L"GameoverScene";
+	//SE
+	const std::wstring kSESelectPath = L"Select";
+	const std::wstring kSEOKPath = L"OK";
 }
 
 GameoverScene::GameoverScene(SceneController& controller):
@@ -37,8 +40,13 @@ void GameoverScene::Init()
 	//Phisicsを停止
 	Physics::GetInstance().StopUpdate();
 
+	//サウンド
+	auto& soundManager = SoundManager::GetInstance();
+	soundManager.LoadBGM(kBGMGameoverPath);
+	soundManager.LoadSE(kSEOKPath);
+	soundManager.LoadSE(kSESelectPath);
 	//BGM
-	SoundManager::GetInstance().PlayBGM(kBGMGameoverPath);
+	soundManager.PlayBGM(kBGMGameoverPath);
 
 	auto gameoverUI = std::make_shared<GameoverUI>();
 	gameoverUI->Init();
@@ -49,6 +57,7 @@ void GameoverScene::Update()
 {
 	auto& input = Input::GetInstance();
 	auto& fader = Fader::GetInstance();
+	auto& soundManager = SoundManager::GetInstance();
 	//フェードアウトしきったら
 	if (fader.IsFinishFadeOut())
 	{
@@ -80,6 +89,8 @@ void GameoverScene::Update()
 	{
 		if (input.IsTrigger("A"))
 		{
+			//SE再生
+			soundManager.PlayOnceSE(kSEOKPath);
 			//フェードカラー
 			fader.SetColor(kFadeColor);
 			//フェードアウト
@@ -90,6 +101,12 @@ void GameoverScene::Update()
 		if (input.IsTrigger("Up"))--index;
 		if (input.IsTrigger("Down"))++index;
 		index = MathSub::ClampInt(index, static_cast<int>(Menu::Continue), static_cast<int>(Menu::StageSelect));
+		//カーソルを動かしたら
+		if (index != static_cast<int>(m_menuIndex))
+		{
+			//SE再生
+			soundManager.PlayOnceSE(kSESelectPath);
+		}
 		m_menuIndex = static_cast<Menu>(index);
 		ui->SetMenuIndex(m_menuIndex);
 	}

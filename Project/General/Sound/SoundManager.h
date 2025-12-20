@@ -55,6 +55,12 @@ public:
 	void AllPlay();
 	//全ての再生を止める
 	void AllStop();
+	//BGMのロード
+	int LoadBGM(std::wstring path);
+	//SEのロード
+	int LoadSE(std::wstring path);
+	//VCのロード
+	int LoadVC(std::wstring path);
 	//音量
 	int GetSEVolumeC()	 const;
 	int GetBGMVolumeC()	 const;

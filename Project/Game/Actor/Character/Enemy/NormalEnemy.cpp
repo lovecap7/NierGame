@@ -19,7 +19,7 @@
 namespace
 {
 	//敵キャラのパスデータ数
-	constexpr int kPathNum = 5;
+	constexpr int kPathNum = 6;
 }
 
 NormalEnemy::NormalEnemy(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager):
@@ -39,13 +39,13 @@ void NormalEnemy::Init()
 
 	assert(pathData.size() >= kPathNum);
 	//共通初期化
-	CharacterBase::Init(pathData[0].c_str(), pathData[1].c_str(), pathData[2].c_str());
+	CharacterBase::Init(pathData[0].c_str(), pathData[1].c_str(), pathData[2].c_str(), pathData[3].c_str());
 
 	//攻撃のキーを取得
-	InitAttackKey(csvLoader, pathData[3]);
+	InitAttackKey(csvLoader, pathData[4]);
 
 	//目の位置
-	InitEyeIndex(csvLoader, pathData[4]);
+	InitEyeIndex(csvLoader, pathData[5]);
 
 	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
 	auto thisPointer = std::dynamic_pointer_cast<NormalEnemy>(shared_from_this());

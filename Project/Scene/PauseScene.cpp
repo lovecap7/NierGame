@@ -5,9 +5,11 @@
 #include<DxLib.h>
 #include "../General/game.h"
 #include "../General/Collision/Physics.h"
+#include "../General/Sound/SoundManager.h"
 #include "../Game/UI/UIManager.h"
 #include "../General/Effect/EffekseerManager.h"
 #include "../General/AssetManager.h"
+#include "../General/Fader.h"
 #include "../Game/Camera/CameraController.h"
 
 namespace
@@ -41,6 +43,11 @@ namespace
 
 	//影
 	const Vector2 kShadowOffsetPos = { 10.0f,10.0f };
+
+	//SE
+	const std::wstring kSESelectPath = L"Select";
+	const std::wstring kSEOKPath = L"OK";
+	const std::wstring kSECancelPath = L"Cancel";
 }
 
 PauseScene::PauseScene(SceneController& controller) :
@@ -55,13 +62,6 @@ PauseScene::PauseScene(SceneController& controller) :
 	m_menuIndex(MenuIndex::BackGame),
 	m_cursorAngle(0.0f)
 {
-	auto& assetManager = AssetManager::GetInstance();
-	m_backGameHandle = assetManager.GetImageHandle(kBackGame);
-	m_restartGameHandle = assetManager.GetImageHandle(kRestartGame);
-	m_optionHandle = assetManager.GetImageHandle(kOption);
-	m_returnHandle = assetManager.GetImageHandle(kReturn);
-	m_backHandle = assetManager.GetImageHandle(kBack);
-	m_cursorHandle = assetManager.GetImageHandle(kCursor);
 }
 
 PauseScene::~PauseScene()
@@ -79,6 +79,19 @@ void PauseScene::Init()
 	EffekseerManager::GetInstance().StopEffect();
 	//Physicsを止める
 	Physics::GetInstance().StopUpdate();
+	//画像ハンドル
+	auto& assetManager = AssetManager::GetInstance();
+	m_backGameHandle = assetManager.GetImageHandle(kBackGame);
+	m_restartGameHandle = assetManager.GetImageHandle(kRestartGame);
+	m_optionHandle = assetManager.GetImageHandle(kOption);
+	m_returnHandle = assetManager.GetImageHandle(kReturn);
+	m_backHandle = assetManager.GetImageHandle(kBack);
+	m_cursorHandle = assetManager.GetImageHandle(kCursor);
+	//サウンド
+	auto& soundManager = SoundManager::GetInstance();
+	soundManager.LoadSE(kSESelectPath);
+	soundManager.LoadSE(kSEOKPath);
+	soundManager.LoadSE(kSECancelPath);
 }
 
 void PauseScene::Update()
@@ -86,50 +99,37 @@ void PauseScene::Update()
 	//カメラの更新
 	CameraController::GetInstance().Update();
 
+	//サウンド
+	auto& soundManager = SoundManager::GetInstance();
+
+	//フェード
+	auto& fader = Fader::GetInstance();
+
 	auto& input = Input::GetInstance();
-	if (input.IsTrigger("Pause") || input.IsTrigger("B"))
+
+	//フェード終了
+	if (fader.IsFinishFadeOut())
 	{
+		//ステージセレクトへ戻る
+		m_controller.ChangeBaseScene(std::make_shared<SelectScene>(m_controller));
+		m_controller.PopScene();
+	}
+
+	if ((input.IsTrigger("Pause") || input.IsTrigger("B")) && !fader.IsFadeNow())
+	{
+		//SE再生
+		soundManager.PlayOnceSE(kSECancelPath);
+		//ゲームに戻る
 		m_menuIndex = MenuIndex::BackGame;
 		m_controller.PopScene();
 		return;
 	}
 
-	//メニューセレクト
-	int menu = static_cast<int>(m_menuIndex);
-	if (input.IsRepeate("Up"))menu--;
-	if (input.IsRepeate("Down"))menu++;
-	if (menu < static_cast<int>(MenuIndex::BackGame))
-	{
-		menu = static_cast<int>(MenuIndex::Return);
-	}
-	if (menu > static_cast<int>(MenuIndex::Return))
-	{
-		menu = static_cast<int>(MenuIndex::BackGame);
-	}
-	m_menuIndex = static_cast<MenuIndex>(menu);
-
-	switch (m_menuIndex)
-	{
-	case PauseScene::MenuIndex::BackGame:
-		m_cursorPos = Vector2::Lerp(m_cursorPos, kCursorBackGamePos, kCursorLerpRate);
-		break;
-	case PauseScene::MenuIndex::RestartGame:
-		m_cursorPos = Vector2::Lerp(m_cursorPos, kCursorRestartGamePos, kCursorLerpRate);
-		break;
-	case PauseScene::MenuIndex::Option:
-		m_cursorPos = Vector2::Lerp(m_cursorPos, kCursorOptionPos, kCursorLerpRate);
-		break;
-	case PauseScene::MenuIndex::Return:
-		m_cursorPos = Vector2::Lerp(m_cursorPos, kCursorReturnPos, kCursorLerpRate);
-		break;
-	default:
-		break;
-	}
-
-
 	//決定処理
-	if (input.IsTrigger("A"))
+	if (input.IsTrigger("A") && !fader.IsFadeNow())
 	{
+		//SE再生
+		soundManager.PlayOnceSE(kSEOKPath);
 		switch (m_menuIndex)
 		{
 		case PauseScene::MenuIndex::BackGame:
@@ -152,14 +152,51 @@ void PauseScene::Update()
 			m_controller.PopScene();
 			break;
 		case PauseScene::MenuIndex::Return:
-			//ステージセレクトへ戻る
-			m_controller.ChangeBaseScene(std::make_shared<SelectScene>(m_controller));
-			m_controller.PopScene();
+			fader.FadeOut();
 			break;
 		default:
 			break;
 		}
 		return;
+	}
+
+	//メニューセレクト
+	int menu = static_cast<int>(m_menuIndex);
+	if (input.IsRepeate("Up"))menu--;
+	if (input.IsRepeate("Down"))menu++;
+	if (menu < static_cast<int>(MenuIndex::BackGame))
+	{
+		menu = static_cast<int>(MenuIndex::Return);
+	}
+	if (menu > static_cast<int>(MenuIndex::Return))
+	{
+		menu = static_cast<int>(MenuIndex::BackGame);
+	}
+	//カーソルを動かしたら
+	if (menu != static_cast<int>(m_menuIndex))
+	{
+		//SE再生
+		soundManager.PlayOnceSE(kSESelectPath);
+	}
+
+	m_menuIndex = static_cast<MenuIndex>(menu);
+
+	switch (m_menuIndex)
+	{
+	case PauseScene::MenuIndex::BackGame:
+		m_cursorPos = Vector2::Lerp(m_cursorPos, kCursorBackGamePos, kCursorLerpRate);
+		break;
+	case PauseScene::MenuIndex::RestartGame:
+		m_cursorPos = Vector2::Lerp(m_cursorPos, kCursorRestartGamePos, kCursorLerpRate);
+		break;
+	case PauseScene::MenuIndex::Option:
+		m_cursorPos = Vector2::Lerp(m_cursorPos, kCursorOptionPos, kCursorLerpRate);
+		break;
+	case PauseScene::MenuIndex::Return:
+		m_cursorPos = Vector2::Lerp(m_cursorPos, kCursorReturnPos, kCursorLerpRate);
+		break;
+	default:
+		break;
 	}
 
 	//角度加算

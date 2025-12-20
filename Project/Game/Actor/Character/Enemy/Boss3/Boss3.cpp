@@ -22,7 +22,7 @@
 namespace
 {
 	//敵キャラのパスデータ数
-	constexpr int kPathNum = 5;
+	constexpr int kPathNum = 6;
 }
 
 Boss3::Boss3(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager) :
@@ -42,13 +42,13 @@ void Boss3::Init()
 
 	assert(pathData.size() >= kPathNum);
 	//共通初期化
-	CharacterBase::Init(pathData[0].c_str(), pathData[1].c_str(), pathData[2].c_str());
+	CharacterBase::Init(pathData[0].c_str(), pathData[1].c_str(), pathData[2].c_str(), pathData[3].c_str());
 
 	//攻撃のキーを取得
-	InitAttackKey(csvLoader, pathData[3]);
+	InitAttackKey(csvLoader, pathData[4]);
 
 	//目の位置
-	InitEyeIndex(csvLoader, pathData[4]);
+	InitEyeIndex(csvLoader, pathData[5]);
 
 	//待機状態にする
 	auto thisPointer = std::dynamic_pointer_cast<Boss3>(shared_from_this());

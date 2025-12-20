@@ -44,6 +44,10 @@ namespace
 	
 	//BGM
 	const std::wstring kBGMSelectPath = L"SelectScene";
+	//SE
+	const std::wstring kSESelectPath = L"Select";
+	const std::wstring kSEOKPath = L"OK";
+	const std::wstring kSECancelPath = L"Cancel";
 }
 
 SelectScene::SelectScene(SceneController& controller) :
@@ -82,6 +86,11 @@ void SelectScene::Init()
 
 	//音
 	auto& soundManager = SoundManager::GetInstance();
+	soundManager.LoadBGM(kBGMSelectPath);
+	soundManager.LoadSE(kSESelectPath);
+	soundManager.LoadSE(kSEOKPath);
+	soundManager.LoadSE(kSECancelPath);
+	//BGM
 	soundManager.PlayBGM(kBGMSelectPath);
 
 	//カメラ
@@ -136,6 +145,9 @@ void SelectScene::UpdateMainMenu(Input& input, Fader& fader,std::shared_ptr<Sele
 		return;
 	}
 
+	//サウンド
+	auto& soundManager = SoundManager::GetInstance();
+
 	//引きカメラ
 	startCamera->PullCamera();
 
@@ -144,6 +156,9 @@ void SelectScene::UpdateMainMenu(Input& input, Fader& fader,std::shared_ptr<Sele
 	{
 		if (input.IsTrigger("A"))
 		{
+			//SE再生
+			soundManager.PlayOnceSE(kSEOKPath);
+
 			switch (m_currentMainMenu)
 			{
 			case SelectScene::MainMenu::Tutorial:
@@ -171,6 +186,13 @@ void SelectScene::UpdateMainMenu(Input& input, Fader& fader,std::shared_ptr<Sele
 		int menu = static_cast<int>(m_currentMainMenu);
 		if (input.IsRepeate("Up"))menu--;
 		if (input.IsRepeate("Down"))menu++;
+
+		//カーソルが動いたら
+		if (menu != static_cast<int>(m_currentMainMenu))
+		{
+			//SE再生
+			soundManager.PlayOnceSE(kSESelectPath);
+		}
 
 		//範囲外ならループ
 		if (menu < static_cast<int>(MainMenu::Tutorial))
@@ -217,6 +239,9 @@ void SelectScene::UpdateTutorialMenu(Input& input, Fader& fader, std::shared_ptr
 	//ズームカメラ
 	startCamera->ZoomInCamera();
 
+	//サウンド
+	auto& soundManager = SoundManager::GetInstance();
+
 	//フェードアウトしきったら
 	if (fader.IsFinishFadeOut())
 	{
@@ -242,11 +267,16 @@ void SelectScene::UpdateTutorialMenu(Input& input, Fader& fader, std::shared_ptr
 	{
 		if(input.IsTrigger("A"))
 		{
+			//SE再生
+			soundManager.PlayOnceSE(kSEOKPath);
+			//フェード
 			fader.FadeOut();
 			return;
 		}
 		if(input.IsTrigger("B"))
 		{
+			//SE再生
+			soundManager.PlayOnceSE(kSECancelPath);
 			//メインメニューへ戻る
 			m_update = &SelectScene::UpdateMainMenu;
 			return;
@@ -255,6 +285,13 @@ void SelectScene::UpdateTutorialMenu(Input& input, Fader& fader, std::shared_ptr
 		int menu = static_cast<int>(m_currentTutorialMenu);
 		if (input.IsRepeate("Up"))menu--;
 		if (input.IsRepeate("Down"))menu++;
+
+		//カーソルが動いたら
+		if (menu != static_cast<int>(m_currentTutorialMenu))
+		{
+			//SE再生
+			soundManager.PlayOnceSE(kSESelectPath);
+		}
 
 		//範囲外ならループ
 		if (menu < static_cast<int>(TutorialMenu::Tutorial1))
@@ -281,6 +318,9 @@ void SelectScene::UpdateStageMenu(Input& input, Fader& fader, std::shared_ptr<Se
 	//ズームカメラ
 	startCamera->ZoomInCamera();
 
+	//サウンド
+	auto& soundManager = SoundManager::GetInstance();
+
 	//フェードアウトしきったら
 	if (fader.IsFinishFadeOut())
 	{
@@ -306,11 +346,16 @@ void SelectScene::UpdateStageMenu(Input& input, Fader& fader, std::shared_ptr<Se
 	{
 		if (input.IsTrigger("A"))
 		{
+			//SE再生
+			soundManager.PlayOnceSE(kSEOKPath);
+			//フェード
 			fader.FadeOut();
 			return;
 		}
 		if (input.IsTrigger("B"))
 		{
+			//SE再生
+			soundManager.PlayOnceSE(kSECancelPath);
 			//メインメニューへ戻る
 			m_update = &SelectScene::UpdateMainMenu;
 			return;
@@ -319,6 +364,13 @@ void SelectScene::UpdateStageMenu(Input& input, Fader& fader, std::shared_ptr<Se
 		int menu = static_cast<int>(m_currentStageMenu);
 		if (input.IsRepeate("Up"))menu--;
 		if (input.IsRepeate("Down"))menu++;
+
+		//カーソルが動いたら
+		if (menu != static_cast<int>(m_currentStageMenu))
+		{
+			//SE再生
+			soundManager.PlayOnceSE(kSESelectPath);
+		}
 
 		//範囲外ならループ
 		if (menu < static_cast<int>(StageMenu::Stage1))

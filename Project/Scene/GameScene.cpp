@@ -316,15 +316,15 @@ void GameScene::InitStageBGM()
 	switch (GetStageIndexByName(m_stageName))
 	{
 	case StageIndex::Stage1:
-		soundManager.PlayBGM(kBGMStage1BossPath);
-		soundManager.PlayBGM(kBGMStage1Path);
+		soundManager.LoadBGM(kBGMStage1BossPath);
+		soundManager.LoadBGM(kBGMStage1Path);
 		break;
 	case StageIndex::Stage2:
-		soundManager.PlayBGM(kBGMStage2BossPath);
-		soundManager.PlayBGM(kBGMStage2Path);
+		soundManager.LoadBGM(kBGMStage2BossPath);
+		soundManager.LoadBGM(kBGMStage2Path);
 		break;
 	case StageIndex::Stage3:
-		soundManager.PlayBGM(kBGMStage3Path);
+		soundManager.LoadBGM(kBGMStage3Path);
 		break;
 	default:
 		break;

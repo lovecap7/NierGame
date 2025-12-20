@@ -94,6 +94,12 @@ public:
 	//攻撃エフェクト
 	std::wstring GetAttackEffectPath()const { return m_attackEffectPath; };
 
+	//攻撃発生SE
+	std::wstring GetSEAppearPath()const { return m_seAppearPath; };
+
+	//ヒットSE
+	std::wstring GetSEHitPath()const { return m_seHitPath; };
+
 	//パラメータ
 	float GetParam1()const { return m_param1; };
 	float GetParam2()const { return m_param2; };
@@ -169,6 +175,12 @@ private:
 
 	//攻撃エフェクトパス
 	std::wstring m_attackEffectPath;
+
+	//攻撃発生SE
+	std::wstring m_seAppearPath;
+
+	//ヒットSE
+	std::wstring m_seHitPath;
 
 	//パラメータ
 	float m_param1;
