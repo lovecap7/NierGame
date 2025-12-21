@@ -16,6 +16,7 @@
 #include "../../../../../General/Collision/Rigidbody.h"
 #include "../../../../../General/Effect/NormalEffect.h"
 #include "../../../../../General/Effect/EffekseerManager.h"
+#include "../../../../../General/Sound/SoundManager.h"
 
 namespace
 {
@@ -165,6 +166,10 @@ void Boss3StateAttack::UpdateAttackFrame(std::shared_ptr<EnemyBase> owner)
 void Boss3StateAttack::CreateAttack(std::shared_ptr<EnemyBase> owner)
 {
 	if (!m_attackData)return;
+
+	//SEÄ¶
+	SoundManager::GetInstance().PlayOnceSE(owner->GetSEPath(m_attackData->GetSEAppearPath()));
+
 	std::shared_ptr<AttackBase> attack;
 	//UŒ‚ì¬
 	if (m_attackData->GetAttackType() == AttackData::AttackType::Sword)

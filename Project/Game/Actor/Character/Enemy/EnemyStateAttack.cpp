@@ -15,6 +15,7 @@
 #include "../../../../General/Model.h"
 #include "../../../../General/CSV/AttackData.h"
 #include "../../../../General/Collision/Rigidbody.h"
+#include "../../../../General/Sound/SoundManager.h"
 
 namespace
 {
@@ -161,6 +162,10 @@ void EnemyStateAttack::DeleteAttack()
 void EnemyStateAttack::CreateAttack(std::shared_ptr<EnemyBase> owner)
 {
 	if (!m_attackData)return;
+
+	//SEÄ¶
+	SoundManager::GetInstance().PlayOnceSE(owner->GetSEPath(m_attackData->GetSEAppearPath()));
+
 	std::shared_ptr<AttackBase> attack;
 	//UŒ‚ì¬
 	if (m_attackData->GetAttackType() == AttackData::AttackType::Sword)

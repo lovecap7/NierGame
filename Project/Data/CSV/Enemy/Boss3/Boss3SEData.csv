@@ -1,1 +1,6 @@
 ﻿SE名,パス
+Shot,Enemy/Laser
+Missile,Enemy/Missile
+Tackle,Enemy/Tackle
+Head,Enemy/Head
+Laser,Enemy/Laser
