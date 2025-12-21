@@ -1,3 +1,5 @@
 ﻿SE名,パス
 Bomb2,Enemy/Bomb2
 Shot,Enemy/Shot
+Hit1,Hit/Hit_B2
+Hit2,Hit/Hit_P3

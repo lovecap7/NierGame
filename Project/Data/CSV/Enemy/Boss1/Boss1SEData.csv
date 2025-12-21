@@ -2,3 +2,6 @@
 Swing,Enemy/Swing
 Shot,Enemy/Shot
 Bomb2,Enemy/Bomb2
+HIt1,Hit/Hit_P2
+HIt2,Hit/Hit_P3
+Hit3,Hit/Hit_B2

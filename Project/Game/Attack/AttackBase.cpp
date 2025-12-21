@@ -9,6 +9,7 @@
 #include "../../General/Effect/EffekseerManager.h"
 #include "../../General/Effect/NormalEffect.h"
 #include "../../General/Model.h"
+#include "../../General/Sound/SoundManager.h"
 #include "../../Main/Application.h"
 
 AttackBase::AttackBase(Shape shape, std::shared_ptr<AttackData> attackData, std::weak_ptr<CharacterBase> pOwner) :
@@ -25,6 +26,7 @@ AttackBase::AttackBase(Shape shape, std::shared_ptr<AttackData> attackData, std:
 	m_hitStopShakePower(0),
 	m_hitEffectPath(L""),
 	m_attackEffectPath(L""),
+	m_hitSEPath(L""),
 	m_attackEffect(),
 	m_isHit(false),
 	m_isRequestHitStop(false)
@@ -41,6 +43,7 @@ AttackBase::AttackBase(Shape shape, std::shared_ptr<AttackData> attackData, std:
 		m_hitStopShakePower = attackData->GetHitStopShakePower();
 		m_hitEffectPath = attackData->GetHitEffectPath();
 		m_attackEffectPath = attackData->GetAttackEffectPath();
+		m_hitSEPath = attackData->GetSEHitPath();
 		m_isHit = false;
 		m_isRequestHitStop = false;
 	}
@@ -192,6 +195,13 @@ void AttackBase::OnCollide(const std::shared_ptr<Collidable> other)
 					}
 					hitPos += (toAttackDir * otherColl->GetRadius());
 					EffekseerManager::GetInstance().CreateEffect(m_hitEffectPath, hitPos);
+				}
+
+				//ƒqƒbƒgSE
+				if (m_hitSEPath != L"" &&
+					m_hitSEPath != L"None")
+				{
+					SoundManager::GetInstance().PlayOnceSE(ownerColl->GetSEPath(m_hitSEPath));
 				}
 			}
 

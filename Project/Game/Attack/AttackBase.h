@@ -98,5 +98,8 @@ protected:
 
     //中心座標
     Vector3 m_oriPos;
+
+    //ヒットSE
+    std::wstring m_hitSEPath;
 };
 

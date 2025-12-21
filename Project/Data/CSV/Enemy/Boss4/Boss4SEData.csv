@@ -2,3 +2,4 @@
 Beam,Enemy/Beam
 Shot,Enemy/Shot
 Missile,Enemy/Missile
+Hit,Hit/Hit_B2
