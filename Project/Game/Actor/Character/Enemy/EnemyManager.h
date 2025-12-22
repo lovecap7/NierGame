@@ -43,5 +43,7 @@ private:
 	std::shared_ptr<GroupManager> m_pGroupManager;
 	//エリア内で戦闘中
 	bool m_isInAreaBattle;
+	//ボス
+	std::list<std::weak_ptr<EnemyBase>> m_bosses;
 };
 

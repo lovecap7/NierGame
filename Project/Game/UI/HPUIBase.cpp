@@ -25,6 +25,12 @@ HPUIBase::~HPUIBase()
 
 void HPUIBase::UpdateDamageBar()
 {
+	//もし死亡したらすぐにダメージバーを現在の体力に合わせる
+	if (m_charaStatus->GetNowHP() <= 0)
+	{
+		m_damageFrame = 0;
+	}
+
 	if (m_damageFrame > 0)
 	{
 		--m_damageFrame;

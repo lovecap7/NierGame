@@ -116,13 +116,13 @@ void NormalEnemyHPUI::Draw() const
 	backUIPos.x -= (kBackBarSizeX * 0.5f);
 	backUIPos.y -= kBackPosOffsetY;
 	//ÉoÅ[ÇÃï`âÊ
-	DrawRectGraphF(backUIPos.x, backUIPos.y, 0, 0, kBackBarSizeX, kBackBarSizeY, m_backValueHandle, true);
+	DrawRectGraphF2(backUIPos.x, backUIPos.y, 0, 0, kBackBarSizeX, kBackBarSizeY, m_backValueHandle, true);
 
 	auto uiPos = m_enemyViewPos;
 	uiPos.x -= (kBarSizeX * 0.5f);
 	uiPos.y -= kPosOffsetY;
 
-	DrawRectGraphF(uiPos.x, uiPos.y, 0, 0, kBarSizeX * m_damageValueRate, kBarSizeY, m_damageValueHandle, true);
-	DrawRectGraphF(uiPos.x, uiPos.y, 0, 0, kBarSizeX * m_healValueRate, kBarSizeY, m_healValueHandle, true);
-	DrawRectGraphF(uiPos.x, uiPos.y, 0, 0, kBarSizeX * m_nowHpRate, kBarSizeY, kBarSizeY, m_nowValueHandle, true);
+	DrawRectGraphF2(uiPos.x, uiPos.y, 0, 0, kBarSizeX * m_damageValueRate, kBarSizeY, m_damageValueHandle, true);
+	DrawRectGraphF2(uiPos.x, uiPos.y, 0, 0, kBarSizeX * m_healValueRate, kBarSizeY, m_healValueHandle, true);
+	DrawRectGraphF2(uiPos.x, uiPos.y, 0, 0, kBarSizeX * m_nowHpRate, kBarSizeY, kBarSizeY, m_nowValueHandle, true);
 }

@@ -8,6 +8,7 @@
 #include "../../../../../General/CharaStatus.h"
 #include "../../../../../General/Effect/EffekseerManager.h"
 #include "../../../../../General/Effect/NormalEffect.h"
+#include "../../../../../General/Sound/SoundManager.h"
 #include "../../../../Camera/CameraController.h"
 #include "../../../../Camera/BossCamera.h"
 
@@ -19,7 +20,8 @@ namespace
 	//エフェクト
 	const std::wstring kDeadEff = L"Dead";
 	const std::wstring kTransEff = L"Trans";
-
+	//SE
+	const std::wstring kDeadSE = L"Dead";
 	//ふっとばす力
 	constexpr float kMinSmashPower = 10.0f;
 	constexpr float kMaxSmashPower = 20.0f;
@@ -46,6 +48,7 @@ Boss4StateDeath::Boss4StateDeath(std::weak_ptr<Actor> enemy, bool isWait) :
 
 	//無敵に
 	owner->GetCharaStatus()->SetIsNoDamage(true);
+	auto status = owner->GetCharaStatus();
 
 	//第二形態なら
 	if (owner->IsSecondPhase())
@@ -70,10 +73,14 @@ Boss4StateDeath::Boss4StateDeath(std::weak_ptr<Actor> enemy, bool isWait) :
 	//第一形態なら
 	else
 	{
+		//1だけ回復
+		status->Heal(1);
 		//変身
 		model->SetAnim(owner->GetAnim(kTrans).c_str(), true);
 		//変身エフェクト
 		EffekseerManager::GetInstance().CreateEffect(owner->GetEffectPath(kTransEff), owner->GetPos());
+		//BGM開始
+		SoundManager::GetInstance().PlayBGM();
 	}
 }
 
@@ -102,6 +109,9 @@ void Boss4StateDeath::Update()
 			{
 				//爆発
 				EffekseerManager::GetInstance().CreateEffect(owner->GetEffectPath(kDeadEff), owner->GetPos());
+
+				//爆発SE
+				SoundManager::GetInstance().PlayOnceSE(owner->GetSEPath(kDeadSE));
 			}
 			//第二形態なら死亡
 			owner->Delete();
@@ -109,6 +119,10 @@ void Boss4StateDeath::Update()
 	}
 	else
 	{
+		//徐々に回復
+		auto status = owner->GetCharaStatus();
+		status->Heal(status->GetMaxHP() / kTransFrame);
+
 		if (m_frame > kTransFrame)
 		{
 			//第一形態なら第二形態へ移行

@@ -3,3 +3,5 @@ Beam,Enemy/Beam
 Shot,Enemy/Shot
 Missile,Enemy/Missile
 Hit,Hit/Hit_B2
+Warning,Enemy/Warning
+Dead,Enemy/Bomb1

@@ -100,6 +100,12 @@ void SoundManager::PlayBGM(std::wstring path)
 	m_bgm->Play();
 }
 
+void SoundManager::PlayBGM()
+{
+	if (!m_bgm)return;
+	m_bgm->Play();
+}
+
 void SoundManager::StopBGM()
 {
 	m_bgm->Stop();

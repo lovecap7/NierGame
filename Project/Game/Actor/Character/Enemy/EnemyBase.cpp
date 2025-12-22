@@ -119,6 +119,8 @@ void EnemyBase::Draw() const
 
 void EnemyBase::DrawShadow() const
 {
+	//”ñŠˆ“®’†‚Í•`‰æ‚µ‚È‚¢
+	if (!m_isActive)return;
 	if (!m_model)return;
 	m_model->Draw();
 }

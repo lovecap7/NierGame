@@ -7,6 +7,9 @@
 #include "../../../../../General/Model.h"
 #include "../../../../../General/Input.h"
 #include "../../../../../General/CSV/AttackData.h"
+#include "../../../../../General/Sound/SoundManager.h"
+#include "../../../../../General/Effect/EffekseerManager.h"
+#include "../../../../../General/Effect/TrackActorEffect.h"
 
 namespace
 {
@@ -22,6 +25,9 @@ namespace
 	constexpr float kShotPosYOffset = 30.0f;
 	//弾のばらつき
 	constexpr float kDispersion = 0.04f;
+
+	//ショットエフェクト
+	const std::wstring kShotEffect = L"Shot";
 }
 
 PodStateAttack::PodStateAttack(std::weak_ptr<Actor> pod):
@@ -32,10 +38,15 @@ PodStateAttack::PodStateAttack(std::weak_ptr<Actor> pod):
 	owner->GetModel()->SetAnim(owner->GetAnim(kAttackAnim).c_str(), true);
 	//攻撃データ
 	m_attackData = owner->GetAttackData(kAttackData);
+
+	//発射エフェクト
+	m_shotEffect = EffekseerManager::GetInstance().CreateTrackActorEffect(owner->GetEffectPath(kShotEffect), owner);
 }
 
 PodStateAttack::~PodStateAttack()
 {
+	if (m_shotEffect.expired())return;
+	m_shotEffect.lock()->Delete();
 }
 
 void PodStateAttack::Init()
@@ -88,14 +99,30 @@ void PodStateAttack::Update()
 	//向きをカメラに合わせる
 	owner->GetModel()->SetDir(dir.XZ());
 
+	//エフェクトの向き
+	if (!m_shotEffect.expired())
+	{
+		m_shotEffect.lock()->LookAt(dir);
+	}
+
 	//カウント
 	CountFrame();
 
 	//発生フレームになったら弾を打つ
+	CreateAttack(owner, dir);
+	
+}
+
+void PodStateAttack::CreateAttack(std::shared_ptr<Pod> owner, const Vector3& dir)
+{
 	if (m_attackData->GetStartFrame() <= m_frame)
 	{
+		//SE再生
+		SoundManager::GetInstance().PlayOnceSE(owner->GetSEPath(m_attackData->GetSEAppearPath()));
+
 		//弾を打つ
 		auto bullets = owner->GetBullets();
+
 		for (auto bullet : bullets)
 		{
 			//活動中でない弾があるなら
@@ -122,5 +149,4 @@ void PodStateAttack::Update()
 		}
 		m_frame = 0.0f;
 	}
-	
 }

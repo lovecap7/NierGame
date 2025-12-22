@@ -5,6 +5,7 @@
 #include "../../../../General/Collision/Rigidbody.h"
 #include "../../../../General/CharaStatus.h"
 #include "../../../../General/Effect/EffekseerManager.h"
+#include "../../../../General/Sound/SoundManager.h"
 #include "../../../Camera/CameraController.h"
 #include "../../../Camera/BossCamera.h"
 
@@ -14,6 +15,8 @@ namespace
 	const std::wstring kDeath = L"Death";
 	//エフェクト
 	const std::wstring kDeadEff = L"Dead";
+	//SE
+	const std::wstring kDeadSE = L"Dead";
 	//ふっとばす力
 	constexpr float kMinSmashPower = 10.0f;
 	constexpr float kMaxSmashPower = 20.0f;
@@ -88,6 +91,9 @@ void EnemyStateDeath::Update()
 		{
 			//爆発
 			EffekseerManager::GetInstance().CreateEffect(owner->GetEffectPath(kDeadEff), owner->GetPos());
+
+			//爆発SE
+			SoundManager::GetInstance().PlayOnceSE(owner->GetSEPath(kDeadSE));
 		}
 		owner->Delete();
 	}

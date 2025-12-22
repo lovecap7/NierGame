@@ -14,11 +14,15 @@
 
 namespace
 {
+	//ƒpƒX
 	const std::wstring kAnimPath = L"Player/PodAnimData";
 	const std::wstring kAttackPath = L"Player/PodAttackData";
-	const std::wstring kEffectPath = L"";
-	const std::wstring kSEPath = L"";
+	const std::wstring kEffectPath = L"Player/PodEffectData";
+	const std::wstring kSEPath = L"Player/PodSEData";
 	const std::wstring kNormalShot = L"NormalShot";
+
+	//ƒ‚ƒfƒ‹‚Ì‰ñ“]‘¬“x
+	constexpr float kModelRotSpeed = 1.0f;
 }
 
 Pod::Pod(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager, std::weak_ptr<Player> pPlayer) :
@@ -53,6 +57,8 @@ void Pod::Init()
 		bullet->SetActive(false);		//XV‚Æ•`‰æ‚ðŽ~‚ß‚é
 		m_bullets.emplace_back(bullet);
 	}
+
+	m_model->SetRotSpeed(kModelRotSpeed);
 }
 
 void Pod::Update()

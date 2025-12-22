@@ -5,6 +5,7 @@
 #include "../../../Camera/PlayerCamera.h"
 #include "../../../../General/Input.h"
 #include "../../../../General/Math/MyMath.h"
+#include "../../../../General/Sound/SoundManager.h"
 #include "../GroupManager.h"
 
 namespace
@@ -38,6 +39,12 @@ void EnemyManager::Entry(std::shared_ptr<EnemyBase> enemy)
 	if (!(tag == L"None" || tag == L""))
 	{
 		m_pGroupManager->Entry(enemy);
+	}
+
+	//ボスかどうか
+	if (enemy->IsBoss())
+	{
+		m_bosses.emplace_back(enemy);
 	}
 }
 
@@ -130,6 +137,24 @@ void EnemyManager::Update()
 
 	//グループマネージャーの更新
 	m_pGroupManager->Update();
+
+
+	//全てのボスが死亡したら
+	bool isAllBossDead = true;
+	for (auto& boss : m_bosses)
+	{
+		//死亡条件
+		if (boss.expired())continue;
+		if(boss.lock()->GetCharaStatus()->IsDead())continue;
+
+		//ここまで来たら生存中のボスがいる
+		isAllBossDead = false;
+	}
+	if (isAllBossDead)
+	{
+		//BGM停止
+		SoundManager::GetInstance().StopBGM();
+	}
 
 }
 

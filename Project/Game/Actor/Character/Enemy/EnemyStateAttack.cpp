@@ -21,6 +21,9 @@ namespace
 {
 	//Šp“x
 	constexpr float kMissileAngle = 30.0f;
+
+	//ŒxŒø‰Ê‰¹
+	const std::wstring kWarningSE = L"Warning";
 }
 
 EnemyStateAttack::EnemyStateAttack(std::weak_ptr<Actor> enemy, bool isWait, std::shared_ptr<AttackData> attackData):
@@ -43,6 +46,9 @@ EnemyStateAttack::EnemyStateAttack(std::weak_ptr<Actor> enemy, bool isWait, std:
 
 	//–Ú‚ğŒõ‚ç‚¹‚é
 	owner->InitLightUpEyesEff();
+
+	//ŒxŒø‰Ê‰¹
+	SoundManager::GetInstance().PlayOnceSE(owner->GetSEPath(kWarningSE));
 }
 
 EnemyStateAttack::~EnemyStateAttack()

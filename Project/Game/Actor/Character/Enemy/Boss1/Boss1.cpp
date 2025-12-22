@@ -80,6 +80,7 @@ void Boss1::Complete()
 {
 	if (!m_isActive)
 	{
+		m_rb->SetVec(Vector3::Zero());
 		//モデルの座標更新
 		m_model->SetPos(m_rb->m_pos.ToDxLibVector());
 		m_model->ApplyMat();

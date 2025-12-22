@@ -43,6 +43,7 @@ public:
 	void SaveVolume();
 	//BGMÄ¶
 	void PlayBGM(std::wstring path);
+	void PlayBGM();
 	//BGM’â~
 	void StopBGM();
 	//1“x‚¾‚¯Ä¶‚·‚é 

@@ -103,11 +103,11 @@ void BossHPUI::Draw() const
 	auto enemy = m_pEnemy.lock();
 	if (!enemy->IsActive())return;
 	//バーの描画
-	DrawRectGraphF(kBackPosX, kBackPosY, 0, 0, kBackBarSizeX, kBackBarSizeY, m_backValueHandle, true);
+	DrawRectGraphF2(kBackPosX, kBackPosY, 0, 0, kBackBarSizeX, kBackBarSizeY, m_backValueHandle, true);
 	//バーの描画
-	DrawRectGraphF(kPosX, kPosY, 0, 0, kBarSizeX , (kBarSizeY * -m_damageValueRate), m_damageValueHandle, true);
-	DrawRectGraphF(kPosX, kPosY, 0, 0, kBarSizeX , (kBarSizeY * -m_healValueRate), m_healValueHandle, true);
-	DrawRectGraphF(kPosX, kPosY, 0, 0, kBarSizeX , (kBarSizeY * -m_nowHpRate), m_nowValueHandle, true);
+	DrawRectGraphF2(kPosX, kPosY, 0, 0, kBarSizeX , (kBarSizeY * -m_damageValueRate), m_damageValueHandle, true);
+	DrawRectGraphF2(kPosX, kPosY, 0, 0, kBarSizeX , (kBarSizeY * -m_healValueRate), m_healValueHandle, true);
+	DrawRectGraphF2(kPosX, kPosY, 0, 0, kBarSizeX , (kBarSizeY * -m_nowHpRate), m_nowValueHandle, true);
 	//ボス名の描画
 	DrawRotaGraphF(kBossNamePosX, kBossNamePosY, 1.0f, 0.0f, m_bossNameHandle, true);
 }
