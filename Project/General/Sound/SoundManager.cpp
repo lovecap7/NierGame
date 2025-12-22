@@ -48,7 +48,7 @@ void SoundManager::Init()
 	//SEの音量
 	m_seVolume = kDefaultVolume;
 	//BGMの音量
-	m_bgmVolume = kDefaultVolume;
+	m_bgmVolume = 0;
 	//ボイスの音量
 	m_voiceVolume = kDefaultVolume;
 	//マスターの音量

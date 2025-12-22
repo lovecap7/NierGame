@@ -11,12 +11,15 @@
 #include "../../../../General/Input.h"
 #include "../../../../General/Collision/Rigidbody.h"
 #include "../../../../General/CharaStatus.h"
+#include "../../../../General/Sound/SoundManager.h"
 
 namespace
 {
 	//アニメーション
 	const std::wstring kJump1 = L"Jump1";
 	const std::wstring kJump2 = L"Jump2";
+	//SE
+	const std::wstring kJumpSE = L"Jump";
 	//ジャンプ一回目
 	constexpr int kFirstJump = 1;
 	//減速率
@@ -36,7 +39,15 @@ PlayerStateJump::PlayerStateJump(std::weak_ptr<Actor> player, bool isWait) :
 	owner->AddJumpNum();
 	if (owner->GetJumpNum() <= kFirstJump)
 	{
+		//最初のジャンプ
 		owner->GetModel()->SetAnim(owner->GetAnim(kJump1).c_str(), false);
+
+		//地面にいるなら
+		if (owner->IsFloor())
+		{
+			//SE再生
+			SoundManager::GetInstance().PlayOnceSE(owner->GetSEPath(kJumpSE));
+		}
 	}
 	else
 	{

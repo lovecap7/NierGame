@@ -5,3 +5,4 @@ Hit1,Hit/Hit_B2
 Hit2,Hit/Hit_P3
 Warning,Enemy/Warning
 Dead,Enemy/Bomb1
+KO,Enemy/BossDead

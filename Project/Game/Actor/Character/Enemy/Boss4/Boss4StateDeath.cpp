@@ -22,6 +22,7 @@ namespace
 	const std::wstring kTransEff = L"Trans";
 	//SE
 	const std::wstring kDeadSE = L"Dead";
+	const std::wstring kKOSE = L"KO";
 	//ふっとばす力
 	constexpr float kMinSmashPower = 10.0f;
 	constexpr float kMaxSmashPower = 20.0f;
@@ -53,6 +54,9 @@ Boss4StateDeath::Boss4StateDeath(std::weak_ptr<Actor> enemy, bool isWait) :
 	//第二形態なら
 	if (owner->IsSecondPhase())
 	{
+		//とどめSE
+		SoundManager::GetInstance().PlayOnceSE(owner->GetSEPath(kKOSE));
+
 		//死亡アニメーション
 		model->SetAnim(owner->GetAnim(kDeath).c_str(), false);
 		Vector3 dir = model->GetDir();

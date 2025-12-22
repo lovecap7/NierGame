@@ -3,3 +3,4 @@ Slash,Enemy/Slash
 Hit,Hit/Hit_P2
 Warning,Enemy/Warning
 Dead,Enemy/Bomb1
+Move,Enemy/Footsteps1

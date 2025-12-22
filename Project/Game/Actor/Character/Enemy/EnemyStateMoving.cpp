@@ -9,16 +9,21 @@
 #include "../../../../General/Input.h"
 #include "../../../../General/Collision/Rigidbody.h"
 #include "../../../../General/CharaStatus.h"
+#include "../../../../General/Sound/SoundManager.h"
+#include "../../../../General/Sound/SE.h"
 
 namespace
 {
 	//アニメーション
 	const std::wstring kWalk = L"Walk";
+	//SE
+	const std::wstring kMoveSE = L"Move";
 	//最低保証フレーム数
 	constexpr int kMinFrame = 10;
 }
 EnemyStateMoving::EnemyStateMoving(std::weak_ptr<Actor> enemy, bool isWait):
-	EnemyStateBase(enemy,isWait)
+	EnemyStateBase(enemy,isWait),
+	m_speed(0.0f)
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());
@@ -27,10 +32,15 @@ EnemyStateMoving::EnemyStateMoving(std::weak_ptr<Actor> enemy, bool isWait):
 	//速度
 	auto status = owner->GetCharaStatus();
 	m_speed = status->GetMS();
+
+	//SE
+	m_moveSE = SoundManager::GetInstance().PlayLoopSE(owner->GetSEPath(kMoveSE));
 }
 
 EnemyStateMoving::~EnemyStateMoving()
 {
+	if (m_moveSE.expired())return;
+	m_moveSE.lock()->Delete();
 }
 
 void EnemyStateMoving::Init()

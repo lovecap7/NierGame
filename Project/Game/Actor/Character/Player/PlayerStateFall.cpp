@@ -12,12 +12,15 @@
 #include "../../../../General/Input.h"
 #include "../../../../General/Collision/Rigidbody.h"
 #include "../../../../General/CharaStatus.h"
+#include "../../../../General/Sound/SoundManager.h"
 
 namespace
 {
 	//アニメーション
 	const std::wstring kFall = L"Fall";
 	const std::wstring kGliding = L"PodFall";
+	//着地SE
+	const std::wstring kLanding = L"Jump";
 	//減速率
 	constexpr float kAirDecel = 0.9f;
 	//空中加速度
@@ -79,6 +82,9 @@ void PlayerStateFall::Update()
 	//地面に付いたら
 	if (owner->IsFloor())
 	{
+		//SE再生
+		SoundManager::GetInstance().PlayOnceSE(owner->GetSEPath(kLanding));
+
 		ChangeState(std::make_shared<PlayerStateIdle>(m_pOwner, m_isWait));
 		return;
 	}

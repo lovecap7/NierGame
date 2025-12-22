@@ -12,6 +12,8 @@
 #include "../../../../General/Model.h"
 #include "../../../../General/Collision/Rigidbody.h"
 #include "../../../../General/CharaStatus.h"
+#include "../../../../General/Sound/SoundManager.h"
+#include "../../../../General/Sound/SE.h"
 
 namespace
 {
@@ -23,6 +25,10 @@ namespace
 	const std::wstring kWalk = L"Walk";
 	//走る
 	const std::wstring kRun = L"Run";
+
+	//SE
+	const std::wstring kWalkSE = L"Walk";
+	const std::wstring kRunSE = L"Run";
 }
 
 PlayerStateMoving::PlayerStateMoving(std::weak_ptr<Actor> player, bool isWait, bool isDash) :
@@ -35,6 +41,10 @@ PlayerStateMoving::PlayerStateMoving(std::weak_ptr<Actor> player, bool isWait, b
 	//ステータス
 	auto status = owner->GetCharaStatus();
 	m_speed = status->GetMS();
+
+	//SEのパス
+	std::wstring sePath = kWalkSE;
+
 	//走り
 	if(m_isDash)
 	{
@@ -44,8 +54,14 @@ PlayerStateMoving::PlayerStateMoving(std::weak_ptr<Actor> player, bool isWait, b
 		owner->GetModel()->SetAnim(owner->GetAnim(kRun).c_str(), true);
 		//速度を少し早く
 		m_speed *= kRunSpeedRata;
+
+		//走りSE
+		sePath = kRunSE;
 	}
 	owner->SetCollState(CollisionState::Move);
+
+	//SE再生
+	m_moveSE = SoundManager::GetInstance().PlayLoopSE(owner->GetSEPath(sePath));
 
 	//地面に付いてるなら
 	if (owner->IsFloor())
@@ -57,6 +73,8 @@ PlayerStateMoving::PlayerStateMoving(std::weak_ptr<Actor> player, bool isWait, b
 
 PlayerStateMoving::~PlayerStateMoving()
 {
+	if (m_moveSE.expired())return;
+	m_moveSE.lock()->Delete();
 }
 
 void PlayerStateMoving::Init()

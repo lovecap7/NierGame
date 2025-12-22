@@ -3,6 +3,7 @@
 class Actor;
 class Player;
 class Input;
+class SE;
 class PlayerStateMoving :
     public PlayerStateBase, public std::enable_shared_from_this<PlayerStateMoving>
 {
@@ -21,5 +22,7 @@ private:
     void ChangeWalkAnim(std::shared_ptr<Player> owner, Input& input);
     //ˆÚ“®
     void Move(std::shared_ptr<Player> owner, Input& input);
+    //SE
+	std::weak_ptr<SE> m_moveSE;
 };
 

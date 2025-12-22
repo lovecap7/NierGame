@@ -13,6 +13,7 @@
 #include "../../../../Main/Application.h"
 #include "../../../../General/ShaderPostProcess.h"
 #include "../../../../General/Effect/EffekseerManager.h"
+#include "../../../../General/Sound/SoundManager.h"
 namespace
 {
 	//速度
@@ -24,6 +25,9 @@ namespace
 	const std::wstring kForwardAvoid = L"AvoidForward";
 	const std::wstring kBackAvoid = L"AvoidBack";
 	const std::wstring kJustAvoid = L"JustAvoid";
+
+	//SE
+	const std::wstring kAvoidSE = L"JustAvoid";
 
 	//ジャスト回避フレーム
 	constexpr float kJustFrame = 20.0f;
@@ -112,6 +116,9 @@ PlayerStateAvoid::PlayerStateAvoid(std::weak_ptr<Actor> player, bool isWait) :
 
 	//無敵
 	status->SetIsNoDamage(true);
+
+	//SE再生
+	SoundManager::GetInstance().PlayOnceSE(owner->GetSEPath(kAvoidSE));
 }
 
 PlayerStateAvoid::~PlayerStateAvoid()
@@ -286,6 +293,9 @@ void PlayerStateAvoid::InitJustAvoid(std::shared_ptr<Model> model, std::shared_p
 
 	//ジャスト回避数カウント
 	owner->AddJustAvoidNum();
+
+	//SE再生
+	SoundManager::GetInstance().PlayOnceSE(owner->GetSEPath(kAvoidSE));
 }
 
 void PlayerStateAvoid::UpdateJustAvoid(std::shared_ptr<Player> owner, std::shared_ptr<Model> model, Application& app)

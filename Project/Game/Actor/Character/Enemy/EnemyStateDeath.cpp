@@ -17,6 +17,7 @@ namespace
 	const std::wstring kDeadEff = L"Dead";
 	//SE
 	const std::wstring kDeadSE = L"Dead";
+	const std::wstring kKOSE = L"KO";
 	//‚Ó‚Á‚Æ‚Î‚·—Í
 	constexpr float kMinSmashPower = 10.0f;
 	constexpr float kMaxSmashPower = 20.0f;
@@ -45,6 +46,9 @@ EnemyStateDeath::EnemyStateDeath(std::weak_ptr<Actor> enemy, bool isWait) :
 	}
 	else
 	{
+		//‚Æ‚Ç‚ßSE
+		SoundManager::GetInstance().PlayOnceSE(owner->GetSEPath(kKOSE));
+
 		owner->GetRb()->SetMoveVec(Vector3::Zero());
 
 		Vector3 dir = model->GetDir();
