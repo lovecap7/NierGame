@@ -1,6 +1,9 @@
 #include "SelectUI.h"
 #include "../../../General/AssetManager.h"
+#include "../../../General/CSV/CSVDataLoader.h"
+#include "../../../General/CSV/MissionBoardUIData.h"
 #include "../../../General/Fader.h"
+#include "MissionBoardUI.h"
 #include <DxLib.h>
 
 namespace
@@ -45,6 +48,7 @@ namespace
 	const std::wstring kSelectMission1Path = L"Select/SelectMission1";
 	const std::wstring kSelectMission2Path = L"Select/SelectMission2";
 	const std::wstring kSelectMission3Path = L"Select/SelectMission3";
+	const std::wstring kStageMissionBoardUIDataPath = L"Select/StageMissionBoardUIData";
 	const std::wstring kOptionPath = L"Select/Option";
 	const std::wstring kBackTitlePath = L"Select/BackTitle";
 	const std::wstring kCursorPath = L"Mark/Cursor";
@@ -97,6 +101,18 @@ SelectUI::SelectUI() :
 	m_stageMenus[0].handle = assetManager.GetImageHandle(kSelectMission1Path);
 	m_stageMenus[1].handle = assetManager.GetImageHandle(kSelectMission2Path);
 	m_stageMenus[2].handle = assetManager.GetImageHandle(kSelectMission3Path);
+
+	//ミッションボード
+	auto& csvLoader = CSVDataLoader::GetInstance();
+	std::vector<std::shared_ptr<MissionBoardUIData>> missionBoardUIData;
+	for(auto& data : csvLoader.LoadCSV(kStageMissionBoardUIDataPath.c_str()))
+	{
+		auto mbData = std::make_shared<MissionBoardUIData>(data);
+		missionBoardUIData.push_back(mbData);
+	}
+	auto mb = std::make_shared<MissionBoardUI>(kStageSelectSize, missionBoardUIData);
+	mb->Init();
+	m_missionBoard = mb;
 
 	//カーソル
 	m_cursor.handle = assetManager.GetImageHandle(kCursorPath);
@@ -158,6 +174,10 @@ void SelectUI::SetSelectTutorialMenuIndex(int index)
 
 void SelectUI::SetSelectStageMenuIndex(int index)
 {
+	if(!m_missionBoard.expired())
+	{
+		m_missionBoard.lock()->SetSelectMissionBoardIndex(index);
+	}
 	m_selectStageMenuIndex = index;
 	m_update = &SelectUI::UpdateStageMenu;
 }
@@ -199,6 +219,10 @@ void SelectUI::UpdateMainMenu()
 		}
 		m_stageMenus[i].pos = m_mainMenus[1].pos;
 	}
+
+	//非表示
+	if (m_missionBoard.expired())return;
+	m_missionBoard.lock()->DisableDraw();
 }
 
 void SelectUI::UpdateTutorialMenu()
@@ -231,6 +255,10 @@ void SelectUI::UpdateTutorialMenu()
 		}
 		m_mainMenus[i].pos.x = MathSub::Lerp(m_mainMenus[i].pos.x, targetX, kMainMenuLerpRate);
 	}
+
+	//非表示
+	if (m_missionBoard.expired())return;
+	m_missionBoard.lock()->DisableDraw();
 }
 
 void SelectUI::UpdateStageMenu()
@@ -263,6 +291,10 @@ void SelectUI::UpdateStageMenu()
 		}
 		m_mainMenus[i].pos.x = MathSub::Lerp(m_mainMenus[i].pos.x, targetX, kMainMenuLerpRate);
 	}
+
+	//表示
+	if (m_missionBoard.expired())return;
+	m_missionBoard.lock()->EnableDraw();
 }
 
 void SelectUI::DrawMenu(Fader& fader, const std::vector<MenuUI>& menus, int selectMenuIndex, bool isMenuMode) const

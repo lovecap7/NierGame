@@ -1,5 +1,6 @@
 #include "ResultScene.h"
 #include "SelectScene.h"
+#include "EndingScene.h"
 #include <Dxlib.h>
 #include  "../General/Input.h"
 #include  "../General/Timer.h"
@@ -12,6 +13,7 @@
 #include "../Game/Camera/CameraController.h"
 #include "../General/AssetManager.h"
 #include "../General/Sound/SoundManager.h"
+#include "../General/Effect/EffekseerManager.h"
 
 namespace
 {
@@ -40,6 +42,9 @@ void ResultScene::Init()
 
 	//アセット削除
 	AssetManager::GetInstance().AllDelete();
+
+	//エフェクトリセット
+	EffekseerManager::GetInstance().Reset();
 	
 	auto& uiManager = UIManager::GetInstance();
 	//UIの削除
@@ -70,6 +75,12 @@ void ResultScene::Update()
 	//フェードアウトしきったら
 	if (fader.IsFinishFadeOut())
 	{
+		//最終ステージならエンディングへ
+		if (GetStageIndexByName(m_stageName) == StageIndex::Stage3)
+		{
+			m_controller.ChangeScene(std::make_unique<EndingScene>(m_controller));
+			return;
+		}
 		m_controller.ChangeScene(std::make_unique<SelectScene>(m_controller));
 		return;
 	}

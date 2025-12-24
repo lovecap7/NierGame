@@ -57,6 +57,8 @@ void TutorialScene::Init()
 	UIManager::GetInstance().SetIsDraw(true);
 	//Inputの入力情報リセット
 	Input::GetInstance().StopUpdate();
+	//リセット
+	m_effectManager.Reset();
 
 	//サウンド
 	auto& soundManager = SoundManager::GetInstance();

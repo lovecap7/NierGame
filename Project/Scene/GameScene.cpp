@@ -71,6 +71,8 @@ void GameScene::Init()
 	Physics::GetInstance().Reset();
 	//Physicsを開始
 	Physics::GetInstance().StartUpdate();
+	//エフェクトリセット
+	EffekseerManager::GetInstance().Reset();
 
 	//ステージインデックス
 	auto stageName = m_stageName.c_str();

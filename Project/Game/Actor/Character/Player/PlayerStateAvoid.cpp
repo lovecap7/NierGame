@@ -134,6 +134,8 @@ PlayerStateAvoid::~PlayerStateAvoid()
 		//–³“G
 		owner->SetNoDamageFrame(kNoDamageFrame);
 	}
+
+	
 }
 
 void PlayerStateAvoid::Init()

@@ -9,6 +9,7 @@
 #include "../General/Math/MyMath.h"
 #include "../General/AssetManager.h"
 #include "../General/ShaderPostProcess.h"
+#include "../General/Effect/EffekseerManager.h"
 #include "../General/Timer.h"
 #include "../Game/UI/UIManager.h"
 #include "../Game/UI/TalkUI.h"
@@ -73,6 +74,8 @@ void SelectScene::Init()
 	UIManager::GetInstance().AllDeleteUI();
 	//フェードイン
 	Fader::GetInstance().FadeIn();
+	//エフェクトリセット
+	EffekseerManager::GetInstance().Reset();
 
 	//一番上の項目から
 	m_currentMainMenu = MainMenu::Tutorial;

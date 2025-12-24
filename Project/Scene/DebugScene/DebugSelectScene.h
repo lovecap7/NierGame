@@ -31,7 +31,7 @@ private:
 		Tutorial1	= 6,
 		Tutorial2	= 7,
 		Tutorial3	= 8,
-		PlayerTest	= 9,
+		EndingScene = 9,
 	};
 	Menu m_currentMenu = Menu::Title;
 };

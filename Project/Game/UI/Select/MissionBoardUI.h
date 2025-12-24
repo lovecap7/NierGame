@@ -1,0 +1,32 @@
+#pragma once
+#include "../UIBase.h"
+#include "../../../General/Math/MyMath.h"
+#include <map>
+#include <vector>
+class MissionBoardUIData;
+class MissionBoardUI :
+	public UIBase
+{
+public:
+	MissionBoardUI(int size,std::vector<std::shared_ptr<MissionBoardUIData>> datas);
+	~MissionBoardUI();
+	//更新
+	void Update() override;
+	//描画
+	void Draw()const override;
+	//メニューセレクト
+	void SetSelectMissionBoardIndex(int index) { m_index = index; };
+private:
+	//ハンドル
+	std::map<int, int> m_handles;
+	int m_backHandle;
+	int m_backShadowHandle;
+	//番号
+	int m_index;
+	//データ
+	std::vector<std::shared_ptr<MissionBoardUIData>> m_datas;
+	//フォントハンドル
+	int m_textFontHandle;
+	int m_titleFontHandle;
+};
+

@@ -32,6 +32,9 @@ PlayerStateIdle::PlayerStateIdle(std::weak_ptr<Actor> player, bool isWait):
 		//‰ñ”ð‰Â”\
 		owner->SetIsAvoidable(true);
 	}
+
+	//•`‰æ‚·‚é
+	owner->SetIsDraw(true);
 }
 
 PlayerStateIdle::~PlayerStateIdle()

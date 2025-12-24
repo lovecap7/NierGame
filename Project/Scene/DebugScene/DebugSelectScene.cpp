@@ -6,6 +6,7 @@
 #include "../GameScene.h"
 #include "../ResultScene.h"
 #include "../TutorialScene.h"
+#include "../EndingScene.h"
 #include "../../General/Input.h"
 #include <DxLib.h>
 #include "../../General/StringUtil.h"
@@ -79,8 +80,8 @@ void DebugSelectScene::Update()
 		case Menu::Tutorial3:
 			m_controller.ChangeScene(std::make_shared<TutorialScene>(m_controller, GetStageNameByIndex(StageIndex::Tutorial3)));
 			break;
-		case Menu::PlayerTest:
-			m_controller.ChangeScene(std::make_shared<PlayerTestScene>(m_controller));
+		case Menu::EndingScene:
+			m_controller.ChangeScene(std::make_shared<EndingScene>(m_controller));
 			break;
 		default:
 			break;
@@ -90,13 +91,13 @@ void DebugSelectScene::Update()
 	int menu = static_cast<int>(m_currentMenu);
 	if (input.IsRepeate("Up"))menu--;
 	if (input.IsRepeate("Down"))menu++;
-	menu = MathSub::ClampInt(menu, 0, static_cast<int>(Menu::PlayerTest));
+	menu = MathSub::ClampInt(menu, 0, static_cast<int>(Menu::EndingScene));
 	m_currentMenu = static_cast<Menu>(menu);
 }
 
 void DebugSelectScene::Draw()
 {
-	for (int i = 0;i <= static_cast<int>(Menu::PlayerTest);i++)
+	for (int i = 0;i <= static_cast<int>(Menu::EndingScene);i++)
 	{
 		int color = 0xffffff;
 		if (m_currentMenu == static_cast<Menu>(i))
@@ -133,8 +134,8 @@ void DebugSelectScene::Draw()
 		case Menu::Tutorial3:
 			text = L"Tutorial3";
 			break;
-		case Menu::PlayerTest:
-			text = L"PlayerTest";
+		case Menu::EndingScene:
+			text = L"Ending";
 			break;
 		default:
 			break;

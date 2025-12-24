@@ -66,6 +66,9 @@ void TitleScene::Init()
 	UIManager::GetInstance().AllDeleteUI();
 	//フェードイン
 	Fader::GetInstance().FadeIn();
+	//エフェクトリセット
+	m_effectManager.Reset();
+
 	//エフェクトマネージャー初期化
 	m_effectManager.Init();
 	//音

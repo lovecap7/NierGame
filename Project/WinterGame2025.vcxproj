@@ -231,6 +231,7 @@
     <ClCompile Include="Game\Camera\TitleCamera.cpp" />
     <ClCompile Include="Game\Tutorial\TutorialManager.cpp" />
     <ClCompile Include="Game\UI\Camera\PlayerCameraUI.cpp" />
+    <ClCompile Include="Game\UI\Ending\EndingTextUI.cpp" />
     <ClCompile Include="Game\UI\Enemy\BossHPUI.cpp" />
     <ClCompile Include="Game\UI\Enemy\NormalEnemyHPUI.cpp" />
     <ClCompile Include="Game\UI\Gameover\GameoverUI.cpp" />
@@ -239,6 +240,7 @@
     <ClCompile Include="Game\UI\Player\PlayerHPUI.cpp" />
     <ClCompile Include="Game\UI\Result\TutorialResultUI.cpp" />
     <ClCompile Include="Game\UI\Result\ResultUI.cpp" />
+    <ClCompile Include="Game\UI\Select\MissionBoardUI.cpp" />
     <ClCompile Include="Game\UI\Select\SelectUI.cpp" />
     <ClCompile Include="Game\UI\TalkUI.cpp" />
     <ClCompile Include="Game\UI\Title\TitleUI.cpp" />
@@ -266,7 +268,9 @@
     <ClCompile Include="General\CSV\CSVDataLoader.cpp" />
     <ClCompile Include="General\CSV\AnimData.cpp" />
     <ClCompile Include="General\CSV\EffectData.cpp" />
+    <ClCompile Include="General\CSV\EndingTextUIData.cpp" />
     <ClCompile Include="General\CSV\EnemyAttackKeyData.cpp" />
+    <ClCompile Include="General\CSV\MissionBoardUIData.cpp" />
     <ClCompile Include="General\CSV\PodData.cpp" />
     <ClCompile Include="General\CSV\ResultRankData.cpp" />
     <ClCompile Include="General\CSV\SEData.cpp" />
@@ -298,6 +302,7 @@
     <ClCompile Include="Main\main.cpp" />
     <ClCompile Include="Scene\DebugScene\DebugSelectScene.cpp" />
     <ClCompile Include="Scene\DebugScene\PlayerTestScene.cpp" />
+    <ClCompile Include="Scene\EndingScene.cpp" />
     <ClCompile Include="Scene\GameoverScene.cpp" />
     <ClCompile Include="Scene\GameScene.cpp" />
     <ClCompile Include="Scene\PauseScene.cpp" />
@@ -395,6 +400,7 @@
     <ClInclude Include="Game\Camera\TitleCamera.h" />
     <ClInclude Include="Game\Tutorial\TutorialManager.h" />
     <ClInclude Include="Game\UI\Camera\PlayerCameraUI.h" />
+    <ClInclude Include="Game\UI\Ending\EndingTextUI.h" />
     <ClInclude Include="Game\UI\Enemy\BossHPUI.h" />
     <ClInclude Include="Game\UI\Enemy\NormalEnemyHPUI.h" />
     <ClInclude Include="Game\UI\Gameover\GameoverUI.h" />
@@ -403,6 +409,7 @@
     <ClInclude Include="Game\UI\Player\PlayerHPUI.h" />
     <ClInclude Include="Game\UI\Result\TutorialResultUI.h" />
     <ClInclude Include="Game\UI\Result\ResultUI.h" />
+    <ClInclude Include="Game\UI\Select\MissionBoardUI.h" />
     <ClInclude Include="Game\UI\Select\SelectUI.h" />
     <ClInclude Include="Game\UI\TalkUI.h" />
     <ClInclude Include="Game\UI\Title\TitleUI.h" />
@@ -430,7 +437,9 @@
     <ClInclude Include="General\CSV\CSVDataLoader.h" />
     <ClInclude Include="General\CSV\AnimData.h" />
     <ClInclude Include="General\CSV\EffectData.h" />
+    <ClInclude Include="General\CSV\EndingTextUIData.h" />
     <ClInclude Include="General\CSV\EnemyAttackKeyData.h" />
+    <ClInclude Include="General\CSV\MissionBoardUIData.h" />
     <ClInclude Include="General\CSV\PodData.h" />
     <ClInclude Include="General\CSV\ResultRankData.h" />
     <ClInclude Include="General\CSV\SEData.h" />
@@ -467,6 +476,7 @@
     <ClInclude Include="Scene\DebugScene\PlayerTestScene.h" />
     <ClInclude Include="Scene\Debug\DebugSelectScene.h" />
     <ClInclude Include="Scene\Debug\PlayerTestScene.h" />
+    <ClInclude Include="Scene\EndingScene.h" />
     <ClInclude Include="Scene\GameoverScene.h" />
     <ClInclude Include="Scene\GameScene.h" />
     <ClInclude Include="Scene\PauseScene.h" />

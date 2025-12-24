@@ -3,6 +3,8 @@
 #include "../../../General/Math/MyMath.h"
 #include <vector>
 class Fader;
+class MissionBoardUI;
+class MissionBoardUIData;
 class SelectUI :
 	public UIBase
 {
@@ -39,6 +41,7 @@ private:
 
 	//ステージメニューの項目座標
 	std::vector<MenuUI> m_stageMenus;
+	std::weak_ptr<MissionBoardUI> m_missionBoard;
 	//選んでるメニューのインデックス
 	int m_selectStageMenuIndex;
 
