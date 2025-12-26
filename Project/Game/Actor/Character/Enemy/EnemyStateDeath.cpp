@@ -18,6 +18,8 @@ namespace
 	//SE
 	const std::wstring kDeadSE = L"Dead";
 	const std::wstring kKOSE = L"KO";
+	//ボイス
+	const std::wstring kDeadVoice = L"Dead";
 	//ふっとばす力
 	constexpr float kMinSmashPower = 10.0f;
 	constexpr float kMaxSmashPower = 20.0f;
@@ -37,6 +39,8 @@ EnemyStateDeath::EnemyStateDeath(std::weak_ptr<Actor> enemy, bool isWait) :
 	model->SetAnim(owner->GetAnim(kDeath).c_str(), false);
 	owner->SetCollState(CollisionState::Dead);
 
+	auto& soundManager = SoundManager::GetInstance();
+
 	//ボスではないなら
 	if (!owner->IsBoss())
 	{
@@ -47,7 +51,7 @@ EnemyStateDeath::EnemyStateDeath(std::weak_ptr<Actor> enemy, bool isWait) :
 	else
 	{
 		//とどめSE
-		SoundManager::GetInstance().PlayOnceSE(owner->GetSEPath(kKOSE));
+		soundManager.PlayOnceSE(owner->GetSEPath(kKOSE));
 
 		owner->GetRb()->SetMoveVec(Vector3::Zero());
 
@@ -66,6 +70,9 @@ EnemyStateDeath::EnemyStateDeath(std::weak_ptr<Actor> enemy, bool isWait) :
 		CameraController::GetInstance().PushCamera(std::make_shared<BossCamera>(owner->GetCenterPos(), dir,
 			(owner->GetHeadPos() - owner->GetPos()).Magnitude(), owner->GetActorManager(), false));
 	}
+
+	//ボイス再生
+	soundManager.PlayVoice(owner->GetVoicePath(kDeadVoice));
 
 	//無敵に
 	owner->GetCharaStatus()->SetIsNoDamage(true);

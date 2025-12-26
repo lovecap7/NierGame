@@ -17,7 +17,7 @@ namespace
 	const std::wstring kStart = L"Start";
 
 	//ボイス
-	const std::wstring kVoice = L"Start";
+	const std::wstring kStartVoice = L"Start";
 
 	//カメラ距離
 	constexpr float kCameraDistance = 800.0f;
@@ -64,7 +64,7 @@ void Boss3StateStart::Update()
 			actorManager->SetIsBossBattle(true);
 
 			//ボイス再生
-			SoundManager::GetInstance().PlayVoice(owner->GetVoicePath(kVoice));
+			SoundManager::GetInstance().PlayVoice(owner->GetVoicePath(kStartVoice));
 		}
 		m_isCreate = true;
 	}

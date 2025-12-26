@@ -3,7 +3,7 @@
 
 namespace
 {
-	constexpr int kDataNum = 28;
+	constexpr int kDataNum = 29;
 }
 
 AttackData::AttackData():
@@ -33,7 +33,8 @@ AttackData::AttackData():
 	m_hitEffectPath(L""),
 	m_attackEffectPath(L""),
 	m_seAppearPath(L""),
-	m_seHitPath(L"")
+	m_seHitPath(L""),
+	m_voicePath(L"")
 {
 }
 
@@ -62,7 +63,8 @@ AttackData::AttackData(std::shared_ptr<CSVData> data):
 	m_hitEffectPath(L""),
 	m_attackEffectPath(L""),
 	m_seAppearPath(L""),
-	m_seHitPath(L"")
+	m_seHitPath(L""),
+	m_voicePath(L"")
 {
 	//データを取得
 	this->m_data = data->GetData();
@@ -154,9 +156,12 @@ void AttackData::Conversion()
 	//攻撃ヒットSE
 	m_seHitPath = m_data[23];
 
+	//攻撃ボイス
+	m_voicePath = m_data[24];
+
 	//パラメータ
-	m_param1 = stof(m_data[24]);
-	m_param2 = stof(m_data[25]);
-	m_param3 = stof(m_data[26]);
-	m_param4 = stof(m_data[27]);
+	m_param1 = stof(m_data[25]);
+	m_param2 = stof(m_data[26]);
+	m_param3 = stof(m_data[27]);
+	m_param4 = stof(m_data[28]);
 }

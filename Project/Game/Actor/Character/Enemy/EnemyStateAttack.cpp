@@ -47,8 +47,12 @@ EnemyStateAttack::EnemyStateAttack(std::weak_ptr<Actor> enemy, bool isWait, std:
 	//–Ú‚ðŒõ‚ç‚¹‚é
 	owner->InitLightUpEyesEff();
 
+	auto& soundManager = SoundManager::GetInstance();
 	//ŒxŒø‰Ê‰¹
-	SoundManager::GetInstance().PlayOnceSE(owner->GetSEPath(kWarningSE));
+	soundManager.PlayOnceSE(owner->GetSEPath(kWarningSE));
+
+	//ƒ{ƒCƒXÄ¶
+	soundManager.PlayVoice(owner->GetVoicePath(m_attackData->GetVoicePath()));
 }
 
 EnemyStateAttack::~EnemyStateAttack()

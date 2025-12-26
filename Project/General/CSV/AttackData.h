@@ -100,6 +100,9 @@ public:
 	//ヒットSE
 	std::wstring GetSEHitPath()const { return m_seHitPath; };
 
+	//攻撃ボイス
+	std::wstring GetVoicePath()const { return m_voicePath; };
+
 	//パラメータ
 	float GetParam1()const { return m_param1; };
 	float GetParam2()const { return m_param2; };
@@ -181,6 +184,9 @@ private:
 
 	//ヒットSE
 	std::wstring m_seHitPath;
+
+	//攻撃ボイス
+	std::wstring m_voicePath;
 
 	//パラメータ
 	float m_param1;

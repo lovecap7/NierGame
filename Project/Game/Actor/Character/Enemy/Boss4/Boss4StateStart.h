@@ -11,7 +11,7 @@ public:
     void Update() override;
 private:
     //ƒJƒƒ‰¶¬
-    bool m_isCreateCamera;
+    bool m_isCreate;
 };
 
 

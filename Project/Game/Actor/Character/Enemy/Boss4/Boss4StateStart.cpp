@@ -7,19 +7,24 @@
 #include "../../../../../General/Collision/Rigidbody.h"
 #include "../../../../../General/CharaStatus.h"
 #include "../../../../../General/Effect/EffekseerManager.h"
+#include "../../../../../General/Sound/SoundManager.h"
 #include "../../../../Camera/BossCamera.h"
 #include "../../../../Camera/CameraController.h"
 namespace
 {
 	//アニメーション
 	const std::wstring kStart = L"Attack4";
+
+	//ボイス
+	const std::wstring kStartVoice = L"Start";
+
 	//カメラ距離
 	constexpr float kCameraDistance = 300.0f;
 }
 
 Boss4StateStart::Boss4StateStart(std::weak_ptr<Actor> enemy) :
 	EnemyStateBase(enemy, false),
-	m_isCreateCamera(false)
+	m_isCreate(false)
 {
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());
@@ -54,11 +59,16 @@ void Boss4StateStart::Update()
 	model->SetAnimSpeed(1.0f);
 
 	//カメラの作成
-	if (!m_isCreateCamera)
+	if (!m_isCreate)
 	{
+		//カメラ作成
 		CameraController::GetInstance().PushCamera(std::make_shared<BossCamera>(owner->GetCenterPos(), model->GetDir(),
 			kCameraDistance, owner->GetActorManager(), true));
-		m_isCreateCamera = true;
+
+		//ボイス再生
+		SoundManager::GetInstance().PlayVoice(owner->GetVoicePath(kStartVoice));
+
+		m_isCreate = true;
 	}
 
 	//モデルのアニメーションが終わったら

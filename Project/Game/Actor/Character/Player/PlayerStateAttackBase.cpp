@@ -44,8 +44,12 @@ void PlayerStateAttackBase::CreateAttack(std::shared_ptr<Player> owner, std::sha
 {
 	if (!m_attackData)return;
 
+	auto& soundManager = SoundManager::GetInstance();
 	//SEÄ¶
-	SoundManager::GetInstance().PlayOnceSE(owner->GetSEPath(m_attackData->GetSEAppearPath()));
+	soundManager.PlayOnceSE(owner->GetSEPath(m_attackData->GetSEAppearPath()));
+
+	//UŒ‚ƒ{ƒCƒX
+	soundManager.PlayVoice(owner->GetVoicePath(m_attackData->GetVoicePath()));
 
 	//UŒ‚ì¬
 	std::shared_ptr<AttackBase> attack;

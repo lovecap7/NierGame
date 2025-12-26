@@ -5,12 +5,18 @@
 #include "../../../../General/Input.h"
 #include "../../../../General/Collision/Rigidbody.h"
 #include "../../../../General/CharaStatus.h"
+#include "../../../../General/Sound/SoundManager.h"
 #include "../../../UI/UIManager.h"
 
 namespace
 {
 	//アニメーション
 	const std::wstring kStart = L"Start";
+
+	//スタートボイス
+	const std::wstring kStartVoice1 = L"Start1";
+	const std::wstring kStartVoice2 = L"Start2";
+
 }
 
 PlayerStateStart::PlayerStateStart(std::weak_ptr<Actor> player) :
@@ -34,6 +40,14 @@ PlayerStateStart::PlayerStateStart(std::weak_ptr<Actor> player) :
 	UIManager::GetInstance().SetIsDraw(false);
 	//強制待機状態にする(ポッドの射撃を不可能に)
 	Wait();
+
+	//ボイス
+	auto voicePath = kStartVoice1;
+	if(MyMath::IsRand())
+	{
+		voicePath = kStartVoice2;
+	}
+	SoundManager::GetInstance().PlayVoice(owner->GetVoicePath(voicePath));
 }
 
 PlayerStateStart::~PlayerStateStart()

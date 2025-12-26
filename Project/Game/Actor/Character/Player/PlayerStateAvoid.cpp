@@ -29,6 +29,10 @@ namespace
 	//SE
 	const std::wstring kAvoidSE = L"JustAvoid";
 
+	//ボイス
+	const std::wstring kJustAvoidVoice1 = L"JustAvoid1";
+	const std::wstring kJustAvoidVoice2 = L"JustAvoid2";
+
 	//ジャスト回避フレーム
 	constexpr float kJustFrame = 20.0f;
 	//スロー速度
@@ -296,8 +300,15 @@ void PlayerStateAvoid::InitJustAvoid(std::shared_ptr<Model> model, std::shared_p
 	//ジャスト回避数カウント
 	owner->AddJustAvoidNum();
 
+	auto& soundManager = SoundManager::GetInstance();
 	//SE再生
-	SoundManager::GetInstance().PlayOnceSE(owner->GetSEPath(kAvoidSE));
+	soundManager.PlayOnceSE(owner->GetSEPath(kAvoidSE));
+
+	//攻撃ボイス
+	auto voicePath = kJustAvoidVoice1;
+	if (MyMath::IsRand())voicePath = kJustAvoidVoice2;
+	soundManager.PlayVoice(owner->GetVoicePath(voicePath));
+
 }
 
 void PlayerStateAvoid::UpdateJustAvoid(std::shared_ptr<Player> owner, std::shared_ptr<Model> model, Application& app)

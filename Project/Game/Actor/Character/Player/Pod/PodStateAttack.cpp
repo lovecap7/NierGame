@@ -41,6 +41,9 @@ PodStateAttack::PodStateAttack(std::weak_ptr<Actor> pod):
 
 	//発射エフェクト
 	m_shotEffect = EffekseerManager::GetInstance().CreateTrackActorEffect(owner->GetEffectPath(kShotEffect), owner);
+
+	//ボイス再生
+	SoundManager::GetInstance().PlayVoice(owner->GetVoicePath(m_attackData->GetVoicePath()));
 }
 
 PodStateAttack::~PodStateAttack()
