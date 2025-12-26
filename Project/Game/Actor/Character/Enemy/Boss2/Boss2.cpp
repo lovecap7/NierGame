@@ -27,7 +27,7 @@
 namespace
 {
 	//敵キャラのパスデータ数
-	constexpr int kPathNum = 8;
+	constexpr int kPathNum = 9;
 	//状態に合わせたモデル数
 	constexpr int kArmStateModelNum = 3;
 	//腕が破壊されたときのダメージ
@@ -75,19 +75,19 @@ void Boss2::Init()
 	}
 
 	//共通初期化
-	CharacterBase::Init(pathData[0].c_str(), pathData[1].c_str(), pathData[2].c_str(), pathData[3].c_str());
+	CharacterBase::Init(pathData[0].c_str(), pathData[1].c_str(), pathData[2].c_str(), pathData[3].c_str(), pathData[4].c_str());
 
 	//攻撃のキーを取得
-	InitAttackKey(csvLoader, pathData[4]);
+	InitAttackKey(csvLoader, pathData[5]);
 
 	//目の位置
-	InitEyeIndex(csvLoader, pathData[5]);
+	InitEyeIndex(csvLoader, pathData[6]);
 
 	//腕の状態に合わせたモデル
-	InitArmStateModel(csvLoader, pathData[7]);
+	InitArmStateModel(csvLoader, pathData[8]);
 
 	//腕の作成
-	InitArm(csvLoader, pathData[6]);
+	InitArm(csvLoader, pathData[7]);
 
 	//待機状態にする
 	auto thisPointer = std::dynamic_pointer_cast<Boss2>(shared_from_this());

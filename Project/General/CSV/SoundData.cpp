@@ -1,17 +1,17 @@
-#include "SEData.h"
+#include "SoundData.h"
 
 namespace
 {
 	constexpr int kDataNum = 2;
 }
 
-SEData::SEData() :
+SoundData::SoundData() :
 	m_name(),
 	m_path()
 {
 }
 
-SEData::SEData(std::shared_ptr<CSVData> data) :
+SoundData::SoundData(std::shared_ptr<CSVData> data) :
 	m_name(),
 	m_path()
 {
@@ -21,11 +21,11 @@ SEData::SEData(std::shared_ptr<CSVData> data) :
 	Conversion();
 }
 
-SEData::~SEData()
+SoundData::~SoundData()
 {
 }
 
-void SEData::Conversion()
+void SoundData::Conversion()
 {
 	//—v‘f‚ª‘«‚è‚È‚¢‚È‚ç‘ŠúƒŠƒ^[ƒ“
 	if (m_data.size() != kDataNum)return;

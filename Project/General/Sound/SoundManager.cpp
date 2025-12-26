@@ -22,7 +22,7 @@ namespace
 	//ƒpƒX
 	const std::wstring kBGM = L"BGM/";
 	const std::wstring kSE = L"SE/";
-	const std::wstring kVC = L"VC/";
+	const std::wstring kVoice = L"Voice/";
 }
 
 void SoundManager::Entry(std::shared_ptr<SoundBase> sound)
@@ -130,10 +130,10 @@ std::weak_ptr<SE> SoundManager::PlayLoopSE(std::wstring path)
 	return se;
 }
 
-std::weak_ptr<Voice> SoundManager::PlayVC(std::wstring path)
+std::weak_ptr<Voice> SoundManager::PlayVoice(std::wstring path)
 {
 	std::shared_ptr<Voice> vc;
-	vc = std::make_shared<Voice>(LoadVC(path), m_seVolume);
+	vc = std::make_shared<Voice>(LoadVoice(path), m_seVolume);
 	vc->Init();
 	vc->Play();
 	return vc;
@@ -173,9 +173,9 @@ int SoundManager::LoadSE(std::wstring path)
 	return AssetManager::GetInstance().GetSoundHandle(kSE + path);
 }
 
-int SoundManager::LoadVC(std::wstring path)
+int SoundManager::LoadVoice(std::wstring path)
 {
-	return AssetManager::GetInstance().GetSoundHandle(kVC + path);
+	return AssetManager::GetInstance().GetSoundHandle(kVoice + path);
 }
 
 int SoundManager::GetSEVolumeC() const

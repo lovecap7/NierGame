@@ -35,7 +35,7 @@
 namespace
 {
 	//プレイヤーのパスデータ数
-	constexpr int kPathNum = 4;
+	constexpr int kPathNum = 5;
 
 	//回避判定倍率
 	constexpr float kAvoidCollRadiusRate = 5.0f;
@@ -130,7 +130,7 @@ void Player::Init()
 
 	assert(pathData.size() >= kPathNum);
 	//共通初期化
-	CharacterBase::Init(pathData[0].c_str(), pathData[1].c_str(),pathData[2].c_str(), pathData[3].c_str());
+	CharacterBase::Init(pathData[0].c_str(), pathData[1].c_str(),pathData[2].c_str(), pathData[3].c_str(), pathData[4].c_str());
 
 	//待機状態にする(最初はプレイヤー内で状態を初期化するがそのあとは各状態で遷移する
 	auto thisPointer = std::dynamic_pointer_cast<Player>(shared_from_this());

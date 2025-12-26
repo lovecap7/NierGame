@@ -3,13 +3,13 @@
 #include <memory>
 #include <string>
 #include "../Math/MyMath.h"
-class SEData :
+class SoundData :
 	public CSVData
 {
 public:
-	SEData();
-	SEData(std::shared_ptr<CSVData> data);
-	~SEData();
+	SoundData();
+	SoundData(std::shared_ptr<CSVData> data);
+	~SoundData();
 
 	//–¼‘O
 	std::wstring GetName()const { return m_name; };

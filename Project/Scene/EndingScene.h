@@ -5,6 +5,7 @@
 class ActorManager;
 class EffekseerManager;
 class EndingTextUI;
+class SkipUI;
 class EndingScene :
     public SceneBase
 {
@@ -33,7 +34,13 @@ private:
 	//エンディングテキストUI
 	std::weak_ptr<EndingTextUI> m_endingTextUI;
 
+	//スキップUI
+	std::weak_ptr<SkipUI> m_skipUI;
+
     //スキップフレーム
-	int m_skipFrame;
+	int m_skipCountFrame;
+
+    //終了フレーム
+	int m_finishCountFrame;
 };
 

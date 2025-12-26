@@ -7,7 +7,7 @@
 #include "../../../General/CSV/CSVData.h"
 #include "../../../General/CSV/AttackData.h"
 #include "../../../General/CSV/EffectData.h"
-#include "../../../General/CSV/SEData.h"
+#include "../../../General/CSV/SoundData.h"
 #include "../../../General/AssetManager.h"
 #include "../../../General/Collision/CapsuleCollider.h"
 #include "../../../General/Collision/Rigidbody.h"
@@ -22,7 +22,7 @@ CharacterBase::CharacterBase(std::shared_ptr<ActorData> actorData, std::shared_p
 	m_charaStatus = std::make_shared<CharaStatus>(charaStatusData);
 }
 
-void CharacterBase::Init(std::wstring animPath, std::wstring attackPath, std::wstring effectPath, std::wstring sePath)
+void CharacterBase::Init(std::wstring animPath, std::wstring attackPath, std::wstring effectPath, std::wstring sePath, std::wstring voicePath)
 {
 	//Physics‚É“o˜^
 	Collidable::Init();
@@ -47,6 +47,11 @@ void CharacterBase::Init(std::wstring animPath, std::wstring attackPath, std::ws
 	{
 		//SE‚Ì€”õ
 		InitSE(csvLoader, sePath);
+	}
+	if (voicePath != L"" && voicePath != L"None")
+	{
+		//Voice‚Ì€”õ
+		InitVoice(csvLoader, voicePath);
 	}
 }
 
@@ -163,6 +168,24 @@ std::wstring CharacterBase::GetSEPath(std::wstring seName) const
 	return path;
 }
 
+std::wstring CharacterBase::GetVoicePath(std::wstring voiceName) const
+{
+	std::wstring path;
+
+	//’T‚·
+	for (auto& data : m_voiceDatas)
+	{
+		//ðŒ‚É‡‚¤‚à‚Ì‚ª‚ ‚Á‚½‚ç
+		if (data->GetName() == voiceName)
+		{
+			path = data->GetPath();
+			break;
+		}
+	}
+
+	return path;
+}
+
 void CharacterBase::ChangeArmor(CharaStatus::Armor armor)
 {
 	m_charaStatus->SetArmor(armor);
@@ -231,12 +254,28 @@ void CharacterBase::InitEffectData(CSVDataLoader& csvLoader, std::wstring effect
 
 void CharacterBase::InitSE(CSVDataLoader& csvLoader, std::wstring sePath)
 {
+	auto& soundManager = SoundManager::GetInstance();
+
 	auto seDatas = csvLoader.LoadCSV(sePath.c_str());
 	//“o˜^
 	for (auto data : seDatas)
 	{
-		auto seData = std::make_shared<SEData>(data);
+		auto seData = std::make_shared<SoundData>(data);
 		m_seDatas.emplace_back(seData);
-		SoundManager::GetInstance().LoadSE(seData->GetPath());
+		soundManager.LoadSE(seData->GetPath());
+	}
+}
+
+void CharacterBase::InitVoice(CSVDataLoader& csvLoader, std::wstring voicePath)
+{
+	auto& soundManager = SoundManager::GetInstance();
+
+	auto voiceDatas = csvLoader.LoadCSV(voicePath.c_str());
+	//“o˜^
+	for (auto data : voiceDatas)
+	{
+		auto voiceData = std::make_shared<SoundData>(data);
+		m_voiceDatas.emplace_back(voiceData);
+		soundManager.LoadVoice(voiceData->GetPath());
 	}
 }

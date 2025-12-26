@@ -19,6 +19,7 @@ namespace
 	const std::wstring kAttackPath = L"Player/PodAttackData";
 	const std::wstring kEffectPath = L"Player/PodEffectData";
 	const std::wstring kSEPath = L"Player/PodSEData";
+	const std::wstring kVoicePath = L"";
 	const std::wstring kNormalShot = L"NormalShot";
 
 	//ƒ‚ƒfƒ‹‚Ì‰ñ“]‘¬“x
@@ -40,7 +41,7 @@ Pod::~Pod()
 void Pod::Init()
 {
 	//‹¤’Ê‰Šú‰»
-	CharacterBase::Init(kAnimPath, kAttackPath, kEffectPath, kSEPath);
+	CharacterBase::Init(kAnimPath, kAttackPath, kEffectPath, kSEPath, kVoicePath);
 
 	//‘Ò‹@ó‘Ô‚É‚·‚é
 	auto thisPointer = std::dynamic_pointer_cast<Pod>(shared_from_this());

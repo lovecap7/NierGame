@@ -13,7 +13,7 @@ class AttackBase;
 class CSVDataLoader;
 class AttackData;
 class EffectData;
-class SEData;
+class SoundData;
 class CharacterBase abstract:
     public Actor
 {
@@ -22,7 +22,7 @@ public:
 	virtual ~CharacterBase() {};
 
     //初期化処理
-    void Init(std::wstring animPath, std::wstring attackPath, std::wstring effectPath, std::wstring sePath);
+    void Init(std::wstring animPath, std::wstring attackPath, std::wstring effectPath, std::wstring sePath, std::wstring voicePath);
 	//更新処理
 	virtual void Update() override;
     //半径
@@ -56,6 +56,9 @@ public:
     //SEの検索
     std::wstring GetSEPath(std::wstring seName)const;
 
+    //Voiceの検索
+    std::wstring GetVoicePath(std::wstring voiceName)const;
+
     //アーマーを変える
     void ChangeArmor(CharaStatus::Armor armor);
     //アーマーを元に戻す
@@ -79,6 +82,8 @@ protected:
     void InitEffectData(CSVDataLoader& csvLoader, std::wstring effectPath);
     //SEの読み込み
     void InitSE(CSVDataLoader& csvLoader, std::wstring sePath);
+    //Voiceの読み込み
+    void InitVoice(CSVDataLoader& csvLoader, std::wstring voicePath);
 protected:
     //キャラクターの状態
     std::shared_ptr<CharacterStateBase> m_state;
@@ -91,7 +96,9 @@ protected:
     //エフェクトのデータ
     std::vector<std::shared_ptr<EffectData>> m_effectDatas;
     //SEのデータ
-    std::vector<std::shared_ptr<SEData>> m_seDatas;
+    std::vector<std::shared_ptr<SoundData>> m_seDatas;
+    //VCのデータ
+    std::vector<std::shared_ptr<SoundData>> m_voiceDatas;
 
 };
 

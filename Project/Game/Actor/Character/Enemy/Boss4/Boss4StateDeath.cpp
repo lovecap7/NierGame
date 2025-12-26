@@ -23,6 +23,9 @@ namespace
 	//SE
 	const std::wstring kDeadSE = L"Dead";
 	const std::wstring kKOSE = L"KO";
+	//ボイス
+	const std::wstring kDeadVoice = L"Dead";
+
 	//ふっとばす力
 	constexpr float kMinSmashPower = 10.0f;
 	constexpr float kMaxSmashPower = 20.0f;
@@ -51,11 +54,12 @@ Boss4StateDeath::Boss4StateDeath(std::weak_ptr<Actor> enemy, bool isWait) :
 	owner->GetCharaStatus()->SetIsNoDamage(true);
 	auto status = owner->GetCharaStatus();
 
+	auto& soundManager = SoundManager::GetInstance();
 	//第二形態なら
 	if (owner->IsSecondPhase())
 	{
 		//とどめSE
-		SoundManager::GetInstance().PlayOnceSE(owner->GetSEPath(kKOSE));
+		soundManager.PlayOnceSE(owner->GetSEPath(kKOSE));
 
 		//死亡アニメーション
 		model->SetAnim(owner->GetAnim(kDeath).c_str(), false);
@@ -84,8 +88,11 @@ Boss4StateDeath::Boss4StateDeath(std::weak_ptr<Actor> enemy, bool isWait) :
 		//変身エフェクト
 		EffekseerManager::GetInstance().CreateEffect(owner->GetEffectPath(kTransEff), owner->GetPos());
 		//BGM開始
-		SoundManager::GetInstance().PlayBGM();
+		soundManager.PlayBGM();
 	}
+
+	//ボイス再生
+	soundManager.PlayVoice(owner->GetVoicePath(kDeadVoice));
 }
 
 Boss4StateDeath::~Boss4StateDeath()

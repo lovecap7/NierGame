@@ -7,6 +7,7 @@
 #include "../../../../../General/Collision/Rigidbody.h"
 #include "../../../../../General/CharaStatus.h"
 #include "../../../../../General/Effect/EffekseerManager.h"
+#include "../../../../../General/Sound/SoundManager.h"
 #include "../../../ActorManager.h"
 #include "../../../../Camera/BossCamera.h"
 #include "../../../../Camera/CameraController.h"
@@ -14,6 +15,10 @@ namespace
 {
 	//アニメーション
 	const std::wstring kStart = L"Start";
+
+	//ボイス
+	const std::wstring kVoice = L"Start";
+
 	//カメラ距離
 	constexpr float kCameraDistance = 800.0f;
 }
@@ -57,6 +62,9 @@ void Boss3StateStart::Update()
 
 			//ボス戦
 			actorManager->SetIsBossBattle(true);
+
+			//ボイス再生
+			SoundManager::GetInstance().PlayVoice(owner->GetVoicePath(kVoice));
 		}
 		m_isCreate = true;
 	}

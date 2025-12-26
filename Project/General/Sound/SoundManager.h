@@ -51,7 +51,7 @@ public:
 	//ループ再生する
 	std::weak_ptr<SE> PlayLoopSE(std::wstring path);
 	//1度だけ再生する 
-	std::weak_ptr<Voice> PlayVC(std::wstring path);
+	std::weak_ptr<Voice> PlayVoice(std::wstring path);
 	//全ての再生を開始
 	void AllPlay();
 	//全ての再生を止める
@@ -60,8 +60,8 @@ public:
 	int LoadBGM(std::wstring path);
 	//SEのロード
 	int LoadSE(std::wstring path);
-	//VCのロード
-	int LoadVC(std::wstring path);
+	//Voiceのロード
+	int LoadVoice(std::wstring path);
 	//音量
 	int GetSEVolumeC()	 const;
 	int GetBGMVolumeC()	 const;

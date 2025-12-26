@@ -29,7 +29,7 @@
 namespace
 {
 	//プレイヤーのパスデータ数
-	constexpr int kPathNum = 3;
+	constexpr int kPathNum = 5;
 }
 
 SelectPlayer::SelectPlayer(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager) :
@@ -50,7 +50,7 @@ void SelectPlayer::Init()
 
 	assert(pathData.size() >= kPathNum);
 	//共通初期化
-	CharacterBase::Init(pathData[0].c_str(), pathData[1].c_str(), pathData[2].c_str(),pathData[3].c_str());
+	CharacterBase::Init(pathData[0].c_str(), pathData[1].c_str(), pathData[2].c_str(),pathData[3].c_str(), pathData[4].c_str());
 
 	//待機状態にする
 	auto thisPointer = std::dynamic_pointer_cast<SelectPlayer>(shared_from_this());

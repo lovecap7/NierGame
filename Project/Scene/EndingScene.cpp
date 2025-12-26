@@ -7,6 +7,7 @@
 #include "../General/Fader.h"
 #include "../General/Game.h"
 #include "../Game/UI/Ending/EndingTextUI.h"
+#include "../Game/UI/SkipUI.h"
 #include "../Game/UI/UIManager.h"
 #include "../Game/Actor/ActorManager.h"
 #include "../General/AssetManager.h"
@@ -31,12 +32,16 @@ namespace
 
 	//スキップフレーム数
 	constexpr int kSkipFrame = 60 * 2;
+
+	//終了フレーム
+	constexpr int kFinishFrame = 60 * 3;
 }
 
 EndingScene::EndingScene(SceneController& controller) :
 	SceneBase(controller),
 	m_effectManager(EffekseerManager::GetInstance()),
-	m_skipFrame(0.0f)
+	m_skipCountFrame(0),
+	m_finishCountFrame(0)
 {
 }
 
@@ -77,13 +82,20 @@ void EndingScene::Init()
 	m_actorManager->CreateActorCSV(kEndingPath.c_str(), kCharacterDataPath.c_str());
 	m_actorManager->CreateActorCSV(kEndingPath.c_str(), kStageDataPath.c_str());
 
-	//UI
+	//テキストUI
 	auto endingTextUI = std::make_shared<EndingTextUI>();
 	endingTextUI->Init();
 	m_endingTextUI = endingTextUI;
 
+	//スキップUI
+	auto skipUI = std::make_shared<SkipUI>();
+	skipUI->Init();
+	m_skipUI = skipUI;
+
 	//スキップフレーム
-	m_skipFrame = 0;
+	m_skipCountFrame = 0;
+	//終了フレーム
+	m_finishCountFrame = 0;
 }
 
 void EndingScene::Update()
@@ -108,18 +120,31 @@ void EndingScene::Update()
 	//全ての処理が終了したら
 	if (!m_endingTextUI.expired())
 	{
-		if (m_endingTextUI.lock()->IsAllEnd() || input.IsPress("A"))
+		if (m_endingTextUI.lock()->IsAllEnd())
 		{
-			++m_skipFrame;
+			++m_finishCountFrame;
+		}
+		m_finishCountFrame = MathSub::ClampInt(m_finishCountFrame, 0, kFinishFrame);
+	}
+
+	//スキップ処理
+	if (!m_skipUI.expired())
+	{
+		if (input.IsPress("A"))
+		{
+			++m_skipCountFrame;
 		}
 		else
 		{
-			--m_skipFrame;
+			--m_skipCountFrame;
 		}
-		m_skipFrame = MathSub::ClampFloat(m_skipFrame, 0, kSkipFrame);
+		m_skipCountFrame = MathSub::ClampInt(m_skipCountFrame, 0, kSkipFrame);
+		//割合
+		m_skipUI.lock()->SetRate(static_cast<float>(m_skipCountFrame) / static_cast<float>(kSkipFrame));
 	}
 
-	if (m_skipFrame >= kSkipFrame && !fader.IsFadeNow())
+	//終了条件
+	if ((m_skipCountFrame >= kSkipFrame || m_finishCountFrame >= kFinishFrame) && !fader.IsFadeNow())
 	{
 		//フェード
 		fader.FadeOut();
@@ -144,6 +169,5 @@ void EndingScene::DebugDraw() const
 #if _DEBUG
 	DrawString(0, 0, L"Ending Scene", 0xffffff);
 	DrawString(0, 16, L"[D]キーで Debug Scene", 0xffffff);
-	DrawFormatString(0, 32, 0xffffff,L"Skip = %d", m_skipFrame);
 #endif
 }
