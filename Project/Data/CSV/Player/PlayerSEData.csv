@@ -9,3 +9,4 @@ JustAvoid,Player/JustAvoid
 Walk,Player/Footsteps
 Run,Player/Footsteps_Short
 Jump,Player/Footsteps
+Heal,Player/Heal

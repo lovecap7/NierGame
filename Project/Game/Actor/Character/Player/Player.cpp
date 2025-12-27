@@ -22,6 +22,8 @@
 #include "../../../Camera/PlayerCamera.h"
 #include "../../../../General/CSV/CSVDataLoader.h"
 #include "../../../../General/CSV/CSVData.h"
+#include "../../../../General/Sound/SoundManager.h"
+#include "../../../../General/Effect/EffekseerManager.h"
 #include <DxLib.h>
 #include <cmath>
 #include <cassert>
@@ -69,6 +71,11 @@ namespace
 
 	//回復可能回数
 	constexpr int kFullRecoveryNum = 3;
+
+	//回復Effect
+	const std::wstring kHealEffect = L"Heal";
+	//回復SE
+	const std::wstring kHealSE = L"Heal";
 }
 
 Player::Player(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaStatusData> charaStatusData, std::weak_ptr<ActorManager> pActorManager) :
@@ -230,19 +237,7 @@ void Player::Update()
 #endif
 
 	//回復
-	if (input.GetPOVInfo().IsDownTrigger())
-	{
-		//体力が満タンでなく、かつ死んでいなければ回復
-		if (m_charaStatus->GetNowHP() < m_charaStatus->GetMaxHP() &&
-			!m_charaStatus->IsDead() &&
-			m_fullRecoveryNum > 0)
-		{
-			//全回復
-			m_charaStatus->FullRecovery();
-			//回復可能回数を減らす
-			--m_fullRecoveryNum;
-		}
-	}
+	Heal(input);
 
 	//武器を収める
 	UpdatePutAwayWeapon();
@@ -381,6 +376,28 @@ void Player::End()
 	//登録解除
 	Collidable::End();
 	m_avoidColl->End();
+}
+
+void Player::Heal(Input& input)
+{
+	if (input.GetPOVInfo().IsDownTrigger())
+	{
+		//体力が満タンでなく、かつ死んでいなければ回復
+		if (m_charaStatus->GetNowHP() < m_charaStatus->GetMaxHP() &&
+			!m_charaStatus->IsDead() &&
+			m_fullRecoveryNum > 0)
+		{
+			//回復エフェクト
+			EffekseerManager::GetInstance().CreateTrackActorEffect(GetEffectPath(kHealEffect), 
+				std::dynamic_pointer_cast<Actor>(shared_from_this()));
+			//回復SE
+			SoundManager::GetInstance().PlayOnceSE(GetSEPath(kHealSE));
+			//全回復
+			m_charaStatus->FullRecovery();
+			//回復可能回数を減らす
+			--m_fullRecoveryNum;
+		}
+	}
 }
 
 Quaternion Player::GetCameraRot() const

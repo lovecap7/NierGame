@@ -39,6 +39,9 @@ public:
 	void Complete() override;
 	//I—¹ˆ—
 	void End()override;
+
+	//‰ñ•œˆ—
+	void Heal(Input& input);
 	
 	//ƒJƒƒ‰‚Ì‰ñ“]—Ê
 	Quaternion GetCameraRot()const;
