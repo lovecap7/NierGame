@@ -2,6 +2,7 @@
 #include "SceneController.h"
 #include "TitleScene.h"
 #include "GameScene.h"
+#include "OptionScene.h"
 #include "TutorialScene.h"
 #include "../General/Input.h"
 #include <DxLib.h>
@@ -173,8 +174,8 @@ void SelectScene::UpdateMainMenu(Input& input, Fader& fader,std::shared_ptr<Sele
 				m_update = &SelectScene::UpdateStageMenu;
 				break;
 			case SelectScene::MainMenu::Option:
-				//タイトルへ
-				fader.FadeOut();
+				//オプション
+				m_controller.PushScene(std::make_shared<OptionScene>(m_controller));
 				break;
 			case SelectScene::MainMenu::Title:
 				//タイトルへ

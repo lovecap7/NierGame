@@ -1,5 +1,6 @@
 #include "OptionUI.h"
 #include "../../../General/AssetManager.h"
+#include "../../../General/Game.h"
 #include <string>
 #include <DxLib.h>
 
@@ -13,6 +14,11 @@ namespace
 	const std::wstring kWindowModePath = L"Option/Option_Window";
 	const std::wstring kFullScreenModePath = L"Option/Option_FullScreen";
 	const std::wstring kCursorPath = L"Mark/Cursor";
+
+	//座標
+	constexpr float kMenuPosX = Game::kScreenCenterX - 200.0f;
+	constexpr float kBasePosY = 100.0f;
+	constexpr float kOffsetPosY = 100.0f;
 }
 
 OptionUI::OptionUI() :
@@ -33,6 +39,16 @@ OptionUI::OptionUI() :
 	m_windowHandle = assetManager.GetImageHandle(kWindowModePath);
 	m_fullScreenHandle = assetManager.GetImageHandle(kFullScreenModePath);
 	m_cursorHandle = assetManager.GetImageHandle(kCursorPath);
+
+	//選択中メニュー初期化
+	m_selectMenuIndex = static_cast<int>(OptionScene::OptionMenu::BGM);
+
+	//メニュー座標初期化
+	m_menuPos.resize(static_cast<int>(OptionScene::OptionMenu::Max));
+	for(int i = 0; i < static_cast<int>(OptionScene::OptionMenu::Max); i++)
+	{
+		m_menuPos[i] = { kMenuPosX , kBasePosY + i * kOffsetPosY };
+	}
 }
 
 OptionUI::~OptionUI()
@@ -45,12 +61,14 @@ void OptionUI::Update()
 
 void OptionUI::Draw() const
 {
-	DrawRotaGraph(50, 50, 1.0f, 0.0f, m_bgmHandle, true);
-	DrawRotaGraph(50, 150, 1.0f, 0.0f, m_seHandle, true);
-	DrawRotaGraph(50, 250, 1.0f, 0.0f, m_voiceHandle, true);
-	DrawRotaGraph(50, 350, 1.0f, 0.0f, m_screenModeHandle, true);
-	DrawRotaGraph(50, 450, 1.0f, 0.0f, m_windowHandle, true);
-	DrawRotaGraph(50, 550, 1.0f, 0.0f, m_fullScreenHandle, true);
-	DrawRotaGraph(50, 650, 1.0f, 0.0f, m_cursorHandle, true);
+	int bgmIndex = static_cast<int>(OptionScene::OptionMenu::BGM);
+	int seIndex = static_cast<int>(OptionScene::OptionMenu::SE);
+	int voiceIndex = static_cast<int>(OptionScene::OptionMenu::Voice);
+	int screenModeIndex = static_cast<int>(OptionScene::OptionMenu::ScreenMode);
+	//描画
+	DrawRotaGraph(m_menuPos[bgmIndex].x, m_menuPos[bgmIndex].y, 1.0f, 0.0f, m_bgmHandle, true);
+	DrawRotaGraph(m_menuPos[seIndex].x, m_menuPos[seIndex].y, 1.0f, 0.0f, m_seHandle, true);
+	DrawRotaGraph(m_menuPos[voiceIndex].x, m_menuPos[voiceIndex].y, 1.0f, 0.0f, m_voiceHandle, true);
+	DrawRotaGraph(m_menuPos[screenModeIndex].x, m_menuPos[screenModeIndex].y, 1.0f, 0.0f, m_screenModeHandle, true);
 
 }

@@ -18,6 +18,15 @@ public:
     virtual void End() override;
     virtual void Restart() override {};
     virtual void DebugDraw()const override {};
+
+	enum class OptionMenu : int
+    {
+        BGM = 0,
+		SE = 1,
+		Voice = 2,
+        ScreenMode = 3,
+		Max = 4,
+	};
 private:
 	//ƒIƒvƒVƒ‡ƒ“UI
 	std::weak_ptr<OptionUI> m_optionUI;
