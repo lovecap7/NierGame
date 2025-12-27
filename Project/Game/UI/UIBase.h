@@ -18,6 +18,7 @@ public:
 	bool IsFrontDraw()const { return m_isFrontDraw; };
 	//íœ
 	bool IsDelete()const { return m_isDelete; };
+	void Delete() { m_isDelete = true; };
 	//•`‰æ‚µ‚Ä‚¢‚é‚©
 	bool IsDraw()const { return m_isDraw; };
 	// •`‰æ‚ğ—LŒø‚É‚·‚é

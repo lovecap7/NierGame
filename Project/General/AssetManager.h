@@ -116,5 +116,6 @@ private:
 	std::map<Font, int>m_fontHandles;
 	//‰¹ƒŠƒ\[ƒX
 	std::map<std::wstring, int>m_soundHandles;
+
 };
 
