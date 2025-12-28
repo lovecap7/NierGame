@@ -1,10 +1,12 @@
 #pragma once
 #include "SoundBase.h"
+#include "SoundManager.h"
+
 class SE :
     public SoundBase
 {
 public:
-    SE(int handle, int volume, bool isLoop);
+    SE(int handle, SoundManager::SoundVolume volume, bool isLoop);
     ~SE();
     void Update()override;
 };

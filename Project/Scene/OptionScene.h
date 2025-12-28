@@ -30,5 +30,8 @@ public:
 private:
 	//オプションUI
 	std::weak_ptr<OptionUI> m_optionUI;
+
+	//オプションメニューの選択中インデックス
+	OptionMenu m_currentOptionMenu;
 };
 

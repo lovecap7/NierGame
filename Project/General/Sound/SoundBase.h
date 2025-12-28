@@ -1,10 +1,11 @@
 #pragma once
 #include <memory>
+#include "SoundManager.h"
 class SoundBase abstract:
 	public std::enable_shared_from_this<SoundBase>
 {
 public:
-	SoundBase(int handle,int volume,bool isLoop);
+	SoundBase(int handle, SoundManager::SoundVolume volume,bool isLoop);
 	~SoundBase();
 	virtual void Init();
 	virtual void Update()abstract;
@@ -20,12 +21,12 @@ public:
 	//削除予定
 	virtual bool IsDelete();
 	//音量
-	void SetVolume(int volume);
+	void SetVolume(SoundManager::SoundVolume volume);
 protected:
 	//ハンドル
 	int m_playHandle;
 	//音量
-	int m_volume;
+	SoundManager::SoundVolume m_volume;
 	//ループ
 	bool m_isLoop;
 };

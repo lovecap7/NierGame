@@ -1,8 +1,7 @@
 #include "SoundBase.h"
-#include "SoundManager.h"
 #include <DxLib.h>
 
-SoundBase::SoundBase(int handle, int volume, bool isLoop):
+SoundBase::SoundBase(int handle, SoundManager::SoundVolume volume, bool isLoop):
 	m_playHandle(handle),
 	m_volume(volume),
 	m_isLoop(isLoop)
@@ -59,8 +58,8 @@ bool SoundBase::IsDelete()
 	return !m_isLoop && IsPlay();
 }
 
-void SoundBase::SetVolume(int volume)
+void SoundBase::SetVolume(SoundManager::SoundVolume volume)
 {
 	m_volume = volume;
-	ChangeVolumeSoundMem(m_volume, m_playHandle);
+	ChangeVolumeSoundMem(static_cast<int>(m_volume), m_playHandle);
 }

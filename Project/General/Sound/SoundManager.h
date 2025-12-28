@@ -62,29 +62,43 @@ public:
 	int LoadSE(std::wstring path);
 	//Voiceのロード
 	int LoadVoice(std::wstring path);
-	//音量
-	int GetSEVolumeC()	 const;
-	int GetBGMVolumeC()	 const;
-	int GetVoiceVolumeC() const;
-	int GetMasterVolume()const;
+	//音量定数
+	enum class SoundVolume : int
+	{
+		V0 = 0,
+		V1 = 26,
+		V2 = 51,
+		V3 = 77,
+		V4 = 102,
+		V5 = 128,
+		V6 = 153,
+		V7 = 179,
+		V8 = 204,
+		V9 = 230,
+		V10 = 255,
+	};
+
 	//セッター
-	void SetSEVolume(int volume);
-	void SetBGMVolume(int volume);
-	void SetVoiceVolume(int volume);
-	void SetMasterVolume(int volume);
-	//音量調整用
-	int GetSEVolume()	 const { return m_seVolume; };
-	int GetBGMVolume()	 const { return m_bgmVolume; };
-	int GetVoiceVolume() const { return m_voiceVolume; };
+	void SetSEVolume(SoundVolume volume);
+	void SetBGMVolume(SoundVolume volume);
+	void SetVoiceVolume(SoundVolume volume);
+	void SetMasterVolume(SoundVolume volume);
+	//音量
+	SoundVolume GetSEVolume()	 const { return m_seVolume; };
+	SoundVolume GetBGMVolume()	 const { return m_bgmVolume; };
+	SoundVolume GetVoiceVolume() const { return m_voiceVolume; };
+	//音量レベル
+	int GetVolumeLevel(SoundVolume volume)const;
+	
 private:
 	//SEの音量
-	int m_seVolume;
+	SoundVolume m_seVolume;
 	//BGMの音量
-	int m_bgmVolume;
+	SoundVolume m_bgmVolume;
 	//ボイスの音量
-	int m_voiceVolume;
+	SoundVolume m_voiceVolume;
 	//マスターの音量
-	int m_masterVolume;
+	SoundVolume m_masterVolume;
 	//サウンド
 	std::list<std::shared_ptr<SoundBase>> m_sounds;
 	//BGMは常に一つなのでここで扱う

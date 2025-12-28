@@ -1,7 +1,7 @@
 #include "Voice.h"
-#include "SoundManager.h"
 
-Voice::Voice(int handle, int volume):
+
+Voice::Voice(int handle, SoundManager::SoundVolume volume):
 	SoundBase(handle,volume,false)
 {
 }
@@ -11,5 +11,5 @@ Voice::~Voice()
 }
 void Voice::Update()
 {
-	SetVolume(SoundManager::GetInstance().GetVoiceVolumeC());
+	SetVolume(SoundManager::GetInstance().GetVoiceVolume());
 }

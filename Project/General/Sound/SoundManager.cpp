@@ -10,15 +10,6 @@
 
 namespace
 {
-	//最小
-	constexpr int kMinVolume = 0;
-	//最大
-	constexpr int kMaxVolume = 255;
-	//デフォルトのサウンドの倍率
-	constexpr int kDefaultVolume = 127;
-	//補正倍率
-	constexpr float kCorrectionRate = 1.2f;
-
 	//パス
 	const std::wstring kBGM = L"BGM/";
 	const std::wstring kSE = L"SE/";
@@ -46,13 +37,13 @@ void SoundManager::Exit(std::shared_ptr<SoundBase> sound)
 void SoundManager::Init()
 {
 	//SEの音量
-	m_seVolume = kDefaultVolume;
+	m_seVolume = SoundVolume::V5;
 	//BGMの音量
-	m_bgmVolume = kDefaultVolume;
+	m_bgmVolume = SoundVolume::V5;
 	//ボイスの音量
-	m_voiceVolume = kDefaultVolume;
+	m_voiceVolume = SoundVolume::V5;
 	//マスターの音量
-	m_masterVolume = kDefaultVolume;
+	m_masterVolume = SoundVolume::V5;
 }
 void SoundManager::Update()
 {
@@ -178,44 +169,55 @@ int SoundManager::LoadVoice(std::wstring path)
 	return AssetManager::GetInstance().GetSoundHandle(kVoice + path);
 }
 
-int SoundManager::GetSEVolumeC() const
+void SoundManager::SetSEVolume(SoundVolume volume)
 {
-	return MathSub::ClampInt(m_seVolume, kMinVolume, m_masterVolume);
+	m_seVolume = volume;
 }
 
-int SoundManager::GetBGMVolumeC() const
+void SoundManager::SetBGMVolume(SoundVolume volume)
 {
-	return MathSub::ClampInt(m_bgmVolume, kMinVolume, m_masterVolume);
+	m_bgmVolume = volume;
 }
 
-int SoundManager::GetVoiceVolumeC() const
+void SoundManager::SetVoiceVolume(SoundVolume volume)
 {
-	return MathSub::ClampInt(m_voiceVolume, kMinVolume, m_masterVolume);
+	m_voiceVolume = volume;
 }
 
-int SoundManager::GetMasterVolume() const
+void SoundManager::SetMasterVolume(SoundVolume volume)
 {
-	return m_masterVolume;
+	m_masterVolume = volume;
 }
 
-void SoundManager::SetSEVolume(int volume)
+int SoundManager::GetVolumeLevel(SoundVolume volume) const
 {
-	m_seVolume = MathSub::ClampInt(volume, kMinVolume, kMaxVolume);
-}
+	switch(volume)
+	{
+		case SoundVolume::V0:
+			return 0;
+		case SoundVolume::V1:
+			return 1;
+		case SoundVolume::V2:
+			return 2;
+		case SoundVolume::V3:
+			return 3;
+		case SoundVolume::V4:
+			return 4;
+		case SoundVolume::V5:
+			return 5;
+		case SoundVolume::V6:
+			return 6;
+		case SoundVolume::V7:
+			return 7;
+		case SoundVolume::V8:
+			return 8;
+		case SoundVolume::V9:
+			return 9;
+		case SoundVolume::V10:
+			return 10;
+	}
 
-void SoundManager::SetBGMVolume(int volume)
-{
-	m_bgmVolume = MathSub::ClampInt(volume, kMinVolume, kMaxVolume);
-}
-
-void SoundManager::SetVoiceVolume(int volume)
-{
-	m_voiceVolume = MathSub::ClampInt(volume, kMinVolume, kMaxVolume);
-}
-
-void SoundManager::SetMasterVolume(int volume)
-{
-	m_masterVolume = MathSub::ClampInt(volume, kMinVolume, kMaxVolume);
+	return 0;
 }
 
 //消滅フラグをチェックして削除
