@@ -39,6 +39,8 @@ public:
 	void Update();
 	//終了
 	void End();
+	//リセット
+	void Reset();
 	//保存
 	void SaveVolume();
 	//BGM再生
@@ -83,12 +85,25 @@ public:
 	void SetBGMVolume(SoundVolume volume);
 	void SetVoiceVolume(SoundVolume volume);
 	void SetMasterVolume(SoundVolume volume);
+	//レベル加算・減算
+	void LevelUpSEVolume();
+	void LevelDownSEVolume();
+	void LevelUpBGMVolume();
+	void LevelDownBGMVolume();
+	void LevelUpVoiceVolume();
+	void LevelDownVoiceVolume();
+	void LevelUpMasterVolume();
+	void LevelDownMasterVolume();
+
+
 	//音量
 	SoundVolume GetSEVolume()	 const { return m_seVolume; };
 	SoundVolume GetBGMVolume()	 const { return m_bgmVolume; };
 	SoundVolume GetVoiceVolume() const { return m_voiceVolume; };
 	//音量レベル
-	int GetVolumeLevel(SoundVolume volume)const;
+	int GetLevelToVolume(SoundVolume volume)const;
+	SoundVolume GetVolumeToLevel(int level)const;
+	
 	
 private:
 	//SEの音量

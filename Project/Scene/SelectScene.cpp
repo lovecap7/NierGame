@@ -77,6 +77,8 @@ void SelectScene::Init()
 	Fader::GetInstance().FadeIn();
 	//エフェクトリセット
 	EffekseerManager::GetInstance().Reset();
+	//音リセット
+	SoundManager::GetInstance().Reset();
 
 	//一番上の項目から
 	m_currentMainMenu = MainMenu::Tutorial;

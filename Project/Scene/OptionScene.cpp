@@ -2,6 +2,7 @@
 #include "SceneController.h"
 #include "../Game/UI/Option/OptionUI.h"
 #include "../General/Input.h"
+#include "../General/Sound/SoundManager.h"
 
 OptionScene::OptionScene(SceneController& controller):
 	SceneBase(controller),
@@ -32,10 +33,35 @@ void OptionScene::Update()
 		m_controller.PopScene();
 		return;
 	}
+	auto& input = Input::GetInstance();
+
+	//音量調整
+	auto& soundManager = SoundManager::GetInstance();
+	switch (m_currentOptionMenu)
+	{
+	case OptionScene::OptionMenu::BGM:
+		if (input.IsRepeate("Right"))soundManager.LevelUpBGMVolume();
+		if (input.IsRepeate("Left"))soundManager.LevelDownBGMVolume();
+		break;
+	case OptionScene::OptionMenu::SE:
+		if (input.IsRepeate("Right"))soundManager.LevelUpSEVolume();
+		if (input.IsRepeate("Left"))soundManager.LevelDownSEVolume();
+		break;
+	case OptionScene::OptionMenu::Voice:
+		if (input.IsRepeate("Right"))soundManager.LevelUpVoiceVolume();
+		if (input.IsRepeate("Left"))soundManager.LevelDownVoiceVolume();
+		break;
+	case OptionScene::OptionMenu::ScreenMode:
+		break;
+	case OptionScene::OptionMenu::Max:
+		break;
+	default:
+		break;
+	}
+
 
 	//メニュー操作
 	int menu = static_cast<int>(m_currentOptionMenu);
-	auto& input = Input::GetInstance();
 	if (input.IsRepeate("Up"))menu--;
 	if (input.IsRepeate("Down"))menu++;
 	//範囲外ならループ

@@ -42,6 +42,7 @@ void GameoverScene::Init()
 
 	//ƒTƒEƒ“ƒh
 	auto& soundManager = SoundManager::GetInstance();
+	soundManager.Reset();
 	soundManager.LoadBGM(kBGMGameoverPath);
 	soundManager.LoadSE(kSEOKPath);
 	soundManager.LoadSE(kSESelectPath);

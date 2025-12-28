@@ -58,12 +58,17 @@ void SoundManager::Update()
 void SoundManager::End()
 {
 	//削除
+	Reset();
+	InitSoundMem();
+}
+void SoundManager::Reset()
+{
+	//削除
 	for (auto& sound : m_sounds) {
 		sound->Delete();
 	}
 	CheckDeleteSound();
 	m_sounds.clear();
-	InitSoundMem();
 }
 
 void SoundManager::SaveVolume()
@@ -189,7 +194,63 @@ void SoundManager::SetMasterVolume(SoundVolume volume)
 	m_masterVolume = volume;
 }
 
-int SoundManager::GetVolumeLevel(SoundVolume volume) const
+void SoundManager::LevelUpSEVolume()
+{
+	int level = GetLevelToVolume(m_seVolume);
+	level = MathSub::ClampInt(level + 1, 0, 10);
+	m_seVolume = GetVolumeToLevel(level);
+}
+
+void SoundManager::LevelDownSEVolume()
+{
+	int level = GetLevelToVolume(m_seVolume);
+	level = MathSub::ClampInt(level - 1, 0, 10);
+	m_seVolume = GetVolumeToLevel(level);
+}
+
+void SoundManager::LevelUpBGMVolume()
+{
+	int level = GetLevelToVolume(m_bgmVolume);
+	level = MathSub::ClampInt(level + 1, 0, 10);
+	m_bgmVolume = GetVolumeToLevel(level);
+}
+
+void SoundManager::LevelDownBGMVolume()
+{
+	int level = GetLevelToVolume(m_bgmVolume);
+	level = MathSub::ClampInt(level - 1, 0, 10);
+	m_bgmVolume = GetVolumeToLevel(level);
+}
+
+void SoundManager::LevelUpVoiceVolume()
+{
+	int level = GetLevelToVolume(m_voiceVolume);
+	level = MathSub::ClampInt(level + 1, 0, 10);
+	m_voiceVolume = GetVolumeToLevel(level);
+}
+
+void SoundManager::LevelDownVoiceVolume()
+{
+	int level = GetLevelToVolume(m_voiceVolume);
+	level = MathSub::ClampInt(level - 1, 0, 10);
+	m_voiceVolume = GetVolumeToLevel(level);
+}
+
+void SoundManager::LevelUpMasterVolume()
+{
+	int level = GetLevelToVolume(m_masterVolume);
+	level = MathSub::ClampInt(level + 1, 0, 10);
+	m_masterVolume = GetVolumeToLevel(level);
+}
+
+void SoundManager::LevelDownMasterVolume()
+{
+	int level = GetLevelToVolume(m_masterVolume);
+	level = MathSub::ClampInt(level - 1, 0, 10);
+	m_masterVolume = GetVolumeToLevel(level);
+}
+
+int SoundManager::GetLevelToVolume(SoundVolume volume) const
 {
 	switch(volume)
 	{
@@ -218,6 +279,37 @@ int SoundManager::GetVolumeLevel(SoundVolume volume) const
 	}
 
 	return 0;
+}
+
+SoundManager::SoundVolume SoundManager::GetVolumeToLevel(int level) const
+{
+	switch (level)
+	{
+	case 0:
+		return SoundVolume::V0;
+	case 1:
+		return SoundVolume::V1;
+	case 2:
+		return SoundVolume::V2;
+	case 3:
+		return SoundVolume::V3;
+	case 4:
+		return SoundVolume::V4;
+	case 5:
+		return SoundVolume::V5;
+	case 6:
+		return SoundVolume::V6;
+	case 7:
+		return SoundVolume::V7;
+	case 8:
+		return SoundVolume::V8;
+	case 9:
+		return SoundVolume::V9;
+	case 10:
+		return SoundVolume::V10;
+	}
+
+	return SoundVolume::V0;
 }
 
 //消滅フラグをチェックして削除

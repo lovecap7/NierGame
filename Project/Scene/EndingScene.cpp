@@ -65,6 +65,7 @@ void EndingScene::Init()
 	m_effectManager.Init();
 	//音
 	auto& soundManager = SoundManager::GetInstance();
+	soundManager.Reset();
 	//サウンドデータのロード
 	soundManager.LoadBGM(kBGMEndingPath);
 	//BGM再生

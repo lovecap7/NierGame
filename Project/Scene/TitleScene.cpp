@@ -68,6 +68,8 @@ void TitleScene::Init()
 	Fader::GetInstance().FadeIn();
 	//エフェクトリセット
 	m_effectManager.Reset();
+	//音リセット
+	SoundManager::GetInstance().Reset();
 
 	//エフェクトマネージャー初期化
 	m_effectManager.Init();

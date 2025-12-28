@@ -115,9 +115,9 @@ void OptionUI::Update()
 	//Še‰¹—ÊŽæ“¾
 	auto& soundManager = SoundManager::GetInstance();
 
-	m_bgmVolume = soundManager.GetVolumeLevel(soundManager.GetBGMVolume());
-	m_seVolume = soundManager.GetVolumeLevel(soundManager.GetSEVolume());
-	m_voiceVolume = soundManager.GetVolumeLevel(soundManager.GetVoiceVolume());
+	m_bgmVolume = soundManager.GetLevelToVolume(soundManager.GetBGMVolume());
+	m_seVolume = soundManager.GetLevelToVolume(soundManager.GetSEVolume());
+	m_voiceVolume = soundManager.GetLevelToVolume(soundManager.GetVoiceVolume());
 }
 
 void OptionUI::Draw() const

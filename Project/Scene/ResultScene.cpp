@@ -55,8 +55,11 @@ void ResultScene::Init()
 	//カメラリセット
 	CameraController::GetInstance().Init();
 
+	//音リセット
+	auto& soundManager = SoundManager::GetInstance();
+	soundManager.Reset();
 	//BGM
-	SoundManager::GetInstance().PlayBGM(kBGMResultPath);
+	soundManager.PlayBGM(kBGMResultPath);
 
 
 	//入力を開始

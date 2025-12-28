@@ -46,6 +46,7 @@ void TutorialResultScene::Init()
 
 	//ƒTƒEƒ“ƒh
 	auto& soundManager = SoundManager::GetInstance();
+	soundManager.Reset();
 	soundManager.LoadBGM(kBGMTutorialResultPath);
 	soundManager.LoadSE(kSESelectPath);
 	soundManager.LoadSE(kSEOKPath);

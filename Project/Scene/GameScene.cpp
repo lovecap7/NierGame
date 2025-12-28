@@ -312,7 +312,9 @@ void GameScene::PlayStageBGM()
 
 void GameScene::InitStageBGM()
 {
+	//音リセット
 	auto& soundManager = SoundManager::GetInstance();
+	soundManager.Reset();
 
 	//ステージBGMで使うサウンドデータを先に全てロードする
 	switch (GetStageIndexByName(m_stageName))

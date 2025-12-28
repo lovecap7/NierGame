@@ -53,8 +53,9 @@ void TutorialScene::Init()
 	//タイムスケール
 	Application::GetInstance().SetTimeScale(1.0f);
 	//UI削除
-	UIManager::GetInstance().AllDeleteUI();
-	UIManager::GetInstance().SetIsDraw(true);
+	auto& uiManager = UIManager::GetInstance();
+	uiManager.AllDeleteUI();
+	uiManager.SetIsDraw(true);
 	//Inputの入力情報リセット
 	Input::GetInstance().StopUpdate();
 	//リセット
@@ -62,6 +63,7 @@ void TutorialScene::Init()
 
 	//サウンド
 	auto& soundManager = SoundManager::GetInstance();
+	soundManager.Reset();
 	soundManager.LoadBGM(kBGMTutorialPath);
 	//BGM
 	soundManager.PlayBGM(kBGMTutorialPath);
