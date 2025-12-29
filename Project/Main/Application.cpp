@@ -201,6 +201,7 @@ void Application::Run()
 
 
 #if _DEBUG
+
 		if (input.IsPress("AddTimeScale"))
 		{
 			m_timeScale += 0.01f;
@@ -241,6 +242,7 @@ void Application::Run()
 			
 		}
 
+		printf("LoadingNum : %d\n", GetASyncLoadNum());
 #endif
 		//êÿÇËë÷ÇÌÇ¡ÇΩÇ»ÇÁ
 		if (m_isWindow != isWindow)

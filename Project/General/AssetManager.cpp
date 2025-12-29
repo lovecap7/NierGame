@@ -86,10 +86,18 @@ int AssetManager::GetEffectHandle(std::wstring path)
     }
     else
     {
+        //非同期ロードをしているか
+		bool isASyncLoad = GetUseASyncLoadFlag();
+		//非同期ロードを無効にする
+		SetUseASyncLoadFlag(false);
+
         //ハンドルをロードする
         std::wstring loadPath = kEffectPath + path + kEfk;
         handle = LoadEffekseerEffect(loadPath.c_str());
         m_effectHandles[path] = handle;
+
+		//非同期ロードの設定を元に戻す
+		SetUseASyncLoadFlag(isASyncLoad);
     }
 
     //ハンドルチェック

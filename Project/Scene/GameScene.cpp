@@ -59,8 +59,6 @@ GameScene::~GameScene()
 
 void GameScene::Init()
 {
-	
-
 	//アセットを削除
 	AssetManager::GetInstance().DeleteModelHandle();
 	//ポストエフェクトを解除
@@ -75,6 +73,9 @@ void GameScene::Init()
 	Physics::GetInstance().StartUpdate();
 	//エフェクトリセット
 	EffekseerManager::GetInstance().Reset();
+
+	//非同期ロード開始
+	SetUseASyncLoadFlag(true);
 
 	//ステージインデックス
 	auto stageName = m_stageName.c_str();
@@ -128,6 +129,9 @@ void GameScene::Init()
 	//スタートカメラ
 	auto startCamera = std::make_shared<StartCamera>(m_actorManager->GetPlayer(),m_actorManager);
 	cameraController.PushCamera(startCamera);
+
+	//非同期ロード終了
+	SetUseASyncLoadFlag(false);
 
 }
 
