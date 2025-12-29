@@ -79,7 +79,7 @@ void AssetManager::DeleteModelHandle()
 int AssetManager::GetEffectHandle(std::wstring path)
 {
     int handle = -1;
-    //モデルがあったら
+    //エフェクトがあったら
     if (m_effectHandles.find(path) != m_effectHandles.end())
     {
         handle = m_effectHandles.at(path);

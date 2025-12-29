@@ -55,6 +55,7 @@ void TutorialScene::Init()
 	Application::GetInstance().SetTimeScale(1.0f);
 	//Physicsスタート
 	Physics::GetInstance().StartUpdate();
+
 	//UI削除
 	auto& uiManager = UIManager::GetInstance();
 	uiManager.AllDeleteUI();

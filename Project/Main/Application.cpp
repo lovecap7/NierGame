@@ -238,7 +238,9 @@ void Application::Run()
 			SYSTEMTIME lt;
 			GetLocalTime(&lt);
 			printf("FPS Low! fps = %.2f : Time = %02d:%02d\n", fps, lt.wHour, lt.wMinute);
+			
 		}
+
 #endif
 		//êÿÇËë÷ÇÌÇ¡ÇΩÇ»ÇÁ
 		if (m_isWindow != isWindow)

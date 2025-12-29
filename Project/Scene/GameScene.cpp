@@ -59,6 +59,8 @@ GameScene::~GameScene()
 
 void GameScene::Init()
 {
+	
+
 	//アセットを削除
 	AssetManager::GetInstance().DeleteModelHandle();
 	//ポストエフェクトを解除
@@ -95,6 +97,10 @@ void GameScene::Init()
 	m_actorManager->CreateActorCSV(stageName, kStageDataName.c_str());
 	m_actorManager->CreateActorCSV(stageName, kCheckPointDataName.c_str());
 
+	//音
+	InitStageBGM();
+	PlayStageBGM();
+
 	//カメラセット
 	m_actorManager->SetPlayerCamera(playerCamera);
 	//攻撃マネージャーセット
@@ -114,18 +120,15 @@ void GameScene::Init()
 	m_timer = std::make_shared<Timer>();
 	m_timer->Init();
 
-	//音
-	InitStageBGM();
-	PlayStageBGM();
-
 	//ゲームオーバー
 	m_isGameover = false;
 	//ゲームクリア
 	m_isGameClear = false;
 
-	//スターとカメラ
+	//スタートカメラ
 	auto startCamera = std::make_shared<StartCamera>(m_actorManager->GetPlayer(),m_actorManager);
 	cameraController.PushCamera(startCamera);
+
 }
 
 void GameScene::Update()
