@@ -5,6 +5,7 @@
 #include <map>
 class SceneController;
 class OptionUI;
+class Input;
 class OptionScene :
     public SceneBase
 {
@@ -25,13 +26,28 @@ public:
 		SE = 1,
 		Voice = 2,
         ScreenMode = 3,
-		Max = 4,
+        Back = 4,
+		Max = 5,
 	};
 private:
+    //状態遷移
+    using UpdateFunc_t = void(OptionScene::*)(Input& input);
+    UpdateFunc_t m_update;
+
 	//オプションUI
 	std::weak_ptr<OptionUI> m_optionUI;
 
 	//オプションメニューの選択中インデックス
 	OptionMenu m_currentOptionMenu;
+
+	//ウィンドウモード切り替え
+    bool m_isWindowScreen;
+
+private:
+	//メニュー選択更新
+	void UpdateMenuSelect(Input& input);
+	//ウィンドウモード切り替え
+	void UpdateScreenMode(Input& input);
+
 };
 

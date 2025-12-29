@@ -15,6 +15,10 @@ public:
 
 	//選択中メニューのインデックスを設定
 	void SetSelectMenuIndex(OptionScene::OptionMenu index);
+
+	//ウィンドウモード切り替え
+	void SetIsWindowMode(bool isWindow) { m_isScreenMode = isWindow; };
+	void SetIsFullScreen(bool isFullScreen) { m_isFullScreen = isFullScreen; };
 private:
 	//画像ハンドル
 	int m_bgmHandle;
@@ -24,6 +28,7 @@ private:
 	int m_screenModeHandle;
 	int m_windowHandle;
 	int m_fullScreenHandle;
+	int m_gameBackHandle;
 	int m_cursorHandle;
 	int m_backHandle;
 	//フォントハンドル
@@ -40,6 +45,11 @@ private:
 	int m_bgmVolume;
 	int m_seVolume;
 	int m_voiceVolume;
+
+	//ウィンドウモード
+	bool m_isScreenMode;
+	bool m_isFullScreen;
+
 
 private:	
 	//音量描画

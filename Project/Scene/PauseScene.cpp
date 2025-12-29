@@ -1,5 +1,6 @@
 #include "PauseScene.h"
 #include "SelectScene.h"
+#include "OptionScene.h"
 #include "../General/Input.h"
 #include "SceneController.h"
 #include<DxLib.h>
@@ -105,6 +106,10 @@ void PauseScene::Update()
 	//フェード
 	auto& fader = Fader::GetInstance();
 
+	//UIマネージャー
+	auto& uiManager = UIManager::GetInstance();
+	uiManager.SetIsDraw(false);
+
 	auto& input = Input::GetInstance();
 
 	//フェード終了
@@ -147,9 +152,10 @@ void PauseScene::Update()
 			}
 			break;
 		case PauseScene::MenuIndex::Option:
+			//UI描画再開
+			uiManager.SetIsDraw(true);
 			//設定
-			m_controller.ChangeBaseScene(std::make_shared<SelectScene>(m_controller));
-			m_controller.PopScene();
+			m_controller.PushScene(std::make_shared<OptionScene>(m_controller));
 			break;
 		case PauseScene::MenuIndex::Return:
 			fader.FadeOut();
@@ -206,6 +212,10 @@ void PauseScene::Update()
 
 void PauseScene::Draw()
 {
+	//自分がシーンの一番上にあるなら描画
+	if (m_controller.GetTopScene().expired())return;
+	if (!std::dynamic_pointer_cast<PauseScene>(m_controller.GetTopScene().lock()))return;
+
 	//ゲームに戻る
 	DrawRotaGraph(kBackPos.x, kBackPos.y, 1.0, 0.0, m_backHandle, true);
 

@@ -60,6 +60,8 @@ public:
 	void StopUpdate() { m_isUpdate = false; };
 	//下のシーンの参照
 	std::weak_ptr<SceneBase> GetBaseScene() { return m_scenes.front(); };
+	//上のシーンの参照
+	std::weak_ptr<SceneBase> GetTopScene() { return m_scenes.back(); };
 #if _DEBUG
 	//デバッグ用
 	void DebugDraw() const;

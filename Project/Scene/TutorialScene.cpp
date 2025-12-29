@@ -1,6 +1,7 @@
 #include "TutorialScene.h"
 #include "ResultScene.h"
 #include "TutorialResultScene.h"
+#include "PauseScene.h"
 #include <Dxlib.h>
 #include  "../General/Input.h"
 #include "SceneController.h"
@@ -52,6 +53,8 @@ void TutorialScene::Init()
 	Application::GetInstance().GetPostProcess()->ResetPostEffectState();
 	//タイムスケール
 	Application::GetInstance().SetTimeScale(1.0f);
+	//Physicsスタート
+	Physics::GetInstance().StartUpdate();
 	//UI削除
 	auto& uiManager = UIManager::GetInstance();
 	uiManager.AllDeleteUI();
@@ -124,8 +127,17 @@ void TutorialScene::Update()
 	//もしもすべてのエリアを突破したら
 	if ((m_tutorialManager->IsClear() || input.IsTrigger("GameClear")))
 	{
-		m_controller.PushScene(std::make_unique<TutorialResultScene>(m_controller, GetStageIndexByName(m_stageName)));
+		m_controller.PushScene(std::make_shared<TutorialResultScene>(m_controller, GetStageIndexByName(m_stageName)));
 		return;
+	}
+	else
+	{
+		if (input.IsTrigger("Pause"))
+		{
+			//ポーズ
+			m_controller.PushScene(std::make_shared<PauseScene>(m_controller));
+			return;
+		}
 	}
 	if (m_actorManager->IsGameover())
 	{
@@ -142,6 +154,7 @@ void TutorialScene::Draw()
 
 void TutorialScene::End()
 {
+	Physics::GetInstance().Reset();
 	m_actorManager->End();
 	m_attackManager->End();
 	m_battleAreaManager->End();

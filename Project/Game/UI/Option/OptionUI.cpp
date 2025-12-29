@@ -2,6 +2,7 @@
 #include "../../../General/AssetManager.h"
 #include "../../../General/Game.h"
 #include "../../../General/Sound/SoundManager.h"
+#include "../../../Main/Application.h"
 #include <string>
 #include <DxLib.h>
 
@@ -15,6 +16,7 @@ namespace
 	const std::wstring kScreenModePath = L"Option/Option_ScreenMode";
 	const std::wstring kWindowModePath = L"Option/Option_Window";
 	const std::wstring kFullScreenModePath = L"Option/Option_FullScreen";
+	const std::wstring kGameBackPath = L"Option/Option_Back";
 	const std::wstring kCursorPath = L"Mark/Cursor";
 	const std::wstring kBackPath = L"Back/BlackBack1";
 
@@ -31,9 +33,7 @@ namespace
 	constexpr float kLerpSpeedX = 0.1f;
 	constexpr float kLerpSpeedY = 0.5f;
 
-	//カーソル座標
-	constexpr float kCursorPosX = kMenuPosX - 250.0f;
-
+	
 	//現在の音量のマークサイズ
 	constexpr float kVolumeMarkSize = 1.1f;
 	//音量マークの間隔
@@ -42,9 +42,20 @@ namespace
 	constexpr float kVolumeNumOffsetX = 150.0f;
 	constexpr float kVolumeNumOffsetY = 16.0f;
 
+	//スクリーンモード切り替え時のオフセット
+	constexpr float kScreenModeOffsetX = 50.0f;
+	constexpr float kScreenModeWindowOffsetY = 70.0f;
+	constexpr float kScreenModeFullScreenOffsetY = kScreenModeWindowOffsetY * 2.0f;
+
+	//カーソル座標
+	constexpr float kBaseCursorPosX = kMenuPosX - 250.0f;
+	constexpr float kScreenModeCursorPosX = kMenuPosX + kScreenModeOffsetX - 250.0f;
+
+
 }
 
 OptionUI::OptionUI() :
+	UIBase(),
 	m_bgmHandle(-1),
 	m_seHandle(-1),
 	m_voiceHandle(-1),
@@ -52,6 +63,7 @@ OptionUI::OptionUI() :
 	m_screenModeHandle(-1),
 	m_windowHandle(-1),
 	m_fullScreenHandle(-1),
+	m_gameBackHandle(-1),
 	m_cursorHandle(-1),
 	m_backHandle(-1),
 	m_fontHandle(-1),
@@ -59,7 +71,9 @@ OptionUI::OptionUI() :
 	m_selectMenuIndex(OptionScene::OptionMenu::BGM),
 	m_bgmVolume(1),
 	m_seVolume(2),
-	m_voiceVolume(3)
+	m_voiceVolume(3),
+	m_isScreenMode(false),
+	m_isFullScreen(false)
 {
 	auto& assetManager = AssetManager::GetInstance();
 	//画像ハンドル取得
@@ -70,6 +84,7 @@ OptionUI::OptionUI() :
 	m_screenModeHandle = assetManager.GetImageHandle(kScreenModePath);
 	m_windowHandle = assetManager.GetImageHandle(kWindowModePath);
 	m_fullScreenHandle = assetManager.GetImageHandle(kFullScreenModePath);
+	m_gameBackHandle = assetManager.GetImageHandle(kGameBackPath);
 	m_cursorHandle = assetManager.GetImageHandle(kCursorPath);
 	m_backHandle = assetManager.GetImageHandle(kBackPath);
 	//フォントハンドル取得
@@ -84,9 +99,11 @@ OptionUI::OptionUI() :
 	{
 		m_menuPos[i] = { kMenuPosX , kMenuBasePosY + i * kMenuOffsetPosY };
 	}
-	m_cursorPos.x = kCursorPosX;
+	m_cursorPos.x = kBaseCursorPosX;
 	m_cursorPos.y = m_menuPos[0].y;
 
+	//ウィンドウモード
+	m_isFullScreen = !Application::GetInstance().IsWindowMode();
 }
 
 OptionUI::~OptionUI()
@@ -101,8 +118,12 @@ void OptionUI::Update()
 		//選択中
 		if (i == static_cast<int>(m_selectMenuIndex))
 		{
+			if (!m_isScreenMode)
+			{
+				m_cursorPos.y = MathSub::Lerp(m_cursorPos.y, m_menuPos[i].y, kLerpSpeedY);
+				m_cursorPos.x = MathSub::Lerp(m_cursorPos.x,kBaseCursorPosX, kLerpSpeedX);
+			}
 			//選択中メニュー
-			m_cursorPos.y = MathSub::Lerp(m_cursorPos.y,m_menuPos[i].y,kLerpSpeedY);
 			m_menuPos[i].x = MathSub::Lerp(m_menuPos[i].x,kMenuPosX + kSelectMenuOffsetX, kLerpSpeedX);
 		}
 		else
@@ -110,6 +131,20 @@ void OptionUI::Update()
 			//選択中でないメニュー
 			m_menuPos[i].x = MathSub::Lerp(m_menuPos[i].x, kMenuPosX, kLerpSpeedX);
 		}
+	}
+
+	//スクリーンモード切り替え中
+	if (m_isScreenMode)
+	{
+		if (m_isFullScreen)
+		{
+			m_cursorPos.y = MathSub::Lerp(m_cursorPos.y, m_menuPos[static_cast<int>(OptionScene::OptionMenu::ScreenMode)].y + kScreenModeFullScreenOffsetY, kLerpSpeedY);
+		}
+		else
+		{
+			m_cursorPos.y = MathSub::Lerp(m_cursorPos.y, m_menuPos[static_cast<int>(OptionScene::OptionMenu::ScreenMode)].y + kScreenModeWindowOffsetY, kLerpSpeedY);
+		}
+		m_cursorPos.x = MathSub::Lerp(m_cursorPos.x, kScreenModeCursorPosX, kLerpSpeedX);
 	}
 
 	//各音量取得
@@ -129,6 +164,7 @@ void OptionUI::Draw() const
 	int seIndex = static_cast<int>(OptionScene::OptionMenu::SE);
 	int voiceIndex = static_cast<int>(OptionScene::OptionMenu::Voice);
 	int screenModeIndex = static_cast<int>(OptionScene::OptionMenu::ScreenMode);
+	int gameBackIndex = static_cast<int>(OptionScene::OptionMenu::Back);
 
 	//影
 	SetDrawBlendMode(DX_BLENDMODE_SUB, 100);
@@ -136,7 +172,7 @@ void OptionUI::Draw() const
 	DrawRotaGraph(m_menuPos[seIndex].x + kShadowOffsetX, m_menuPos[seIndex].y + kShadowOffsetY, 1.0f, 0.0f, m_seHandle, true);
 	DrawRotaGraph(m_menuPos[voiceIndex].x + kShadowOffsetX, m_menuPos[voiceIndex].y + kShadowOffsetY, 1.0f, 0.0f, m_voiceHandle, true);
 	DrawRotaGraph(m_menuPos[screenModeIndex].x + kShadowOffsetX, m_menuPos[screenModeIndex].y + kShadowOffsetY, 1.0f, 0.0f, m_screenModeHandle, true);
-	DrawRotaGraph(m_cursorPos.x + kShadowOffsetX, m_cursorPos.y + kShadowOffsetY, 1.0f, 0.0f, m_cursorHandle, true);
+	DrawRotaGraph(m_menuPos[gameBackIndex].x + kShadowOffsetX, m_menuPos[gameBackIndex].y + kShadowOffsetY, 1.0f, 0.0f, m_gameBackHandle, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 
 	//描画
@@ -144,6 +180,7 @@ void OptionUI::Draw() const
 	DrawRotaGraphF(m_menuPos[seIndex].x, m_menuPos[seIndex].y, 1.0f, 0.0f, m_seHandle, true);
 	DrawRotaGraphF(m_menuPos[voiceIndex].x, m_menuPos[voiceIndex].y, 1.0f, 0.0f, m_voiceHandle, true);
 	DrawRotaGraphF(m_menuPos[screenModeIndex].x, m_menuPos[screenModeIndex].y, 1.0f, 0.0f, m_screenModeHandle, true);
+	DrawRotaGraphF(m_menuPos[gameBackIndex].x, m_menuPos[gameBackIndex].y, 1.0f, 0.0f, m_gameBackHandle, true);
 
 	//ボリューム数値描画
 	DrawFormatStringToHandle(m_menuPos[bgmIndex].x + kVolumeNumOffsetX, m_menuPos[bgmIndex].y - kVolumeNumOffsetY, 0xffffff, m_fontHandle, L"%d", m_bgmVolume);
@@ -168,13 +205,13 @@ void OptionUI::Draw() const
 	case OptionScene::OptionMenu::ScreenMode:
 		DrawRotaGraphF(m_menuPos[screenModeIndex].x, m_menuPos[screenModeIndex].y, 1.0f, 0.0f, m_screenModeHandle, true);
 		break;
+	case OptionScene::OptionMenu::Back:
+		DrawRotaGraphF(m_menuPos[gameBackIndex].x, m_menuPos[gameBackIndex].y, 1.0f, 0.0f, m_gameBackHandle, true);
+		break;
 	default:
 		break;
 	}
 	
-	//カーソル描画
-	DrawRotaGraphF(m_cursorPos.x, m_cursorPos.y, 1.0f, 0.0f, m_cursorHandle, true);
-
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 
 	//ボリュームマーク描画
@@ -191,12 +228,60 @@ void OptionUI::Draw() const
 	DrawVolume(m_bgmVolume, bgmIndex);
 	DrawVolume(m_seVolume, seIndex);
 	DrawVolume(m_voiceVolume, voiceIndex);
+
+	//スクリーンモード描画
+	if (m_isScreenMode)
+	{
+		//背景を少し暗く
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+		DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x000000, true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+
+		float windowPosX = m_menuPos[screenModeIndex].x + kScreenModeOffsetX;
+		float windowPosY = m_menuPos[screenModeIndex].y + kScreenModeWindowOffsetY;
+		float fullScreenPosX = m_menuPos[screenModeIndex].x + kScreenModeOffsetX;
+		float fullScreenPosY = m_menuPos[screenModeIndex].y + kScreenModeFullScreenOffsetY;
+
+		//影
+		SetDrawBlendMode(DX_BLENDMODE_SUB, 100);
+		DrawRotaGraphF(windowPosX + kShadowOffsetX, windowPosY + kShadowOffsetY, 1.0f, 0.0f, m_windowHandle, true);
+		DrawRotaGraphF(fullScreenPosX + kShadowOffsetX, fullScreenPosY + kShadowOffsetY, 1.0f, 0.0f, m_fullScreenHandle, true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+
+		//描画
+		DrawRotaGraphF(windowPosX, windowPosY, 1.0f, 0.0f, m_windowHandle, true);
+		DrawRotaGraphF(fullScreenPosX, fullScreenPosY, 1.0f, 0.0f, m_fullScreenHandle, true);
+
+		//選んでるほうを反転
+		SetDrawBlendMode(DX_BLENDMODE_INVSRC, 255);
+		if (m_isFullScreen)
+		{
+			DrawRotaGraphF(fullScreenPosX, fullScreenPosY, 1.0f, 0.0f, m_fullScreenHandle, true);
+		}
+		else
+		{
+			DrawRotaGraphF(windowPosX, windowPosY, 1.0f, 0.0f, m_windowHandle, true);
+		}
+
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+	}
+
+	//影
+	SetDrawBlendMode(DX_BLENDMODE_SUB, 100);
+	DrawRotaGraph(m_cursorPos.x + kShadowOffsetX, m_cursorPos.y + kShadowOffsetY, 1.0f, 0.0f, m_cursorHandle, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+	SetDrawBlendMode(DX_BLENDMODE_INVSRC, 255);
+	//カーソル描画
+	DrawRotaGraphF(m_cursorPos.x, m_cursorPos.y, 1.0f, 0.0f, m_cursorHandle, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+
 }
 
 void OptionUI::SetSelectMenuIndex(OptionScene::OptionMenu index)
 {
 	m_selectMenuIndex = index;
 }
+
 
 void OptionUI::DrawVolume(int volume, int index) const
 {

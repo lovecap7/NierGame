@@ -132,6 +132,9 @@ void Application::Run()
 		//更新
 		input.Update();
 
+		//Windowモードが切り替わったかをチェック
+		bool isWindow = m_isWindow;
+
 #if _DEBUG
 		if (input.IsTrigger("Glitch"))
 		{
@@ -237,9 +240,16 @@ void Application::Run()
 			printf("FPS Low! fps = %.2f : Time = %02d:%02d\n", fps, lt.wHour, lt.wMinute);
 		}
 #endif
+		//切り替わったなら
+		if (m_isWindow != isWindow)
+		{
+			//切り替わり処理
+			ChangeScreenMode();
+		}
 
 		//画面の切り替わりを待つ必要がある
 		ScreenFlip();
+
 
 
 		//FPSを60に固定

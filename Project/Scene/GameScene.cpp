@@ -151,12 +151,12 @@ void GameScene::Update()
 	{
 		if (m_isGameClear)
 		{
-			m_controller.ChangeScene(std::make_unique<ResultScene>(m_stageName, m_controller, m_timer));
+			m_controller.ChangeScene(std::make_shared<ResultScene>(m_stageName, m_controller, m_timer));
 			return;
 		}
 		else if (m_isGameover)
 		{
-			m_controller.PushScene(std::make_unique<GameoverScene>(m_controller));
+			m_controller.PushScene(std::make_shared<GameoverScene>(m_controller));
 			return;
 		}
 	}
@@ -189,7 +189,7 @@ void GameScene::Update()
 			if (player->IsStartState())return;				//スタート状態ならポーズには遷移できない
 			if (player->GetCharaStatus()->IsDead())return;	//死亡状態ならポーズには遷移できない
 			//ポーズ
-			m_controller.PushScene(std::make_unique<PauseScene>(m_controller));
+			m_controller.PushScene(std::make_shared<PauseScene>(m_controller));
 			return;
 		}
 	}
