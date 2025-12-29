@@ -242,8 +242,10 @@ void Application::Run()
 			
 		}
 
-		printf("LoadingNum : %d\n", GetASyncLoadNum());
+		DrawFormatString(10, 10, 0xff0000, L"LoadingNum : %d");
 #endif
+		
+
 		//êÿÇËë÷ÇÌÇ¡ÇΩÇ»ÇÁ
 		if (m_isWindow != isWindow)
 		{
