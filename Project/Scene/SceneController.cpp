@@ -40,6 +40,7 @@ void SceneController::Update()
 
 void SceneController::Draw()
 {
+
 	//古いシーンから描画されるので最後に入れたシーンが前に描画される
 	for (auto& scenes : m_scenes)
 	{

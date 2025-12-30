@@ -14,7 +14,6 @@ public:
 	/// <summary>
 	/// Applicationから呼ばれる関数。現在のシーンのUpdateをそのまま実行。
 	/// </summary>
-	
 	void Update();
 	/// <summary>
 	/// Applicationから呼ばれる関数。現在のシーンのDrawをそのまま実行。

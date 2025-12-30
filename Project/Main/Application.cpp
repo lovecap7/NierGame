@@ -121,8 +121,9 @@ void Application::Run()
 	//シーン
 	std::unique_ptr<SceneController> sceneController = std::make_unique<SceneController>();
 
+	//前のフレームが非同期ロード中だったか
+	bool isBeforeAsyncload = false;
 
-	
 	//ゲームループ
 	while (ProcessMessage() != -1) // Windowsが行う処理を待つ
 	{
@@ -134,6 +135,9 @@ void Application::Run()
 
 		//Windowモードが切り替わったかをチェック
 		bool isWindow = m_isWindow;
+
+		//非同期ロード中か
+		bool isAsyncload = GetASyncLoadNum() > 0;
 
 #if _DEBUG
 		if (input.IsTrigger("Glitch"))
@@ -166,39 +170,77 @@ void Application::Run()
 			//画面全体をクリア
 			ClearDrawScreen();
 
-			//フェード
-			fader.Update();
-			//シーン
-			sceneController->Update();
-			//当たり判定処理
-			physics.Update();
-			//シェーダー
-			m_postProcess->Update();
-			//UIマネージャー
-			uiManager.Update();
-			//音
-			soundManager.Update();
+			//非同期ロード中でなければ更新
+			if (!isAsyncload)
+			{
+				//シーン
+				sceneController->Update();
+			}
+
+			//非同期ロード中かもう一度確認
+			bool isAsyncload = GetASyncLoadNum() > 0;
+		
+			//非同期ロード中でなければ更新
+			if (!isAsyncload)
+			{
+				//フェード
+				fader.Update();
+				//当たり判定処理
+				physics.Update();
+				//シェーダー
+				m_postProcess->Update();
+				//UIマネージャー
+				uiManager.Update();
+				//音
+				soundManager.Update();
+			}
 		}
 		
-		//描画
-		sceneController->Draw();
+		//非同期ロード中でなければ描画
+		if (!isAsyncload) 
+		{
+			//描画
+			sceneController->Draw();
 
-		//前描画
-		uiManager.FrontDraw();
+			//前描画
+			uiManager.FrontDraw();
+		}
+		
 
 		//裏描画
 		SetDrawScreen(DX_SCREEN_BACK);
 		ClearDrawScreen();
 
-		//裏画面にレンダーターゲットを描画
-		m_postProcess->Draw(RT);
-		
-		//後描画
-		uiManager.BackDraw();
+		if (!isAsyncload)
+		{
+			//裏画面にレンダーターゲットを描画
+			m_postProcess->Draw(RT);
+
+			//後描画
+			uiManager.BackDraw();
+		}
 
 		//フェード
 		fader.Draw();
 
+		//非同期ロード中の処理
+		if (isAsyncload)
+		{
+			//全ての音を一時停止
+			soundManager.AllStop();
+			//非同期ロード中は画面を青く塗りつぶす
+			DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x5555ff, true);
+		}
+		//非同期ロードが終わった直後の処理
+		else
+		{
+			if(isBeforeAsyncload)
+			{
+				//音開始
+				soundManager.AllPlay();
+			}
+		}
+		isBeforeAsyncload = isAsyncload;
 
 #if _DEBUG
 
@@ -242,9 +284,8 @@ void Application::Run()
 			
 		}
 
-		DrawFormatString(10, 10, 0xff0000, L"LoadingNum : %d");
+		DrawFormatString(10, 10, 0xff0000, L"LoadingNum : %d",GetASyncLoadNum());
 #endif
-		
 
 		//切り替わったなら
 		if (m_isWindow != isWindow)
