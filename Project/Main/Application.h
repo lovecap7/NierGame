@@ -57,11 +57,11 @@ public:
 	
 private:
 	//アプリケーションの終了
-	bool m_isFinishApplication;
+	bool m_isFinishApplication = false;
 	//ウィンドウモードにする
 	bool m_isWindow = true;
 	//タイムスケール
-	float m_timeScale;
+	float m_timeScale = 1.0f;
 	//ポストエフェクト
 	std::unique_ptr<ShaderPostProcess> m_postProcess;
 
@@ -76,7 +76,7 @@ private:
 
 
 	//デバッグ用
-	bool m_isUpdateStop;
+	bool m_isUpdateStop = false;
 private:
 	//スクリーンモードを切り替える際の処理
 	void ChangeScreenMode();

@@ -104,7 +104,7 @@ void LoadingManager::Update()
 		}
 
 		//もしもロードが完了していて、最低ロード時間も過ぎていたら
-		if (loadNum <= 0 && m_loadCountFrame <= 0)
+		if (loadNum <= 0 && m_loadCountFrame <= 0 && !AssetManager::GetInstance().IsLoading())
 		{
 			--m_afterLoadFrame;
 			if (m_afterLoadFrame <= 0)

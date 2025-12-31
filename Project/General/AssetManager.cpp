@@ -1,4 +1,5 @@
 #include "AssetManager.h"
+#include "LoadingManager.h"
 #include <cassert>
 #include <DxLib.h>
 #include <EffekseerForDXLib.h>
@@ -36,6 +37,43 @@ void AssetManager::Init()
     assert(AddFontResourceExA(kCinzelPath.c_str(), FR_PRIVATE, NULL) > 0);
     assert(AddFontResourceExA(kNotoPath.c_str(), FR_PRIVATE, NULL) > 0);
     assert(AddFontResourceExA(kRobotoPath.c_str(), FR_PRIVATE, NULL) > 0);
+
+    m_isLoading = false;
+}
+void AssetManager::Update()
+{
+    //ロード中じゃないなら早期リターン
+    if (!LoadingManager::GetInstance().IsLoading())return;
+
+    //全ての非同期ロードが終わったかをチェック
+    m_isLoading = true;
+    for (const auto& [key, value] : m_imageHandles) 
+    {
+        //ロードが完了していないなら
+        auto result = CheckHandleASyncLoad(value);
+        if (result > 0)return;
+    }
+    for (const auto& [key, value] : m_fontHandles) 
+    {
+        //ロードが完了していないなら
+        auto result = CheckHandleASyncLoad(value);
+        if (result > 0)return;
+    }
+    for (const auto& [key, value] : m_modelHandles) 
+    {
+        //ロードが完了していないなら
+        auto result = CheckHandleASyncLoad(value);
+        if (result > 0)return;
+    }
+    for (const auto& [key, value] : m_soundHandles) 
+    {
+        //ロードが完了していないなら
+        auto result = CheckHandleASyncLoad(value);
+        if (result > 0)return;
+    }
+
+    //ここまで来たら全てのロードが完了
+    m_isLoading = false;
 }
 
 void AssetManager::End()
@@ -230,6 +268,9 @@ void AssetManager::DeleteFontHandle()
 
 void AssetManager::AllDelete()
 {
+    //ロード中はスキップ
+    if (LoadingManager::GetInstance().IsLoading())return;
+
     DeleteImageHandle();
     DeleteEffectHandle();
     DeleteModelHandle();

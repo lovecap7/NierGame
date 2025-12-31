@@ -145,6 +145,9 @@ void GameScene::Init()
 
 void GameScene::Update()
 {
+	//ロード中はスキップ
+	if (LoadingManager::GetInstance().IsLoading())return;
+
 	//ボス戦に入ったか
 	bool isBeforeBossBattle = m_actorManager->IsBossBattle();
 	//更新
@@ -213,6 +216,9 @@ void GameScene::Update()
 
 void GameScene::Draw()
 {
+	//ロード中はスキップ
+	if (LoadingManager::GetInstance().IsLoading())return;
+
 	m_actorManager->Draw();
 	m_attackManager->Draw();
 	m_effectManager.Draw();

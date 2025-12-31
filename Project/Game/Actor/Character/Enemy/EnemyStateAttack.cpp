@@ -66,7 +66,7 @@ EnemyStateAttack::~EnemyStateAttack()
 	//攻撃クールタイム設定
 	if (m_pOwner.expired())return;
 	auto owner = std::dynamic_pointer_cast<EnemyBase>(m_pOwner.lock());
-	owner->SetAttackCoolTime(m_attackData->GetCancelFrame());
+	owner->SetAttackCoolTime(static_cast<float>(m_attackData->GetCancelFrame()));
 
 	//グループに所属しているなら
 	if (owner->IsInGroup())

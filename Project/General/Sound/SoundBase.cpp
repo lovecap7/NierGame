@@ -1,4 +1,5 @@
 #include "SoundBase.h"
+#include "../LoadingManager.h"
 #include <DxLib.h>
 
 SoundBase::SoundBase(int handle, SoundManager::SoundVolume volume, bool isLoop):
@@ -24,6 +25,9 @@ void SoundBase::End()
 }
 void SoundBase::Play()
 {
+	//ƒ[ƒh’†‚Í’â~
+	if (LoadingManager::GetInstance().IsLoading())return Stop();
+
 	SetVolume(m_volume);
 	//Ä¶
 	if (m_isLoop)	

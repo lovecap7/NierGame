@@ -132,7 +132,7 @@ void Boss4StateDeath::Update()
 	{
 		//™X‚É‰ñ•œ
 		auto status = owner->GetCharaStatus();
-		status->Heal(status->GetMaxHP() / kTransFrame);
+		status->Heal(static_cast<int>(status->GetMaxHP() / kTransFrame));
 
 		if (m_frame > kTransFrame)
 		{

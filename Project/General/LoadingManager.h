@@ -62,10 +62,10 @@ private:
 	//フォントハンドル
 	int m_fontHandle = -1;
 	//画像ハンドル
-	int m_backHandle;
-	int m_loadingGearHandle;
-	int m_loadingTextHandle;
-	int m_loadingTextPointHandle;
+	int m_backHandle = -1;
+	int m_loadingGearHandle = -1;
+	int m_loadingTextHandle = -1;
+	int m_loadingTextPointHandle = -1;
 
 	//テキスト
 	std::vector<std::wstring> m_loadingTexts;

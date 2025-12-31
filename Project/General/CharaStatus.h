@@ -125,7 +125,7 @@ private:
 	Vector3 m_ownerPos;
 
 	//1フレーム前の体力
-	int m_beforeHp;
+	unsigned int m_beforeHp;
 private:
 	//ダメージ計算
 	int GetDamage(int power, int at);

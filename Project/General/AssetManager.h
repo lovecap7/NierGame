@@ -26,6 +26,8 @@ public:
 
 	//初期化
 	void Init();
+	//更新
+	void Update();
 	//終了
 	void End();
 
@@ -105,6 +107,10 @@ public:
 
 	//全て削除
 	void AllDelete();
+
+	//ロード中か
+	bool IsLoading()const { return m_isLoading; };
+
 private:
 	//モデルリソース
 	std::map<std::wstring,int>m_modelHandles;
@@ -117,5 +123,7 @@ private:
 	//音リソース
 	std::map<std::wstring, int>m_soundHandles;
 
+	//ロードしているか
+	bool m_isLoading = false;
 };
 

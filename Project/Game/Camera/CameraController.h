@@ -92,6 +92,6 @@ public:
 private:
 	std::list<std::shared_ptr<CameraBase>> m_cameras;
 	//シーンの更新
-	bool m_isUpdate;
+	bool m_isUpdate = true;
 };
 

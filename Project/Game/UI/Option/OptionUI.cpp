@@ -168,11 +168,11 @@ void OptionUI::Draw() const
 
 	//‰e
 	SetDrawBlendMode(DX_BLENDMODE_SUB, 100);
-	DrawRotaGraph(m_menuPos[bgmIndex].x + kShadowOffsetX, m_menuPos[bgmIndex].y + kShadowOffsetY, 1.0f, 0.0f, m_bgmHandle, true);
-	DrawRotaGraph(m_menuPos[seIndex].x + kShadowOffsetX, m_menuPos[seIndex].y + kShadowOffsetY, 1.0f, 0.0f, m_seHandle, true);
-	DrawRotaGraph(m_menuPos[voiceIndex].x + kShadowOffsetX, m_menuPos[voiceIndex].y + kShadowOffsetY, 1.0f, 0.0f, m_voiceHandle, true);
-	DrawRotaGraph(m_menuPos[screenModeIndex].x + kShadowOffsetX, m_menuPos[screenModeIndex].y + kShadowOffsetY, 1.0f, 0.0f, m_screenModeHandle, true);
-	DrawRotaGraph(m_menuPos[gameBackIndex].x + kShadowOffsetX, m_menuPos[gameBackIndex].y + kShadowOffsetY, 1.0f, 0.0f, m_gameBackHandle, true);
+	DrawRotaGraphF(m_menuPos[bgmIndex].x + kShadowOffsetX, m_menuPos[bgmIndex].y + kShadowOffsetY, 1.0f, 0.0f, m_bgmHandle, true);
+	DrawRotaGraphF(m_menuPos[seIndex].x + kShadowOffsetX, m_menuPos[seIndex].y + kShadowOffsetY, 1.0f, 0.0f, m_seHandle, true);
+	DrawRotaGraphF(m_menuPos[voiceIndex].x + kShadowOffsetX, m_menuPos[voiceIndex].y + kShadowOffsetY, 1.0f, 0.0f, m_voiceHandle, true);
+	DrawRotaGraphF(m_menuPos[screenModeIndex].x + kShadowOffsetX, m_menuPos[screenModeIndex].y + kShadowOffsetY, 1.0f, 0.0f, m_screenModeHandle, true);
+	DrawRotaGraphF(m_menuPos[gameBackIndex].x + kShadowOffsetX, m_menuPos[gameBackIndex].y + kShadowOffsetY, 1.0f, 0.0f, m_gameBackHandle, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 
 	//•`‰æ

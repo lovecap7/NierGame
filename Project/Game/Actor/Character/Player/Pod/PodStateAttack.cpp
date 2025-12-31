@@ -132,7 +132,7 @@ void PodStateAttack::CreateAttack(std::shared_ptr<Pod> owner, const Vector3& dir
 			if (!bullet->IsActive())
 			{
 				//Activeにしつつフラグ等のリセット
-				bullet->Reset(m_attackData->GetKeepFrame());
+				bullet->Reset(static_cast<float>(m_attackData->GetKeepFrame()));
 				//ポッドの少し上
 				Vector3 bulletPos = owner->GetPos();
 				bulletPos.y += kShotPosYOffset;

@@ -81,6 +81,8 @@ void TitleScene::Init()
 	//ロード
 	auto& loadingManager = LoadingManager::GetInstance();
 
+	//非同期ロード開始
+	loadingManager.StartLoading();
 	
 	//音
 	auto& soundManager = SoundManager::GetInstance();
@@ -93,9 +95,6 @@ void TitleScene::Init()
 	soundManager.PlayBGM(kBGMTitlePath);
 	//ノイズ再生
 	m_noiseSE = soundManager.PlayLoopSE(kSENoisePath);
-
-	//非同期ロード開始
-	loadingManager.StartLoading();
 
 	//カメラ
 	auto camera = std::make_shared<TitleCamera>();
@@ -126,6 +125,9 @@ void TitleScene::Init()
 
 void TitleScene::Update()
 {
+	//ロード中はスキップ
+	if (LoadingManager::GetInstance().IsLoading())return;
+
 	auto& input = Input::GetInstance();
 
 	//エフェクトの再生
@@ -160,6 +162,9 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
+	//ロード中はスキップ
+	if (LoadingManager::GetInstance().IsLoading())return;
+
 	m_actorManager->Draw();
 	m_effectManager.Draw();
 }

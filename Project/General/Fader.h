@@ -45,15 +45,15 @@ public:
 	void SetColor(unsigned int color) { m_color = color; };
 private:
 	//だんだん明るくなる
-	bool m_isFadeIn;
+	bool m_isFadeIn = false;
 	//だんだん暗くなる
-	bool m_isFadeOut;
+	bool m_isFadeOut = false;
 	//フレームカウント
-	float m_countFrame;
+	float m_countFrame = 0.0f;
 	//フェード速度
-	float m_fadeSpeed;
+	float m_fadeSpeed = 0.0f;
 	//フェード中
-	bool m_isFadeNow;
+	bool m_isFadeNow = false;
 
 	//色
 	unsigned int m_color = 0x000000;

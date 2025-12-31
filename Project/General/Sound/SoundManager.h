@@ -107,17 +107,18 @@ public:
 	
 private:
 	//SEの音量
-	SoundVolume m_seVolume;
+	SoundVolume m_seVolume = SoundVolume::V5;
 	//BGMの音量
-	SoundVolume m_bgmVolume;
+	SoundVolume m_bgmVolume = SoundVolume::V5;
 	//ボイスの音量
-	SoundVolume m_voiceVolume;
+	SoundVolume m_voiceVolume = SoundVolume::V5;
 	//マスターの音量
-	SoundVolume m_masterVolume;
+	SoundVolume m_masterVolume = SoundVolume::V5;
 	//サウンド
 	std::list<std::shared_ptr<SoundBase>> m_sounds;
 	//BGMは常に一つなのでここで扱う
 	std::shared_ptr<BGM> m_bgm;
+private:
 	//削除候補のものを削除
 	void CheckDeleteSound();
 };

@@ -91,7 +91,8 @@ bool Application::Init()
 void Application::Run()
 {
 	//アセットマネージャー
-	AssetManager::GetInstance().Init();
+	auto& assetManager = AssetManager::GetInstance();
+	assetManager.Init();
 
 	//ロードマネージャー
 	auto& loadingManager = LoadingManager::GetInstance();
@@ -176,6 +177,9 @@ void Application::Run()
 				sceneController->Update();
 			}
 
+			//ロードチェック更新
+			assetManager.Update();
+
 			//非同期ロード中でなければ更新
 			if (!loadingManager.IsLoading())
 			{
@@ -206,12 +210,11 @@ void Application::Run()
 		//裏描画
 		SetDrawScreen(DX_SCREEN_BACK);
 		ClearDrawScreen();
-
+	
 		if (!loadingManager.IsLoading())
 		{
 			//裏画面にレンダーターゲットを描画
 			m_postProcess->Draw(RT);
-
 			//後描画
 			uiManager.BackDraw();
 		}
@@ -281,7 +284,7 @@ void Application::Run()
 
 
 		//FPSを60に固定
-		while (GetNowHiPerformanceCount() - time < 16667);
+		while (GetNowHiPerformanceCount() - time < 16667)
 		{
 
 		}

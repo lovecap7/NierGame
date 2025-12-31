@@ -17,14 +17,18 @@ Actor::Actor(std::shared_ptr<ActorData> actorData,Shape shape, std::weak_ptr<Act
 	m_isSetId(false)
 {
 	if (!m_actorData)return;
-	//モデル
+	//モデル取得
 	auto& assetManager = AssetManager::GetInstance();
 	int handle = assetManager.GetModelHandle(m_actorData->GetModelPath());
-	m_model = std::make_shared<Model>(handle, m_actorData->GetPos().ToDxLibVector());
-	//大きさ
-	m_model->SetScale(m_actorData->GetScale().ToDxLibVector());
-	//回転量
-	m_model->SetRot(m_actorData->GetRot().ToDxLibVector());
+	if (handle >= 0)
+	{
+		m_model = std::make_shared<Model>(handle, m_actorData->GetPos().ToDxLibVector());
+		//大きさ
+		m_model->SetScale(m_actorData->GetScale().ToDxLibVector());
+		//回転量
+		m_model->SetRot(m_actorData->GetRot().ToDxLibVector());
+	}
+
 	//座標
 	m_rb->SetPos(m_actorData->GetPos());
 	//コライダーの設定
