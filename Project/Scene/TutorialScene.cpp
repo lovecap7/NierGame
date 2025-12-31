@@ -17,6 +17,7 @@
 #include "../General/Fader.h"
 #include "../General/Sound/SoundManager.h"
 #include "../General/ShaderPostProcess.h"
+#include "../General/LoadingManager.h"
 #include "../Main/Application.h"
 #include "../General/Effect/EffekseerManager.h"
 #include "../Game/UI/UIManager.h"
@@ -49,10 +50,12 @@ void TutorialScene::Init()
 {
 	//アセットを削除
 	AssetManager::GetInstance().DeleteModelHandle();
+	//アプリケーション
+	auto& app = Application::GetInstance();
 	//ポストエフェクトを解除
-	Application::GetInstance().GetPostProcess()->ResetPostEffectState();
+	app.GetPostProcess()->ResetPostEffectState();
 	//タイムスケール
-	Application::GetInstance().SetTimeScale(1.0f);
+	app.SetTimeScale(1.0f);
 	//Physicsスタート
 	Physics::GetInstance().StartUpdate();
 
@@ -64,6 +67,12 @@ void TutorialScene::Init()
 	Input::GetInstance().StopUpdate();
 	//リセット
 	m_effectManager.Reset();
+
+	//ロード
+	auto& loadingManager = LoadingManager::GetInstance();
+
+	//非同期ロード開始
+	loadingManager.StartLoading();
 
 	//サウンド
 	auto& soundManager = SoundManager::GetInstance();
@@ -109,6 +118,9 @@ void TutorialScene::Init()
 
 	//チュートリアル
 	m_tutorialManager = std::make_shared<TutorialManager>(m_actorManager->GetPlayer(), m_actorManager, stageName);
+
+	//非同期ロード終了
+	loadingManager.EndLoading();
 }
 
 void TutorialScene::Update()

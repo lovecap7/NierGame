@@ -2,6 +2,7 @@
 #include<memory>
 class ShaderPostProcess;
 class Input;
+class SoundManager;
 /// <summary>
 /// シングルトン
 /// </summary>
@@ -53,6 +54,7 @@ public:
 
 	//ポストエフェクト
 	std::unique_ptr<ShaderPostProcess>& GetPostProcess() { return m_postProcess; };
+	
 private:
 	//アプリケーションの終了
 	bool m_isFinishApplication;
@@ -62,6 +64,7 @@ private:
 	float m_timeScale;
 	//ポストエフェクト
 	std::unique_ptr<ShaderPostProcess> m_postProcess;
+
 	//デバッグ用
 	enum class DebugState : int
 	{
@@ -70,6 +73,8 @@ private:
 		DebugMax	= 2
 	};
 	DebugState m_debugState = DebugState::SceneInfo;
+
+
 	//デバッグ用
 	bool m_isUpdateStop;
 private:

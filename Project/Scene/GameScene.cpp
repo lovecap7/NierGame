@@ -22,6 +22,7 @@
 #include "../Main/Application.h"
 #include "../General/Effect/EffekseerManager.h"
 #include "../General/Sound/SoundManager.h"
+#include "../General/LoadingManager.h"
 #include "../Game/UI/UIManager.h"
 #include "../Game/Tutorial/TutorialManager.h"
 
@@ -61,21 +62,28 @@ void GameScene::Init()
 {
 	//アセットを削除
 	AssetManager::GetInstance().DeleteModelHandle();
+	//アプリケーション
+	auto& app = Application::GetInstance();
 	//ポストエフェクトを解除
-	Application::GetInstance().GetPostProcess()->ResetPostEffectState();
+	app.GetPostProcess()->ResetPostEffectState();
 	//タイムスケール
-	Application::GetInstance().SetTimeScale(1.0f);
+	app.SetTimeScale(1.0f);
 	//UI削除
 	UIManager::GetInstance().AllDeleteUI();
+	//Physics
+	auto& physics = Physics::GetInstance();
 	//リセット
-	Physics::GetInstance().Reset();
+	physics.Reset();
 	//Physicsを開始
-	Physics::GetInstance().StartUpdate();
+	physics.StartUpdate();
 	//エフェクトリセット
 	EffekseerManager::GetInstance().Reset();
+	
+	//ロード
+	auto& loadingManager = LoadingManager::GetInstance();
 
 	//非同期ロード開始
-	SetUseASyncLoadFlag(true);
+	loadingManager.StartLoading();
 
 	//ステージインデックス
 	auto stageName = m_stageName.c_str();
@@ -131,7 +139,7 @@ void GameScene::Init()
 	cameraController.PushCamera(startCamera);
 
 	//非同期ロード終了
-	SetUseASyncLoadFlag(false);
+	loadingManager.EndLoading();
 
 }
 

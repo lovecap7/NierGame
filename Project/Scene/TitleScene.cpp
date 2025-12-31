@@ -19,6 +19,7 @@
 #include "../General/Effect/EffekseerManager.h"
 #include "../General/Sound/SoundManager.h"
 #include "../General/Sound/SE.h"
+#include "../General/LoadingManager.h"
 
 namespace
 {
@@ -60,8 +61,11 @@ void TitleScene::Init()
 {
 	//アセットの削除
 	AssetManager::GetInstance().AllDelete();
+	//ポストエフェクトリセット
+	auto& app = Application::GetInstance();
+	app.GetPostProcess()->ResetPostEffectState();
 	//タイムスケール
-	Application::GetInstance().SetTimeScale(1.0f);
+	app.SetTimeScale(1.0f);
 	//UI削除
 	UIManager::GetInstance().AllDeleteUI();
 	//フェードイン
@@ -73,6 +77,11 @@ void TitleScene::Init()
 
 	//エフェクトマネージャー初期化
 	m_effectManager.Init();
+
+	//ロード
+	auto& loadingManager = LoadingManager::GetInstance();
+
+	
 	//音
 	auto& soundManager = SoundManager::GetInstance();
 	//サウンドデータのロード
@@ -85,6 +94,9 @@ void TitleScene::Init()
 	//ノイズ再生
 	m_noiseSE = soundManager.PlayLoopSE(kSENoisePath);
 
+	//非同期ロード開始
+	loadingManager.StartLoading();
+
 	//カメラ
 	auto camera = std::make_shared<TitleCamera>();
 	auto& cameraController = CameraController::GetInstance();
@@ -95,19 +107,21 @@ void TitleScene::Init()
 	auto titleLogo = std::make_shared<TitleUI>();
 	titleLogo->Init();
 
-	//グリッジ
-	auto& postPrecess = Application::GetInstance().GetPostProcess();
-	postPrecess->AddPostEffectState(ShaderPostProcess::PostEffectState::NoColorGlitch);
-	postPrecess->SetBlockScele(m_blockScele);
-	postPrecess->SetNoiseSpeed(m_noiseSpeed);
-	postPrecess->SetShakeStrength(m_shakeStrength);
-
 	//アクターマネージャー
 	m_actorManager = std::make_shared<ActorManager>();
 	m_actorManager->Init();
 	m_actorManager->CreateActorCSV(kTitlePath.c_str(), kCharacterDataPath.c_str());
 	m_actorManager->CreateActorCSV(kTitlePath.c_str(), kStageDataPath.c_str());
 	
+	//非同期ロード終了
+	loadingManager.EndLoading();
+
+	//グリッジ
+	auto& postPrecess = Application::GetInstance().GetPostProcess();
+	postPrecess->AddPostEffectState(ShaderPostProcess::PostEffectState::NoColorGlitch);
+	postPrecess->SetBlockScele(m_blockScele);
+	postPrecess->SetNoiseSpeed(m_noiseSpeed);
+	postPrecess->SetShakeStrength(m_shakeStrength);
 }
 
 void TitleScene::Update()

@@ -10,6 +10,7 @@
 #include "../General/AssetManager.h"
 #include "../Game/UI/UIManager.h"
 #include "../General/Sound/SoundManager.h"
+#include "../General/LoadingManager.h"
 #include  <cassert>
 #include <chrono>
 namespace
@@ -92,6 +93,10 @@ void Application::Run()
 	//アセットマネージャー
 	AssetManager::GetInstance().Init();
 
+	//ロードマネージャー
+	auto& loadingManager = LoadingManager::GetInstance();
+	loadingManager.Init();
+
 	//コントローラー
 	auto& input = Input::GetInstance();
 	input.Init();
@@ -121,9 +126,6 @@ void Application::Run()
 	//シーン
 	std::unique_ptr<SceneController> sceneController = std::make_unique<SceneController>();
 
-	//前のフレームが非同期ロード中だったか
-	bool isBeforeAsyncload = false;
-
 	//ゲームループ
 	while (ProcessMessage() != -1) // Windowsが行う処理を待つ
 	{
@@ -135,9 +137,6 @@ void Application::Run()
 
 		//Windowモードが切り替わったかをチェック
 		bool isWindow = m_isWindow;
-
-		//非同期ロード中か
-		bool isAsyncload = GetASyncLoadNum() > 0;
 
 #if _DEBUG
 		if (input.IsTrigger("Glitch"))
@@ -171,17 +170,14 @@ void Application::Run()
 			ClearDrawScreen();
 
 			//非同期ロード中でなければ更新
-			if (!isAsyncload)
+			if (!loadingManager.IsLoading())
 			{
 				//シーン
 				sceneController->Update();
 			}
 
-			//非同期ロード中かもう一度確認
-			bool isAsyncload = GetASyncLoadNum() > 0;
-		
 			//非同期ロード中でなければ更新
-			if (!isAsyncload)
+			if (!loadingManager.IsLoading())
 			{
 				//フェード
 				fader.Update();
@@ -197,7 +193,7 @@ void Application::Run()
 		}
 		
 		//非同期ロード中でなければ描画
-		if (!isAsyncload) 
+		if (!loadingManager.IsLoading())
 		{
 			//描画
 			sceneController->Draw();
@@ -211,7 +207,7 @@ void Application::Run()
 		SetDrawScreen(DX_SCREEN_BACK);
 		ClearDrawScreen();
 
-		if (!isAsyncload)
+		if (!loadingManager.IsLoading())
 		{
 			//裏画面にレンダーターゲットを描画
 			m_postProcess->Draw(RT);
@@ -224,23 +220,8 @@ void Application::Run()
 		fader.Draw();
 
 		//非同期ロード中の処理
-		if (isAsyncload)
-		{
-			//全ての音を一時停止
-			soundManager.AllStop();
-			//非同期ロード中は画面を青く塗りつぶす
-			DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x5555ff, true);
-		}
-		//非同期ロードが終わった直後の処理
-		else
-		{
-			if(isBeforeAsyncload)
-			{
-				//音開始
-				soundManager.AllPlay();
-			}
-		}
-		isBeforeAsyncload = isAsyncload;
+		loadingManager.Update();
+		loadingManager.Draw();
 
 #if _DEBUG
 
@@ -329,6 +310,9 @@ void Application::Terminate()
 	//アセットの削除
 	AssetManager::GetInstance().End();
 
+	//ロードの削除
+	LoadingManager::GetInstance().End();
+
 	//ＤＸライブラリ使用の終了処理
 	DxLib_End();				
 }
@@ -361,3 +345,4 @@ void Application::DebugDrawFPS() const
 	DrawFormatString(10, 10, 0xffffff, L"fps=%.2f", DxLib::GetFPS());
 	DrawFormatString(10, 26, 0xffffff, L"TimeScale=%.2f", m_timeScale);
 }
+
