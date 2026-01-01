@@ -10,7 +10,7 @@ namespace
 	const std::wstring kMissionBoardShadowPath = L"Select/MissionBoard_Shadow";
 
 	//ç¿ïW
-	constexpr float kMissionBoardPosX = Game::kScreenCenterX + 300.0f;
+	constexpr float kMissionBoardPosX = Game::kScreenCenterX + 200.0f;
 	constexpr float kMissionBoardPosY = Game::kScreenCenterY;
 
 	//âe

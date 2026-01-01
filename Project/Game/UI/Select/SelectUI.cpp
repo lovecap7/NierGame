@@ -14,16 +14,16 @@ namespace
 	constexpr float kMainMenuStartY = 110.0f;
 	constexpr float kMainMenuOffsetY = 110.0f;
 	constexpr float kMainMenuLerpRate = 0.3f;
-	constexpr float kMainMenuSecondX = 0.0f;
+	constexpr float kMainMenuSecondX = -130.0f;
 
 	//チュートリアルメニューの位置
-	constexpr float kTutorialMenuStartX = 420.0f;
+	constexpr float kTutorialMenuStartX = 320.0f;
 	constexpr float kTutorialMenuStartY = 110.0f;
 	constexpr float kTutorialMenuOffsetY = 110.0f;
 	constexpr float kTutorialMenuLerpRate = 0.3f;
 
 	//ステージメニューの位置
-	constexpr float kStageMenuStartX = 420.0f;
+	constexpr float kStageMenuStartX = 320.0f;
 	constexpr float kStageMenuStartY = 110.0f;
 	constexpr float kStageMenuOffsetY = 110.0f;
 	constexpr float kStageMenuLerpRate = 0.3f;
@@ -32,7 +32,7 @@ namespace
 	const Vector2 kShadowOffsetPos = { 10.0f,10.0f };
 
 	//選択中にずらす量
-	constexpr float kSelectOffsetX = 30.0f;
+	constexpr float kSelectOffsetX = 50.0f;
 
 	//サイズ
 	constexpr int kMainSize = 4;
