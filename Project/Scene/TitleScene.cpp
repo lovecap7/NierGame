@@ -4,10 +4,12 @@
 #include "SceneController.h"
 #include "GameScene.h"
 #include "SelectScene.h"
+#include "OptionScene.h"
 #include "DebugScene/DebugSelectScene.h"
 #include "../General/Fader.h"
 #include "../General/Game.h"
 #include "../Game/UI/Title/TitleUI.h"
+#include "../Game/UI/Title/SelectTitleUI.h"
 #include "../Game/UI/UIManager.h"
 #include "../Game/Actor/ActorManager.h"
 #include "../General/AssetManager.h"
@@ -49,12 +51,16 @@ TitleScene::TitleScene(SceneController& controller):
 	m_noiseSpeed(kNoiseSpeed),
 	m_shakeStrength(kShakeStrength),
 	m_effectManager(EffekseerManager::GetInstance()),
-	m_noiseSE()
+	m_noiseSE(),
+	m_selectIndex(SelectMenuTitle::Continue),
+	m_update(&TitleScene::UpdateTitle)
 {
 }
 
 TitleScene::~TitleScene()
 {
+	if (m_selectTitleUI.expired())return;
+	m_selectTitleUI.lock()->Delete();
 }
 
 void TitleScene::Init()
@@ -105,6 +111,11 @@ void TitleScene::Init()
 	//タイトルロゴ
 	auto titleLogo = std::make_shared<TitleUI>();
 	titleLogo->Init();
+	//セレクトUI
+	auto selectTitleUI = std::make_shared<SelectTitleUI>();
+	selectTitleUI->Init();
+	selectTitleUI->DisableDraw();
+	m_selectTitleUI = selectTitleUI;
 
 	//アクターマネージャー
 	m_actorManager = std::make_shared<ActorManager>();
@@ -121,6 +132,12 @@ void TitleScene::Init()
 	postPrecess->SetBlockScele(m_blockScele);
 	postPrecess->SetNoiseSpeed(m_noiseSpeed);
 	postPrecess->SetShakeStrength(m_shakeStrength);
+
+	//番号初期化
+	m_selectIndex = SelectMenuTitle::Continue;
+
+	//更新
+	m_update = &TitleScene::UpdateTitle;
 }
 
 void TitleScene::Update()
@@ -130,34 +147,23 @@ void TitleScene::Update()
 
 	auto& input = Input::GetInstance();
 
-	//エフェクトの再生
-	m_effectManager.Update();
-
 	auto& fader = Fader::GetInstance();
-	//フェードアウトしきったら
-	if (fader.IsFinishFadeOut())
-	{
-		m_controller.ChangeScene(std::make_unique<SelectScene>(m_controller));
-		return;
-	}
-
-	//グリッジの更新
-	UpdateGlitch();
 
 	//カメラ
 	auto& cameraController = CameraController::GetInstance();
 	cameraController.Update();
 
-	if (input.IsTrigger("A") && !fader.IsFadeNow())
-	{
-		//フェード
-		fader.FadeOut();
-		//クリックSE
-		auto& soundManager = SoundManager::GetInstance();
-		soundManager.PlayOnceSE(kSEGameStartPath);
-	}
+	//エフェクトの再生
+	m_effectManager.Update();
 
+	//アクター更新
 	m_actorManager->Update();
+
+	//グリッジの更新
+	UpdateGlitch();
+
+	//状態ごとの更新処理
+	(this->*m_update)(input, fader);
 }
 
 void TitleScene::Draw()
@@ -186,6 +192,97 @@ void TitleScene::DebugDraw() const
 #endif
 }
 
+
+void TitleScene::UpdateTitle(Input& input, Fader& fader)
+{
+	if (input.IsTrigger("A") && !fader.IsFadeNow())
+	{
+		//クリックSE
+		auto& soundManager = SoundManager::GetInstance();
+		soundManager.PlayOnceSE(kSEGameStartPath);
+
+		//セレクトUI表示
+		if (!m_selectTitleUI.expired())
+		{
+			m_selectTitleUI.lock()->EnableDraw();
+		}
+
+		//セレクト更新
+		m_update = &TitleScene::UpdateSelect;
+		return;
+	}
+}
+
+void TitleScene::UpdateSelect(Input& input, Fader& fader)
+{
+	//フェードアウトしきったら
+	if (fader.IsFinishFadeOut())
+	{
+		switch (m_selectIndex)
+		{
+		case TitleScene::SelectMenuTitle::Continue:
+			m_controller.ChangeScene(std::make_shared<SelectScene>(m_controller));
+			break;
+		case TitleScene::SelectMenuTitle::NewGame:
+			m_controller.ChangeScene(std::make_shared<SelectScene>(m_controller));
+			break;
+		case TitleScene::SelectMenuTitle::GameEnd:
+			Application::GetInstance().FinishApplication();
+			break;
+		default:
+			break;
+		}
+		return;
+	}
+
+	if (!fader.IsFadeNow())
+	{
+		//セレクトUI
+		if (m_selectTitleUI.expired())return;
+		auto selectUI = m_selectTitleUI.lock();
+
+		auto& soundManager = SoundManager::GetInstance();
+		if (input.IsTrigger("B"))
+		{
+			//非表示
+			selectUI->DisableDraw();
+
+			//クリックSE
+			soundManager.PlayOnceSE(kSEGameStartPath);
+
+			//タイトル更新
+			m_update = &TitleScene::UpdateTitle;
+			return;
+		}
+		if (input.IsTrigger("A"))
+		{
+			//オプション
+			if (m_selectIndex == SelectMenuTitle::Option)
+			{
+				m_controller.PushScene(std::make_shared<OptionScene>(m_controller));
+				return;
+			}
+
+			//フェード
+			fader.FadeOut();
+
+			//クリックSE	
+			soundManager.PlayOnceSE(kSEGameStartPath);
+			return;
+		}
+
+		//メニューセレクト
+		int index = static_cast<int>(m_selectIndex);
+		if (input.IsRepeate("Up"))--index;
+		if (input.IsRepeate("Down"))++index;
+		if (index < static_cast<int>(SelectMenuTitle::Continue))index = static_cast<int>(SelectMenuTitle::GameEnd);
+		if (index > static_cast<int>(SelectMenuTitle::GameEnd))index = static_cast<int>(SelectMenuTitle::Continue);
+		m_selectIndex = static_cast<SelectMenuTitle>(index);
+
+		//UI反映
+		selectUI->SetMenuIndex(m_selectIndex);
+	}
+}
 
 void TitleScene::UpdateGlitch()
 {

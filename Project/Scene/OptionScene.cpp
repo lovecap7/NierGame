@@ -3,6 +3,7 @@
 #include "SceneController.h"
 #include "../Game/UI/Option/OptionUI.h"
 #include "../Game/UI/UIManager.h"
+#include "../Game/Camera/CameraController.h"
 #include "../General/Input.h"
 #include "../General/Sound/SoundManager.h"
 #include "../Main/Application.h"
@@ -44,7 +45,7 @@ void OptionScene::Init()
 void OptionScene::Update()
 {
 	auto& input = Input::GetInstance();
-	
+	CameraController::GetInstance().Update();
 	//XV
 	(this->*m_update)(input);
 }

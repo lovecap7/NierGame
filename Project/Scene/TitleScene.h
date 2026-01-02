@@ -3,9 +3,10 @@
 #include "../General/StageIndex.h"
 #include <memory>
 class Input;
+class Fader;
 class SceneController;
 class CameraController;
-class TitleUI;
+class SelectTitleUI;
 class ActorManager;
 class SE;
 class EffekseerManager;
@@ -27,6 +28,15 @@ public:
     virtual void Restart() override {};
     //デバッグ用
     virtual void DebugDraw() const override;
+
+    //メニュー
+    enum class SelectMenuTitle : int
+    {
+        Continue = 0,
+        NewGame = 1,
+        Option = 2,
+        GameEnd = 3
+    };
 private:
     //最初の激しいグリッジを行うフレームをカウント
     int m_hardShakingCountFrame;
@@ -43,6 +53,22 @@ private:
 
     //SE
     std::weak_ptr<SE> m_noiseSE;
+
+    //UI
+    std::weak_ptr<SelectTitleUI> m_selectTitleUI;
+
+    //セレクト番号
+    SelectMenuTitle m_selectIndex;
+
+    //状態に合わせた更新
+    using UpdateFunc = void(TitleScene::*)(Input& input, Fader& fader);
+    UpdateFunc m_update;
+private:
+    //タイトル更新
+    void UpdateTitle(Input& input, Fader& fader);
+    //モードセレクト更新
+    void UpdateSelect(Input& input, Fader& fader);
+
 private:
     //グリッジの更新
     void UpdateGlitch();
