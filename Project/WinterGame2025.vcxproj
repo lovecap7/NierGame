@@ -271,10 +271,12 @@
     <ClCompile Include="General\CSV\CSVData.cpp" />
     <ClCompile Include="General\CSV\CSVDataLoader.cpp" />
     <ClCompile Include="General\CSV\AnimData.cpp" />
+    <ClCompile Include="General\CSV\CSVDataSaver.cpp" />
     <ClCompile Include="General\CSV\EffectData.cpp" />
     <ClCompile Include="General\CSV\EndingTextUIData.cpp" />
     <ClCompile Include="General\CSV\EnemyAttackKeyData.cpp" />
     <ClCompile Include="General\CSV\MissionBoardUIData.cpp" />
+    <ClCompile Include="General\CSV\OptionData.cpp" />
     <ClCompile Include="General\CSV\PodData.cpp" />
     <ClCompile Include="General\CSV\ResultRankData.cpp" />
     <ClCompile Include="General\CSV\SoundData.cpp" />
@@ -294,6 +296,7 @@
     <ClCompile Include="General\Math\Vector2.cpp" />
     <ClCompile Include="General\Math\Vector3.cpp" />
     <ClCompile Include="General\Model.cpp" />
+    <ClCompile Include="General\SaveDataManager.cpp" />
     <ClCompile Include="General\ShaderPostProcess.cpp" />
     <ClCompile Include="General\Shadow.cpp" />
     <ClCompile Include="General\Sound\BGM.cpp" />
@@ -446,10 +449,12 @@
     <ClInclude Include="General\CSV\CSVData.h" />
     <ClInclude Include="General\CSV\CSVDataLoader.h" />
     <ClInclude Include="General\CSV\AnimData.h" />
+    <ClInclude Include="General\CSV\CSVDataSaver.h" />
     <ClInclude Include="General\CSV\EffectData.h" />
     <ClInclude Include="General\CSV\EndingTextUIData.h" />
     <ClInclude Include="General\CSV\EnemyAttackKeyData.h" />
     <ClInclude Include="General\CSV\MissionBoardUIData.h" />
+    <ClInclude Include="General\CSV\OptionData.h" />
     <ClInclude Include="General\CSV\PodData.h" />
     <ClInclude Include="General\CSV\ResultRankData.h" />
     <ClInclude Include="General\CSV\SoundData.h" />
@@ -471,6 +476,7 @@
     <ClInclude Include="General\Math\Vector3.h" />
     <ClInclude Include="General\Model.h" />
     <ClInclude Include="General\MyDraw.h" />
+    <ClInclude Include="General\SaveDataManager.h" />
     <ClInclude Include="General\ShaderPostProcess.h" />
     <ClInclude Include="General\Shadow.h" />
     <ClInclude Include="General\Sound\BGM.h" />
