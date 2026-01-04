@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 class OptionData;
+class ClearSaveData;
 class SaveDataManager final
 {
 private:
@@ -23,10 +24,13 @@ public:
 	//セーブデータのロード
 	void LoadSave();
 	
-
+	//クリアデータ
+	std::shared_ptr<ClearSaveData> GetClearData()const { return m_clearData; };
 	//オプションデータ
 	std::shared_ptr<OptionData> GetOptionData()const { return m_optionData; };
 private:
+	//クリアデータ
+	std::shared_ptr<ClearSaveData> m_clearData;
 	//オプションデータ
 	std::shared_ptr<OptionData> m_optionData;
 };

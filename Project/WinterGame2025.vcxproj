@@ -268,6 +268,7 @@
     <ClCompile Include="General\CSV\ArmData.cpp" />
     <ClCompile Include="General\CSV\AttackData.cpp" />
     <ClCompile Include="General\CSV\CharaStatusData.cpp" />
+    <ClCompile Include="General\CSV\ClearSaveData.cpp" />
     <ClCompile Include="General\CSV\CSVData.cpp" />
     <ClCompile Include="General\CSV\CSVDataLoader.cpp" />
     <ClCompile Include="General\CSV\AnimData.cpp" />
@@ -446,6 +447,7 @@
     <ClInclude Include="General\CSV\ArmData.h" />
     <ClInclude Include="General\CSV\AttackData.h" />
     <ClInclude Include="General\CSV\CharaStatusData.h" />
+    <ClInclude Include="General\CSV\ClearSaveData.h" />
     <ClInclude Include="General\CSV\CSVData.h" />
     <ClInclude Include="General\CSV\CSVDataLoader.h" />
     <ClInclude Include="General\CSV\AnimData.h" />
