@@ -30,5 +30,6 @@ void OptionData::Conversion()
 	m_seLv = std::stoi(m_data[1]);
 	m_voiceLv = std::stoi(m_data[2]);
 	//スクリーンモード
-	m_isWindow = static_cast<bool>(std::stoi(m_data[3]));
+	int temp = std::stoi(m_data[3]);
+	m_isWindow = temp != 0;
 }

@@ -4,6 +4,8 @@
 #include "SE.h"
 #include "Voice.h"
 #include "../AssetManager.h"
+#include "../SaveDataManager.h"
+#include "../CSV/OptionData.h"
 #include "../Math/MyMath.h"
 #include <DxLib.h>
 #include <cassert>
@@ -36,14 +38,15 @@ void SoundManager::Exit(std::shared_ptr<SoundBase> sound)
 
 void SoundManager::Init()
 {
+	//セーブデータ
+	auto& saveDataManager = SaveDataManager::GetInstance();
+
 	//SEの音量
-	m_seVolume = SoundVolume::V5;
+	m_seVolume = GetVolumeToLevel(saveDataManager.GetOptionData()->GetSELevel());
 	//BGMの音量
-	m_bgmVolume = SoundVolume::V5;
+	m_bgmVolume = GetVolumeToLevel(saveDataManager.GetOptionData()->GetBGMLevel());
 	//ボイスの音量
-	m_voiceVolume = SoundVolume::V5;
-	//マスターの音量
-	m_masterVolume = SoundVolume::V5;
+	m_voiceVolume = GetVolumeToLevel(saveDataManager.GetOptionData()->GetVoiceLevel());
 }
 void SoundManager::Update()
 {
@@ -189,11 +192,6 @@ void SoundManager::SetVoiceVolume(SoundVolume volume)
 	m_voiceVolume = volume;
 }
 
-void SoundManager::SetMasterVolume(SoundVolume volume)
-{
-	m_masterVolume = volume;
-}
-
 void SoundManager::LevelUpSEVolume()
 {
 	int level = GetLevelToVolume(m_seVolume);
@@ -234,20 +232,6 @@ void SoundManager::LevelDownVoiceVolume()
 	int level = GetLevelToVolume(m_voiceVolume);
 	level = MathSub::ClampInt(level - 1, 0, 10);
 	m_voiceVolume = GetVolumeToLevel(level);
-}
-
-void SoundManager::LevelUpMasterVolume()
-{
-	int level = GetLevelToVolume(m_masterVolume);
-	level = MathSub::ClampInt(level + 1, 0, 10);
-	m_masterVolume = GetVolumeToLevel(level);
-}
-
-void SoundManager::LevelDownMasterVolume()
-{
-	int level = GetLevelToVolume(m_masterVolume);
-	level = MathSub::ClampInt(level - 1, 0, 10);
-	m_masterVolume = GetVolumeToLevel(level);
 }
 
 int SoundManager::GetLevelToVolume(SoundVolume volume) const

@@ -11,6 +11,8 @@
 #include "../Game/UI/UIManager.h"
 #include "../General/Sound/SoundManager.h"
 #include "../General/LoadingManager.h"
+#include "../General/SaveDataManager.h"
+#include "../General/CSV/OptionData.h"
 #include  <cassert>
 #include <chrono>
 namespace
@@ -35,6 +37,10 @@ Application& Application::GetInstance()
 
 bool Application::Init()
 {
+	//セーブデータ
+	auto& saveDataManager = SaveDataManager::GetInstance();
+	saveDataManager.LoadSave();
+
 	//初期化
 	//このフラグがtrueの時アプリケーションが終了する
 	m_isFinishApplication = false;
@@ -45,7 +51,7 @@ bool Application::Init()
 	//SetWindowIconID(IDI_ICON1);
 
 	//ウィンドウモード
-	m_isWindow = true;
+	m_isWindow = saveDataManager.GetOptionData()->IsWindow();
 
 	 //フルスクリーンでなく、ウィンドウモードで開くようにする
 	//こういった関数はウィンドウが開く前に(Dxlib.Init()の前)に処理しておく必要がある
@@ -88,6 +94,7 @@ bool Application::Init()
 
 void Application::Run()
 {
+
 	//アセットマネージャー
 	auto& assetManager = AssetManager::GetInstance();
 	assetManager.Init();

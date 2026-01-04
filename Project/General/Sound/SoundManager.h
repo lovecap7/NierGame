@@ -84,7 +84,7 @@ public:
 	void SetSEVolume(SoundVolume volume);
 	void SetBGMVolume(SoundVolume volume);
 	void SetVoiceVolume(SoundVolume volume);
-	void SetMasterVolume(SoundVolume volume);
+	
 	//レベル加算・減算
 	void LevelUpSEVolume();
 	void LevelDownSEVolume();
@@ -92,8 +92,6 @@ public:
 	void LevelDownBGMVolume();
 	void LevelUpVoiceVolume();
 	void LevelDownVoiceVolume();
-	void LevelUpMasterVolume();
-	void LevelDownMasterVolume();
 
 
 	//音量
@@ -112,8 +110,6 @@ private:
 	SoundVolume m_bgmVolume = SoundVolume::V5;
 	//ボイスの音量
 	SoundVolume m_voiceVolume = SoundVolume::V5;
-	//マスターの音量
-	SoundVolume m_masterVolume = SoundVolume::V5;
 	//サウンド
 	std::list<std::shared_ptr<SoundBase>> m_sounds;
 	//BGMは常に一つなのでここで扱う

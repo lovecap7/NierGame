@@ -20,7 +20,13 @@ public:
 		static SaveDataManager instance;
 		return instance;
 	}
+	//セーブデータのロード
+	void LoadSave();
+	
 
+	//オプションデータ
+	std::shared_ptr<OptionData> GetOptionData()const { return m_optionData; };
+private:
 	//オプションデータ
 	std::shared_ptr<OptionData> m_optionData;
 };
