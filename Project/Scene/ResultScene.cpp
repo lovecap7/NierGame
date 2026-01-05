@@ -14,6 +14,8 @@
 #include "../General/AssetManager.h"
 #include "../General/Sound/SoundManager.h"
 #include "../General/Effect/EffekseerManager.h"
+#include "../General/SaveDataManager.h"
+#include "../General/CSV/ClearSaveData.h"
 
 namespace
 {
@@ -69,6 +71,23 @@ void ResultScene::Init()
 	auto resultUI = std::make_shared<ResultUI>(m_stageName,m_timer);
 	resultUI->Init();
 	m_resultUI = resultUI;
+
+	//ステージクリア
+	auto clearData = SaveDataManager::GetInstance().GetClearData();
+	switch (GetStageIndexByName(m_stageName))
+	{
+	case StageIndex::Stage1:
+		clearData->ClearStage1();
+		break;
+	case StageIndex::Stage2:
+		clearData->ClearStage2();
+		break;
+	case StageIndex::Stage3:
+		clearData->ClearStage3();
+		break;
+	default:
+		break;
+	}
 }
 
 void ResultScene::Update()

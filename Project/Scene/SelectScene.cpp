@@ -19,6 +19,8 @@
 #include "../General/CSV/TextData.h"
 #include "../General/Fader.h"
 #include "../General/Sound/SoundManager.h"
+#include "../General/SaveDataManager.h"
+#include "../General/CSV/ClearSaveData.h"
 #include "../Game/Actor/ActorManager.h"
 #include "../Game/UI/Select/SelectUI.h"
 #include "../Game/Camera/SelectCamera.h"
@@ -56,6 +58,7 @@ SelectScene::SelectScene(SceneController& controller) :
 	SceneBase(controller),
 	m_currentMainMenu(MainMenu::Tutorial),
 	m_currentStageMenu(StageMenu::Stage1),
+	m_canSelectStageMenu(StageMenu::Stage1),
 	m_currentTutorialMenu(TutorialMenu::Tutorial1),
 	m_update(&SelectScene::UpdateMainMenu)
 {
@@ -84,6 +87,27 @@ void SelectScene::Init()
 	m_currentMainMenu = MainMenu::Tutorial;
 	m_currentStageMenu = StageMenu::Stage1;
 	m_currentTutorialMenu = TutorialMenu::Tutorial1;
+
+	//クリア状況から選べるステージを制限
+	auto clearData = SaveDataManager::GetInstance().GetClearData();
+	//ステージ2,3までクリアしていたら
+	if (clearData->IsClearStage2() || clearData->IsClearStage3())
+	{
+		//ステージ3まで解放
+		m_canSelectStageMenu = StageMenu::Stage3;
+	}
+	//ステージ1までクリアしているなら
+	else if (clearData->IsClearStage1())
+	{
+		//ステージ2まで解放
+		m_canSelectStageMenu = StageMenu::Stage2;
+	}
+	//一つもクリアしていないなら
+	else if (!clearData->IsClearStage1())
+	{
+		//ステージ1まで解放
+		m_canSelectStageMenu = StageMenu::Stage1;
+	}
 
 	//UI作成
 	auto ui = std::make_shared<SelectUI>();
@@ -381,9 +405,9 @@ void SelectScene::UpdateStageMenu(Input& input, Fader& fader, std::shared_ptr<Se
 		//範囲外ならループ
 		if (menu < static_cast<int>(StageMenu::Stage1))
 		{
-			menu = static_cast<int>(StageMenu::Stage3);
+			menu = static_cast<int>(m_canSelectStageMenu);
 		}
-		if (menu > static_cast<int>(StageMenu::Stage3))
+		if (menu > static_cast<int>(m_canSelectStageMenu))
 		{
 			menu = static_cast<int>(StageMenu::Stage1);
 		}

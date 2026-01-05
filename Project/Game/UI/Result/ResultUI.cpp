@@ -61,7 +61,8 @@ ResultUI::ResultUI(std::wstring stageName, std::shared_ptr<Timer> timer):
     m_fontHandle(-1),
     m_countFrame(0),
     m_timer(timer),
-    m_rank(L"E")
+    m_rank(L"E"),
+    m_timeText(L"")
 {
     auto& assetManager = AssetManager::GetInstance();
     m_resultHandle.handle = assetManager.GetImageHandle(L"Result/Result");
@@ -94,6 +95,25 @@ ResultUI::ResultUI(std::wstring stageName, std::shared_ptr<Timer> timer):
             break;
         }
     }
+
+    int mins = m_timer->GetMillisecond();
+    //30•ª‚ğ’´‚¦‚½‚ç
+    if (min >= kTimeMaxHalfAnHour)
+    {
+        //30•ª‚ğãŒÀ‚Æ‚·‚é
+        min = kTimeMaxHalfAnHour;
+        sec = 0;
+        mins = 0;
+    }
+
+    std::wstringstream ss;
+    //0–„‚ß
+    ss << std::setfill(L'0')
+        << std::setw(kDigitsNum) << min << L":"
+        << std::setw(kDigitsNum) << sec << L":"
+        << std::setw(kDigitsNum) << mins;
+    m_timeText = ss.str();
+    
 }
 
 ResultUI::~ResultUI()
@@ -130,26 +150,7 @@ void ResultUI::Draw() const
     DrawRotaGraph(kResultInfoPosX, kResultInfoPosY, 1.0, 0.0, m_resultInfoHandle.handle, true);
 
     //ƒ^ƒCƒ€
-    int mins    = m_timer->GetMillisecond();
-    int sec     = m_timer->GetSeconds();
-    int min     = m_timer->GetMinutes();
-    //30•ª‚ğ’´‚¦‚½‚ç
-    if (min >= kTimeMaxHalfAnHour)
-    {
-        //30•ª‚ğãŒÀ‚Æ‚·‚é
-        min     = kTimeMaxHalfAnHour;
-        sec     = 0;
-        mins    = 0;
-    }
-
-    std::wstringstream ss;
-    //0–„‚ß
-    ss << std::setfill(L'0')
-        << std::setw(kDigitsNum) << min << L":"
-        << std::setw(kDigitsNum) << sec << L":"
-        << std::setw(kDigitsNum) << mins;
-    std::wstring time = ss.str();
-    DrawStringToHandle(kTimePosX, kTimePosY, time.c_str(), kTextColor, m_fontHandle);
+    DrawStringToHandle(kTimePosX, kTimePosY, m_timeText.c_str(), kTextColor, m_fontHandle);
 
     //ƒ‰ƒ“ƒN
     DrawStringToHandle(kRankPosX, kRankPosY, m_rank.c_str(), kTextColor, m_fontHandle);

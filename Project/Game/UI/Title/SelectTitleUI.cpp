@@ -9,7 +9,9 @@ namespace
 	const std::wstring kSelectNewGame = L"Title/SelectNewGame";
 	const std::wstring kSelectOption = L"Title/SelectOption";
 	const std::wstring kSelectGameEnd = L"Title/SelectGameEnd";
+	const std::wstring kMenuShadow = L"Title/Menu_Shadow";
 	const std::wstring kCursor = L"Mark/Cursor";
+	const std::wstring kCursorShadow = L"Mark/Cursor_Shadow";
 
 	//âÊñ äOç¿ïW
 	constexpr float kOutPosX = -200.0f;
@@ -41,6 +43,8 @@ SelectTitleUI::SelectTitleUI():
 	UIBase(),
 	m_selectIndex(TitleScene::SelectMenuTitle::Continue),
 	m_cursorHandle(-1),
+	m_shadowMenuHandle(-1),
+	m_shadowCursorHandle(-1),
 	m_cursorPos()
 {
 	auto& assetManager = AssetManager::GetInstance();
@@ -50,6 +54,8 @@ SelectTitleUI::SelectTitleUI():
 	m_menuHandle.emplace_back(assetManager.GetImageHandle(kSelectOption));
 	m_menuHandle.emplace_back(assetManager.GetImageHandle(kSelectGameEnd));
 	m_cursorHandle = assetManager.GetImageHandle(kCursor);
+	m_shadowMenuHandle = assetManager.GetImageHandle(kMenuShadow);
+	m_shadowCursorHandle = assetManager.GetImageHandle(kCursorShadow);
 
 	//ç¿ïW
 	m_menuPoses.emplace_back(Vector2(kWaitPosX, kContinuePosY));
@@ -102,13 +108,11 @@ void SelectTitleUI::Draw() const
 	const int kGameEnd = static_cast<int>(TitleScene::SelectMenuTitle::GameEnd);
 
 	//âe
-	SetDrawBlendMode(DX_BLENDMODE_SUB, 255);
-	DrawRotaGraphF(m_menuPoses[kContinue].x + kShadowOffsetPosX, m_menuPoses[kContinue].y + kShadowOffsetPosY, 1.0, 0.0, m_menuHandle[kContinue], true);
-	DrawRotaGraphF(m_menuPoses[kNewGame].x + kShadowOffsetPosX, m_menuPoses[kNewGame].y + kShadowOffsetPosY, 1.0, 0.0, m_menuHandle[kNewGame], true);
-	DrawRotaGraphF(m_menuPoses[kOption].x + kShadowOffsetPosX, m_menuPoses[kOption].y + kShadowOffsetPosY, 1.0, 0.0, m_menuHandle[kOption], true);
-	DrawRotaGraphF(m_menuPoses[kGameEnd].x + kShadowOffsetPosX, m_menuPoses[kGameEnd].y + kShadowOffsetPosY, 1.0, 0.0, m_menuHandle[kGameEnd], true);
-	DrawRotaGraphF(m_cursorPos.x + kShadowOffsetPosX, m_cursorPos.y + kShadowOffsetPosY, 1.0, 0.0, m_cursorHandle, true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+	DrawRotaGraphF(m_menuPoses[kContinue].x + kShadowOffsetPosX, m_menuPoses[kContinue].y + kShadowOffsetPosY, 1.0, 0.0, m_shadowMenuHandle, true);
+	DrawRotaGraphF(m_menuPoses[kNewGame].x + kShadowOffsetPosX, m_menuPoses[kNewGame].y + kShadowOffsetPosY, 1.0, 0.0, m_shadowMenuHandle, true);
+	DrawRotaGraphF(m_menuPoses[kOption].x + kShadowOffsetPosX, m_menuPoses[kOption].y + kShadowOffsetPosY, 1.0, 0.0, m_shadowMenuHandle, true);
+	DrawRotaGraphF(m_menuPoses[kGameEnd].x + kShadowOffsetPosX, m_menuPoses[kGameEnd].y + kShadowOffsetPosY, 1.0, 0.0, m_shadowMenuHandle, true);
+	DrawRotaGraphF(m_cursorPos.x + kShadowOffsetPosX, m_cursorPos.y + kShadowOffsetPosY, 1.0, 0.0, m_shadowCursorHandle, true);
 
 	//ï`âÊ
 	DrawRotaGraphF(m_menuPoses[kContinue].x, m_menuPoses[kContinue].y, 1.0, 0.0, m_menuHandle[kContinue], true);

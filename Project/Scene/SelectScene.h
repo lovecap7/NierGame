@@ -54,6 +54,8 @@ private:
 	TutorialMenu m_currentTutorialMenu = TutorialMenu::Tutorial1;
 	//ステージメニューの現在地
 	StageMenu m_currentStageMenu = StageMenu::Stage1;
+	//クリア状況からどこまでステージが解放されているか
+	StageMenu m_canSelectStageMenu = StageMenu::Stage1;
 
 	//アクターマネージャー
 	std::shared_ptr<ActorManager> m_actorManager;

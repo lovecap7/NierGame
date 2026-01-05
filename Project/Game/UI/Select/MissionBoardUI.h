@@ -21,6 +21,9 @@ private:
 	std::map<int, int> m_handles;
 	int m_backHandle;
 	int m_backShadowHandle;
+	int m_clearMarkHandle;
+	int m_scoreBoardHandle;
+	int m_scoreBoardShadowHandle;
 	//番号
 	int m_index;
 	//データ
@@ -28,5 +31,6 @@ private:
 	//フォントハンドル
 	int m_textFontHandle;
 	int m_titleFontHandle;
+	int m_scoreFontHandle;
 };
 

@@ -40,5 +40,7 @@ private:
     std::shared_ptr<Timer> m_timer;
     //ランク
     std::wstring m_rank;
+    //時間テキスト
+    std::wstring m_timeText;
 };
 

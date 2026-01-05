@@ -2,6 +2,7 @@
 #include <memory>
 class OptionData;
 class ClearSaveData;
+class HighScoreData;
 class SaveDataManager final
 {
 private:
@@ -28,10 +29,14 @@ public:
 	std::shared_ptr<ClearSaveData> GetClearData()const { return m_clearData; };
 	//オプションデータ
 	std::shared_ptr<OptionData> GetOptionData()const { return m_optionData; };
+	//スコアデータ
+	std::shared_ptr<HighScoreData> GetHighScoreData()const { return m_highScoreData; };
 private:
 	//クリアデータ
 	std::shared_ptr<ClearSaveData> m_clearData;
 	//オプションデータ
 	std::shared_ptr<OptionData> m_optionData;
+	//スコアデータ
+	std::shared_ptr<HighScoreData> m_highScoreData;
 };
 

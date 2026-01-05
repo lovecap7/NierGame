@@ -1,5 +1,10 @@
 #include "OptionData.h"
 
+namespace
+{
+	constexpr int kDataNum = 4;
+}
+
 OptionData::OptionData():
 	m_bgmLv(0),
 	m_seLv(0),
@@ -25,6 +30,9 @@ OptionData::~OptionData()
 
 void OptionData::Conversion()
 {
+	//—v‘f‚ª‘«‚è‚È‚¢‚È‚ç‘ŠúƒŠƒ^[ƒ“
+	if (m_data.size() != kDataNum)return;
+
 	//‰¹—Ê
 	m_bgmLv = std::stoi(m_data[0]);
 	m_seLv = std::stoi(m_data[1]);

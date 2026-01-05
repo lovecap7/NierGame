@@ -2,6 +2,7 @@
 #include "CSV/CSVDataLoader.h"
 #include "CSV/ClearSaveData.h"
 #include "CSV/OptionData.h"
+#include "CSV/HighScoreData.h"
 #include "../Main/Application.h"
 
 namespace
@@ -22,4 +23,8 @@ void SaveDataManager::LoadSave()
 	//オプションデータのロード
 	auto optionData = csvLoader.LoadCSV(kOptionSaveDataPath.c_str()).front();
 	m_optionData = std::make_shared<OptionData>(optionData);
+
+	//オプションデータのロード
+	auto highScoreData = csvLoader.LoadCSV(kOptionSaveDataPath.c_str()).front();
+	m_highScoreData = std::make_shared<HighScoreData>(highScoreData);
 }

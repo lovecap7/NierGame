@@ -2,7 +2,9 @@
 #include "../../../General/AssetManager.h"
 #include "../../../General/CSV/CSVDataLoader.h"
 #include "../../../General/CSV/MissionBoardUIData.h"
+#include "../../../General/CSV/ClearSaveData.h"
 #include "../../../General/Fader.h"
+#include "../../../General/SaveDataManager.h"
 #include "MissionBoardUI.h"
 #include <DxLib.h>
 
@@ -49,15 +51,20 @@ namespace
 	const std::wstring kSelectMission2Path = L"Select/SelectMission2";
 	const std::wstring kSelectMission3Path = L"Select/SelectMission3";
 	const std::wstring kStageMissionBoardUIDataPath = L"Select/StageMissionBoardUIData";
+	const std::wstring kShadowPath = L"Select/Menu_Shadow";
 	const std::wstring kOptionPath = L"Select/Option";
 	const std::wstring kBackTitlePath = L"Select/BackTitle";
 	const std::wstring kCursorPath = L"Mark/Cursor";
+	const std::wstring kCursorShadowPath = L"Mark/Cursor_Shadow";
 
 	//カーソル
 	constexpr float kCursorOffsetPosX = -220.0f;
 	constexpr float kCursorRange = 10.0f;
 	constexpr float kCursorAngleSpeed = 5.0f;
 	constexpr float kCursorLerpRate = 0.3f;
+
+	//解放されてないときの輝度
+	constexpr int kBrightness = -200;
 }
 
 SelectUI::SelectUI() :
@@ -65,10 +72,14 @@ SelectUI::SelectUI() :
 	m_selectMainMenuIndex(0),
 	m_selectTutorialMenuIndex(0),
 	m_selectStageMenuIndex(0),
+	m_shadowMenuHandle(-1),
+	m_shadowCursorHandle(-1),
 	m_update(&SelectUI::UpdateMainMenu),
 	m_cursor(),
 	m_cursorAngle(0.0f)
 {
+	auto clearData = SaveDataManager::GetInstance().GetClearData();
+
 	auto& assetManager = AssetManager::GetInstance();
 
 	//メインメニュー
@@ -98,9 +109,18 @@ SelectUI::SelectUI() :
 	{
 		m_stageMenus[i].pos = Vector2(kMainMenuStartX, kMainMenuStartY + kMainMenuOffsetY);
 	}
+	
+
 	m_stageMenus[0].handle = assetManager.GetImageHandle(kSelectMission1Path);
 	m_stageMenus[1].handle = assetManager.GetImageHandle(kSelectMission2Path);
+	//ステージ1をクリアしていないなら
+	if(!clearData->IsClearStage1()) GraphFilter(m_stageMenus[1].handle, DX_GRAPH_FILTER_HSB, 0, 0, 0, kBrightness);
 	m_stageMenus[2].handle = assetManager.GetImageHandle(kSelectMission3Path);
+	//ステージ2をクリアしていないなら
+	if (!clearData->IsClearStage2()) GraphFilter(m_stageMenus[2].handle, DX_GRAPH_FILTER_HSB, 0, 0, 0, kBrightness);
+
+	//影
+	m_shadowMenuHandle = assetManager.GetImageHandle(kShadowPath);
 
 	//ミッションボード
 	auto& csvLoader = CSVDataLoader::GetInstance();
@@ -118,6 +138,7 @@ SelectUI::SelectUI() :
 	m_cursor.handle = assetManager.GetImageHandle(kCursorPath);
 	m_cursor.pos = m_mainMenus[0].pos;
 	m_cursor.pos.x += kCursorOffsetPosX;
+	m_shadowCursorHandle = assetManager.GetImageHandle(kCursorShadowPath);
 }
 
 SelectUI::~SelectUI()
@@ -152,9 +173,8 @@ void SelectUI::Draw() const
 
 	//カーソル
 	float cursorMoveX = kCursorRange * cosf(m_cursorAngle * MyMath::DEG_2_RAD);
-	SetDrawBlendMode(DX_BLENDMODE_SUB, 255);
-	DrawRotaGraphF(m_cursor.pos.x + kShadowOffsetPos.x + cursorMoveX, m_cursor.pos.y + kShadowOffsetPos.y, 1.0, 0.0, m_cursor.handle, true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+	DrawRotaGraphF(m_cursor.pos.x + kShadowOffsetPos.x + cursorMoveX, m_cursor.pos.y + kShadowOffsetPos.y, 1.0, 0.0, m_shadowCursorHandle, true);
+	
 	SetDrawBlendMode(DX_BLENDMODE_INVSRC, 255);
 	DrawRotaGraphF(m_cursor.pos.x + cursorMoveX, m_cursor.pos.y, 1.0, 0.0, m_cursor.handle, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
@@ -301,9 +321,8 @@ void SelectUI::DrawMenu(Fader& fader, const std::vector<MenuUI>& menus, int sele
 {
 	for (int i = 0; i < menus.size(); ++i)
 	{
-		SetDrawBlendMode(DX_BLENDMODE_SUB, 255);
-		DrawRotaGraph(menus[i].pos.x + kShadowOffsetPos.x, menus[i].pos.y + kShadowOffsetPos.y, 1.0, 0.0, menus[i].handle, true);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+		//影
+		DrawRotaGraph(menus[i].pos.x + kShadowOffsetPos.x, menus[i].pos.y + kShadowOffsetPos.y, 1.0, 0.0, m_shadowMenuHandle, true);
 
 		//選んでいるメニューなら反転
 		if (selectMenuIndex == i &&

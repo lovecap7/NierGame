@@ -23,6 +23,10 @@ private:
 	//座標
 	std::vector<Vector2> m_menuPoses;
 
+	//影
+	int m_shadowMenuHandle;
+	int m_shadowCursorHandle;
+
 	//カーソル
 	int m_cursorHandle;
 	Vector2 m_cursorPos;

@@ -9,6 +9,8 @@
 #include "../General/Game.h"
 #include "../General/Sound/SoundManager.h"
 #include "../General/Collision/Physics.h"
+#include "../General/SaveDataManager.h"
+#include "../General/CSV/ClearSaveData.h"
 #include "../Game/UI/Result/TutorialResultUI.h"
 #include "../Game/UI/UIManager.h"
 #include "../Game/Camera/CameraController.h"
@@ -52,6 +54,23 @@ void TutorialResultScene::Init()
 	soundManager.LoadSE(kSEOKPath);
 	//BGM
 	soundManager.PlayBGM(kBGMTutorialResultPath);
+
+	//ステージクリア
+	auto clearData = SaveDataManager::GetInstance().GetClearData();
+	switch (m_tutorialIndex)
+	{
+	case StageIndex::Stage1:
+		clearData->ClearTutorial1();
+		break;
+	case StageIndex::Stage2:
+		clearData->ClearTutorial2();
+		break;
+	case StageIndex::Stage3:
+		clearData->ClearTutorial3();
+		break;
+	default:
+		break;
+	}
 }
 
 void TutorialResultScene::Update()

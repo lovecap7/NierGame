@@ -45,6 +45,10 @@ private:
 	//選んでるメニューのインデックス
 	int m_selectStageMenuIndex;
 
+	//影
+	int m_shadowMenuHandle;
+	int m_shadowCursorHandle;
+
 	//カーソル
 	MenuUI m_cursor;
 	float m_cursorAngle;
