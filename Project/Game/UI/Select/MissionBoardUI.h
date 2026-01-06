@@ -24,13 +24,19 @@ private:
 	int m_clearMarkHandle;
 	int m_scoreBoardHandle;
 	int m_scoreBoardShadowHandle;
+
 	//番号
 	int m_index;
+
 	//データ
 	std::vector<std::shared_ptr<MissionBoardUIData>> m_datas;
+
 	//フォントハンドル
 	int m_textFontHandle;
 	int m_titleFontHandle;
+	int m_timeFontHandle;
+	int m_rankFontHandle;
 	int m_scoreFontHandle;
+
 };
 

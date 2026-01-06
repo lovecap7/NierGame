@@ -16,6 +16,7 @@
 #include "../General/Effect/EffekseerManager.h"
 #include "../General/SaveDataManager.h"
 #include "../General/CSV/ClearSaveData.h"
+#include "../General/CSV/HighScoreData.h"
 
 namespace
 {
@@ -72,9 +73,16 @@ void ResultScene::Init()
 	resultUI->Init();
 	m_resultUI = resultUI;
 
+	//ステージインデックス
+	StageIndex index = GetStageIndexByName(m_stageName);
+
+	//セーブ
+	auto& saveDataManager = SaveDataManager::GetInstance();
 	//ステージクリア
-	auto clearData = SaveDataManager::GetInstance().GetClearData();
-	switch (GetStageIndexByName(m_stageName))
+	auto clearData = saveDataManager.GetClearData();
+
+	//ステージをクリアしたことを記録
+	switch (index)
 	{
 	case StageIndex::Stage1:
 		clearData->ClearStage1();
@@ -88,6 +96,7 @@ void ResultScene::Init()
 	default:
 		break;
 	}
+
 }
 
 void ResultScene::Update()

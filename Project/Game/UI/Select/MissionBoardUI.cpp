@@ -5,9 +5,11 @@
 #include "../../../General/CSV/MissionBoardUIData.h"
 #include "../../../General/SaveDataManager.h"
 #include "../../../General/CSV/ClearSaveData.h"
+#include "../../../General/CSV/HighScoreData.h"
 
 namespace
 {
+	//パス
 	const std::wstring kMissionBoardPath = L"Select/MissionBoard";
 	const std::wstring kMissionBoardShadowPath = L"Select/MissionBoard_Shadow";
 	const std::wstring kMissionBoardClearPath = L"Select/MissionBoardClear";
@@ -19,6 +21,14 @@ namespace
 	constexpr float kMissionBoardPosY = Game::kScreenCenterY;
 	constexpr float kScoreBoardPosX = kMissionBoardPosX + 300.0f;
 	constexpr float kScoreBoardPosY = kMissionBoardPosY - 100.0f;
+	constexpr float kTimePosX = kScoreBoardPosX;
+	constexpr float kTimePosY = kScoreBoardPosY - 35.0f;
+	constexpr float kMinClearTimePosX = kScoreBoardPosX - 85.0f;
+	constexpr float kMinClearTimePosY = kScoreBoardPosY - 70.0f;
+	constexpr float kRankPosX = kScoreBoardPosX;
+	constexpr float kRankPosY = kScoreBoardPosY + 30.0f;
+	constexpr float kRankTextPosX = kScoreBoardPosX - 24.0f;
+	constexpr float kRankTextPosY = kScoreBoardPosY;
 
 	//影
 	constexpr float kMissionBoardShadowOffsetX = 10.0f;
@@ -33,6 +43,11 @@ namespace
 	//タイトル座標
 	constexpr float kMissionBoardTitlePosX = kMissionBoardPosX;
 	constexpr float kMissionBoardTitlePosY = kMissionBoardPosY - 268.0f;
+
+	//最短クリア記録
+	const std::wstring kMinClearTimeText = L"最短クリア記録";
+	//評価
+	const std::wstring kRankText = L"評価";
 }
 
 MissionBoardUI::MissionBoardUI(int size, std::vector<std::shared_ptr<MissionBoardUIData>> datas):
@@ -41,6 +56,8 @@ MissionBoardUI::MissionBoardUI(int size, std::vector<std::shared_ptr<MissionBoar
 	m_backShadowHandle(-1),
 	m_textFontHandle(-1),
 	m_titleFontHandle(-1),
+	m_timeFontHandle(-1),
+	m_scoreFontHandle(-1),
 	m_clearMarkHandle(-1),
 	m_scoreBoardHandle(-1),
 	m_scoreBoardShadowHandle(-1),
@@ -61,7 +78,9 @@ MissionBoardUI::MissionBoardUI(int size, std::vector<std::shared_ptr<MissionBoar
 	//フォント
 	m_textFontHandle = assetManager.GetFontHandle(AssetManager::Font(AssetManager::FontType::NotoSansJP, AssetManager::FontSize::Size20));
 	m_titleFontHandle = assetManager.GetFontHandle(AssetManager::Font(AssetManager::FontType::NotoSansJP, AssetManager::FontSize::Size32));
-	m_scoreFontHandle = assetManager.GetFontHandle(AssetManager::Font(AssetManager::FontType::NotoSansJP, AssetManager::FontSize::Size12));
+	m_timeFontHandle = assetManager.GetFontHandle(AssetManager::Font(AssetManager::FontType::NotoSansJP, AssetManager::FontSize::Size24));
+	m_rankFontHandle = assetManager.GetFontHandle(AssetManager::Font(AssetManager::FontType::NotoSansJP, AssetManager::FontSize::Size36));
+	m_scoreFontHandle = assetManager.GetFontHandle(AssetManager::Font(AssetManager::FontType::NotoSansJP, AssetManager::FontSize::Size24));
 }
 
 MissionBoardUI::~MissionBoardUI()
@@ -116,15 +135,30 @@ void MissionBoardUI::Draw() const
 	DrawRotaGraph(kScoreBoardPosX + kScoreBoardPosShadowOffsetX, kScoreBoardPosY + kScoreBoardPosShadowOffsetY, 1.0f, 0.0f, m_scoreBoardShadowHandle, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
+	//スコアデータ
+	auto scoreData = SaveDataManager::GetInstance().GetHighScoreData(static_cast<StageIndex>(m_index));
+	std::wstring timeText = scoreData->GetTimeText();
+	std::wstring rankText = scoreData->GetRankText();
+
 	//ハイスコアを描画
 	DrawRotaGraph(kScoreBoardPosX, kScoreBoardPosY, 1.0f, 0.0f, m_scoreBoardHandle, true);
-
-	//中央ぞろえ
-	float scoreWidth = static_cast<float>(GetDrawNStringWidthToHandle(title.c_str(), wcslen(title.c_str()), m_scoreFontHandle));
-	if (scoreWidth > 0.0f)
+	
+	//タイマー
+	float timeWidth = static_cast<float>(GetDrawNStringWidthToHandle(timeText.c_str(), wcslen(timeText.c_str()), m_timeFontHandle));
+	if (timeWidth > 0.0f)
 	{
-		scoreWidth *= 0.5f;
+		timeWidth *= 0.5f;
 	}
-	DrawStringFToHandle(kScoreBoardPosX - scoreWidth, kScoreBoardPosY, title.c_str(), 0x000000, m_scoreFontHandle);
+	DrawStringFToHandle(kMinClearTimePosX, kMinClearTimePosY, kMinClearTimeText.c_str(), 0xaa2222, m_scoreFontHandle);
+	DrawStringFToHandle(kTimePosX - timeWidth, kTimePosY, timeText.c_str(), 0x000000, m_timeFontHandle);
+
+	//ランク
+	float rankWidth = static_cast<float>(GetDrawNStringWidthToHandle(rankText.c_str(), wcslen(rankText.c_str()), m_rankFontHandle));
+	if (rankWidth > 0.0f)
+	{
+		rankWidth *= 0.5f;
+	}
+	DrawStringFToHandle(kRankTextPosX, kRankTextPosY, kRankText.c_str(), 0xaa2222, m_scoreFontHandle);
+	DrawStringFToHandle(kRankPosX - rankWidth, kRankPosY, rankText.c_str(), 0x000000, m_rankFontHandle);
 
 }

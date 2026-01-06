@@ -5,6 +5,9 @@
 #include "../../../General/Timer.h"
 #include "../../../General/CSV/CSVDataLoader.h"
 #include "../../../General/CSV/ResultRankData.h"
+#include "../../../General/CSV/ClearSaveData.h"
+#include "../../../General/CSV/HighScoreData.h"
+#include "../../../General/SaveDataManager.h"
 #include <DxLib.h>
 #include <cmath>
 #include <sstream>
@@ -49,6 +52,11 @@ namespace
 
     //リザルトランクのパス
     const std::wstring kResultRankPath = L"/ResultRankData";
+    //パス
+    const std::wstring kResultImagePath = L"Result/Result";
+    const std::wstring kResultInfoImagePath = L"Result/ResultInfo";
+    const std::wstring kPressAnyBottonImagePath = L"Result/PressAnyBotton";
+    const std::wstring kBackImagePath = L"Back/BlackBack2";
 
     //終了フレーム
 	constexpr int kFinishFrame = 150;
@@ -65,10 +73,10 @@ ResultUI::ResultUI(std::wstring stageName, std::shared_ptr<Timer> timer):
     m_timeText(L"")
 {
     auto& assetManager = AssetManager::GetInstance();
-    m_resultHandle.handle = assetManager.GetImageHandle(L"Result/Result");
-    m_resultInfoHandle.handle = assetManager.GetImageHandle(L"Result/ResultInfo");
-    m_pressAnyBottonHandle.handle = assetManager.GetImageHandle(L"Result/PressAnyBotton");
-    m_backHandle = assetManager.GetImageHandle(L"Back/BlackBack2");
+    m_resultHandle.handle = assetManager.GetImageHandle(kResultImagePath);
+    m_resultInfoHandle.handle = assetManager.GetImageHandle(kResultInfoImagePath);
+    m_pressAnyBottonHandle.handle = assetManager.GetImageHandle(kPressAnyBottonImagePath);
+    m_backHandle = assetManager.GetImageHandle(kBackImagePath);
     m_fontHandle = assetManager.GetFontHandle(AssetManager::Font(AssetManager::FontType::Roboto, AssetManager::FontSize::Size36));
 
     //ランクを計算
@@ -113,7 +121,51 @@ ResultUI::ResultUI(std::wstring stageName, std::shared_ptr<Timer> timer):
         << std::setw(kDigitsNum) << sec << L":"
         << std::setw(kDigitsNum) << mins;
     m_timeText = ss.str();
+
+    //ステージインデックス
+    StageIndex index = GetStageIndexByName(stageName);
+
+    //セーブ
+    auto& saveDataManager = SaveDataManager::GetInstance();
+
+    //クリア状況
+    auto clearData = saveDataManager.GetClearData();
+
+    //スコア
+    auto scoreData = saveDataManager.GetHighScoreData(index);
     
+    //初クリア
+    bool isNewClear = false;
+
+    //初クリアかチェック
+    switch (index)
+    {
+    case StageIndex::Stage1:
+        isNewClear = !clearData->IsClearStage1();
+        break;
+    case StageIndex::Stage2:
+        isNewClear = !clearData->IsClearStage1();
+        break;
+    case StageIndex::Stage3:
+        isNewClear = !clearData->IsClearStage1();
+        break;
+    default:
+        break;
+    }
+
+    //スコア更新
+    if (isNewClear)
+    {
+        scoreData->SetRankText(m_rank);
+        scoreData->SetTimeText(m_timeText);
+    }
+    else
+    {
+        //今回のタイムが最短ではないなら
+        if (m_timer->GetTime() >= scoreData->GetTime())return;
+        scoreData->SetRankText(m_rank);
+        scoreData->SetTimeText(m_timeText);
+    }
 }
 
 ResultUI::~ResultUI()

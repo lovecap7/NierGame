@@ -1,19 +1,25 @@
 #include "HighScoreData.h"
+#include "ClearSaveData.h"
+#include "../SaveDataManager.h"
 
 namespace
 {
-	constexpr int kDataNum = 2;
+	constexpr int kDataNum = 3;
 }
 
 HighScoreData::HighScoreData():
-	m_timeText(L"--:--:--"),
-	m_rankText(L"-")
+	m_stageIndex(StageIndex::Stage1),
+	m_timeText(L"ーー:ーー:ーー"),
+	m_rankText(L"ー"),
+	m_time(0)
 {
 }
 
 HighScoreData::HighScoreData(std::shared_ptr<CSVData> data) :
-	m_timeText(L"--:--:--"),
-	m_rankText(L"-")
+	m_stageIndex(StageIndex::Stage1),
+	m_timeText(L"ーー:ーー:ーー"),
+	m_rankText(L"ー"),
+	m_time(0)
 {
 	//データを取得
 	this->m_data = data->GetData();
@@ -22,6 +28,12 @@ HighScoreData::HighScoreData(std::shared_ptr<CSVData> data) :
 
 HighScoreData::~HighScoreData()
 {
+}
+
+void HighScoreData::SetTimeText(std::wstring time)
+{
+	m_timeText = time;
+	m_time = GetAllTime();
 }
 
 void HighScoreData::Conversion()
@@ -46,8 +58,45 @@ void HighScoreData::Conversion()
 		break;
 	}
 
+	auto clearData = SaveDataManager::GetInstance().GetClearData();
+	if (!clearData)return;
+	
+	//クリアしてないならreturn
+	switch (m_stageIndex)
+	{
+	case StageIndex::Stage1:
+		if (!clearData->IsClearStage1())return;
+		break;
+	case StageIndex::Stage2:
+		if (!clearData->IsClearStage2())return;
+		break;
+	case StageIndex::Stage3:
+		if (!clearData->IsClearStage3())return;
+		break;
+	default:
+		return;
+		break;
+	}
+
 	//タイム
 	m_timeText = m_data[1];
+	m_time = GetAllTime();
+
 	//ランク
 	m_rankText = m_data[2];
+}
+
+int HighScoreData::GetAllTime() const
+{
+	int hour = 0;
+	int minute = 0;
+	int second = 0;
+
+	size_t pos1 = m_timeText.find(L':');
+	size_t pos2 = m_timeText.find(L':', pos1 + 1);
+
+	hour = std::stoi(m_timeText.substr(0, pos1));
+	minute = std::stoi(m_timeText.substr(pos1 + 1, pos2 - pos1 - 1));
+	second = std::stoi(m_timeText.substr(pos2 + 1));
+	return hour * 3600 + minute * 60 + second;
 }

@@ -1,5 +1,7 @@
 #pragma once
 #include <memory>
+#include <vector>
+#include "StageIndex.h"
 class OptionData;
 class ClearSaveData;
 class HighScoreData;
@@ -30,13 +32,13 @@ public:
 	//オプションデータ
 	std::shared_ptr<OptionData> GetOptionData()const { return m_optionData; };
 	//スコアデータ
-	std::shared_ptr<HighScoreData> GetHighScoreData()const { return m_highScoreData; };
+	std::shared_ptr<HighScoreData> GetHighScoreData(StageIndex index)const;
 private:
 	//クリアデータ
 	std::shared_ptr<ClearSaveData> m_clearData;
 	//オプションデータ
 	std::shared_ptr<OptionData> m_optionData;
 	//スコアデータ
-	std::shared_ptr<HighScoreData> m_highScoreData;
+	std::vector<std::shared_ptr<HighScoreData>> m_highScoreDatas;
 };
 
