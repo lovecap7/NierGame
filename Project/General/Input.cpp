@@ -43,27 +43,27 @@ void Input::Init()
 	m_inputActionMap["B"]		= { {InputType::kKeyboard,KEY_INPUT_H}		, {InputType::kPad,PAD_INPUT_2} };
 	m_inputActionMap["X"]		=	{ {InputType::kKeyboard,KEY_INPUT_G}	, {InputType::kPad,PAD_INPUT_3} };
 	m_inputActionMap["Y"]		= { {InputType::kKeyboard,KEY_INPUT_Y}		, {InputType::kPad,PAD_INPUT_4} };
-#if _DEBUG
-	m_inputActionMap["DebugScene"] = { {InputType::kKeyboard,KEY_INPUT_D}};
-	m_inputActionMap["GameClear"] = { {InputType::kKeyboard,KEY_INPUT_C}};
-	m_inputActionMap["Gameover"] = { {InputType::kKeyboard,KEY_INPUT_V}};
-	m_inputActionMap["EnemyDead"] = { {InputType::kKeyboard,KEY_INPUT_E}};
-	m_inputActionMap["Pinch"] = { {InputType::kKeyboard,KEY_INPUT_X}};
-	m_inputActionMap["Death"] = { {InputType::kKeyboard,KEY_INPUT_Z}};
-	m_inputActionMap["AddFPS"] = { {InputType::kKeyboard,KEY_INPUT_6}};
-	m_inputActionMap["SubFPS"] = { {InputType::kKeyboard,KEY_INPUT_5}};
-	m_inputActionMap["AddTimeScale"] = { {InputType::kKeyboard,KEY_INPUT_8}};
-	m_inputActionMap["SubTimeScale"] = { {InputType::kKeyboard,KEY_INPUT_7}};
-	m_inputActionMap["StopUpdate"] = { {InputType::kKeyboard,KEY_INPUT_1}};
-	m_inputActionMap["OneFrame"] = { {InputType::kKeyboard,KEY_INPUT_2}};
-	m_inputActionMap["FullRecovery"] = { {InputType::kKeyboard,KEY_INPUT_3}};
-	m_inputActionMap["Glitch"] = { {InputType::kKeyboard,KEY_INPUT_G}};
-	m_inputActionMap["GlitchSub"] = { {InputType::kKeyboard,KEY_INPUT_H}};
-	m_inputActionMap["Gray"] = { {InputType::kKeyboard,KEY_INPUT_J}};
-	m_inputActionMap["GraySub"] = { {InputType::kKeyboard,KEY_INPUT_K}};
-	m_inputActionMap["TargetDeath"] = { {InputType::kKeyboard,KEY_INPUT_T}};
-	m_inputActionMap["Strongest"] = { {InputType::kKeyboard,KEY_INPUT_S}};
-#endif
+
+
+	m_inputActionMap["DebugScene"] = { {InputType::kKeyboard,KEY_INPUT_D} };
+	m_inputActionMap["GameClear"] = { {InputType::kKeyboard,KEY_INPUT_C} };
+	m_inputActionMap["Gameover"] = { {InputType::kKeyboard,KEY_INPUT_V} };
+	m_inputActionMap["EnemyDead"] = { {InputType::kKeyboard,KEY_INPUT_E} };
+	m_inputActionMap["Pinch"] = { {InputType::kKeyboard,KEY_INPUT_X} };
+	m_inputActionMap["Death"] = { {InputType::kKeyboard,KEY_INPUT_Z} };
+	m_inputActionMap["AddFPS"] = { {InputType::kKeyboard,KEY_INPUT_6} };
+	m_inputActionMap["SubFPS"] = { {InputType::kKeyboard,KEY_INPUT_5} };
+	m_inputActionMap["AddTimeScale"] = { {InputType::kKeyboard,KEY_INPUT_8} };
+	m_inputActionMap["SubTimeScale"] = { {InputType::kKeyboard,KEY_INPUT_7} };
+	m_inputActionMap["StopUpdate"] = { {InputType::kKeyboard,KEY_INPUT_1} };
+	m_inputActionMap["OneFrame"] = { {InputType::kKeyboard,KEY_INPUT_2} };
+	m_inputActionMap["FullRecovery"] = { {InputType::kKeyboard,KEY_INPUT_3} };
+	m_inputActionMap["Glitch"] = { {InputType::kKeyboard,KEY_INPUT_G} };
+	m_inputActionMap["GlitchSub"] = { {InputType::kKeyboard,KEY_INPUT_H} };
+	m_inputActionMap["Gray"] = { {InputType::kKeyboard,KEY_INPUT_J} };
+	m_inputActionMap["GraySub"] = { {InputType::kKeyboard,KEY_INPUT_K} };
+	m_inputActionMap["TargetDeath"] = { {InputType::kKeyboard,KEY_INPUT_T} };
+	m_inputActionMap["Strongest"] = { {InputType::kKeyboard,KEY_INPUT_S} };
 
 	//çXêVÇÇ∑ÇÈ
 	m_isUpdate = true;

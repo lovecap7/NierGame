@@ -4,6 +4,8 @@
 class Actor;
 class AttackData;
 class SwordAttack;
+class Model;
+class Player;
 class PlayerStateLightAttack :
     public PlayerStateAttackBase, public std::enable_shared_from_this<PlayerStateLightAttack>
 {
@@ -13,6 +15,8 @@ public:
     void Init()override;
     void Update() override;
 private:
+    //Ÿ‚ÌUŒ‚
+    void NextAttack(bool isChargeAttack, std::shared_ptr<Player> owner, std::shared_ptr<Model> model);
     //UŒ‚ŠJnˆ—
     void UpdateStartAttack(std::shared_ptr<Player>& owner, std::shared_ptr<Weapon>& weapon);
     //ˆÚ“®‚©‘Ò‹@‚©

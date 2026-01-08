@@ -36,14 +36,12 @@ void AvoidColl::Update(Vector3 nextPos, bool isEnableColl)
 }
 void AvoidColl::Draw()const
 {
-#if _DEBUG
 	DrawSphere3D(m_rb->GetPos().ToDxLibVector(),
 		std::dynamic_pointer_cast<SphereCollider>(m_collisionData)->GetRadius(),
 		16,
 		0x00ff00,
 		0x00ff00,
 		false);
-#endif
 }
 
 void AvoidColl::OnCollide(const std::shared_ptr<Collidable> other)

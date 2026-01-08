@@ -46,7 +46,7 @@ bool Application::Init()
 	m_isFinishApplication = false;
 
 	//ゲームタイトル
-	SetWindowText(L"Project:NieR");
+	SetWindowText(L"Project:NeaR");
 	//ゲームアイコン
 	//SetWindowIconID(IDI_ICON1);
 
@@ -162,12 +162,14 @@ void Application::Run()
 			m_postProcess->SubPostEffectState(ShaderPostProcess::PostEffectState::Gray);
 		}
 
+		
+		
+#endif
 		if (input.IsTrigger("StopUpdate"))
 		{
 			m_isUpdateStop = !m_isUpdateStop;
 		}
 		if (!m_isUpdateStop || input.IsTrigger("OneFrame"))
-#endif
 		{
 			//ターゲット
 			SetDrawScreen(RT);

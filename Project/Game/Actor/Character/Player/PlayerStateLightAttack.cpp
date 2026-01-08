@@ -126,12 +126,14 @@ void PlayerStateLightAttack::Update()
 		ChangeState(std::make_shared<PlayerStateAvoid>(m_pOwner, m_isWait));
 		return;
 	}
+
 	//死亡
 	if (owner->GetCharaStatus()->IsDead())
 	{
 		ChangeState(std::make_shared<PlayerStateDeath>(m_pOwner, m_isWait));
 		return;
 	}
+
 	//やられ
 	if (owner->GetCharaStatus()->IsHitReaction())
 	{
@@ -183,41 +185,8 @@ void PlayerStateLightAttack::Update()
 			//攻撃をするか
 			if (isChargeAttack || isCombAttack)
 			{
-				//次の攻撃名
-				auto nextName = m_attackData->GetNextAttackName();
-
-				//チャージ攻撃をするなら
-				if (isChargeAttack)
-				{
-					nextName = kChargeName;
-				}
-				//次の攻撃がない場合
-				else if (nextName == L"None")
-				{
-					//空中にいないなら
-					if (owner->IsFloor())
-					{
-						//最初の攻撃に戻る
-						nextName = kFirstGroundAttackName;
-					}
-				}
-				if (nextName != L"None")
-				{
-					//攻撃データ
-					m_attackData = owner->GetAttackData(nextName);
-					m_isAppearedAttack = false;
-
-					//アニメーション
-					model->SetAnim(owner->GetAnim(m_attackData->GetAnimName()).c_str(), false);
-
-					//フレームリセット
-					m_frame = 0.0f;
-
-					//攻撃削除
-					DeleteAttack();
-
-					return;
-				}
+				NextAttack(isChargeAttack, owner, model);
+				return;
 			}
 			//ジャンプ
 			if (owner->IsJumpable() && input.IsBuffered("A"))
@@ -247,6 +216,45 @@ void PlayerStateLightAttack::Update()
 	{
 		//縦の移動量をリセット
 		owner->GetRb()->SetVecY(0.0f);
+	}
+}
+
+void PlayerStateLightAttack::NextAttack(bool isChargeAttack, std::shared_ptr<Player> owner, std::shared_ptr<Model> model)
+{
+	//次の攻撃名
+	auto nextName = m_attackData->GetNextAttackName();
+
+	//チャージ攻撃をするなら
+	if (isChargeAttack)
+	{
+		nextName = kChargeName;
+	}
+	//次の攻撃がない場合
+	else if (nextName == L"None")
+	{
+		//空中にいないなら
+		if (owner->IsFloor())
+		{
+			//最初の攻撃に戻る
+			nextName = kFirstGroundAttackName;
+		}
+	}
+	if (nextName != L"None")
+	{
+		//攻撃データ
+		m_attackData = owner->GetAttackData(nextName);
+		m_isAppearedAttack = false;
+
+		//アニメーション
+		model->SetAnim(owner->GetAnim(m_attackData->GetAnimName()).c_str(), false);
+
+		//フレームリセット
+		m_frame = 0.0f;
+
+		//攻撃削除
+		DeleteAttack();
+
+		return;
 	}
 }
 

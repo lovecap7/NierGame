@@ -287,17 +287,8 @@ void Player::OnCollide(const std::shared_ptr<Collidable> other)
 void Player::Draw() const
 {
 #if _DEBUG
-	//衝突判定
-	DrawCapsule3D(
-		m_rb->m_pos.ToDxLibVector(),
-		std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetEndPos().ToDxLibVector(),
-		std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetRadius(),
-		16,
-		0x00ff00,
-		0x00ff00,
-		false
-	);
-	//衝突判定
+	
+	//リスポーン地点
 	DrawSphere3D(
 		m_respawnPos.ToDxLibVector(),
 		m_actorData->GetCollRadius(),
@@ -306,8 +297,7 @@ void Player::Draw() const
 		0x00ff00,
 		false
 	);
-	//回避判定
-	m_avoidColl->Draw();
+	
 	//見てる方向
 	if (m_model)
 	{
@@ -321,7 +311,23 @@ void Player::Draw() const
 		DrawLine3D(m_rb->m_pos.ToDxLibVector(), (m_rb->m_pos + viewDir1).ToDxLibVector(), 0xff0000);
 		DrawLine3D(m_rb->m_pos.ToDxLibVector(), (m_rb->m_pos + viewDir2).ToDxLibVector(), 0xff0000);
 	}
+
+	//衝突判定
+	DrawCapsule3D(
+		m_rb->m_pos.ToDxLibVector(),
+		std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetEndPos().ToDxLibVector(),
+		std::dynamic_pointer_cast<CapsuleCollider>(m_collisionData)->GetRadius(),
+		16,
+		0xff0000,
+		0xff0000,
+		false
+	);
+
+	//回避判定
+	m_avoidColl->Draw();
 #endif
+	
+
 	if (m_isDraw)
 	{
 		m_model->Draw();
@@ -359,13 +365,12 @@ void Player::Complete()
 		camera->SetPlayerDir(m_model->GetDir());
 	}
 
-	bool isHit = m_charaStatus->IsHit();
-	if (isHit)
-	{
 #if _DEBUG
+	if (m_charaStatus->IsHit())
+	{
 		printf("プレイヤーの残りの体力 : %d\n", m_charaStatus->GetNowHP());
-#endif
 	}
+#endif
 }
 
 
