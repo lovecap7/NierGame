@@ -41,7 +41,8 @@ private:
 
 	//ステージメニューの項目座標
 	std::vector<MenuUI> m_stageMenus;
-	std::weak_ptr<MissionBoardUI> m_missionBoard;
+	std::weak_ptr<MissionBoardUI> m_stageMissionBoard;
+	std::weak_ptr<MissionBoardUI> m_tutorialMissionBoard;
 	//選んでるメニューのインデックス
 	int m_selectStageMenuIndex;
 

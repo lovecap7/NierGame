@@ -8,7 +8,7 @@ class MissionBoardUI :
 	public UIBase
 {
 public:
-	MissionBoardUI(int size,std::vector<std::shared_ptr<MissionBoardUIData>> datas);
+	MissionBoardUI(int size,std::vector<std::shared_ptr<MissionBoardUIData>> datas,bool isTutorial = false);
 	~MissionBoardUI();
 	//更新
 	void Update() override;
@@ -38,5 +38,7 @@ private:
 	int m_rankFontHandle;
 	int m_scoreFontHandle;
 
+	//チュートリアルか
+	bool m_isTutorial;
 };
 

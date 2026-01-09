@@ -59,13 +59,13 @@ void TutorialResultScene::Init()
 	auto clearData = SaveDataManager::GetInstance().GetClearData();
 	switch (m_tutorialIndex)
 	{
-	case StageIndex::Stage1:
+	case StageIndex::Tutorial1:
 		clearData->ClearTutorial1();
 		break;
-	case StageIndex::Stage2:
+	case StageIndex::Tutorial2:
 		clearData->ClearTutorial2();
 		break;
-	case StageIndex::Stage3:
+	case StageIndex::Tutorial3:
 		clearData->ClearTutorial3();
 		break;
 	default:

@@ -51,6 +51,7 @@ namespace
 	const std::wstring kSelectMission2Path = L"Select/SelectMission2";
 	const std::wstring kSelectMission3Path = L"Select/SelectMission3";
 	const std::wstring kStageMissionBoardUIDataPath = L"Select/StageMissionBoardUIData";
+	const std::wstring kTutorialMissionBoardUIDataPath = L"Select/TutorialMissionBoardUIData";
 	const std::wstring kShadowPath = L"Select/Menu_Shadow";
 	const std::wstring kOptionPath = L"Select/Option";
 	const std::wstring kBackTitlePath = L"Select/BackTitle";
@@ -132,7 +133,17 @@ SelectUI::SelectUI() :
 	}
 	auto mb = std::make_shared<MissionBoardUI>(kStageSelectSize, missionBoardUIData);
 	mb->Init();
-	m_missionBoard = mb;
+	m_stageMissionBoard = mb;
+	
+	missionBoardUIData.clear();
+	for(auto& data : csvLoader.LoadCSV(kTutorialMissionBoardUIDataPath.c_str()))
+	{
+		auto mbData = std::make_shared<MissionBoardUIData>(data);
+		missionBoardUIData.push_back(mbData);
+	}
+	mb = std::make_shared<MissionBoardUI>(kTutorialSize, missionBoardUIData,true);
+	mb->Init();
+	m_tutorialMissionBoard = mb;
 
 	//カーソル
 	m_cursor.handle = assetManager.GetImageHandle(kCursorPath);
@@ -188,15 +199,19 @@ void SelectUI::SetSelectMainMenuIndex(int index)
 
 void SelectUI::SetSelectTutorialMenuIndex(int index)
 {
+	if (!m_tutorialMissionBoard.expired())
+	{
+		m_tutorialMissionBoard.lock()->SetSelectMissionBoardIndex(index);
+	}
 	m_selectTutorialMenuIndex = index;
 	m_update = &SelectUI::UpdateTutorialMenu;
 }
 
 void SelectUI::SetSelectStageMenuIndex(int index)
 {
-	if(!m_missionBoard.expired())
+	if(!m_stageMissionBoard.expired())
 	{
-		m_missionBoard.lock()->SetSelectMissionBoardIndex(index);
+		m_stageMissionBoard.lock()->SetSelectMissionBoardIndex(index);
 	}
 	m_selectStageMenuIndex = index;
 	m_update = &SelectUI::UpdateStageMenu;
@@ -241,8 +256,15 @@ void SelectUI::UpdateMainMenu()
 	}
 
 	//非表示
-	if (m_missionBoard.expired())return;
-	m_missionBoard.lock()->DisableDraw();
+	if (!m_stageMissionBoard.expired())
+	{
+		m_stageMissionBoard.lock()->DisableDraw();
+	}
+	//非表示
+	if (!m_tutorialMissionBoard.expired())
+	{
+		m_tutorialMissionBoard.lock()->DisableDraw();
+	}
 }
 
 void SelectUI::UpdateTutorialMenu()
@@ -277,8 +299,15 @@ void SelectUI::UpdateTutorialMenu()
 	}
 
 	//非表示
-	if (m_missionBoard.expired())return;
-	m_missionBoard.lock()->DisableDraw();
+	if (!m_stageMissionBoard.expired())
+	{
+		m_stageMissionBoard.lock()->DisableDraw();
+	}
+	//表示
+	if (!m_tutorialMissionBoard.expired())
+	{
+		m_tutorialMissionBoard.lock()->EnableDraw();
+	}
 }
 
 void SelectUI::UpdateStageMenu()
@@ -313,8 +342,15 @@ void SelectUI::UpdateStageMenu()
 	}
 
 	//表示
-	if (m_missionBoard.expired())return;
-	m_missionBoard.lock()->EnableDraw();
+	if (!m_stageMissionBoard.expired())
+	{
+		m_stageMissionBoard.lock()->EnableDraw();
+	}
+	//非表示
+	if (!m_tutorialMissionBoard.expired())
+	{
+		m_tutorialMissionBoard.lock()->DisableDraw();
+	}
 }
 
 void SelectUI::DrawMenu(Fader& fader, const std::vector<MenuUI>& menus, int selectMenuIndex, bool isMenuMode) const

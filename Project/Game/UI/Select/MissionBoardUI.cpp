@@ -50,7 +50,7 @@ namespace
 	const std::wstring kRankText = L"評価";
 }
 
-MissionBoardUI::MissionBoardUI(int size, std::vector<std::shared_ptr<MissionBoardUIData>> datas):
+MissionBoardUI::MissionBoardUI(int size, std::vector<std::shared_ptr<MissionBoardUIData>> datas,bool isTutorial):
 	m_index(0),
 	m_backHandle(-1),
 	m_backShadowHandle(-1),
@@ -61,7 +61,9 @@ MissionBoardUI::MissionBoardUI(int size, std::vector<std::shared_ptr<MissionBoar
 	m_clearMarkHandle(-1),
 	m_scoreBoardHandle(-1),
 	m_scoreBoardShadowHandle(-1),
-	m_datas(datas)
+	m_rankFontHandle(-1),
+	m_datas(datas),
+	m_isTutorial(isTutorial)
 {
 	auto& assetManager = AssetManager::GetInstance();
 	//ハンドルロード
@@ -72,15 +74,21 @@ MissionBoardUI::MissionBoardUI(int size, std::vector<std::shared_ptr<MissionBoar
 	m_backHandle = assetManager.GetImageHandle(kMissionBoardPath.c_str());
 	m_backShadowHandle = assetManager.GetImageHandle(kMissionBoardShadowPath.c_str());
 	m_clearMarkHandle = assetManager.GetImageHandle(kMissionBoardClearPath.c_str());
-	m_scoreBoardHandle = assetManager.GetImageHandle(kScoreBoardPath.c_str());
-	m_scoreBoardShadowHandle = assetManager.GetImageHandle(kScoreBoardShadowPath.c_str());
 
 	//フォント
 	m_textFontHandle = assetManager.GetFontHandle(AssetManager::Font(AssetManager::FontType::NotoSansJP, AssetManager::FontSize::Size20));
 	m_titleFontHandle = assetManager.GetFontHandle(AssetManager::Font(AssetManager::FontType::NotoSansJP, AssetManager::FontSize::Size32));
-	m_timeFontHandle = assetManager.GetFontHandle(AssetManager::Font(AssetManager::FontType::NotoSansJP, AssetManager::FontSize::Size24));
-	m_rankFontHandle = assetManager.GetFontHandle(AssetManager::Font(AssetManager::FontType::NotoSansJP, AssetManager::FontSize::Size36));
-	m_scoreFontHandle = assetManager.GetFontHandle(AssetManager::Font(AssetManager::FontType::NotoSansJP, AssetManager::FontSize::Size24));
+
+	//チュートリアルじゃないなら
+	if (!m_isTutorial)
+	{
+		//クリアした記録を表示するのでロード
+		m_scoreBoardHandle = assetManager.GetImageHandle(kScoreBoardPath.c_str());
+		m_scoreBoardShadowHandle = assetManager.GetImageHandle(kScoreBoardShadowPath.c_str());
+		m_timeFontHandle = assetManager.GetFontHandle(AssetManager::Font(AssetManager::FontType::NotoSansJP, AssetManager::FontSize::Size24));
+		m_rankFontHandle = assetManager.GetFontHandle(AssetManager::Font(AssetManager::FontType::NotoSansJP, AssetManager::FontSize::Size36));
+		m_scoreFontHandle = assetManager.GetFontHandle(AssetManager::Font(AssetManager::FontType::NotoSansJP, AssetManager::FontSize::Size24));
+	}
 }
 
 MissionBoardUI::~MissionBoardUI()
@@ -122,18 +130,37 @@ void MissionBoardUI::Draw() const
 
 	//クリアしたか
 	auto clearData = SaveDataManager::GetInstance().GetClearData();
-	if (m_index == 0 && clearData->IsClearStage1() ||
-		m_index == 1 && clearData->IsClearStage2() ||
-		m_index == 2 && clearData->IsClearStage3())
+
+	bool isClear = false;
+	switch (m_index)
+	{
+	case 0:
+		if (m_isTutorial)isClear = clearData->IsClearTutorial1();
+		else isClear = clearData->IsClearStage1();
+		break;
+	case 1:
+		if (m_isTutorial)isClear = clearData->IsClearTutorial2();
+		else isClear = clearData->IsClearStage2();
+		break;
+	case 2:
+		if (m_isTutorial)isClear = clearData->IsClearTutorial3();
+		else isClear = clearData->IsClearStage3();
+		break;
+	default:
+		break;
+	}
+	if (isClear)
 	{
 		DrawRotaGraph(kMissionBoardPosX, kMissionBoardPosY, 1.0f, 0.0f, m_clearMarkHandle, true);
 	}
 
-	
 	//影描画
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
 	DrawRotaGraph(kScoreBoardPosX + kScoreBoardPosShadowOffsetX, kScoreBoardPosY + kScoreBoardPosShadowOffsetY, 1.0f, 0.0f, m_scoreBoardShadowHandle, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	//チュートリアルなら描画しない
+	if (m_isTutorial)return;
 
 	//スコアデータ
 	auto scoreData = SaveDataManager::GetInstance().GetHighScoreData(static_cast<StageIndex>(m_index));
