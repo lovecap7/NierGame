@@ -144,10 +144,10 @@ ResultUI::ResultUI(std::wstring stageName, std::shared_ptr<Timer> timer):
         isNewClear = !clearData->IsClearStage1();
         break;
     case StageIndex::Stage2:
-        isNewClear = !clearData->IsClearStage1();
+        isNewClear = !clearData->IsClearStage2();
         break;
     case StageIndex::Stage3:
-        isNewClear = !clearData->IsClearStage1();
+        isNewClear = !clearData->IsClearStage3();
         break;
     default:
         break;
