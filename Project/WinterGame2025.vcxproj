@@ -493,6 +493,8 @@
     <ClInclude Include="General\TargetInfo.h" />
     <ClInclude Include="General\Timer.h" />
     <ClInclude Include="Main\Application.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
     <ClInclude Include="Scene\DebugScene\DebugSelectScene.h" />
     <ClInclude Include="Scene\DebugScene\PlayerTestScene.h" />
     <ClInclude Include="Scene\Debug\DebugSelectScene.h" />
@@ -595,6 +597,12 @@
     <None Include="Shader\MV1PixelShader.pso" />
     <None Include="Shader\MV1VertexShader.vso" />
     <None Include="Shader\PostEffects.pso" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Data\GameIcon\Icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resource.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

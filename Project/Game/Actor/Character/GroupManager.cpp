@@ -25,8 +25,9 @@ void GroupManager::Entry(std::shared_ptr<EnemyBase> enemy)
 		//攻撃権を持たせる
 		TakeTurnCanAttack(enemy, groupName);
 #if _DEBUG
-		m_groupColor[groupName] = GetColor(MyMath::GetRand(0, 255), MyMath::GetRand(0, 255), MyMath::GetRand(0, 255));
+		//デバッグ用
 #endif
+		m_groupColor[groupName] = GetColor(MyMath::GetRand(0, 255), MyMath::GetRand(0, 255), MyMath::GetRand(0, 255));
 	}
 	else
 	{

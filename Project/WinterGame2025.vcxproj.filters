@@ -1121,6 +1121,12 @@
     <ClInclude Include="General\CSV\HighScoreData.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\MV1Default_PixelLighting_PS.hlsl" />
@@ -1135,5 +1141,15 @@
     <None Include="Shader\MV1PixelShader.pso" />
     <None Include="Shader\MV1VertexShader.vso" />
     <None Include="Shader\PostEffects.pso" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Data\GameIcon\Icon.ico">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resource.rc">
+      <Filter>リソース ファイル</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

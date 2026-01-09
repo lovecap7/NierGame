@@ -13,6 +13,7 @@
 #include "../General/LoadingManager.h"
 #include "../General/SaveDataManager.h"
 #include "../General/CSV/OptionData.h"
+#include "../resource.h"
 #include  <cassert>
 #include <chrono>
 namespace
@@ -47,8 +48,9 @@ bool Application::Init()
 
 	//ゲームタイトル
 	SetWindowText(L"Project:NeaR");
+
 	//ゲームアイコン
-	//SetWindowIconID(IDI_ICON1);
+	SetWindowIconID(IDI_ICON1);
 
 	//ウィンドウモード
 	m_isWindow = saveDataManager.GetOptionData()->IsWindow();
