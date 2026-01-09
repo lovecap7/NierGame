@@ -6,6 +6,7 @@
 #include "../Game/Camera/CameraController.h"
 #include "../General/Input.h"
 #include "../General/Sound/SoundManager.h"
+#include "../General/SaveDataManager.h"
 #include "../Main/Application.h"
 
 OptionScene::OptionScene(SceneController& controller):
@@ -20,6 +21,9 @@ OptionScene::OptionScene(SceneController& controller):
 
 OptionScene::~OptionScene()
 {
+	//•Û‘¶
+	SaveDataManager::GetInstance().SaveOptionData();
+
 	if (!m_optionUI.expired())
 	{
 		m_optionUI.lock()->Delete();

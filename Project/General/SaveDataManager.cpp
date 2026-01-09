@@ -1,5 +1,6 @@
 #include "SaveDataManager.h"
 #include "CSV/CSVDataLoader.h"
+#include "CSV/CSVDataSaver.h"
 #include "CSV/ClearSaveData.h"
 #include "CSV/OptionData.h"
 #include "CSV/HighScoreData.h"
@@ -13,7 +14,7 @@ namespace
 	const std::wstring kHighScoreSaveDataPath = L"Save/HighScoreSaveData";
 }
 
-void SaveDataManager::LoadSave()
+void SaveDataManager::LoadSaveData()
 {
 	auto& csvLoader = CSVDataLoader::GetInstance();
 
@@ -30,6 +31,20 @@ void SaveDataManager::LoadSave()
 	{
 		m_highScoreDatas.emplace_back(std::make_shared<HighScoreData>(data));
 	}
+}
+
+void SaveDataManager::SaveAllData()
+{
+	auto& saver = CSVDataSaver::GetInstance();
+	saver.SaveClearData();
+	saver.SaveHighScoreData();
+	saver.SaveOption();
+}
+
+void SaveDataManager::SaveOptionData()
+{
+	//ê›íËÇÉZÅ[ÉuÇ∑ÇÈ
+	CSVDataSaver::GetInstance().SaveOption();
 }
 
 std::shared_ptr<HighScoreData> SaveDataManager::GetHighScoreData(StageIndex index) const

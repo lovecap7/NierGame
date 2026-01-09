@@ -40,7 +40,7 @@ bool Application::Init()
 {
 	//セーブデータ
 	auto& saveDataManager = SaveDataManager::GetInstance();
-	saveDataManager.LoadSave();
+	saveDataManager.LoadSaveData();
 
 	//初期化
 	//このフラグがtrueの時アプリケーションが終了する

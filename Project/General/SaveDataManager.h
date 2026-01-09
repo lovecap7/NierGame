@@ -25,7 +25,13 @@ public:
 		return instance;
 	}
 	//セーブデータのロード
-	void LoadSave();
+	void LoadSaveData();
+
+	//セーブ
+	void SaveAllData();
+
+	//オプションのセーブ
+	void SaveOptionData();
 	
 	//クリアデータ
 	std::shared_ptr<ClearSaveData> GetClearData()const { return m_clearData; };

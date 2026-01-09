@@ -134,6 +134,8 @@ void ResultScene::Draw()
 
 void ResultScene::End()
 {
+	//ÉZÅ[Éu
+	SaveDataManager::GetInstance().SaveAllData();
 }
 
 void ResultScene::DebugDraw() const

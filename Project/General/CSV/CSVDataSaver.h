@@ -25,7 +25,9 @@ public:
 	}
 		
 	//ÉZÅ[Éu
-	void OptionSave();
+	void SaveOption();
+	void SaveClearData();
+	void SaveHighScoreData();
 private:
 	
 };

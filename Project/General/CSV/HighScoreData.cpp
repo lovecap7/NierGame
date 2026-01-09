@@ -88,15 +88,15 @@ void HighScoreData::Conversion()
 
 int HighScoreData::GetAllTime() const
 {
-	int hour = 0;
 	int minute = 0;
 	int second = 0;
+	int millisecond = 0;
 
 	size_t pos1 = m_timeText.find(L':');
 	size_t pos2 = m_timeText.find(L':', pos1 + 1);
 
-	hour = std::stoi(m_timeText.substr(0, pos1));
-	minute = std::stoi(m_timeText.substr(pos1 + 1, pos2 - pos1 - 1));
-	second = std::stoi(m_timeText.substr(pos2 + 1));
-	return hour * 3600 + minute * 60 + second;
+	minute = std::stoi(m_timeText.substr(0, pos1));
+	second = std::stoi(m_timeText.substr(pos1 + 1, pos2 - pos1 - 1));
+	millisecond = std::stoi(m_timeText.substr(pos2 + 1));
+	return minute * 3600 + second * 60 + millisecond;
 }
