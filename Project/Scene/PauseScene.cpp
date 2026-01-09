@@ -11,6 +11,7 @@
 #include "../General/Effect/EffekseerManager.h"
 #include "../General/AssetManager.h"
 #include "../General/Fader.h"
+#include "../General/SaveDataManager.h"
 #include "../Game/Camera/CameraController.h"
 
 namespace
@@ -97,6 +98,9 @@ void PauseScene::Init()
 
 void PauseScene::Update()
 {
+	//プレイ時間加算
+	SaveDataManager::GetInstance().AddPlayTime();
+
 	//カメラの更新
 	CameraController::GetInstance().Update();
 

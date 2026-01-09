@@ -31,7 +31,7 @@ namespace
 	const std::wstring kBack = L"Text/TalkUI";
 
 	//デフォルトの速度
-	constexpr int kDefTalkSpeed = 10;
+	constexpr int kDefTalkSpeed = 2;
 
 
 }

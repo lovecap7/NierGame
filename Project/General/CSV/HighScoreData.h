@@ -11,6 +11,8 @@ public:
 	HighScoreData(std::shared_ptr<CSVData> data);
 	~HighScoreData();
 
+	void Reset();
+
 	//ステージ番号
 	StageIndex GetStageIndex()const { return m_stageIndex; };
 	//タイム

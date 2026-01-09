@@ -135,6 +135,9 @@ void SelectScene::Init()
 	m_actorManager->Init();
 	m_actorManager->CreateActorCSV(kSelect.c_str(), kCharacterDataPath.c_str());
 	m_actorManager->CreateActorCSV(kSelect.c_str(), kStageDataPath.c_str());
+
+	//セーブ
+	SaveDataManager::GetInstance().SaveAllData();
 }
 
 void SelectScene::Update()
@@ -145,6 +148,9 @@ void SelectScene::Update()
 	auto& cameraController = CameraController::GetInstance();
 	cameraController.Update();
 	m_actorManager->Update();
+
+	//プレイ時間加算
+	SaveDataManager::GetInstance().AddPlayTime();
 
 	if (m_selectCamera.expired())return;
 	

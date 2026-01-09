@@ -75,6 +75,9 @@ void TutorialResultScene::Init()
 
 void TutorialResultScene::Update()
 {
+	//ƒvƒŒƒCŠÔ‰ÁZ
+	SaveDataManager::GetInstance().AddPlayTime();
+
 	auto& input = Input::GetInstance();
 	auto& fader = Fader::GetInstance();
 

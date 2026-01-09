@@ -13,6 +13,7 @@
 #include "../Game/UI/UIManager.h"
 #include "../Game/Actor/ActorManager.h"
 #include "../General/AssetManager.h"
+#include "../General/SaveDataManager.h"
 #include "../Game/Camera/CameraController.h"
 #include "../Game/Camera/TitleCamera.h"
 #include "../Main/Application.h"
@@ -41,6 +42,9 @@ namespace
 	const std::wstring kBGMTitlePath = L"TitleScene";
 	//SE
 	const std::wstring kSENoisePath = L"Noise";
+	const std::wstring kSESelectPath = L"Select";
+	const std::wstring kSEOKPath = L"OK";
+	const std::wstring kSECancelPath = L"Cancel";
 	const std::wstring kSEGameStartPath = L"GameStart";
 }
 
@@ -199,7 +203,7 @@ void TitleScene::UpdateTitle(Input& input, Fader& fader)
 	{
 		//クリックSE
 		auto& soundManager = SoundManager::GetInstance();
-		soundManager.PlayOnceSE(kSEGameStartPath);
+		soundManager.PlayOnceSE(kSEOKPath);
 
 		//セレクトUI表示
 		if (!m_selectTitleUI.expired())
@@ -224,6 +228,8 @@ void TitleScene::UpdateSelect(Input& input, Fader& fader)
 			m_controller.ChangeScene(std::make_shared<SelectScene>(m_controller));
 			break;
 		case TitleScene::SelectMenuTitle::NewGame:
+			//データを削除してから始める
+			SaveDataManager::GetInstance().SaveNewData();
 			m_controller.ChangeScene(std::make_shared<SelectScene>(m_controller));
 			break;
 		case TitleScene::SelectMenuTitle::GameEnd:
@@ -247,8 +253,8 @@ void TitleScene::UpdateSelect(Input& input, Fader& fader)
 			//非表示
 			selectUI->DisableDraw();
 
-			//クリックSE
-			soundManager.PlayOnceSE(kSEGameStartPath);
+			//キャンセルSE
+			soundManager.PlayOnceSE(kSECancelPath);
 
 			//タイトル更新
 			m_update = &TitleScene::UpdateTitle;
@@ -259,6 +265,8 @@ void TitleScene::UpdateSelect(Input& input, Fader& fader)
 			//オプション
 			if (m_selectIndex == SelectMenuTitle::Option)
 			{
+				//クリックSE	
+				soundManager.PlayOnceSE(kSEOKPath);
 				m_controller.PushScene(std::make_shared<OptionScene>(m_controller));
 				return;
 			}
@@ -266,7 +274,7 @@ void TitleScene::UpdateSelect(Input& input, Fader& fader)
 			//フェード
 			fader.FadeOut();
 
-			//クリックSE	
+			//スタートSE	
 			soundManager.PlayOnceSE(kSEGameStartPath);
 			return;
 		}
@@ -277,6 +285,10 @@ void TitleScene::UpdateSelect(Input& input, Fader& fader)
 		if (input.IsRepeate("Down"))++index;
 		if (index < static_cast<int>(SelectMenuTitle::Continue))index = static_cast<int>(SelectMenuTitle::GameEnd);
 		if (index > static_cast<int>(SelectMenuTitle::GameEnd))index = static_cast<int>(SelectMenuTitle::Continue);
+
+		//セレクトSE
+		if (index != static_cast<int>(m_selectIndex))soundManager.PlayOnceSE(kSESelectPath);
+
 		m_selectIndex = static_cast<SelectMenuTitle>(index);
 
 		//UI反映

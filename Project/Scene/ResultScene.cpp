@@ -101,6 +101,9 @@ void ResultScene::Init()
 
 void ResultScene::Update()
 {
+	//プレイ時間加算
+	SaveDataManager::GetInstance().AddPlayTime();
+
 	auto& input = Input::GetInstance();
 	auto& fader = Fader::GetInstance();
 	//フェードアウトしきったら
@@ -126,6 +129,7 @@ void ResultScene::Update()
 			fader.FadeOut();
 		}
 	}
+
 }
 
 void ResultScene::Draw()
@@ -134,8 +138,6 @@ void ResultScene::Draw()
 
 void ResultScene::End()
 {
-	//セーブ
-	SaveDataManager::GetInstance().SaveAllData();
 }
 
 void ResultScene::DebugDraw() const

@@ -5,6 +5,7 @@
 class OptionData;
 class ClearSaveData;
 class HighScoreData;
+class TimeSaveData;
 class SaveDataManager final
 {
 private:
@@ -27,16 +28,24 @@ public:
 	//セーブデータのロード
 	void LoadSaveData();
 
+	//セーブデータの新規作成
+	void SaveNewData();
+
 	//セーブ
 	void SaveAllData();
 
 	//オプションのセーブ
 	void SaveOptionData();
+
+	//プレイ時間の加算
+	void AddPlayTime();
 	
 	//クリアデータ
 	std::shared_ptr<ClearSaveData> GetClearData()const { return m_clearData; };
 	//オプションデータ
 	std::shared_ptr<OptionData> GetOptionData()const { return m_optionData; };
+	//日付と総プレイ時間データ
+	std::shared_ptr<TimeSaveData> GetTimeSaveData()const { return m_timeSaveData; };
 	//スコアデータ
 	std::shared_ptr<HighScoreData> GetHighScoreData(StageIndex index)const;
 private:
@@ -44,6 +53,8 @@ private:
 	std::shared_ptr<ClearSaveData> m_clearData;
 	//オプションデータ
 	std::shared_ptr<OptionData> m_optionData;
+	//日付と総プレイ時間データ
+	std::shared_ptr<TimeSaveData> m_timeSaveData;
 	//スコアデータ
 	std::vector<std::shared_ptr<HighScoreData>> m_highScoreDatas;
 };

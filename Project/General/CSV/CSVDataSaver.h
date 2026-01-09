@@ -28,6 +28,7 @@ public:
 	void SaveOption();
 	void SaveClearData();
 	void SaveHighScoreData();
+	void SaveTimeData();
 private:
 	
 };

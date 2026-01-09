@@ -27,6 +27,16 @@ ClearSaveData::~ClearSaveData()
 {
 }
 
+void ClearSaveData::Reset()
+{
+	m_isClearTutorial1	= false;
+	m_isClearTutorial2	= false;
+	m_isClearTutorial3	= false;
+	m_isClearStage1		= false;
+	m_isClearStage2		= false;
+	m_isClearStage3		= false;
+}
+
 void ClearSaveData::Conversion()
 {
 	m_isClearTutorial1	= std::stoi(m_data[0]) != 0;

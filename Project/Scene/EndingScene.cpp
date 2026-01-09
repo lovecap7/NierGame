@@ -5,6 +5,7 @@
 #include "TitleScene.h"
 #include "DebugScene/DebugSelectScene.h"
 #include "../General/Fader.h"
+#include "../General/SaveDataManager.h"
 #include "../General/Game.h"
 #include "../Game/UI/Ending/EndingTextUI.h"
 #include "../Game/UI/SkipUI.h"
@@ -97,10 +98,16 @@ void EndingScene::Init()
 	m_skipCountFrame = 0;
 	//終了フレーム
 	m_finishCountFrame = 0;
+
+	//セーブ
+	SaveDataManager::GetInstance().SaveAllData();
 }
 
 void EndingScene::Update()
 {
+	//プレイ時間加算
+	SaveDataManager::GetInstance().AddPlayTime();
+
 	auto& input = Input::GetInstance();
 
 	//エフェクトの再生

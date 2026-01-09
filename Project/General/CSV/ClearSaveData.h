@@ -10,6 +10,9 @@ public:
 	ClearSaveData(std::shared_ptr<CSVData> data);
 	~ClearSaveData();
 
+	//リセット
+	void Reset();
+
 	//クリアしたか
 	bool IsClearTutorial1()const { return m_isClearTutorial1; };
 	bool IsClearTutorial2()const { return m_isClearTutorial2; };
@@ -25,7 +28,6 @@ public:
 	void ClearStage1() { m_isClearStage1 = true; };
 	void ClearStage2() { m_isClearStage2 = true; };
 	void ClearStage3() { m_isClearStage3 = true; };
-
 
 private:
 	//変換

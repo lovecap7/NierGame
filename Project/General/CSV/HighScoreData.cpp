@@ -30,6 +30,12 @@ HighScoreData::~HighScoreData()
 {
 }
 
+void HighScoreData::Reset()
+{
+	m_timeText = L"ーー:ーー:ーー";
+	m_rankText = L"ー";
+	m_time = 0;
+}
 void HighScoreData::SetTimeText(std::wstring time)
 {
 	m_timeText = time;

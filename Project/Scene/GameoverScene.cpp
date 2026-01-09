@@ -4,6 +4,7 @@
 #include "../General/AssetManager.h"
 #include "../General/Fader.h"
 #include "../General/Input.h"
+#include "../General/SaveDataManager.h"
 #include "../General/Collision/Physics.h"
 #include "../General/Sound/SoundManager.h"
 #include "../Game/UI/Gameover/GameoverUI.h"
@@ -56,6 +57,9 @@ void GameoverScene::Init()
 
 void GameoverScene::Update()
 {
+	//ƒvƒŒƒCŠÔ‰ÁZ
+	SaveDataManager::GetInstance().AddPlayTime();
+
 	auto& input = Input::GetInstance();
 	auto& fader = Fader::GetInstance();
 	auto& soundManager = SoundManager::GetInstance();

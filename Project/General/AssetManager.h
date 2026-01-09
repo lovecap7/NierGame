@@ -82,6 +82,11 @@ public:
 			type = FontType::Cinzel;
 			size = FontSize::Size8;
 		}
+		/// <summary>
+		/// フォント作成
+		/// </summary>
+		/// <param name="t">タイプ</param>
+		/// <param name="s">サイズ</param>
 		Font(FontType t, FontSize s)
 		{
 			type = t;

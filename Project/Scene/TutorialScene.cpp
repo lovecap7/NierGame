@@ -14,6 +14,7 @@
 #include "../General/CSV/ActorData.h"
 #include "../General/CSV/CharaStatusData.h"
 #include "../General/AssetManager.h"
+#include "../General/SaveDataManager.h"
 #include "../General/Fader.h"
 #include "../General/Sound/SoundManager.h"
 #include "../General/ShaderPostProcess.h"
@@ -125,6 +126,8 @@ void TutorialScene::Init()
 
 void TutorialScene::Update()
 {
+	//プレイ時間加算
+	SaveDataManager::GetInstance().AddPlayTime();
 	//更新
 	m_tutorialManager->Update();
 	m_actorManager->Update();

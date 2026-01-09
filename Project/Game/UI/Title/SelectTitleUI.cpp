@@ -1,4 +1,5 @@
 #include "SelectTitleUI.h"
+#include "SaveDataUI.h"
 #include "../../../General/AssetManager.h"
 #include <string>
 
@@ -63,14 +64,24 @@ SelectTitleUI::SelectTitleUI():
 	m_menuPoses.emplace_back(Vector2(kWaitPosX, kOptionPosY));
 	m_menuPoses.emplace_back(Vector2(kWaitPosX, kGameEndPosY));
 	m_cursorPos = m_menuPoses.front();
+
+	//セーブデータUI
+	auto saveDataUI = std::make_shared<SaveDataUI>();
+	saveDataUI->Init();
+	m_saveDataUI = saveDataUI;
 }
 
 SelectTitleUI::~SelectTitleUI()
 {
+	if (m_saveDataUI.expired())return;
+	m_saveDataUI.lock()->Delete();
 }
 
 void SelectTitleUI::Update()
 {
+	if (m_saveDataUI.expired())return;
+	auto saveDataUI = m_saveDataUI.lock();
+
 	if (m_isDraw)
 	{
 		//画面外から登場
@@ -86,6 +97,7 @@ void SelectTitleUI::Update()
 			}
 			m_menuPoses[i].x = MathSub::Lerp(m_menuPoses[i].x, kWaitPosX, kLerpRate);
 		}
+		saveDataUI->EnableDraw();
 	}
 	else
 	{
@@ -95,6 +107,7 @@ void SelectTitleUI::Update()
 			pos.x = kOutPosX;
 		}
 		m_cursorPos.x = kOutPosX;
+		saveDataUI->DisableDraw();
 	}
 }
 
@@ -131,4 +144,5 @@ void SelectTitleUI::Draw() const
 	DrawRotaGraphF(m_cursorPos.x, m_cursorPos.y, 1.0, 0.0, m_cursorHandle, true);
 
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+
 }

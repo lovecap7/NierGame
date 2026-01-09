@@ -4,6 +4,7 @@
 #include "../../../General/Math/MyMath.h"
 #include <vector>
 
+class SaveDataUI;
 class SelectTitleUI :
     public UIBase
 {
@@ -33,5 +34,8 @@ private:
 
 	//セレクト中の番号
 	TitleScene::SelectMenuTitle m_selectIndex;
+
+	//セーブデータUI
+	std::weak_ptr<SaveDataUI> m_saveDataUI;
 };
 

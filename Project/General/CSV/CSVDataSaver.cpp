@@ -5,7 +5,7 @@
 #include "../../Main/Application.h"
 #include "ClearSaveData.h"
 #include "HighScoreData.h"
-#include "../StringUtil.h"
+#include "TimeSaveData.h"
 #include <iostream>
 #include <fstream>
 #include <list>
@@ -17,6 +17,7 @@ namespace
     const std::string kOptionPath = "Data/CSV/Save/OptionSaveData.csv";
     const std::string kClearSaveDataPath = "Data/CSV/Save/ClearSaveData.csv";
     const std::string kHighScoreSaveDataPath = "Data/CSV/Save/HighScoreSaveData.csv";
+    const std::string kTimeSaveDataPath = "Data/CSV/Save/TimeSaveData.csv";
 
     //オプションヘッダー
     const std::string kOptionSaveHeader = "BGM,SE,Voice,ScreenMode\n";
@@ -26,6 +27,9 @@ namespace
 
     //ハイスコアヘッダー
     const std::string kHighScoreSaveDataHeader = "StageIndex,Time,Rank\n";
+
+    //日付と総プレイ時間データのヘッダー
+    const std::string kTimeSaveDataPathHeader = "TotalTime,LastPlayDate\n";
 }
 
 void CSVDataSaver::SaveOption()
@@ -131,5 +135,30 @@ void CSVDataSaver::SaveHighScoreData()
         std::endl;
 
     //閉じる 
+    file.close();
+}
+
+void CSVDataSaver::SaveTimeData()
+{
+    //ファイルを開く(ない場合は作成される)
+    std::ofstream file(kTimeSaveDataPath);
+    //ファイルが読み込めなかったら
+    if (!file)
+    {
+        assert("ファイルの読み込みに失敗");
+    }
+
+    //ヘッダーを書き込む
+    file << kTimeSaveDataPathHeader;
+
+    //セーブデータ
+    auto timeSaveData = SaveDataManager::GetInstance().GetTimeSaveData();
+
+    //データ書き込み
+    file << timeSaveData->GetTotalPlayTime() << ","
+        << StringUtil::WstringToString(timeSaveData->GetLastPlayDate()) <<
+        std::endl;
+
+    //閉じる
     file.close();
 }

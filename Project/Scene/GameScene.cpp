@@ -19,6 +19,7 @@
 #include "../General/Fader.h"
 #include "../General/ShaderPostProcess.h"
 #include "../General/Timer.h"
+#include "../General/SaveDataManager.h"
 #include "../Main/Application.h"
 #include "../General/Effect/EffekseerManager.h"
 #include "../General/Sound/SoundManager.h"
@@ -147,6 +148,9 @@ void GameScene::Update()
 {
 	//ロード中はスキップ
 	if (LoadingManager::GetInstance().IsLoading())return;
+
+	//プレイ時間加算
+	SaveDataManager::GetInstance().AddPlayTime();
 
 	//ボス戦に入ったか
 	bool isBeforeBossBattle = m_actorManager->IsBossBattle();

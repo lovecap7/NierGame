@@ -246,6 +246,7 @@
     <ClCompile Include="Game\UI\Select\SelectUI.cpp" />
     <ClCompile Include="Game\UI\SkipUI.cpp" />
     <ClCompile Include="Game\UI\TalkUI.cpp" />
+    <ClCompile Include="Game\UI\Title\SaveDataUI.cpp" />
     <ClCompile Include="Game\UI\Title\SelectTitleUI.cpp" />
     <ClCompile Include="Game\UI\Title\TitleUI.cpp" />
     <ClCompile Include="Game\UI\Tutorial\TutorialManualUI.cpp" />
@@ -283,6 +284,7 @@
     <ClCompile Include="General\CSV\ResultRankData.cpp" />
     <ClCompile Include="General\CSV\SoundData.cpp" />
     <ClCompile Include="General\CSV\TextData.cpp" />
+    <ClCompile Include="General\CSV\TimeSaveData.cpp" />
     <ClCompile Include="General\CSV\TutorialClearData.cpp" />
     <ClCompile Include="General\Effect\EffekseerManager.cpp" />
     <ClCompile Include="General\Effect\NormalEffect.cpp" />
@@ -426,6 +428,7 @@
     <ClInclude Include="Game\UI\Select\SelectUI.h" />
     <ClInclude Include="Game\UI\SkipUI.h" />
     <ClInclude Include="Game\UI\TalkUI.h" />
+    <ClInclude Include="Game\UI\Title\SaveDataUI.h" />
     <ClInclude Include="Game\UI\Title\SelectTitleUI.h" />
     <ClInclude Include="Game\UI\Title\TitleUI.h" />
     <ClInclude Include="Game\UI\Tutorial\TutorialManualUI.h" />
@@ -463,6 +466,7 @@
     <ClInclude Include="General\CSV\ResultRankData.h" />
     <ClInclude Include="General\CSV\SoundData.h" />
     <ClInclude Include="General\CSV\TextData.h" />
+    <ClInclude Include="General\CSV\TimeSaveData.h" />
     <ClInclude Include="General\CSV\TutorialClearData.h" />
     <ClInclude Include="General\Effect\EffekseerManager.h" />
     <ClInclude Include="General\Effect\NormalEffect.h" />
