@@ -21,7 +21,7 @@ public:
 	//íœ—\’è
 	virtual bool IsDelete();
 	//‰¹—Ê
-	void SetVolume(SoundManager::SoundVolume volume);
+	virtual void SetVolume(SoundManager::SoundVolume volume);
 protected:
 	//ƒnƒ“ƒhƒ‹
 	int m_playHandle;

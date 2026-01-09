@@ -9,5 +9,8 @@ public:
     Voice(int handle, SoundManager::SoundVolume volume);
     ~Voice();
     void Update()override;
+
+    //‰¹—Ê
+    void SetVolume(SoundManager::SoundVolume volume) override;
 };
 
