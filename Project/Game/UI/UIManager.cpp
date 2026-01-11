@@ -39,6 +39,7 @@ void UIManager::Update()
 
 void UIManager::FrontDraw() const
 {
+	
 	if (!m_isDraw)return;
 
 	//•`‰æ
@@ -51,6 +52,7 @@ void UIManager::FrontDraw() const
 
 void UIManager::BackDraw() const
 {
+	
 	if (!m_isDraw)return;
 
 	//•`‰æ

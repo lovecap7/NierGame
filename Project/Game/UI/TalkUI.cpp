@@ -46,7 +46,7 @@ TalkUI::TalkUI(std::list<std::shared_ptr<TextData>> textDatas):
 	m_displayTextNum(0),
 	m_text(),
 	m_speaker(),
-	m_imageHandle(-1)
+	m_imageHandles()
 {
 	auto& assetManager = AssetManager::GetInstance();
 	m_backHandle = assetManager.GetImageHandle(kBack);
@@ -58,7 +58,11 @@ TalkUI::TalkUI(std::list<std::shared_ptr<TextData>> textDatas):
 	m_speaker = m_textDatas.front()->GetSpeaker();
 
 	//画像ハンドル
-	m_imageHandle = assetManager.GetImageHandle(m_textDatas.front()->GetImagePath());
+	for (auto& data : m_textDatas)
+	{
+		m_imageHandles.emplace_back(assetManager.GetImageHandle(data->GetImagePath()));
+	}
+	
 }
 
 TalkUI::~TalkUI()
@@ -84,6 +88,7 @@ void TalkUI::Update()
 		{
 			//前のデータを削除
 			m_textDatas.pop_front();
+			m_imageHandles.pop_front();
 			//次のデータをチェック
 			if (!m_textDatas.empty())
 			{
@@ -115,9 +120,10 @@ void TalkUI::Draw() const
 	//話してる人
 	DrawStringToHandle(kSpeakerPosX - GetDrawFormatStringWidthToHandle(m_fontHandle, m_speaker.c_str()), kSpeakerPosY, m_speaker.c_str(), 0xffffff, m_fontHandle);
 
-	if (m_imageHandle > 0)
+	if (m_imageHandles.empty())return;
+	if (m_imageHandles.front() > 0)
 	{
 		//画像
-		DrawRotaGraph(kImagePosX, kImagePosY, 1.0, 0.0, m_imageHandle, true);
+		DrawRotaGraph(kImagePosX, kImagePosY, 1.0, 0.0, m_imageHandles.front(), true);
 	}
 }

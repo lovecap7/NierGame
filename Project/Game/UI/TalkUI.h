@@ -33,6 +33,6 @@ private:
     //テキストデータ
     std::list<std::shared_ptr<TextData>> m_textDatas;
     //画像ハンドル
-    int m_imageHandle;
+    std::list<int> m_imageHandles;
 };
 
