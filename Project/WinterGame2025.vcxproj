@@ -237,6 +237,7 @@
     <ClCompile Include="Game\UI\Gameover\GameoverUI.cpp" />
     <ClCompile Include="Game\UI\HPUIBase.cpp" />
     <ClCompile Include="Game\UI\Input\BottunUI.cpp" />
+    <ClCompile Include="Game\UI\Input\InputUI.cpp" />
     <ClCompile Include="Game\UI\Option\OptionUI.cpp" />
     <ClCompile Include="Game\UI\Player\HealCommandU.cpp" />
     <ClCompile Include="Game\UI\Player\PlayerHPUI.cpp" />
@@ -419,6 +420,7 @@
     <ClInclude Include="Game\UI\Gameover\GameoverUI.h" />
     <ClInclude Include="Game\UI\HPUIBase.h" />
     <ClInclude Include="Game\UI\Input\BottunUI.h" />
+    <ClInclude Include="Game\UI\Input\InputUI.h" />
     <ClInclude Include="Game\UI\Option\OptionUI.h" />
     <ClInclude Include="Game\UI\Player\HealCommandU.h" />
     <ClInclude Include="Game\UI\Player\PlayerHPUI.h" />

@@ -165,13 +165,12 @@ void Application::Run()
 		}
 
 		
-		
-#endif
 		if (input.IsTrigger("StopUpdate"))
 		{
 			m_isUpdateStop = !m_isUpdateStop;
 		}
 		if (!m_isUpdateStop || input.IsTrigger("OneFrame"))
+#endif
 		{
 			//ターゲット
 			SetDrawScreen(RT);

@@ -25,6 +25,7 @@
 #include "../General/Sound/SoundManager.h"
 #include "../General/LoadingManager.h"
 #include "../Game/UI/UIManager.h"
+#include "../Game/UI/Input/InputUI.h"
 #include "../Game/Tutorial/TutorialManager.h"
 
 namespace
@@ -138,6 +139,10 @@ void GameScene::Init()
 	//スタートカメラ
 	auto startCamera = std::make_shared<StartCamera>(m_actorManager->GetPlayer(),m_actorManager);
 	cameraController.PushCamera(startCamera);
+
+	//操作UI
+	auto inputUI = std::make_shared<InputUI>();
+	inputUI->Init();
 
 	//非同期ロード終了
 	loadingManager.EndLoading();
