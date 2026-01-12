@@ -17,7 +17,8 @@ namespace
 EnemyManager::EnemyManager(std::weak_ptr<ActorManager> actorM):
 	m_enemys(),
 	m_pActorManager(actorM),
-	m_isInAreaBattle(false)
+	m_isInAreaBattle(false),
+	m_isBeforeAliveBoss(false)
 {
 	m_pGroupManager = std::make_shared<GroupManager>();
 }
@@ -45,6 +46,7 @@ void EnemyManager::Entry(std::shared_ptr<EnemyBase> enemy)
 	if (enemy->IsBoss())
 	{
 		m_bosses.emplace_back(enemy);
+		m_isBeforeAliveBoss = true;
 	}
 }
 
@@ -140,22 +142,26 @@ void EnemyManager::Update()
 
 
 	//全てのボスが死亡したら
-	bool isAllBossDead = true;
-	for (auto& boss : m_bosses)
+	if (m_isBeforeAliveBoss)
 	{
-		//死亡条件
-		if (boss.expired())continue;
-		if(boss.lock()->GetCharaStatus()->IsDead())continue;
+		bool isAllBossDead = true;
+		for (auto& boss : m_bosses)
+		{
+			//死亡条件
+			if (boss.expired())continue;
+			if (boss.lock()->GetCharaStatus()->IsDead())continue;
 
-		//ここまで来たら生存中のボスがいる
-		isAllBossDead = false;
+			//ここまで来たら生存中のボスがいる
+			isAllBossDead = false;
+		}
+		if (isAllBossDead)
+		{
+			//BGM停止
+			SoundManager::GetInstance().StopBGM();
+		}
 	}
-	if (isAllBossDead)
-	{
-		//BGM停止
-		SoundManager::GetInstance().StopBGM();
-	}
-
+	//前のフレーム存在してるかチェック
+	m_isBeforeAliveBoss = !m_bosses.empty();
 }
 
 void EnemyManager::End()

@@ -104,13 +104,13 @@ void TutorialResultScene::Update()
 		switch (m_menuIndex)
 		{
 		case TutorialResultScene::Menu::Next:
-			m_controller.ChangeBaseScene(std::make_unique<TutorialScene>(m_controller,GetStageNameByIndex(m_tutorialIndex)));
+			m_controller.ChangeBaseScene(std::make_shared<TutorialScene>(m_controller,GetStageNameByIndex(m_tutorialIndex)));
 			break;
 		case TutorialResultScene::Menu::Select:
-			m_controller.ChangeBaseScene(std::make_unique<SelectScene>(m_controller));
+			m_controller.ChangeBaseScene(std::make_shared<SelectScene>(m_controller));
 			break;
 		default:
-			m_controller.ChangeBaseScene(std::make_unique<SelectScene>(m_controller));
+			m_controller.ChangeBaseScene(std::make_shared<SelectScene>(m_controller));
 			break;
 		}
 		m_controller.PopScene();

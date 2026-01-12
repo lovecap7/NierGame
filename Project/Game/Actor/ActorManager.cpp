@@ -178,7 +178,7 @@ void ActorManager::CreateActorCSV(const wchar_t* folderName, const wchar_t* file
 	auto& csvLoader = CSVDataLoader::GetInstance();
 	std::wstring path = folderName + std::wstring(L"/") + fileName;
 	auto csvDatas = csvLoader.LoadCSV(path.c_str());
-
+	if (csvDatas.empty())return;
 	//キャラクターのステータスを読み込む
 	std::wstring charaStatusPath = folderName + std::wstring(L"/") + kCharaStatusDataName;
 	auto csvStatusDatas = csvLoader.LoadCSV(charaStatusPath.c_str());

@@ -45,5 +45,7 @@ private:
 	bool m_isInAreaBattle;
 	//ボス
 	std::list<std::weak_ptr<EnemyBase>> m_bosses;
+	//ボスがいるか
+	bool m_isBeforeAliveBoss;
 };
 

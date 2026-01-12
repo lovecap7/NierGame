@@ -17,6 +17,7 @@ void BGM::Update()
 
 void BGM::ChangeBGM(int handle)
 {
+	if (m_playHandle == handle)return Play();
 	//再生中のハンドルがあるなら
 	if (m_playHandle >= 0)
 	{
@@ -25,6 +26,10 @@ void BGM::ChangeBGM(int handle)
 		//削除
 		DeleteSoundMem(m_playHandle);
 	}
+
+	//ハンドル
+	m_playHandle = handle;
+
 	//再生
 	Play();
 }

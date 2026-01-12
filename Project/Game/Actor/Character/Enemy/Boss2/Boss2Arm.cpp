@@ -32,7 +32,7 @@ Boss2Arm::Boss2Arm(std::shared_ptr<ActorData> actorData, std::shared_ptr<CharaSt
 	m_endFrameIndex(0)
 {
 	//ƒ{ƒX
-	m_isBoss = true;
+	m_isBoss = false;
 }
 Boss2Arm::~Boss2Arm()
 {

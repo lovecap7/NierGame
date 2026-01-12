@@ -74,22 +74,9 @@ void SoundManager::Reset()
 	m_sounds.clear();
 }
 
-void SoundManager::SaveVolume()
-{
-	////‰¹—Ê•Û‘¶
-	//auto csvLoader = std::make_shared<CSVDataSaver>();
-	//VolumeData volumeData;
-	//volumeData.seVolume = m_seVolume / kCorrectionRate;
-	//volumeData.bgmVolume = m_bgmVolume;
-	//volumeData.voiceVolume = m_voiceVolume / kCorrectionRate;
-	//volumeData.masterVolume = m_masterVolume;
-	//csvLoader->SaveVolumeDataToCSV(volumeData);
-}
-
-
 void SoundManager::PlayBGM(std::wstring path)
 {
-	//‚·‚Å‚ÉŽÀ‘Ì‚ª‚ ‚é‚Æ‚«I—¹ˆ—‚ð‚·‚é
+	//‚·‚Å‚ÉŽÀ‘Ì‚ª‚ ‚é‚Æ‚«BGM‚ð•ÏX‚·‚é
 	if (m_bgm)
 	{
 		m_bgm->End();

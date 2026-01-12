@@ -33,6 +33,7 @@ namespace
 
 	//BGM
 	const std::wstring kBGMTutorialPath = L"TutorialScene";
+	
 }
 
 TutorialScene::TutorialScene(SceneController& controller, std::wstring stageName) :
@@ -71,17 +72,16 @@ void TutorialScene::Init()
 
 	//ロード
 	auto& loadingManager = LoadingManager::GetInstance();
-
-	//非同期ロード開始
-	loadingManager.StartLoading();
-
+	
 	//サウンド
 	auto& soundManager = SoundManager::GetInstance();
 	soundManager.Reset();
-	soundManager.LoadBGM(kBGMTutorialPath);
-	//BGM
-	soundManager.PlayBGM(kBGMTutorialPath);
 
+	//エフェクト
+	m_effectManager.Init();
+
+	//非同期ロード開始
+	loadingManager.StartLoading();
 
 	//ステージインデックス
 	auto stageName = m_stageName.c_str();
@@ -111,14 +111,15 @@ void TutorialScene::Init()
 	m_battleAreaManager = std::make_shared<BattleAreaManager>();
 	m_battleAreaManager->Init(stageName, m_actorManager);
 
-	//エフェクト
-	m_effectManager.Init();
+	//チュートリアル
+	m_tutorialManager = std::make_shared<TutorialManager>(m_actorManager->GetPlayer(), m_actorManager, stageName);
+
+	//BGM
+	soundManager.LoadBGM(kBGMTutorialPath);
+	soundManager.PlayBGM(kBGMTutorialPath);
 
 	//フェードイン
 	Fader::GetInstance().FadeIn();
-
-	//チュートリアル
-	m_tutorialManager = std::make_shared<TutorialManager>(m_actorManager->GetPlayer(), m_actorManager, stageName);
 
 	//非同期ロード終了
 	loadingManager.EndLoading();
@@ -126,6 +127,9 @@ void TutorialScene::Init()
 
 void TutorialScene::Update()
 {
+	//ロード中はスキップ
+	if (LoadingManager::GetInstance().IsLoading())return;
+
 	//プレイ時間加算
 	SaveDataManager::GetInstance().AddPlayTime();
 	//更新
@@ -163,6 +167,9 @@ void TutorialScene::Update()
 
 void TutorialScene::Draw()
 {
+	//ロード中はスキップ
+	if (LoadingManager::GetInstance().IsLoading())return;
+
 	m_actorManager->Draw();
 	m_attackManager->Draw();
 	m_effectManager.Draw();

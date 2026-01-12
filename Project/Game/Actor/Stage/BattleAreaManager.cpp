@@ -26,6 +26,7 @@ void BattleAreaManager::Init(std::wstring stageName, std::shared_ptr<ActorManage
 	auto& csvLoader = CSVDataLoader::GetInstance();
 	std::wstring path = stageName + std::wstring(L"/") + kBattleAreaCSV;
 	auto csvDatas = csvLoader.LoadCSV(path.c_str());
+	if (csvDatas.empty())return;
 	//Šï”‚È‚çì‚ê‚È‚¢
 	if (csvDatas.size() % 2 != 0)return;
 	std::vector<std::shared_ptr<StageObject>> areaParts;

@@ -41,8 +41,6 @@ public:
 	void End();
 	//ƒŠƒZƒbƒg
 	void Reset();
-	//•Û‘¶
-	void SaveVolume();
 	//BGMÄ¶
 	void PlayBGM(std::wstring path);
 	void PlayBGM();
