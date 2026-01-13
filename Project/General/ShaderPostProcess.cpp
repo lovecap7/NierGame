@@ -75,20 +75,33 @@ void ShaderPostProcess::Update()
 
 void ShaderPostProcess::Draw(const int rt) const
 {
+	if (m_psHandle == -1)return;
+	if (rt == -1)return;
 	MyDraw::DrawPS(Game::kScreenCenterX, Game::kScreenCenterY, 1.0, 0.0, m_cbuff1Handle, m_cbuff2Handle, rt, m_psHandle);
 }
 
 void ShaderPostProcess::Draw(float x, float y, const int handle) const
 {
+	if (m_psHandle == -1)return;
+	if (handle == -1)return;
 	MyDraw::DrawPS(x, y, 1.0, 0.0, m_cbuff1Handle, m_cbuff2Handle, handle, m_psHandle);
 }
 
 void ShaderPostProcess::End()
 {
 	//‰ð•ú
-	DeleteShader(m_psHandle);
-	DeleteShaderConstantBuffer(m_cbuff1Handle);
-	DeleteShaderConstantBuffer(m_cbuff2Handle);
+	if (m_psHandle > -1)
+	{
+		DeleteShader(m_psHandle);
+	}
+	if (m_cbuff1Handle > -1)
+	{
+		DeleteShaderConstantBuffer(m_cbuff1Handle);
+	}
+	if (m_cbuff2Handle > -1)
+	{
+		DeleteShaderConstantBuffer(m_cbuff2Handle);
+	}
 }
 
 void ShaderPostProcess::SetJustAvoidEffectTime(const float time)

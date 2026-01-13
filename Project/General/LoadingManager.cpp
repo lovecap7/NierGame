@@ -126,34 +126,39 @@ void LoadingManager::Draw()
 	if (m_isLoading && m_totalLoadNum > 0)
 	{
 		//背景
-		DrawGraph(0, 0, m_backHandle, true);
+		if (m_backHandle > -1)DrawGraph(0, 0, m_backHandle, true);
 
 		//ギア
 		float gearAngle = m_gearRotaAngle * MyMath::DEG_2_RAD;
-		DrawRotaGraphF(kGear1PosX, kGear1PosY, 1.0f, gearAngle, m_loadingGearHandle,true);
-		DrawRotaGraphF(kGear2PosX, kGear2PosY, 1.0f, gearAngle, m_loadingGearHandle,true);
+		if (m_loadingGearHandle > -1)DrawRotaGraphF(kGear1PosX, kGear1PosY, 1.0f, gearAngle, m_loadingGearHandle,true);
+		if (m_loadingGearHandle > -1)DrawRotaGraphF(kGear2PosX, kGear2PosY, 1.0f, gearAngle, m_loadingGearHandle,true);
 
 		//Loading
-		DrawGraphF(kLoadingTextPosX, kLoadingTextPosY, m_loadingTextHandle, true);
+		if (m_loadingTextHandle > -1)DrawGraphF(kLoadingTextPosX, kLoadingTextPosY, m_loadingTextHandle, true);
 
-		//.1
-		if (m_loadingPointCountFrame > kPointFrame)
+
+		if (m_loadingTextPointHandle > -1)
 		{
-			DrawGraphF(kLoadingPointTextPosX + kLoadingPointTextOffsetPosX, kLoadingTextPosY, m_loadingTextPointHandle, true);
-		}
-		//.2
-		if (m_loadingPointCountFrame > kPointFrame * 2)
-		{
-			DrawGraphF(kLoadingPointTextPosX + (kLoadingPointTextOffsetPosX * 2.0f), kLoadingTextPosY, m_loadingTextPointHandle, true);
-		}
-		//.3
-		if (m_loadingPointCountFrame > kPointFrame * 3)
-		{
-			DrawGraphF(kLoadingPointTextPosX + (kLoadingPointTextOffsetPosX * 3.0f), kLoadingTextPosY, m_loadingTextPointHandle, true);
+			//.1
+			if (m_loadingPointCountFrame > kPointFrame)
+			{
+				DrawGraphF(kLoadingPointTextPosX + kLoadingPointTextOffsetPosX, kLoadingTextPosY, m_loadingTextPointHandle, true);
+			}
+			//.2
+			if (m_loadingPointCountFrame > kPointFrame * 2)
+			{
+				DrawGraphF(kLoadingPointTextPosX + (kLoadingPointTextOffsetPosX * 2.0f), kLoadingTextPosY, m_loadingTextPointHandle, true);
+			}
+			//.3
+			if (m_loadingPointCountFrame > kPointFrame * 3)
+			{
+				DrawGraphF(kLoadingPointTextPosX + (kLoadingPointTextOffsetPosX * 3.0f), kLoadingTextPosY, m_loadingTextPointHandle, true);
+			}
 		}
 
 		//テキスト
 		if (m_loadingTexts.empty())return;
+		if (m_fontHandle == -1)return;
 
 		//ある一定パーセントごとに表示
 		int rateOffset = 100 / m_loadingTexts.size();
@@ -168,11 +173,11 @@ void LoadingManager::Draw()
 }
 void LoadingManager::End()
 {
-	DeleteGraph(m_backHandle);
-	DeleteGraph(m_loadingGearHandle);
-	DeleteGraph(m_loadingTextHandle);
-	DeleteGraph(m_loadingTextPointHandle);
-	DeleteFontToHandle(m_fontHandle);
+	if(m_backHandle >= 0)DeleteGraph(m_backHandle);
+	if (m_loadingGearHandle >= 0)DeleteGraph(m_loadingGearHandle);
+	if (m_loadingTextHandle >= 0)DeleteGraph(m_loadingTextHandle);
+	if (m_loadingTextPointHandle >= 0)DeleteGraph(m_loadingTextPointHandle);
+	if (m_fontHandle >= 0)DeleteFontToHandle(m_fontHandle);
 }
 
 void LoadingManager::StartLoading()

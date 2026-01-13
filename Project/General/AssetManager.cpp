@@ -95,11 +95,13 @@ int AssetManager::GetModelHandle(std::wstring path)
         //ハンドルをロードする
         std::wstring loadPath = kModelPath + path + kMV1;
         handle = MV1LoadModel(loadPath.c_str());
+
+        //ハンドルチェック
+        if (handle == -1)return handle;
+
         m_modelHandles[path] = handle;
     }
-    //ハンドルチェック
-    //assert(handle >= 0);
-
+  
     //コピーを渡す
     return MV1DuplicateModel(handle);
 }
@@ -109,6 +111,7 @@ void AssetManager::DeleteModelHandle()
     //ハンドルをすべて削除
     for (const auto& [key, value] : m_modelHandles) 
     {
+        if (value == -1)continue;
         MV1DeleteModel(value);
     }
     m_modelHandles.clear();
@@ -132,17 +135,18 @@ int AssetManager::GetEffectHandle(std::wstring path)
         //ハンドルをロードする
         std::wstring loadPath = kEffectPath + path + kEfk;
         handle = LoadEffekseerEffect(loadPath.c_str());
+
+        //ハンドルチェック
+        if (handle == -1)return handle;
+
         m_effectHandles[path] = handle;
 
 		//非同期ロードの設定を元に戻す
 		SetUseASyncLoadFlag(isASyncLoad);
     }
 
-    //ハンドルチェック
-    assert(handle >= 0);
-
     int playHandle = PlayEffekseer3DEffect(handle);
-    assert(playHandle >= 0);
+    if (playHandle == -1)return playHandle;
 
     //ハンドルを渡す
     return playHandle;
@@ -152,6 +156,7 @@ void AssetManager::DeleteEffectHandle()
 {
     //ハンドルをすべて削除
     for (const auto& [key, value] : m_effectHandles) {
+        if (value == -1)continue;
         DeleteEffekseerEffect(value);
     }
     m_effectHandles.clear();
@@ -170,11 +175,12 @@ int AssetManager::GetImageHandle(std::wstring path)
         //ハンドルをロードする
         std::wstring loadPath = kImagePath + path + kPng;
         handle = LoadGraph(loadPath.c_str());
+
+        //ハンドルチェック
+        if (handle == -1)return handle;
+
         m_imageHandles[path] = handle;
     }
-
-    //ハンドルチェック
-    //assert(handle >= 0);
 
     return handle;
 }
@@ -183,6 +189,7 @@ void AssetManager::DeleteImageHandle()
 {
     //ハンドルをすべて削除
     for (const auto& [key, value] : m_imageHandles) {
+        if (value == -1)continue;
         DeleteGraph(value);
     }
     m_imageHandles.clear();
@@ -201,11 +208,12 @@ int AssetManager::GetSoundHandle(std::wstring path)
         //ハンドルをロードする
         std::wstring loadPath = kSoundPath + path + kMP3;
         handle = LoadSoundMem(loadPath.c_str());
+
+        //ハンドルチェック
+        if (handle == -1)return handle;
+
         m_soundHandles[path] = handle;
     }
-
-    //ハンドルチェック
-    //assert(handle >= 0);
 
     return DuplicateSoundMem(handle);
 }
@@ -214,6 +222,7 @@ void AssetManager::DeleteSoundHandle()
 {
     //ハンドルをすべて削除
     for (const auto& [key, value] : m_soundHandles) {
+        if (value == -1)continue;
         DeleteSoundMem(value);
     }
     m_soundHandles.clear();
@@ -249,11 +258,13 @@ int AssetManager::GetFontHandle(Font font)
 
         //ハンドルをロードする
         handle = CreateFontToHandle(name.c_str(), static_cast<int>(font.size), 5, DX_FONTTYPE_ANTIALIASING);
+
+        //ハンドルチェック
+        if (handle == -1)return handle;
+
         m_fontHandles[font] = handle;
     }
 
-    //ハンドルチェック
-    assert(handle >= 0);
 
     return handle;
 }
@@ -261,6 +272,7 @@ int AssetManager::GetFontHandle(Font font)
 void AssetManager::DeleteFontHandle()
 {
     for (auto& [key, value] : m_fontHandles) {
+        if (value == -1)continue;
         DeleteFontToHandle(value);
     }
     m_fontHandles.clear();

@@ -65,8 +65,7 @@ bool Application::Init()
 
 	//画面サイズ変更
 	SetGraphMode(Game::kScreenWidth, Game::kScreenHeight, Game::kColorBitNum);
-	//バックグラウンド実行
-	SetAlwaysRunFlag(true);
+
 
 	if (DxLib_Init() == -1)		// ＤＸライブラリ初期化処理
 	{
@@ -91,19 +90,22 @@ bool Application::Init()
 	//変数の初期化
 	m_timeScale = kTimeScale;
 	m_isUpdateStop = false;
+
+	//ロードマネージャー
+	auto& loadingManager = LoadingManager::GetInstance();
+	loadingManager.Init();
+
     return true;
 }
 
 void Application::Run()
 {
+	//ロードマネージャー
+	auto& loadingManager = LoadingManager::GetInstance();
 
 	//アセットマネージャー
 	auto& assetManager = AssetManager::GetInstance();
 	assetManager.Init();
-
-	//ロードマネージャー
-	auto& loadingManager = LoadingManager::GetInstance();
-	loadingManager.Init();
 
 	//コントローラー
 	auto& input = Input::GetInstance();
@@ -116,9 +118,6 @@ void Application::Run()
 	//ポストエフェクトの準備
 	m_postProcess = std::make_unique<ShaderPostProcess>();
 	m_postProcess->Init();
-
-	//レンダーターゲット(Drawの書き込み先)
-	auto RT = MakeScreen(Game::kScreenWidth, Game::kScreenHeight);
 
 	//フェード
 	auto& fader = Fader::GetInstance();
@@ -133,6 +132,9 @@ void Application::Run()
 
 	//シーン
 	std::unique_ptr<SceneController> sceneController = std::make_unique<SceneController>();
+
+	//レンダーターゲット(Drawの書き込み先)
+	auto RT = MakeScreen(Game::kScreenWidth, Game::kScreenHeight);
 
 	//ゲームループ
 	while (ProcessMessage() != -1) // Windowsが行う処理を待つ
@@ -284,6 +286,8 @@ void Application::Run()
 		{
 			//切り替わり処理
 			ChangeScreenMode();
+			DeleteGraph(RT);
+			RT = MakeScreen(Game::kScreenWidth, Game::kScreenHeight);
 		}
 
 		//画面の切り替わりを待つ必要がある
@@ -296,6 +300,7 @@ void Application::Run()
 		{
 
 		}
+
 		//ESCキーで終了
 		if (CheckHitKey(KEY_INPUT_ESCAPE) || m_isFinishApplication)
 		{

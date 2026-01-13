@@ -71,7 +71,7 @@ SelectScene::~SelectScene()
 void SelectScene::Init()
 {
 	//アセットを削除
-	AssetManager::GetInstance().DeleteModelHandle();
+	AssetManager::GetInstance().AllDelete();
 	//ポストエフェクトを解除
 	Application::GetInstance().GetPostProcess()->ResetPostEffectState();
 	//UI削除

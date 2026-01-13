@@ -86,7 +86,9 @@ void EffekseerManager::Draw() const
 	for (auto& eff : m_effects)
 	{
 		if (!eff->IsDraw())continue;
-		DrawEffekseer3D_Draw(eff->GetPlayHandle());
+		int playHandle = eff->GetPlayHandle();
+		if (playHandle == -1)continue;
+		DrawEffekseer3D_Draw(playHandle);
 	}
 	DrawEffekseer3D_End();
 }

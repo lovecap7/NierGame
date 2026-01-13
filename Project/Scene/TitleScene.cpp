@@ -99,12 +99,9 @@ void TitleScene::Init()
 	//サウンドデータのロード
 	soundManager.LoadBGM(kBGMTitlePath);
 	soundManager.LoadSE(kSENoisePath);
-	soundManager.LoadBGM(kSEGameStartPath);
-
-	//BGM再生
-	soundManager.PlayBGM(kBGMTitlePath);
-	//ノイズ再生
-	m_noiseSE = soundManager.PlayLoopSE(kSENoisePath);
+	soundManager.LoadSE(kSEGameStartPath);
+	soundManager.LoadSE(kSEOKPath);
+	soundManager.LoadSE(kSECancelPath);
 
 	//カメラ
 	auto camera = std::make_shared<TitleCamera>();
@@ -129,6 +126,12 @@ void TitleScene::Init()
 	
 	//非同期ロード終了
 	loadingManager.EndLoading();
+
+	//BGM再生
+	soundManager.PlayBGM(kBGMTitlePath);
+
+	//ノイズ再生
+	m_noiseSE = soundManager.PlayLoopSE(kSENoisePath);
 
 	//グリッジ
 	auto& postPrecess = Application::GetInstance().GetPostProcess();

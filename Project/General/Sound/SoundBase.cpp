@@ -28,6 +28,10 @@ void SoundBase::Play()
 	//ƒ[ƒh’†‚Í’â~
 	if (LoadingManager::GetInstance().IsLoading())return Stop();
 
+	//”ñ“¯Šú“Ç‚İ‚İ‚ªI—¹‚µ‚½‚©
+	if(CheckHandleASyncLoad(m_playHandle))return;
+	if(m_playHandle == -1)return;
+
 	SetVolume(m_volume);
 	//Ä¶
 	if (m_isLoop)	
@@ -42,11 +46,13 @@ void SoundBase::Play()
 }
 void SoundBase::Stop()
 {
+	if (m_playHandle == -1)return;
 	//Ä¶‚ğ~‚ß‚é
 	StopSoundMem(m_playHandle);
 }
 void SoundBase::Delete()
 {
+	if (m_playHandle == -1)return;
 	//íœ
 	DeleteSoundMem(m_playHandle);
 }

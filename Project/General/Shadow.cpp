@@ -1,6 +1,7 @@
 #include "Shadow.h"
 #include "../Game/Actor/ActorManager.h"
 #include "../Game/Camera/CameraController.h"
+#include <cassert>
 
 namespace
 {
@@ -20,10 +21,12 @@ Shadow::Shadow():
 {
 	//シャドウマップ作成
 	m_shadowMapHandle = MakeShadowMap(kShadowMapWidth, kShadowMapHeight);
+	assert(m_shadowMapHandle != -1);
 }
 
 Shadow::~Shadow()
 {
+	if (m_shadowMapHandle == -1)return;
 	//シャドウマップの削除
 	DeleteShadowMap(m_shadowMapHandle);
 }

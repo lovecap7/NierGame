@@ -26,10 +26,11 @@ Model::Model(int modelHandle, VECTOR pos) :
 	m_modelHeightAdjust(0.0f),
 	m_timeScale(1.0f)
 {
-	//座標
-	DxLib::MV1SetPosition(m_modelHandle, pos);
 	//アニメーション
 	m_animator = std::make_unique<Animator>();
+	if (m_modelHandle == -1)return;
+	//座標
+	DxLib::MV1SetPosition(m_modelHandle, m_pos.ToDxLibVector());
 }
 
 Model::Model(int modelHandle, VECTOR pos, Vector3 forward) :
@@ -39,18 +40,18 @@ Model::Model(int modelHandle, VECTOR pos, Vector3 forward) :
 	m_rotation(Quaternion::IdentityQ()),
 	m_rotaQ(Quaternion::IdentityQ()),
 	m_rotaFrame(0),
-	m_pos(),
+	m_pos(pos),
 	m_scale{ 1.0f,1.0f,1.0f },
 	m_beforeSetDir{ forward.XZ() },
 	m_modelHeightAdjust(0.0f),
 	m_timeScale(1.0f),
 	m_rotaSpeed(1.0f)
 {
-	//座標
-	m_pos = pos;
-	DxLib::MV1SetPosition(m_modelHandle, m_pos.ToDxLibVector());
 	//アニメーション
 	m_animator = std::make_unique<Animator>();
+	if (m_modelHandle == -1)return;
+	//座標
+	DxLib::MV1SetPosition(m_modelHandle, m_pos.ToDxLibVector());
 }
 
 Model::~Model()
@@ -59,6 +60,8 @@ Model::~Model()
 
 void Model::Update()
 {
+	if (m_modelHandle == -1)return;
+
 	//アニメーションの更新
 	m_animator->PlayAnim(m_modelHandle);
 
@@ -83,6 +86,9 @@ void Model::Update()
 
 void Model::Draw() const
 {
+	//非同期読み込み中なら早期リターン
+	if (CheckHandleASyncLoad(m_modelHandle))return;
+	if (m_modelHandle == -1)return;
 	//描画
 	auto err = DxLib::MV1DrawModel(m_modelHandle);
 	assert(err != -1 && L"モデルが描画できません");
@@ -90,6 +96,7 @@ void Model::Draw() const
 
 void Model::End()
 {
+	if (m_modelHandle == -1)return;
 	DxLib::MV1DeleteModel(m_modelHandle);
 }
 
@@ -188,6 +195,7 @@ void Model::LookAt(Vector3 target)
 
 void Model::SetColor(float r, float g, float b, float a)
 {
+	if (m_modelHandle == -1)return;
 	COLOR_F color = { r, g, b, a };
 	color.r = MathSub::ClampFloat(color.r, 0.0f, 1.0f);
 	color.g = MathSub::ClampFloat(color.g, 0.0f, 1.0f);
@@ -200,6 +208,7 @@ void Model::SetColor(float r, float g, float b, float a)
 
 void Model::SetColor(COLOR_F color)
 {
+	if (m_modelHandle == -1)return;
 	color.r = MathSub::ClampFloat(color.r, 0.0f, 1.0f);
 	color.g = MathSub::ClampFloat(color.g, 0.0f, 1.0f);
 	color.b = MathSub::ClampFloat(color.b, 0.0f, 1.0f);
@@ -211,6 +220,7 @@ void Model::SetColor(COLOR_F color)
 
 void Model::SetEmiColor(float r, float g, float b, float a)
 {
+	if (m_modelHandle == -1)return;
 	COLOR_F color = { r, g, b, a };
 	color.r = MathSub::ClampFloat(color.r, 0.0f, 1.0f);
 	color.g = MathSub::ClampFloat(color.g, 0.0f, 1.0f);
@@ -221,6 +231,7 @@ void Model::SetEmiColor(float r, float g, float b, float a)
 
 void Model::SetEmiColor(COLOR_F color)
 {
+	if (m_modelHandle == -1)return;
 	color.r = MathSub::ClampFloat(color.r, 0.0f, 1.0f);
 	color.g = MathSub::ClampFloat(color.g, 0.0f, 1.0f);
 	color.b = MathSub::ClampFloat(color.b, 0.0f, 1.0f);
@@ -230,6 +241,7 @@ void Model::SetEmiColor(COLOR_F color)
 
 void Model::SetMatrix(Matrix4x4 mat)
 {
+	if (m_modelHandle == -1)return;
 	DxLib::MV1SetMatrix(m_modelHandle, mat.ToDxLibMATRIX());
 }
 
@@ -316,6 +328,7 @@ void Model::ReplayAnim()
 
 void Model::DeleteAnim()
 {
+	if (m_modelHandle == -1)return;
 	//削除
 	m_animator->AllRemoveAnim(m_modelHandle);
 }
@@ -338,6 +351,7 @@ void Model::SetTimeScale(float scale)
 }
 void Model::ApplyMat()
 {
+	if (m_modelHandle == -1)return;
 	Matrix4x4 mat;
 	auto pMat = Matrix4x4::TranslateMat4x4(m_pos.x, m_pos.y + m_modelHeightAdjust, m_pos.z);
 	auto rMat = m_rotation.GetMatrix();
