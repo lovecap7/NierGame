@@ -6,8 +6,9 @@
 namespace
 {
 	//シャドウマップの描画サイズ
-	constexpr int kShadowMapWidth = 4096;
-	constexpr int kShadowMapHeight = 4096;
+	constexpr int kShadowMapWidth = 2048;
+	constexpr int kShadowMapHeight = 2048;
+
 	//シャドウマップの範囲
 	constexpr float kShadowMapHorizon = 3000.0f;
 	constexpr float kShadowMapVertical = 3000.0f;
