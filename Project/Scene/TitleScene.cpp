@@ -8,6 +8,7 @@
 #include "DebugScene/DebugSelectScene.h"
 #include "../General/Fader.h"
 #include "../General/Game.h"
+#include "../General/Collision/Physics.h"
 #include "../Game/UI/Title/TitleUI.h"
 #include "../Game/UI/Title/SelectTitleUI.h"
 #include "../Game/UI/UIManager.h"
@@ -71,6 +72,8 @@ void TitleScene::Init()
 {
 	//アセットの削除
 	AssetManager::GetInstance().AllDelete();
+	//Physicsリセット
+	Physics::GetInstance().Reset();
 	//ポストエフェクトリセット
 	auto& app = Application::GetInstance();
 	app.GetPostProcess()->ResetPostEffectState();
@@ -91,12 +94,12 @@ void TitleScene::Init()
 	//ロード
 	auto& loadingManager = LoadingManager::GetInstance();
 
-	//非同期ロード開始
-	loadingManager.StartLoading();
-	
 	//音
 	auto& soundManager = SoundManager::GetInstance();
-	//サウンドデータのロード
+
+	//非同期ロード開始
+	loadingManager.StartLoading();
+	//サウンドデータのロード(非同期で読み込もうとすると失敗してしまうので同期で)
 	soundManager.LoadBGM(kBGMTitlePath);
 	soundManager.LoadSE(kSENoisePath);
 	soundManager.LoadSE(kSEGameStartPath);
@@ -123,7 +126,6 @@ void TitleScene::Init()
 	m_actorManager->Init();
 	m_actorManager->CreateActorCSV(kTitlePath.c_str(), kCharacterDataPath.c_str());
 	m_actorManager->CreateActorCSV(kTitlePath.c_str(), kStageDataPath.c_str());
-	
 	//非同期ロード終了
 	loadingManager.EndLoading();
 

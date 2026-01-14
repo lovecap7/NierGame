@@ -38,10 +38,6 @@ Application& Application::GetInstance()
 
 bool Application::Init()
 {
-	//セーブデータ
-	auto& saveDataManager = SaveDataManager::GetInstance();
-	saveDataManager.LoadSaveData();
-
 	//初期化
 	//このフラグがtrueの時アプリケーションが終了する
 	m_isFinishApplication = false;
@@ -52,6 +48,9 @@ bool Application::Init()
 	//ゲームアイコン
 	SetWindowIconID(IDI_ICON1);
 
+	//セーブデータ
+	auto& saveDataManager = SaveDataManager::GetInstance();
+	saveDataManager.LoadSaveData();
 	//ウィンドウモード
 	m_isWindow = saveDataManager.GetOptionData()->IsWindow();
 

@@ -3,6 +3,7 @@
 #include <cassert>
 #include <DxLib.h>
 #include <EffekseerForDXLib.h>
+
 namespace
 {
     //ƒ‚ƒfƒ‹
