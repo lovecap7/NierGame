@@ -21,6 +21,7 @@
 #include "../General/Sound/SoundManager.h"
 #include "../General/SaveDataManager.h"
 #include "../General/CSV/ClearSaveData.h"
+#include "../General/Collision/Physics.h"
 #include "../Game/Actor/ActorManager.h"
 #include "../Game/UI/Select/SelectUI.h"
 #include "../Game/Camera/SelectCamera.h"
@@ -72,16 +73,18 @@ void SelectScene::Init()
 {
 	//アセットを削除
 	AssetManager::GetInstance().AllDelete();
+	//リセット
+	Physics::GetInstance().Reset();
 	//ポストエフェクトを解除
 	Application::GetInstance().GetPostProcess()->ResetPostEffectState();
 	//UI削除
 	UIManager::GetInstance().AllDeleteUI();
-	//フェードイン
-	Fader::GetInstance().FadeIn();
 	//エフェクトリセット
 	EffekseerManager::GetInstance().Reset();
 	//音リセット
 	SoundManager::GetInstance().Reset();
+	//フェードイン
+	Fader::GetInstance().FadeIn();
 
 	//一番上の項目から
 	m_currentMainMenu = MainMenu::Tutorial;

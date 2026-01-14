@@ -27,6 +27,7 @@ DialogUI::~DialogUI()
 
 void DialogUI::Update()
 {
+
 }
 
 void DialogUI::Draw() const

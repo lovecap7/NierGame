@@ -70,23 +70,25 @@ TitleScene::~TitleScene()
 
 void TitleScene::Init()
 {
-	//アセットの削除
+	//アセットを削除
 	AssetManager::GetInstance().AllDelete();
-	//Physicsリセット
+	//リセット
 	Physics::GetInstance().Reset();
+	//ポストエフェクトを解除
+	Application::GetInstance().GetPostProcess()->ResetPostEffectState();
+	//UI削除
+	UIManager::GetInstance().AllDeleteUI();
+	//音リセット
+	SoundManager::GetInstance().Reset();
+	//エフェクトリセット
+	m_effectManager.Reset();
 	//ポストエフェクトリセット
 	auto& app = Application::GetInstance();
 	app.GetPostProcess()->ResetPostEffectState();
 	//タイムスケール
 	app.SetTimeScale(1.0f);
-	//UI削除
-	UIManager::GetInstance().AllDeleteUI();
 	//フェードイン
 	Fader::GetInstance().FadeIn();
-	//エフェクトリセット
-	m_effectManager.Reset();
-	//音リセット
-	SoundManager::GetInstance().Reset();
 
 	//エフェクトマネージャー初期化
 	m_effectManager.Init();

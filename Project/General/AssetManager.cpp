@@ -110,10 +110,11 @@ int AssetManager::GetModelHandle(std::wstring path)
 void AssetManager::DeleteModelHandle()
 {
     //ハンドルをすべて削除
-    for (const auto& [key, value] : m_modelHandles) 
+    for (auto& [key, value] : m_modelHandles) 
     {
         if (value == -1)continue;
         MV1DeleteModel(value);
+        value = -1;
     }
     m_modelHandles.clear();
 }
@@ -156,9 +157,10 @@ int AssetManager::GetEffectHandle(std::wstring path)
 void AssetManager::DeleteEffectHandle()
 {
     //ハンドルをすべて削除
-    for (const auto& [key, value] : m_effectHandles) {
+    for (auto& [key, value] : m_effectHandles) {
         if (value == -1)continue;
         DeleteEffekseerEffect(value);
+        value = -1;
     }
     m_effectHandles.clear();
 }
@@ -189,9 +191,10 @@ int AssetManager::GetImageHandle(std::wstring path)
 void AssetManager::DeleteImageHandle()
 {
     //ハンドルをすべて削除
-    for (const auto& [key, value] : m_imageHandles) {
+    for (auto& [key, value] : m_imageHandles) {
         if (value == -1)continue;
         DeleteGraph(value);
+        value = -1;
     }
     m_imageHandles.clear();
 }
@@ -222,9 +225,10 @@ int AssetManager::GetSoundHandle(std::wstring path)
 void AssetManager::DeleteSoundHandle()
 {
     //ハンドルをすべて削除
-    for (const auto& [key, value] : m_soundHandles) {
+    for (auto& [key, value] : m_soundHandles) {
         if (value == -1)continue;
         DeleteSoundMem(value);
+        value = -1;
     }
     m_soundHandles.clear();
 }
@@ -275,6 +279,7 @@ void AssetManager::DeleteFontHandle()
     for (auto& [key, value] : m_fontHandles) {
         if (value == -1)continue;
         DeleteFontToHandle(value);
+        value = -1;
     }
     m_fontHandles.clear();
 }
