@@ -2,7 +2,7 @@
 //
 //		ＤＸライブラリ　コンパイルコンフィグヘッダファイル
 //
-//				Ver 3.24b
+//				Ver 3.25 
 //
 // ----------------------------------------------------------------------------
 
@@ -15,6 +15,20 @@
 // 多重インクルード防止用マクロ
 #ifndef DXCOMPILECONFIG_H
 #define DXCOMPILECONFIG_H
+
+// 設定 -----------------------------------------------------------------------
+
+// ＤＸライブラリに必要な lib ファイルを、プロジェクトのカレントフォルダや
+// コンパイラのデフォルト LIB パスに設定せずに使用される場合は以下の
+// コメントを外してください
+//#define DX_LIB_NOT_DEFAULTPATH
+
+#ifndef DX_MAKE
+
+// 描画関連の関数を一切使用されない場合は以下のコメントを外して下さい
+//#define DX_NOTUSE_DRAWFUNCTION
+
+#endif // DX_MAKE
 
 // スタティックライブラリ生成時ライブラリ機能制限用定義 -----------------------
 
@@ -47,6 +61,9 @@
 
 // ムービー機能がいらない方は次のコメントを外してください
 //#define DX_NON_MOVIE
+
+// Switch の MP4 再生機能がいらない方は次のコメントを外してください
+//#define DX_NON_NSW_MP4
 
 // ＴＧＡ画像の読み込み機能がいらない方は次のコメントを外してください
 //#define DX_NON_TGA
@@ -209,6 +226,7 @@
 #endif
 
 
+
 #ifndef WINDOWS_DESKTOP_OS
 	#ifndef DX_NON_BEEP
 		#define DX_NON_BEEP
@@ -240,6 +258,7 @@
 #define DX_NON_DIRECT3D11
 #define DX_NON_DIRECT3D9
 #endif
+
 
 
 
@@ -419,11 +438,13 @@
 
 
 
+
 #if defined( _WIN64 ) || defined( __ANDROID__ ) || defined( __APPLE__ ) || defined( DX_GCC_COMPILE )
 	#ifndef DX_NON_INLINE_ASM
 		#define DX_NON_INLINE_ASM
 	#endif
 #endif
+
 
 
 
