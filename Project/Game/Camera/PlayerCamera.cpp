@@ -246,7 +246,7 @@ void PlayerCamera::LockOnUpdate(Input& input, Vector3& targetPos)
     if (!m_isThrough)
     {
         //è’ìÀï‚ê≥
-        nextPos = Physics::GetInstance().GetCameraRatCastNearEndPos(lockPos, nextPos);
+        nextPos = Physics::GetInstance().GetCameraRatCastNearEndPos(playerPos, nextPos);
     }
 
     //ï‚ä‘ÇµÇƒÇ»ÇﬂÇÁÇ©Ç…í«è]

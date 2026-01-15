@@ -121,7 +121,7 @@ void MissionBoardUI::Draw() const
 	//タイトル
 	auto title = m_datas[m_index]->GetTitle();
 	//中央ぞろえ
-	float titleWidth = static_cast<float>(GetDrawNStringWidthToHandle(title.c_str(), wcslen(title.c_str()), m_titleFontHandle));
+	float titleWidth = StringUtil::GetTextWidth(title, m_titleFontHandle);
 	if (titleWidth > 0.0f)
 	{
 		titleWidth *= 0.5f;
@@ -171,7 +171,7 @@ void MissionBoardUI::Draw() const
 	DrawRotaGraph(kScoreBoardPosX, kScoreBoardPosY, 1.0f, 0.0f, m_scoreBoardHandle, true);
 	
 	//タイマー
-	float timeWidth = static_cast<float>(GetDrawNStringWidthToHandle(timeText.c_str(), wcslen(timeText.c_str()), m_timeFontHandle));
+	float timeWidth = StringUtil::GetTextWidth(timeText, m_timeFontHandle);
 	if (timeWidth > 0.0f)
 	{
 		timeWidth *= 0.5f;
@@ -180,7 +180,7 @@ void MissionBoardUI::Draw() const
 	DrawStringFToHandle(kTimePosX - timeWidth, kTimePosY, timeText.c_str(), 0x000000, m_timeFontHandle);
 
 	//ランク
-	float rankWidth = static_cast<float>(GetDrawNStringWidthToHandle(rankText.c_str(), wcslen(rankText.c_str()), m_rankFontHandle));
+	float rankWidth = StringUtil::GetTextWidth(rankText, m_rankFontHandle);
 	if (rankWidth > 0.0f)
 	{
 		rankWidth *= 0.5f;

@@ -12,6 +12,7 @@
 #include "../Game/UI/Title/TitleUI.h"
 #include "../Game/UI/Title/SelectTitleUI.h"
 #include "../Game/UI/UIManager.h"
+#include "../Game/UI/Dialog/DialogUI.h"
 #include "../Game/Actor/ActorManager.h"
 #include "../General/AssetManager.h"
 #include "../General/SaveDataManager.h"
@@ -64,8 +65,14 @@ TitleScene::TitleScene(SceneController& controller):
 
 TitleScene::~TitleScene()
 {
-	if (m_selectTitleUI.expired())return;
-	m_selectTitleUI.lock()->Delete();
+	if (!m_selectTitleUI.expired())
+	{
+		m_selectTitleUI.lock()->Delete();
+	}
+	if (!m_dialogUI.expired())
+	{
+		m_dialogUI.lock()->Delete();
+	}
 }
 
 void TitleScene::Init()
@@ -123,11 +130,18 @@ void TitleScene::Init()
 	selectTitleUI->DisableDraw();
 	m_selectTitleUI = selectTitleUI;
 
+	//ダイアログUI
+	auto dialogUI = std::make_shared<DialogUI>(L"現在のセーブデータを破棄して\n新しくデータを作成しますか?");
+	dialogUI->Init();
+	dialogUI->DisableDraw();
+	m_dialogUI = dialogUI;
+
 	//アクターマネージャー
 	m_actorManager = std::make_shared<ActorManager>();
 	m_actorManager->Init();
 	m_actorManager->CreateActorCSV(kTitlePath.c_str(), kCharacterDataPath.c_str());
 	m_actorManager->CreateActorCSV(kTitlePath.c_str(), kStageDataPath.c_str());
+
 	//非同期ロード終了
 	loadingManager.EndLoading();
 
@@ -277,6 +291,16 @@ void TitleScene::UpdateSelect(Input& input, Fader& fader)
 				m_controller.PushScene(std::make_shared<OptionScene>(m_controller));
 				return;
 			}
+			//初めから
+			if (m_selectIndex == SelectMenuTitle::NewGame)
+			{
+				//クリックSE	
+				soundManager.PlayOnceSE(kSEOKPath);
+				
+				//ダイアログ更新
+				m_update = &TitleScene::UpdateDialog;
+				return;
+			}
 
 			//フェード
 			fader.FadeOut();
@@ -300,6 +324,81 @@ void TitleScene::UpdateSelect(Input& input, Fader& fader)
 
 		//UI反映
 		selectUI->SetMenuIndex(m_selectIndex);
+	}
+}
+
+void TitleScene::UpdateDialog(Input& input, Fader& fader)
+{
+	//フェードアウトしきったら
+	if (fader.IsFinishFadeOut())
+	{
+		switch (m_selectIndex)
+		{
+		case TitleScene::SelectMenuTitle::Continue:
+			m_controller.ChangeScene(std::make_shared<SelectScene>(m_controller));
+			break;
+		case TitleScene::SelectMenuTitle::NewGame:
+			//データを削除してから始める
+			SaveDataManager::GetInstance().SaveNewData();
+			m_controller.ChangeScene(std::make_shared<SelectScene>(m_controller));
+			break;
+		case TitleScene::SelectMenuTitle::GameEnd:
+			Application::GetInstance().FinishApplication();
+			break;
+		default:
+			break;
+		}
+		return;
+	}
+
+	if (m_dialogUI.expired())return;
+	auto dialogUI = m_dialogUI.lock();
+	//表示
+	dialogUI->EnableDraw();
+
+	if (!fader.IsFadeNow())
+	{
+		auto& soundManager = SoundManager::GetInstance();
+		if (input.IsTrigger("B"))
+		{
+			//キャンセルSE
+			soundManager.PlayOnceSE(kSECancelPath);
+
+			//非表示
+			dialogUI->DisableDraw();
+
+			//セレクト更新
+			m_update = &TitleScene::UpdateSelect;
+			return;
+		}
+
+		//決定
+		if (input.IsTrigger("A"))
+		{
+
+			if (!dialogUI->IsYes())
+			{
+				//キャンセルSE
+				soundManager.PlayOnceSE(kSECancelPath);
+
+				//非表示
+				dialogUI->DisableDraw();
+
+				//セレクト更新
+				m_update = &TitleScene::UpdateSelect;
+				return;
+			}
+			//フェード
+			fader.FadeOut();
+
+			//スタートSE
+			soundManager.PlayOnceSE(kSEGameStartPath);
+			return;
+		}
+
+		//「はい」か「いいえ」か
+		if (input.IsTrigger("Left"))dialogUI->Yes();
+		if (input.IsTrigger("Right"))dialogUI->No();
 	}
 }
 

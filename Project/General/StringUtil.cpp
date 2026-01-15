@@ -109,3 +109,8 @@ std::wstring StringUtil::StringToWstring(const std::string& str)
 		ret.size());
 	return ret;
 }
+
+float StringUtil::GetTextWidth(const std::wstring text, int handle)
+{
+	return static_cast<float>(GetDrawNStringWidthToHandle(text.c_str(), wcslen(text.c_str()), handle));
+}

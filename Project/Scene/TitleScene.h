@@ -10,6 +10,7 @@ class SelectTitleUI;
 class ActorManager;
 class SE;
 class EffekseerManager;
+class DialogUI;
 class TitleScene :
     public SceneBase
 {
@@ -56,6 +57,7 @@ private:
 
     //UI
     std::weak_ptr<SelectTitleUI> m_selectTitleUI;
+    std::weak_ptr<DialogUI> m_dialogUI;
 
     //セレクト番号
     SelectMenuTitle m_selectIndex;
@@ -68,6 +70,8 @@ private:
     void UpdateTitle(Input& input, Fader& fader);
     //モードセレクト更新
     void UpdateSelect(Input& input, Fader& fader);
+    //ダイアログ更新
+    void UpdateDialog(Input& input, Fader& fader);
 
 private:
     //グリッジの更新

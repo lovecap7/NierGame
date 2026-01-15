@@ -36,4 +36,12 @@ namespace StringUtil
 	/// string‚©‚çwstring‚Ö
 	/// </summary>
 	std::wstring StringToWstring(const std::string& str);
-}
+
+	/// <summary>
+	/// •¶Žš—ñ‚Ì’·‚³
+	/// </summary>
+	/// <param name="text"></param>
+	/// <param name="handle"></param>
+	/// <returns></returns>
+	float GetTextWidth(const std::wstring text, int handle);
+};
