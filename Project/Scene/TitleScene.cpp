@@ -48,6 +48,9 @@ namespace
 	const std::wstring kSEOKPath = L"OK";
 	const std::wstring kSECancelPath = L"Cancel";
 	const std::wstring kSEGameStartPath = L"GameStart";
+
+	//ダイアログテキスト
+	const std::wstring kDialogText = L"現在のセーブデータを破棄して\n新しくデータを作成しますか?";
 }
 
 TitleScene::TitleScene(SceneController& controller):
@@ -72,6 +75,10 @@ TitleScene::~TitleScene()
 	if (!m_dialogUI.expired())
 	{
 		m_dialogUI.lock()->Delete();
+	}
+	if (!m_noiseSE.expired())
+	{
+		m_noiseSE.lock()->Delete();
 	}
 }
 
@@ -108,6 +115,7 @@ void TitleScene::Init()
 
 	//非同期ロード開始
 	loadingManager.StartLoading();
+
 	//サウンドデータのロード(非同期で読み込もうとすると失敗してしまうので同期で)
 	soundManager.LoadBGM(kBGMTitlePath);
 	soundManager.LoadSE(kSENoisePath);
@@ -131,7 +139,7 @@ void TitleScene::Init()
 	m_selectTitleUI = selectTitleUI;
 
 	//ダイアログUI
-	auto dialogUI = std::make_shared<DialogUI>(L"現在のセーブデータを破棄して\n新しくデータを作成しますか?");
+	auto dialogUI = std::make_shared<DialogUI>(kDialogText);
 	dialogUI->Init();
 	dialogUI->DisableDraw();
 	m_dialogUI = dialogUI;

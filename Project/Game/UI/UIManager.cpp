@@ -52,7 +52,6 @@ void UIManager::FrontDraw() const
 
 void UIManager::BackDraw() const
 {
-	
 	if (!m_isDraw)return;
 
 	//•`‰æ

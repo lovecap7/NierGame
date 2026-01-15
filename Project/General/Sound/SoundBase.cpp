@@ -12,6 +12,7 @@ SoundBase::SoundBase(int handle, SoundManager::SoundVolume volume, bool isLoop):
 
 SoundBase::~SoundBase()
 {
+	Delete();
 }
 
 void SoundBase::Init()
@@ -55,6 +56,7 @@ void SoundBase::Delete()
 	if (m_playHandle == -1)return;
 	//íœ
 	DeleteSoundMem(m_playHandle);
+	m_playHandle = -1;
 }
 
 bool SoundBase::IsPlay()

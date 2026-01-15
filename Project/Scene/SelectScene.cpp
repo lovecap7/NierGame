@@ -169,6 +169,7 @@ void SelectScene::Draw()
 
 void SelectScene::End()
 {
+	m_actorManager->End();
 }
 
 void SelectScene::DebugDraw() const

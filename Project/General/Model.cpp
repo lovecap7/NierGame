@@ -278,6 +278,8 @@ void Model::ModelHit()
 
 void Model::SetAnim(const char* animName, bool isLoop)
 {
+	if (m_modelHandle == -1)return;
+
 	auto animNameT = StringUtil::ToTCHAR(animName);
 	//アニメーションを変更
 	m_animator->SetAnim(m_modelHandle, DxLib::MV1GetAnimIndex(m_modelHandle, animNameT), isLoop);
@@ -285,6 +287,8 @@ void Model::SetAnim(const char* animName, bool isLoop)
 
 void Model::SetAnim(const char* animName, bool isLoop, const float& animSpeed)
 {
+	if (m_modelHandle == -1)return;
+
 	auto animNameT = StringUtil::ToTCHAR(animName);
 	//アニメーションを変更
 	m_animator->SetAnim(m_modelHandle, DxLib::MV1GetAnimIndex(m_modelHandle, animNameT), isLoop, animSpeed);
@@ -329,6 +333,7 @@ void Model::ReplayAnim()
 void Model::DeleteAnim()
 {
 	if (m_modelHandle == -1)return;
+
 	//削除
 	m_animator->AllRemoveAnim(m_modelHandle);
 }
@@ -352,6 +357,7 @@ void Model::SetTimeScale(float scale)
 void Model::ApplyMat()
 {
 	if (m_modelHandle == -1)return;
+
 	Matrix4x4 mat;
 	auto pMat = Matrix4x4::TranslateMat4x4(m_pos.x, m_pos.y + m_modelHeightAdjust, m_pos.z);
 	auto rMat = m_rotation.GetMatrix();

@@ -20,14 +20,11 @@ Actor::Actor(std::shared_ptr<ActorData> actorData,Shape shape, std::weak_ptr<Act
 	//ƒ‚ƒfƒ‹Žæ“¾
 	auto& assetManager = AssetManager::GetInstance();
 	int handle = assetManager.GetModelHandle(m_actorData->GetModelPath());
-	if (handle >= 0)
-	{
-		m_model = std::make_shared<Model>(handle, m_actorData->GetPos().ToDxLibVector());
-		//‘å‚«‚³
-		m_model->SetScale(m_actorData->GetScale().ToDxLibVector());
-		//‰ñ“]—Ê
-		m_model->SetRot(m_actorData->GetRot().ToDxLibVector());
-	}
+	m_model = std::make_shared<Model>(handle, m_actorData->GetPos().ToDxLibVector());
+	//‘å‚«‚³
+	m_model->SetScale(m_actorData->GetScale().ToDxLibVector());
+	//‰ñ“]—Ê
+	m_model->SetRot(m_actorData->GetRot().ToDxLibVector());
 
 	//À•W
 	m_rb->SetPos(m_actorData->GetPos());
