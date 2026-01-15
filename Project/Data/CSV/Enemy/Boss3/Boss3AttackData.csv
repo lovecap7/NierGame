@@ -1,9 +1,9 @@
 ﻿攻撃の名前,多段ヒットか,攻撃タイプ,威力,攻撃の重さ,アーマー,ノックバックの大きさ,上方向の力,発生フレーム,持続フレーム,半径,長さ,前進速度,前進フレーム,アニメーションの名前,次の攻撃の名前,攻撃の基準位置,キャンセルフレーム,ヒットストップフレーム,ヒットストップの揺れ,ヒットエフェクト,攻撃エフェクト,発生SE,ヒットSE,攻撃ボイス,パラメータ1,パラメータ2,パラメータ3,パラメータ4
 MeleeAttack,FALSE,1,100,3,2,100,0,90,10,100,100,0,10,MeleeAttack,None,Owner,100,5,5,WhiteHit,None,Head,Hit1,Attack1,69,68,0,0
-MoveAttack,TRUE,5,150,3,2,100,0,90,10,300,0,20,100,MoveAttack,MoveAttack_2,Owner,100,5,5,WhiteHit,Boss3Tackle,Tackle,Hit1,Attack2,79,0,0,0
-MoveAttack_2,TRUE,5,150,3,2,100,0,90,10,300,0,20,100,MoveAttack,MoveAttack_3,Owner,100,5,5,WhiteHit,Boss3Tackle,Tackle,Hit1,Attack2,79,0,0,0
-MoveAttack_3,TRUE,5,150,3,2,100,0,90,10,300,0,20,100,MoveAttack,MoveAttack_4,Owner,100,5,5,WhiteHit,Boss3Tackle,Tackle,Hit1,Attack2,79,0,0,0
-MoveAttack_4,FALSE,5,150,3,2,100,0,90,10,300,0,20,100,MoveAttack,None,Owner,100,5,5,WhiteHit,Boss3Tackle,Tackle,Hit1,Attack2,79,0,0,0
+MoveAttack,TRUE,5,100,3,2,100,0,90,10,300,0,20,100,MoveAttack,MoveAttack_2,Owner,100,5,5,WhiteHit,Boss3Tackle,Tackle,Hit1,Attack2,79,0,0,0
+MoveAttack_2,TRUE,5,100,3,2,100,0,90,10,300,0,20,100,MoveAttack,MoveAttack_3,Owner,100,5,5,WhiteHit,Boss3Tackle,Tackle,Hit1,Attack2,79,0,0,0
+MoveAttack_3,TRUE,5,100,3,2,100,0,90,10,300,0,20,100,MoveAttack,MoveAttack_4,Owner,100,5,5,WhiteHit,Boss3Tackle,Tackle,Hit1,Attack2,79,0,0,0
+MoveAttack_4,FALSE,5,100,3,2,100,0,90,10,300,0,20,100,MoveAttack,None,Owner,100,5,5,WhiteHit,Boss3Tackle,Tackle,Hit1,Attack2,79,0,0,0
 MissileAttack,TRUE,6,100,3,2,100,0,90,200,20,0,0,0,Song,MissileAttack_2,Owner,100,5,5,WhiteHit,Missile,Missile,Hit2,Attack2,5,20,0.6,60
 MissileAttack_2,TRUE,6,100,3,2,100,0,95,200,20,0,0,0,Song,MissileAttack_3,Owner,100,5,5,WhiteHit,Missile,Missile,Hit2,Attack2,5,20,0.5,100
 MissileAttack_3,TRUE,6,100,3,2,100,0,100,200,20,0,0,0,Song,MissileAttack_4,Owner,100,5,5,WhiteHit,Missile,Missile,Hit2,Attack2,5,20,0.6,60
