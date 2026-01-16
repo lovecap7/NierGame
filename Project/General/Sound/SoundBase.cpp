@@ -67,7 +67,7 @@ bool SoundBase::IsPlay()
 bool SoundBase::IsDelete()
 {
 	//ƒ‹[ƒvÄ¶‚¶‚á‚È‚­Ä¶‚ªI—¹‚µ‚½‚Æ‚«íœ‚·‚é
-	return !m_isLoop && IsPlay();
+	return !IsPlay();
 }
 
 void SoundBase::SetVolume(SoundManager::SoundVolume volume)

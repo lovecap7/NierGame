@@ -14,6 +14,7 @@ Voice::Voice(int handle, SoundManager::SoundVolume volume):
 
 Voice::~Voice()
 {
+	printf("‚µ‚á‚×‚Á‚½\n");
 }
 void Voice::Update()
 {
