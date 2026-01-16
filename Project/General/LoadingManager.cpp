@@ -182,6 +182,9 @@ void LoadingManager::End()
 
 void LoadingManager::StartLoading()
 {
+	//非同期ロード開始
+	SetUseASyncLoadFlag(true);
+
 	//ロード開始
 	m_isLoading = true;
 
@@ -191,18 +194,13 @@ void LoadingManager::StartLoading()
 	//ロード終了後すぐに切り替わらないようにするためのフレーム数リセット
 	m_afterLoadFrame = kAfterLoadFrame;
 
-	//音開始
+	//音停止
 	SoundManager::GetInstance().AllStop();
-
-	//非同期ロード開始
-	SetUseASyncLoadFlag(true);
 }
 void LoadingManager::EndLoading()
 {
 	//現在のロード数取得
 	m_totalLoadNum = GetASyncLoadNum() + m_loadCountFrame;
-
-	printf("LoadNum = %d\n", m_totalLoadNum);
 
 	//非同期ロード終了
 	SetUseASyncLoadFlag(false);

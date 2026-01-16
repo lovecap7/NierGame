@@ -1,5 +1,4 @@
 #pragma once
-#include <unordered_map>
 #include <map>
 #include <string>
 /// <summary>
@@ -119,15 +118,15 @@ public:
 
 private:
 	//モデルリソース
-	std::unordered_map<std::wstring,int>m_modelHandles;
+	std::map<std::wstring,int>m_modelHandles;
 	//エフェクトリソース
-	std::unordered_map<std::wstring, int>m_effectHandles;
+	std::map<std::wstring, int>m_effectHandles;
 	//画像ハンドル
-	std::unordered_map<std::wstring, int>m_imageHandles;
+	std::map<std::wstring, int>m_imageHandles;
 	//フォントハンドル
 	std::map<Font, int>m_fontHandles;
 	//音リソース
-	std::unordered_map<std::wstring, int>m_soundHandles;
+	std::map<std::wstring, int>m_soundHandles;
 
 	//ロードしているか
 	bool m_isLoading = false;
