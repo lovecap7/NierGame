@@ -219,10 +219,6 @@ void Application::Run()
 		//裏描画
 		SetDrawScreen(DX_SCREEN_BACK);
 		ClearDrawScreen();
-
-		//非同期ロード中の処理
-		loadingManager.Update();
-		loadingManager.Draw();
 	
 		if (!loadingManager.IsLoading())
 		{
@@ -230,9 +226,13 @@ void Application::Run()
 			m_postProcess->Draw(RT);
 			//後描画
 			uiManager.BackDraw();
-			//フェード
-			fader.Draw();
 		}
+		//フェード
+		fader.Draw();
+
+		//非同期ロード中の処理
+		loadingManager.Update();
+		loadingManager.Draw();
 
 #if _DEBUG
 

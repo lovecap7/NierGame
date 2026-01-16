@@ -151,16 +151,19 @@ void SoundManager::AllStop()
 
 int SoundManager::LoadBGM(std::wstring path)
 {
+	if (path == L"")return -1;
 	return AssetManager::GetInstance().GetSoundHandle(kBGM + path);
 }
 
 int SoundManager::LoadSE(std::wstring path)
 {
+	if (path == L"")return -1;
 	return AssetManager::GetInstance().GetSoundHandle(kSE + path);
 }
 
 int SoundManager::LoadVoice(std::wstring path)
 {
+	if (path == L"")return -1;
 	return AssetManager::GetInstance().GetSoundHandle(kVoice + path);
 }
 

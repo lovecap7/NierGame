@@ -224,6 +224,7 @@ int AssetManager::GetSoundHandle(std::wstring path)
         handle = LoadSoundMem(loadPath.c_str());
 
         //ハンドルチェック
+        assert(handle != -1);
         if (handle == -1)return handle;
 
         m_soundHandles[path] = handle;
