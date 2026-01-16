@@ -1,4 +1,5 @@
 #pragma once
+#include <unordered_map>
 #include <map>
 #include <string>
 /// <summary>
@@ -54,9 +55,9 @@ public:
 	//フォントタイプ
 	enum class FontType : int
 	{
-		Cinzel,
-		NotoSansJP,
-		Roboto
+		Cinzel = 1,
+		NotoSansJP = 2,
+		Roboto = 3
 	};
 	enum class FontSize : int
 	{
@@ -118,15 +119,15 @@ public:
 
 private:
 	//モデルリソース
-	std::map<std::wstring,int>m_modelHandles;
+	std::unordered_map<std::wstring,int>m_modelHandles;
 	//エフェクトリソース
-	std::map<std::wstring, int>m_effectHandles;
+	std::unordered_map<std::wstring, int>m_effectHandles;
 	//画像ハンドル
-	std::map<std::wstring, int>m_imageHandles;
+	std::unordered_map<std::wstring, int>m_imageHandles;
 	//フォントハンドル
 	std::map<Font, int>m_fontHandles;
 	//音リソース
-	std::map<std::wstring, int>m_soundHandles;
+	std::unordered_map<std::wstring, int>m_soundHandles;
 
 	//ロードしているか
 	bool m_isLoading = false;

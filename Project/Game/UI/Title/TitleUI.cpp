@@ -7,6 +7,7 @@
 #include "../../../General/ShaderPostProcess.h"
 #include "../../../General/Fader.h"
 #include "../../../General/Input.h"
+#include "../../../General/LoadingManager.h"
 #include <DxLib.h>
 
 namespace
@@ -101,10 +102,25 @@ TitleUI::TitleUI() :
 	//前描画
 	m_isFrontDraw = true;
 
-	//シェーダ
+
+	auto& loadingManager = LoadingManager::GetInstance();
+	bool isLoading = loadingManager.IsLoading();
+	//ロード中なら
+	if (isLoading)
+	{
+		//一度終了
+		loadingManager.EndLoading();
+	}
+	//シェーダ(ここが非同期で止まる原因)
+	//非同期読み込み中に定数バッファを作成するとまれにエラーが起きるようなので同期に変更
 	m_shader = std::make_shared<ShaderPostProcess>();
 	m_shader->Init();
 	m_shader->SetPostEffectState(ShaderPostProcess::PostEffectState::NoColorGlitch);
+	if (isLoading)
+	{
+		//再度非同期スタート
+		loadingManager.StartLoading();
+	}
 }
 
 TitleUI::~TitleUI()

@@ -86,21 +86,29 @@ void TitleScene::Init()
 {
 	//アセットを削除
 	AssetManager::GetInstance().AllDelete();
+	
 	//リセット
 	Physics::GetInstance().Reset();
+
 	//ポストエフェクトを解除
 	Application::GetInstance().GetPostProcess()->ResetPostEffectState();
+
 	//UI削除
 	UIManager::GetInstance().AllDeleteUI();
+
 	//音リセット
 	SoundManager::GetInstance().Reset();
+
 	//エフェクトリセット
 	m_effectManager.Reset();
+
 	//ポストエフェクトリセット
 	auto& app = Application::GetInstance();
 	app.GetPostProcess()->ResetPostEffectState();
+
 	//タイムスケール
 	app.SetTimeScale(1.0f);
+
 	//フェードイン
 	Fader::GetInstance().FadeIn();
 
@@ -116,12 +124,18 @@ void TitleScene::Init()
 	//非同期ロード開始
 	loadingManager.StartLoading();
 
+	//アクターマネージャー
+	m_actorManager = std::make_shared<ActorManager>();
+	m_actorManager->Init();
+	m_actorManager->CreateActorCSV(kTitlePath.c_str(), kCharacterDataPath.c_str());
+	m_actorManager->CreateActorCSV(kTitlePath.c_str(), kStageDataPath.c_str());
+
+
 	//サウンドデータのロード(非同期で読み込もうとすると失敗してしまうので同期で)
 	soundManager.LoadBGM(kBGMTitlePath);
 	soundManager.LoadSE(kSENoisePath);
 	soundManager.LoadSE(kSEGameStartPath);
 	soundManager.LoadSE(kSEOKPath);
-	soundManager.LoadSE(kSECancelPath);
 
 	//カメラ
 	auto camera = std::make_shared<TitleCamera>();
@@ -132,6 +146,7 @@ void TitleScene::Init()
 	//タイトルロゴ
 	auto titleLogo = std::make_shared<TitleUI>();
 	titleLogo->Init();
+
 	//セレクトUI
 	auto selectTitleUI = std::make_shared<SelectTitleUI>();
 	selectTitleUI->Init();
@@ -143,12 +158,6 @@ void TitleScene::Init()
 	dialogUI->Init();
 	dialogUI->DisableDraw();
 	m_dialogUI = dialogUI;
-
-	//アクターマネージャー
-	m_actorManager = std::make_shared<ActorManager>();
-	m_actorManager->Init();
-	m_actorManager->CreateActorCSV(kTitlePath.c_str(), kCharacterDataPath.c_str());
-	m_actorManager->CreateActorCSV(kTitlePath.c_str(), kStageDataPath.c_str());
 
 	//非同期ロード終了
 	loadingManager.EndLoading();

@@ -44,12 +44,12 @@ void AssetManager::Init()
 void AssetManager::Update()
 {
 #if _DEBUG
-    printf("AssetNum = %d\n",
+   /* printf("AssetNum = %d\n",
         m_imageHandles.size() +
         m_fontHandles.size() +
         m_modelHandles.size() +
         m_soundHandles.size() +
-        m_modelHandles.size());
+        m_modelHandles.size());*/
 #endif
 
 

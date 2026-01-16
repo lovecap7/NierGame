@@ -106,6 +106,10 @@ void Application::Run()
 	auto& assetManager = AssetManager::GetInstance();
 	assetManager.Init();
 
+	//ポストエフェクトの準備
+	m_postProcess = std::make_unique<ShaderPostProcess>();
+	m_postProcess->Init();
+
 	//コントローラー
 	auto& input = Input::GetInstance();
 	input.Init();
@@ -113,10 +117,6 @@ void Application::Run()
 	//Physics(衝突処理)
 	auto& physics = Physics::GetInstance();
 	physics.Init();
-
-	//ポストエフェクトの準備
-	m_postProcess = std::make_unique<ShaderPostProcess>();
-	m_postProcess->Init();
 
 	//フェード
 	auto& fader = Fader::GetInstance();
@@ -219,6 +219,10 @@ void Application::Run()
 		//裏描画
 		SetDrawScreen(DX_SCREEN_BACK);
 		ClearDrawScreen();
+
+		//非同期ロード中の処理
+		loadingManager.Update();
+		loadingManager.Draw();
 	
 		if (!loadingManager.IsLoading())
 		{
@@ -226,14 +230,9 @@ void Application::Run()
 			m_postProcess->Draw(RT);
 			//後描画
 			uiManager.BackDraw();
+			//フェード
+			fader.Draw();
 		}
-
-		//フェード
-		fader.Draw();
-
-		//非同期ロード中の処理
-		loadingManager.Update();
-		loadingManager.Draw();
 
 #if _DEBUG
 

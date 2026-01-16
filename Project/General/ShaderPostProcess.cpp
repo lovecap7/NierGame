@@ -1,6 +1,7 @@
 #include "ShaderPostProcess.h"
 #include "MyDraw.h"
 #include "Math/MyMath.h"
+#include "LoadingManager.h"
 #include "Game.h"
 #include <DxLib.h>
 
@@ -42,7 +43,10 @@ void ShaderPostProcess::Init()
 }
 void ShaderPostProcess::Update()
 {
+	if (LoadingManager::GetInstance().IsLoading())return;
 	if (m_cbuff1 == nullptr)return;
+	if (m_cbuff2 == nullptr)return;
+
 	if (m_cbuff1->state & static_cast<int>(PostEffectState::Glitch) || 
 		m_cbuff1->state & static_cast<int>(PostEffectState::NoColorGlitch))
 	{
